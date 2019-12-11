@@ -1,0 +1,73 @@
+﻿.clearable {
+    background: url(images/x-icon.png) no-repeat right -10px center #fff;
+    padding: 3px 18px 3px 4px; /* USE the same right padding in jQ! */
+    &.x-icon {
+        background-position: right 5px center;
+    }
+
+    &.on-x-icon {
+        cursor: pointer;
+    }
+}
+
+.auto-refresh {
+    position: relative;
+    display: inline-block;
+    background-color: #fff;
+    border: solid 1px #cecccd;
+    box-shadow: inset 1px 1px 3px #CCC;
+    width: 110px;
+    height: 24px;
+    float: right;
+    cursor: pointer;
+
+    .refresh-icon {
+        background: url(images/refresh.png) no-repeat center;
+        width: 93px;
+        line-height: 21px;
+        float: left;
+        padding: 2px 0;
+
+        .refresh-value {
+            display: inline-block;
+            width: 77px;
+            text-align: center !important;
+        }
+    }
+
+    .dropdown-icon {
+        background: url(Images/dropdown.png) no-repeat 4px center;
+        border-left: solid 1px #cecccd;
+        float: left;
+        width: 16px;
+        height: 24px;
+        line-height: 15px;
+    }
+
+    .refresh-options {
+        display: none;
+        position: absolute;
+        top: 26px;
+        right: -1px;
+        background-color: #FCFDFD;
+        border: 1px solid #D4D4D4;
+        cursor: default;
+        width: 110px;
+        padding: 2px 0;
+        z-index: 1;
+
+        .option {
+            padding: 0 5px;
+
+            &:hover {
+                background-color: #5A7DC1;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &.disabled {
+        background-color: #f3efee;
+        cursor: default;
+    }
+}
