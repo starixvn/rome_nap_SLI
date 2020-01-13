@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.960
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAP.SLI.Website", "Sources\NAP.SLI.Website\NAP.SLI.Website.csproj", "{0EC04730-23D1-4CCE-A66C-645EF262F4DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAP.SLI.Authentication", "Sources\NAP.SLI.Authentication\NAP.SLI.Authentication.csproj", "{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{4C84D354-088E-4D3A-8A90-671621CC3EA7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EC04730-23D1-4CCE-A66C-645EF262F4DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC04730-23D1-4CCE-A66C-645EF262F4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC04730-23D1-4CCE-A66C-645EF262F4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC04730-23D1-4CCE-A66C-645EF262F4DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83} = {4C84D354-088E-4D3A-8A90-671621CC3EA7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F30EBE6-90C3-4C6E-9503-0D99B92BA622}
+	EndGlobalSection
+EndGlobal

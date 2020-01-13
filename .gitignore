@@ -1,7 +1,6 @@
-
-#ignore thumbnails created by windows
+#Ignore thumbnails created by Windows
 Thumbs.db
-#Ignore files build by Visual Studio
+#Ignore files built by Visual Studio
 *.obj
 *.exe
 *.pdb
@@ -27,26 +26,6 @@ obj/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
-
-OpenCover.bat
-_CodeCoverageReport
-
-*.dic
-*.orig
-/packages/*
-/PrecompiledWeb
-*.suo
-.vs/config/applicationhost.config
-/OpenCover/*
-
-*.min.js
-bundles
-*.css
-*.js.map
-*/assets/scripts/**/*.js
-*/bundles/**/*.js
 .vs/
-*.js
-*.ncrunchsolution.*
-*.ncrunchproject.*
-/_Chutzpah.coverage.html
+#Nuget packages folder
+packages/

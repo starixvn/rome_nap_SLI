@@ -1,0 +1,19 @@
+form.login-page {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  margin: auto;
+  margin-top: 100px;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+
+  .form-group {
+    display: flex;
+  }
+
+  .browser-icon {
+    margin-top: -5px;
+    width: 18px;
+    height: 18px;
+  }
+}

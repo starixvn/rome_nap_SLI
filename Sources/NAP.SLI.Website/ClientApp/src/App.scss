@@ -1,0 +1,11 @@
+// Override default variables before the import
+$body-bg: #ededec;
+$alert-padding-y: 0.5rem;
+$alert-padding-x: 1rem;
+
+// Import Bootstrap and its default variables
+@import "~bootstrap/scss/bootstrap.scss";
+
+svg {
+  fill: currentColor;
+}
