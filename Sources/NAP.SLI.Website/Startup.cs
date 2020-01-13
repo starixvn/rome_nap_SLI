@@ -16,6 +16,7 @@ namespace NAP.SLI
     using NAP.SLI.Authentication.Models;
     using System;
     using System.IO;
+    using System.Linq;
     using System.Text;
 
     public class Startup
@@ -113,10 +114,16 @@ namespace NAP.SLI
 
         private void ConfigureFanexData(IHostingEnvironment env)
         {
+            var connectionStrings = Configuration
+                 .GetSection("ConnectionStrings")
+                 .GetChildren()
+                 .ToDictionary(connection => connection.Key,
+                               connection => new ConnectionConfiguration(connection.Key, connection.Value));
             var appDataPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             DbSettingProviderManager
               .StartNewSession()
-              .WithSqlServer(resourcePath: Path.Combine(appDataPath, "SPNames/LOCAL"))
+              .Use(connectionStrings)
+              .WithSqlServer(resourcePath: Path.Combine(appDataPath, "SPNames"))
               .Run();
         }
     }

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
   <Function Name="Authentication">
+    <Setting Key="SLI_UserLogin" SpName="SLI_UserLogin" DbName="DBCUST.CustDB.bodbAdminNet" />
   </Function>
 </Functions>

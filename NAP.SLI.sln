@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAP.SLI.Authentication", "S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{4C84D354-088E-4D3A-8A90-671621CC3EA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAP.SLI.Common", "Sources\NAP.SLI.Common\NAP.SLI.Common.csproj", "{7E27B460-7C0C-44B3-9FCB-79E6FF245375}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E27B460-7C0C-44B3-9FCB-79E6FF245375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E27B460-7C0C-44B3-9FCB-79E6FF245375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E27B460-7C0C-44B3-9FCB-79E6FF245375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E27B460-7C0C-44B3-9FCB-79E6FF245375}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C91008EE-EFEB-42AD-BE73-2C8B0F002D83} = {4C84D354-088E-4D3A-8A90-671621CC3EA7}
+		{7E27B460-7C0C-44B3-9FCB-79E6FF245375} = {4C84D354-088E-4D3A-8A90-671621CC3EA7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5F30EBE6-90C3-4C6E-9503-0D99B92BA622}
