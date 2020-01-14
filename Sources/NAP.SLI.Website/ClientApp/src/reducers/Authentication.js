@@ -1,4 +1,5 @@
 import axios from 'axios';
+const CryptoJS = require('../shared/CryptoJS');
 
 const ActionTypes = {
   LOGIN_REQUEST: 'AUTHENTICATION_LOGIN_REQUEST',
@@ -28,16 +29,18 @@ const login = (username, password) => {
     dispatch({ type: ActionTypes.LOGIN_REQUEST, data: { user } });
 
     try {
+      const encryptedPassword = CryptoJS.CfsEnCode(password);
       const payload = {
         username,
-        password
+        password: encryptedPassword
       };
       const response = await axios.post('/api/authentication/login', payload);
-      user.token = response.token;
+      const { groupId, token } = response.data;
+      Object.assign(user, { groupId, token });
       localStorage.setItem('user', JSON.stringify(user));
       dispatch({ type: ActionTypes.LOGIN_SUCCESS, data: { user } });
-    } catch (error) {
-      dispatch({ type: ActionTypes.LOGIN_FAILURE, data: { message: error.message } });
+    } catch (response) {
+      dispatch({ type: ActionTypes.LOGIN_FAILURE, data: { message: response.data } });
     }
   };
 }
@@ -72,6 +75,7 @@ export const reducer = (state = initialState, action) => {
         ...state,
         loggingIn: false,
         loggedIn: true,
+        user: action.data.user,
         message: ''
       };
     case ActionTypes.LOGIN_FAILURE:

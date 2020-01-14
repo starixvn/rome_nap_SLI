@@ -20,15 +20,15 @@
 
         public string CountryCode { get; set; }
 
-        public string From { get; set; } = string.Empty;
+        public string From { get; set; }
 
-        public int CustId { get; set; }
+        public int UserId { get; set; }
 
-        public int RoleId { get; set; }
+        public int GroupId { get; set; }
 
         public int ErrCode { get; set; }
 
-        public string ErrMessage { get; set; }
+        public string ErrMsg { get; set; }
 
         public override string GetSettingKey() => "SLI_UserLogin";
 

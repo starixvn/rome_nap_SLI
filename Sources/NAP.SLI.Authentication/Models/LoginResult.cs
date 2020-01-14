@@ -4,8 +4,10 @@
 
     public class LoginResult : NonQueryResult
     {
-        public int CustId { get; set; }
+        public int UserId { get; set; }
 
-        public int RoleId { get; set; }
+        public int GroupId { get; set; }
+
+        public string Token { get; set; }
     }
 }
