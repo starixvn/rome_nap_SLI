@@ -1,11 +1,13 @@
 ﻿namespace NAP.SLI.Authentication.Criteria
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class LoginCriteria: NonQueryCommand
     {
         public string Username { get; set; }
 
+        [SpParam(SqlParamName = "UserPwd")]
         public string Password { get; set; }
 
         public string LoginIP { get; set; }

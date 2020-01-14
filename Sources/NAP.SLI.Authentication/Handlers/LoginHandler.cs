@@ -3,7 +3,6 @@
     using AutoMapper;
     using Fanex.Data.Repository;
     using MediatR;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.Authentication.Commands;
     using NAP.SLI.Authentication.Criteria;

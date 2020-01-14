@@ -7,6 +7,10 @@
   <ItemGroup>
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.2.2" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.2.0.14119">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="UAParser" Version="3.1.43" />
   </ItemGroup>
 
@@ -17,6 +21,9 @@
 	<Reference Include="Microsoft.AspNetCore.Http.Features">
 	  <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.http.features\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
     </Reference>
+	<Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+	  <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.dependencyinjection.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+	</Reference>
 	<Reference Include="Microsoft.Extensions.Primitives">
 	  <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.primitives\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>

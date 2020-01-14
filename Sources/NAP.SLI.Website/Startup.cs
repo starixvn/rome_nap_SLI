@@ -2,11 +2,13 @@ namespace NAP.SLI
 {
     using AutoMapper;
     using Fanex.Data;
+    using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
     using MediatR;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
     using Microsoft.Extensions.Configuration;
@@ -14,6 +16,7 @@ namespace NAP.SLI
     using Microsoft.IdentityModel.Tokens;
     using NAP.SLI.Authentication;
     using NAP.SLI.Authentication.Models;
+    using NAP.SLI.Common;
     using System;
     using System.IO;
     using System.Linq;
@@ -48,7 +51,9 @@ namespace NAP.SLI
 
         private void ConfigureModules(IServiceCollection services)
         {
-            services.RegisterAuthenticationModule();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IDynamicRepository, DynamicRepository>();
+            services.RegisterCommonModule();
             services.AddMediatR(typeof(AuthenticationProfile).Assembly);
             services.AddAutoMapper(typeof(AuthenticationProfile).Assembly);
         }
@@ -78,7 +83,7 @@ namespace NAP.SLI
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(env.ContentRootPath, "App_Data"));
-            ConfigureFanexData(env);
+            ConfigureFanexData();
 
             if (env.IsDevelopment())
             {
@@ -112,7 +117,7 @@ namespace NAP.SLI
             });
         }
 
-        private void ConfigureFanexData(IHostingEnvironment env)
+        private void ConfigureFanexData()
         {
             var connectionStrings = Configuration
                  .GetSection("ConnectionStrings")
@@ -122,8 +127,8 @@ namespace NAP.SLI
             var appDataPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             DbSettingProviderManager
               .StartNewSession()
-              .Use(connectionStrings)
               .WithSqlServer(resourcePath: Path.Combine(appDataPath, "SPNames"))
+              .Use(connectionStrings)
               .Run();
         }
     }
