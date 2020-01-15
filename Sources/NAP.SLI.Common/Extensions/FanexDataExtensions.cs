@@ -5,9 +5,9 @@
 
     public static class FanexDataExtensions
     {
-        public static void ThrowExceptionIsInvalid(this CriteriaBase criteria)
+        public static void ThrowExceptionIsInvalid(this ICriteria criteria)
         {
-            if (criteria.IsInvalid())
+            if (!criteria.IsValid())
             {
                 throw new InvalidOperationException("Invalid criteria");
             }

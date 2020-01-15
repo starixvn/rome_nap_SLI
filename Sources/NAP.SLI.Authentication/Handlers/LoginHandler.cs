@@ -31,12 +31,7 @@
             IDynamicRepository dynamicRepository,
             ICurrentContextService currentContextService,
             IMapper mapper)
-        {
-            this.authenticationSettings = authenticationSettingsOptions.Value;
-            this.dynamicRepository = dynamicRepository;
-            this.currentContextService = currentContextService;
-            this.mapper = mapper;
-        }
+            => (authenticationSettings, this.dynamicRepository, this.currentContextService, this.mapper) = (authenticationSettingsOptions.Value, dynamicRepository, currentContextService, mapper);
 
         public async Task<IActionResult> Handle(LoginRequest request, CancellationToken cancellationToken)
         {

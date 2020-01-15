@@ -14,9 +14,7 @@
         private readonly IMediator mediator;
 
         public AuthenticationController(IMediator mediator)
-        {
-            this.mediator = mediator;
-        }
+            => (this.mediator) = (mediator);
 
         [AllowAnonymous]
         [HttpPost("[action]")]

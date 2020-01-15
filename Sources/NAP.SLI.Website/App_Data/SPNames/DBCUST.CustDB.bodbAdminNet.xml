@@ -2,5 +2,11 @@
 <Functions>
   <Function Name="Authentication">
     <Setting Key="SLI_UserLogin" SpName="SLI_UserLogin" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_User_Upd" SpName="SLI_User_Upd" DbName="DBCUST.CustDB.bodbAdminNet" />
+  </Function>
+  <Function Name="Administration">
+    <Setting Key="SLI_User_Sel" SpName="SLI_User_Sel" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_User_Ins" SpName="SLI_User_Ins" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_User_Upd" SpName="SLI_User_Upd" DbName="DBCUST.CustDB.bodbAdminNet" />
   </Function>
 </Functions>

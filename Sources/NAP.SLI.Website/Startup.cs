@@ -17,6 +17,7 @@ namespace NAP.SLI
     using NAP.SLI.Authentication;
     using NAP.SLI.Authentication.Models;
     using NAP.SLI.Common;
+    using NAP.SLI.SimpleApi;
     using System;
     using System.IO;
     using System.Linq;
@@ -56,8 +57,9 @@ namespace NAP.SLI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.RegisterCommonModule();
-            services.AddMediatR(typeof(AuthenticationProfile).Assembly);
-            services.AddAutoMapper(typeof(AuthenticationProfile).Assembly);
+            services.AddMediatR(typeof(SimpleApiProfile));
+            services.AddMediatR(typeof(AuthenticationProfile));
+            services.AddAutoMapper(typeof(AuthenticationProfile));
         }
 
         private void ConfigureAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
@@ -101,13 +103,15 @@ namespace NAP.SLI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
+
+            app.UseSimpleApi();
 
             app.UseSpa(spa =>
             {

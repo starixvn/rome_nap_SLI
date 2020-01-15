@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Functions>
+  <Function Name="Authentication">
+    <Setting Key="SLI_CheckIn" SpName="SLI_CheckIn" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_ReCheckIn" SpName="SLI_ReCheckIn" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_CheckOut" SpName="SLI_CheckOut" DbName="DBCUST.CustDB.bodbAdminNet" />
+  </Function>
+</Functions>

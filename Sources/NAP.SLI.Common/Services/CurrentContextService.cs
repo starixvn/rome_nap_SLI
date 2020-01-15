@@ -24,9 +24,7 @@
         private readonly HttpContext context;
 
         public CurrentContextService(IHttpContextAccessor httpContextAccessor)
-        {
-            this.context = httpContextAccessor.HttpContext;
-        }
+            => (context) = (httpContextAccessor.HttpContext);
 
         public string GetIP()
         {
