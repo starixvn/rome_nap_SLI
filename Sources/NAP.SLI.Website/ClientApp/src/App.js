@@ -9,20 +9,29 @@ import { connect } from 'react-redux';
 import { Container } from 'reactstrap';
 import { NavMenu, PrivateRoute } from './components';
 import { authenticationActions } from './reducers/Authentication';
-import { LoginPage, HomePage, NotFoundPage, ChangePasswordModal, CustomerPage, ReportsPage } from './pages';
+import { LoginPage, HomePage, NotFoundPage, ChangePasswordModal, CustomerPage, ReportsPage, UserManagementPage } from './pages';
 
-const App = ({ loggedIn, logout }) => {
+const App = ({ user, loggedIn, logout }) => {
   useEffect(() => {
-    interceptors.response.use((response) => {
-      return response;
-    }, function (error) {
-      if (error.response.status === 401) {
-        logout();
-      }
+    interceptors.request.use(
+      config => {
+        if (loggedIn) {
+          config.headers["Authorization"] = "bearer " + user.token;
+        }
 
-      return Promise.reject(error.response);
-    });
-  });
+        return config;
+      }
+    );
+    interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response.status === 401) {
+          logout();
+        }
+
+        return Promise.reject(error.response);
+      });
+  }, [loggedIn]);
 
   return (
     <BrowserRouter>
@@ -33,6 +42,7 @@ const App = ({ loggedIn, logout }) => {
           <Route path="/login" component={LoginPage} />
           <PrivateRoute exact path="/" component={HomePage} />
           <PrivateRoute path="/customer" component={CustomerPage} />
+          <PrivateRoute path="/administration" component={UserManagementPage} />
           <PrivateRoute path="/reports" component={ReportsPage} />
           <Route component={NotFoundPage} />
         </Switch>
@@ -42,6 +52,7 @@ const App = ({ loggedIn, logout }) => {
 };
 
 App.propTypes = {
+  user: PropTypes.object,
   loggedIn: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired
 };

@@ -18,6 +18,8 @@ namespace NAP.SLI
     using NAP.SLI.Authentication.Models;
     using NAP.SLI.Common;
     using NAP.SLI.SimpleApi;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
     using System;
     using System.IO;
     using System.Linq;
@@ -35,9 +37,11 @@ namespace NAP.SLI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            ConfigureModules(services);
-
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddJsonOptions(options => {
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+            
             var authenticationSection = Configuration.GetSection("Authentication");
             services.Configure<AuthenticationSettings>(authenticationSection);
             var authenticationSettings = authenticationSection.Get<AuthenticationSettings>();
@@ -45,7 +49,8 @@ namespace NAP.SLI
 
             services.AddOptions();
 
-            // In production, the React files will be served from this directory
+            ConfigureModules(services);
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
@@ -57,7 +62,7 @@ namespace NAP.SLI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.RegisterCommonModule();
-            services.AddMediatR(typeof(SimpleApiProfile));
+            services.RegisterSimpleApiModule();
             services.AddMediatR(typeof(AuthenticationProfile));
             services.AddAutoMapper(typeof(AuthenticationProfile));
         }
@@ -103,15 +108,13 @@ namespace NAP.SLI
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-            
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
             });
-
-            app.UseSimpleApi();
 
             app.UseSpa(spa =>
             {

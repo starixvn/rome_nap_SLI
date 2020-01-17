@@ -5,3 +5,4 @@ export * from './change-password/ChangePasswordPage';
 export * from './change-password/ChangePasswordModal';
 export * from './customer/CustomerPage';
 export * from './reports/ReportsPage';
+export * from './user-management/UserManagementPage';

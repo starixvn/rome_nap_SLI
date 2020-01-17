@@ -11,6 +11,7 @@
     using NAP.SLI.Authentication.Criteria;
     using NAP.SLI.Authentication.Models;
     using NAP.SLI.Common.Extensions;
+    using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using System;
     using System.IdentityModel.Tokens.Jwt;
@@ -63,7 +64,9 @@
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, loginResult.UserId.ToString())
+                    new Claim(ClaimTypes.Name, request.Username),
+                    new Claim(NapClaimTypes.UserId, loginResult.UserId.ToString()),
+                    new Claim(NapClaimTypes.GroupId, loginResult.GroupId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(authenticationSettings.AccessExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

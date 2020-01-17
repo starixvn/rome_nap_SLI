@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.SimpleApi.Core
+﻿namespace NAP.SimpleApi.Models
 {
     public enum ActionTypes
     {
