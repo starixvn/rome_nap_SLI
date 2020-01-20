@@ -44,8 +44,7 @@
             }
 
             configuration.RequestActivator.AuthorizeRequest(HttpContext, requestOption);
-
-            var criteria = configuration.RequestActivator.CreateCriteria(HttpContext, requestOption);
+            var criteria = configuration.RequestActivator.CreateCriteria(HttpContext, requestOption, request.Data);
             if (!criteria.IsValid())
             {
                 throw new InvalidOperationException("Invalid criteria");

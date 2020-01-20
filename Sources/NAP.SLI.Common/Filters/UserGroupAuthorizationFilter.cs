@@ -4,12 +4,12 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using NAP.SLI.Common.Models;
 
-    public class GroupAuthorizationFilter : IAuthorizationFilter
+    public class UserGroupAuthorizationFilter : IAuthorizationFilter
     {
-        private readonly UserGroups group;
+        private readonly UserGroups userGroup;
 
-        public GroupAuthorizationFilter(UserGroups group)
-            => (this.group) = (group);
+        public UserGroupAuthorizationFilter(UserGroups userGroup)
+            => (this.userGroup) = (userGroup);
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {

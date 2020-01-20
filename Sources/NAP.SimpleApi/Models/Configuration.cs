@@ -4,7 +4,7 @@
 
     public class Configuration
     {
-        public Configuration(IList<RequestOption> requestOptions, IRequestActivator requestActivator)
+        public Configuration(IList<RequestOption> requestOptions, IRequestOptionContext requestActivator)
         {
             RequestOptions = requestOptions;
             RequestActivator = requestActivator;
@@ -12,6 +12,6 @@
 
         public IList<RequestOption> RequestOptions { get; private set; }
 
-        public IRequestActivator RequestActivator { get; private set; }
+        public IRequestOptionContext RequestActivator { get; private set; }
     }
 }

@@ -9,3 +9,10 @@ $alert-padding-x: 1rem;
 svg {
   fill: currentColor;
 }
+
+button {
+  svg {
+    margin-top: -5px;
+    margin-right: 5px;
+  }
+}

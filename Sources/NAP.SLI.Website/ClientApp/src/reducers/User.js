@@ -6,14 +6,17 @@ const ActionTypes = {
   QUERY_FAILURE: 'USER_QUERY_FAILURE'
 }
 
-const initialState = {};
+const initialState = { users: [] };
 
-const query = (payload) => {
+const query = (data) => {
   return async (dispatch) => {
-    dispatch({ type: ActionTypes.QUERY_REQUEST, data: { payload } });
+    const payload = {
+      apiKey: 'administration-query-user',
+      data
+    };
+    dispatch({ type: ActionTypes.QUERY_REQUEST, data });
 
     try {
-      payload.apiKey = 'administration-query-user';
       const response = await axios.post('/simple-api/query', payload);
       dispatch({ type: ActionTypes.QUERY_SUCCESS, data: { users: response.data } });
     } catch (response) {
@@ -30,6 +33,7 @@ export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.QUERY_REQUEST:
       return {
+        ...state,
         payload: action.data.payload
       };
     case ActionTypes.QUERY_SUCCESS:

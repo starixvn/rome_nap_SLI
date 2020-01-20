@@ -14,7 +14,7 @@
             {
                 new RequestOption {ApiKey = "administration-query-user", CriteriaType = typeof(QueryUserCriteria)}
             };
-            services.AddSimpleApi(requestOptions, new RequestActivator());
+            services.AddSimpleApi(requestOptions, new RequestOptionContext());
         }
     }
 }
