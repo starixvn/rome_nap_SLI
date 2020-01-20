@@ -6,6 +6,6 @@
 
         public string ErrMsg { get; set; }
 
-        public bool IsSuccessful => ErrCode == 0;
+        public bool IsSuccessful => ErrCode == ErrorCodes.OK;
     }
 }

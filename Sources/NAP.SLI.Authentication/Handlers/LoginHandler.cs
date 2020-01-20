@@ -3,7 +3,6 @@
     using AutoMapper;
     using Fanex.Data.Repository;
     using MediatR;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
@@ -46,17 +45,10 @@
                 CountryCode = currentContextService.GetCountryCode(),
                 Platform = currentContextService.GetPlatform()
             };
-            criteria.ThrowExceptionIsInvalid();
+            criteria.ThrowExceptionIfInvalid();
             await dynamicRepository.ExecuteAsync(criteria);
             var loginResult = mapper.Map<LoginResult>(criteria);
-            if (!loginResult.IsSuccessful)
-            {
-                return new ContentResult
-                {
-                    StatusCode = StatusCodes.Status400BadRequest,
-                    Content = loginResult.ErrMsg
-                };
-            }
+            loginResult.ThrowExceptionIfFailed();
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(authenticationSettings.SecretKey);
