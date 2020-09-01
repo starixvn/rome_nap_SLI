@@ -18,6 +18,15 @@
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody]LoginRequest request) => await mediator.Send(request);
+        public async Task<IActionResult> Login([FromBody]LoginRequest request)
+        {
+            var loginResult = await mediator.Send(request);
+            if (!loginResult.IsSuccessful)
+            {
+                return BadRequest(loginResult.ErrMsg);
+            }
+
+            return Ok(loginResult);
+        }
     }
 }

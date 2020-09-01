@@ -2,6 +2,6 @@
 {
     public static class ErrorCodes
     {
-        public static readonly int OK = 1;
+        public static readonly int OK = 0;
     }
 }

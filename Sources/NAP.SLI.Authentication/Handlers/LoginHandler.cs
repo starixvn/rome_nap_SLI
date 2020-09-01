@@ -3,7 +3,6 @@
     using AutoMapper;
     using Fanex.Data.Repository;
     using MediatR;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
     using NAP.SLI.Authentication.Commands;
@@ -19,7 +18,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class LoginHandler : IRequestHandler<LoginRequest, IActionResult>
+    public class LoginHandler : IRequestHandler<LoginRequest, LoginResult>
     {
         private readonly AuthenticationSettings authenticationSettings;
         private readonly IDynamicRepository dynamicRepository;
@@ -33,7 +32,7 @@
             IMapper mapper)
             => (authenticationSettings, this.dynamicRepository, this.currentContextService, this.mapper) = (authenticationSettingsOptions.Value, dynamicRepository, currentContextService, mapper);
 
-        public async Task<IActionResult> Handle(LoginRequest request, CancellationToken cancellationToken)
+        public async Task<LoginResult> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
             var criteria = new LoginCriteria
             {
@@ -48,8 +47,16 @@
             criteria.ThrowExceptionIfInvalid();
             await dynamicRepository.ExecuteAsync(criteria);
             var loginResult = mapper.Map<LoginResult>(criteria);
-            loginResult.ThrowExceptionIfFailed();
+            if (loginResult.IsSuccessful)
+            {
+                UpdateResultToken(request, loginResult);
+            }
+            
+            return loginResult;
+        }
 
+        private void UpdateResultToken(LoginRequest request, LoginResult loginResult)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(authenticationSettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -65,7 +72,6 @@
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             loginResult.Token = tokenHandler.WriteToken(token);
-            return new JsonResult(loginResult);
         }
     }
 }

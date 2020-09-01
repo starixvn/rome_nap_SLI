@@ -1,10 +1,10 @@
 ﻿namespace NAP.SLI.Authentication.Commands
 {
     using MediatR;
-    using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Authentication.Models;
     using System.ComponentModel.DataAnnotations;
 
-    public class LoginRequest : IRequest<IActionResult>
+    public class LoginRequest : IRequest<LoginResult>
     {
         [Required]
         [StringLength(50, MinimumLength = 1)]
