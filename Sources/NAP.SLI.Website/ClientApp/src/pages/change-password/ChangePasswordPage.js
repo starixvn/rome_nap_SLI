@@ -3,23 +3,30 @@ import { Form, Label, Input, Button, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { passwordActions } from '../../reducers/Password';
+import { accountActions } from '../../reducers/Account';
 import './ChangePasswordPage.scss';
 
-const ChangePasswordPage = ({ changePassword, toggleModal, message }) => {
+const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, message }) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [_message, setMessage] = useState(message);
 
   const handleSubmit = event => {
     event.preventDefault();
+    setMessage('');
+    if (confirmPassword !== newPassword) {
+      setMessage('New password and confirm password does not match');
+      return;
+    }
+
     changePassword(oldPassword, newPassword);
   };
 
   return (
     <Form className="change-password-page" noValidate onSubmit={handleSubmit}>
-      {message && <div className="text-center alert alert-danger" role="alert">
-        {message}
+      {_message && <div className="text-center alert alert-danger" role="alert">
+        {_message}
       </div>}
       <FormGroup>
         <Label for="oldPassword" className="col-form-label">Old Password</Label>
@@ -36,7 +43,7 @@ const ChangePasswordPage = ({ changePassword, toggleModal, message }) => {
       <FormGroup>
         <Label className="col-form-label"></Label>
         <Button type="submit" color="primary" className="mr-1">Submit</Button>
-        <Button type="button" color="secondary" onClick={toggleModal}>Cancel</Button>
+        <Button type="button" color="secondary" onClick={toggleChangePasswordModal}>Cancel</Button>
       </FormGroup>
     </Form>
   );
@@ -44,13 +51,13 @@ const ChangePasswordPage = ({ changePassword, toggleModal, message }) => {
 
 ChangePasswordPage.propTypes = {
   changePassword: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func.isRequired,
+  toggleChangePasswordModal: PropTypes.func.isRequired,
   message: PropTypes.string
 };
 
 const connectedChangePasswordPage = connect(
-  state => state.password,
-  dispatch => bindActionCreators(passwordActions, dispatch)
+  state => state,
+  dispatch => bindActionCreators(Object.assign({}, accountActions), dispatch)
 )(ChangePasswordPage);
 
 export { connectedChangePasswordPage as ChangePasswordPage };

@@ -3,16 +3,16 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { passwordActions } from '../../reducers/Password';
+import { accountActions } from '../../reducers/Account';
 import { ChangePasswordPage } from './ChangePasswordPage';
 
-const ChangePasswordModal = ({ authentication, password, toggleModal }) => {
+const ChangePasswordModal = ({ authentication, account, toggleChangePasswordModal }) => {
   const { username } = authentication.user;
-  const { isOpen } = password;
+  const { isChangePasswordOpen } = account;
 
   return (
-    <Modal isOpen={isOpen} toggle={toggleModal}>
-      <ModalHeader toggle={toggleModal}>{username} / Change Password</ModalHeader>
+    <Modal isOpen={isChangePasswordOpen} toggle={toggleChangePasswordModal}>
+      <ModalHeader toggle={toggleChangePasswordModal}>{username} / Change Password</ModalHeader>
       <ModalBody>
         <ChangePasswordPage />
       </ModalBody>
@@ -22,13 +22,13 @@ const ChangePasswordModal = ({ authentication, password, toggleModal }) => {
 
 ChangePasswordModal.propTypes = {
   authentication: PropTypes.object.isRequired,
-  password: PropTypes.object.isRequired,
-  toggleModal: PropTypes.func.isRequired
+  account: PropTypes.object.isRequired,
+  toggleChangePasswordModal: PropTypes.func.isRequired
 };
 
 const connectedChangePasswordModal = connect(
   state => state,
-  dispatch => bindActionCreators(passwordActions, dispatch)
+  dispatch => bindActionCreators(accountActions, dispatch)
 )(ChangePasswordModal);
 
 export { connectedChangePasswordModal as ChangePasswordModal };

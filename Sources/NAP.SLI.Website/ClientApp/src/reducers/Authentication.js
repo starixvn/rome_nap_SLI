@@ -29,10 +29,9 @@ const login = (username, password) => {
     dispatch({ type: ActionTypes.LOGIN_REQUEST, data: { user } });
 
     try {
-      const encryptedPassword = CryptoJS.CfsEnCode(password);
       const payload = {
         username,
-        password: encryptedPassword
+        password: CryptoJS.CfsEnCode(password)
       };
       const response = await axios.post('/api/authentication/login', payload);
       const { groupId, token } = response.data;

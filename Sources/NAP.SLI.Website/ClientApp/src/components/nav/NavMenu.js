@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, NavLink } from 'react-router-dom';
 import { authenticationActions } from '../../reducers/Authentication';
-import { passwordActions } from '../../reducers/Password';
+import { accountActions } from '../../reducers/Account';
 import './NavMenu.scss';
 
-const NavMenu = ({ username, logout, toggleModal }) => {
+const NavMenu = ({ username, logout, toggleChangePasswordModal }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = useCallback(() => {
@@ -40,7 +40,7 @@ const NavMenu = ({ username, logout, toggleModal }) => {
               Welcome {username}
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem onClick={toggleModal}>Change password</DropdownItem>
+              <DropdownItem onClick={toggleChangePasswordModal}>Change password</DropdownItem>
               <DropdownItem onClick={logout}>Sign Out</DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
@@ -53,12 +53,12 @@ const NavMenu = ({ username, logout, toggleModal }) => {
 NavMenu.propTypes = {
   username: PropTypes.string.isRequired,
   logout: PropTypes.func.isRequired,
-  toggleModal: PropTypes.func.isRequired
+  toggleChangePasswordModal: PropTypes.func.isRequired
 };
 
 const connectedNavMenu = connect(
   state => state.authentication.user,
-  dispatch => bindActionCreators(Object.assign({}, authenticationActions, passwordActions), dispatch)
+  dispatch => bindActionCreators(Object.assign({}, authenticationActions, accountActions), dispatch)
 )(NavMenu);
 
 export { connectedNavMenu as NavMenu };

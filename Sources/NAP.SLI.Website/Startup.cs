@@ -15,10 +15,8 @@ namespace NAP.SLI
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using NAP.SimpleApi;
-    using NAP.SLI.Authentication;
     using NAP.SLI.Authentication.Models;
     using NAP.SLI.Common;
-    using NAP.SLI.UserManagement;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using System;
@@ -63,9 +61,10 @@ namespace NAP.SLI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.RegisterCommonModule();
-            services.AddMediatR(typeof(AutoMapperProfile));
-            services.AddAutoMapper(typeof(AutoMapperProfile));
-            services.AddSimpleApi(typeof(SimpleApiProfile));
+            services.AddSimpleApi(typeof(Authentication.SimpleApiProfile));
+            services.AddMediatR(typeof(Authentication.AutoMapperProfile));
+            services.AddAutoMapper(typeof(Authentication.AutoMapperProfile));
+            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
         }
 
         private void ConfigureAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
