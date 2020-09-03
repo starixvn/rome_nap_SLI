@@ -8,16 +8,12 @@
     {
         public static void CopyProperties(JObject src, ICriteria dest)
         {
-            var srcProperties = src.GetType().GetProperties();
             var destProperties = dest.GetType().GetProperties();
             foreach(var destProperty in destProperties)
             {
-                if (destProperty.CanWrite)
+                if (destProperty.CanWrite && src.TryGetValue(destProperty.Name, StringComparison.InvariantCultureIgnoreCase, out JToken value))
                 {
-                    if (src.TryGetValue(destProperty.Name, StringComparison.InvariantCultureIgnoreCase, out JToken value))
-                    {
-                        destProperty.SetValue(dest, value.ToObject(destProperty.PropertyType));
-                    }
+                    destProperty.SetValue(dest, value.ToObject(destProperty.PropertyType));
                 }
             }
         }

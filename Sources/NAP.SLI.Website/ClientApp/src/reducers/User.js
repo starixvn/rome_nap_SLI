@@ -11,7 +11,7 @@ const initialState = { users: [] };
 const query = (data) => {
   return async (dispatch) => {
     const payload = {
-      apiKey: 'administration-query-user',
+      apiKey: 'user-management:query-user',
       data
     };
     dispatch({ type: ActionTypes.QUERY_REQUEST, data });

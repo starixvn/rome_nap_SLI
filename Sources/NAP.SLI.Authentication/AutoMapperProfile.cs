@@ -4,9 +4,9 @@
     using NAP.SLI.Authentication.Criteria;
     using NAP.SLI.Authentication.Models;
 
-    public class AuthenticationProfile : Profile
+    public class AutoMapperProfile : Profile
     {
-        public AuthenticationProfile()
+        public AutoMapperProfile()
         {
             CreateMap<LoginCriteria, LoginResult>();
         }

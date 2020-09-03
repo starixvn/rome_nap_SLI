@@ -3,7 +3,7 @@
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using NAP.SLI.Authentication.Commands;
+    using NAP.SLI.Authentication.Requests;
     using System.Threading.Tasks;
 
     [Authorize]

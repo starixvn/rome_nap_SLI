@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.Authentication.Commands
+﻿namespace NAP.SLI.Authentication.Requests
 {
     using MediatR;
     using Microsoft.AspNetCore.Mvc;

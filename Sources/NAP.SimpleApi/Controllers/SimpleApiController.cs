@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SimpleApi.Models;
+    using NAP.SimpleApi.Requests;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
@@ -20,19 +21,19 @@
             => (this.configuration, this.dynamicRepository) = (configuration, dynamicRepository);
 
         [HttpPost("[action]")]
-        public async Task<JsonResult> Query([FromBody]SimpleApiRequest request)
+        public async Task<IActionResult> Query([FromBody]SimpleApiRequest request)
         {
             var criteria = ValidateAndCreateCriteria(request, ActionTypes.Query);
             var data = await dynamicRepository.FetchAsync<object>(criteria);
-            return new JsonResult(data);
+            return Ok(data);
         }
 
         [HttpPost("[action]")]
-        public async Task<JsonResult> Command([FromBody]SimpleApiRequest request)
+        public async Task<IActionResult> Command([FromBody]SimpleApiRequest request)
         {
             var criteria = ValidateAndCreateCriteria(request, ActionTypes.Command);
             await dynamicRepository.ExecuteAsync((NonQueryCommand)criteria);
-            return new JsonResult(criteria);
+            return Ok(criteria);
         }
 
         private ICriteria ValidateAndCreateCriteria(SimpleApiRequest request, ActionTypes actionType)

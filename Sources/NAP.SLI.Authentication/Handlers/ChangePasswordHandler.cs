@@ -3,8 +3,8 @@
     using Fanex.Data.Repository;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
-    using NAP.SLI.Authentication.Commands;
     using NAP.SLI.Authentication.Criteria;
+    using NAP.SLI.Authentication.Requests;
     using NAP.SLI.Common.Extensions;
     using System.Threading;
     using System.Threading.Tasks;

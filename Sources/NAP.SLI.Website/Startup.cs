@@ -14,10 +14,11 @@ namespace NAP.SLI
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using NAP.SimpleApi;
     using NAP.SLI.Authentication;
     using NAP.SLI.Authentication.Models;
     using NAP.SLI.Common;
-    using NAP.SLI.SimpleApi;
+    using NAP.SLI.UserManagement;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using System;
@@ -62,9 +63,9 @@ namespace NAP.SLI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.RegisterCommonModule();
-            services.RegisterSimpleApiModule();
-            services.AddMediatR(typeof(AuthenticationProfile));
-            services.AddAutoMapper(typeof(AuthenticationProfile));
+            services.AddMediatR(typeof(AutoMapperProfile));
+            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddSimpleApi(typeof(SimpleApiProfile));
         }
 
         private void ConfigureAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
@@ -94,7 +95,7 @@ namespace NAP.SLI
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(env.ContentRootPath, "App_Data"));
             ConfigureFanexData();
 
-            if (env.IsDevelopment())
+            if (!env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }

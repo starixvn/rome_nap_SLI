@@ -5,9 +5,9 @@
     using MediatR;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
-    using NAP.SLI.Authentication.Commands;
     using NAP.SLI.Authentication.Criteria;
     using NAP.SLI.Authentication.Models;
+    using NAP.SLI.Authentication.Requests;
     using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;

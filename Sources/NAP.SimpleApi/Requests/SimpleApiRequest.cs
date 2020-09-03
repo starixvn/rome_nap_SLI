@@ -1,4 +1,4 @@
-﻿namespace NAP.SimpleApi.Models
+﻿namespace NAP.SimpleApi.Requests
 {
     using Newtonsoft.Json.Linq;
 

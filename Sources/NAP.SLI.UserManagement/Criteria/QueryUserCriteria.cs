@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.SimpleApi.Administration
+﻿namespace NAP.SLI.UserManagement.Criteria
 {
     using Fanex.Data.Repository;
 
