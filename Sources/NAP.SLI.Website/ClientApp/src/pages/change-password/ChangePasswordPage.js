@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Label, Input, Button, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -11,6 +11,7 @@ const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, message
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [_message, setMessage] = useState(message);
+  useEffect(() => { setMessage(message) }, [message]);
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -56,8 +57,8 @@ ChangePasswordPage.propTypes = {
 };
 
 const connectedChangePasswordPage = connect(
-  state => state,
-  dispatch => bindActionCreators(Object.assign({}, accountActions), dispatch)
+  state => state.account,
+  dispatch => bindActionCreators(accountActions, dispatch)
 )(ChangePasswordPage);
 
 export { connectedChangePasswordPage as ChangePasswordPage };

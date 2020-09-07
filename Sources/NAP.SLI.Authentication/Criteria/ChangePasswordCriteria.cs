@@ -1,5 +1,6 @@
 ﻿namespace NAP.SLI.Authentication.Criteria
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
@@ -15,8 +16,10 @@
 
         public int CustId => currentUserService.UserId;
 
+        [SpParam(SqlParamName = "OldUserPwd")]
         public string OldPassword { get; set; }
 
+        [SpParam(SqlParamName = "UserPwd")]
         public string NewPassword { get; set; }
 
         public string GetSettingKey() => "SLI_User_Upd";

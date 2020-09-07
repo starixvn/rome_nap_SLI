@@ -23,7 +23,12 @@ const changePassword = (oldPassword, newPassword) => {
 
     try {
       const response = await axios.post('/simple-api/command', payload);
-      dispatch({ type: ActionTypes.CHANGE_PASSWORD_SUCCESS, data: { users: response.data } });
+      var data = response.data;
+      if (data.isSucessful) {
+        dispatch({ type: ActionTypes.CHANGE_PASSWORD_SUCCESS, data: { users: data } });
+      } else {
+        dispatch({ type: ActionTypes.CHANGE_PASSWORD_FAILURE, data: { message: data.errMsg } });
+      }
     } catch (response) {
       dispatch({ type: ActionTypes.CHANGE_PASSWORD_FAILURE, data: { message: response.data } });
     }
@@ -52,7 +57,8 @@ export const reducer = (state = initialState, action) => {
       };
     case ActionTypes.CHANGE_PASSWORD_FAILURE:
       return {
-        ...state
+        ...state,
+        message: action.data.message
       };
     default:
       return state;

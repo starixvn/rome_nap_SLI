@@ -1,11 +1,13 @@
 ﻿namespace NAP.SimpleApi.Controllers
 {
     using Fanex.Data.Repository;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SimpleApi.Models;
     using NAP.SimpleApi.Requests;
     using System.Threading.Tasks;
 
+    [Authorize]
     [ApiController]
     [Route("simple-api")]
     public class SimpleApiController : Controller
@@ -28,7 +30,7 @@
         public async Task<IActionResult> Command([FromBody]SimpleApiRequest request)
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Command);
-            await dynamicRepository.ExecuteAsync((NonQueryCommand)criteria);
+            await dynamicRepository.ExecuteAsync((INonQueryCommand)criteria);
             return Ok(criteria);
         }
     }
