@@ -8,6 +8,7 @@
         public static void RegisterCommonModule(this IServiceCollection services)
         {
             services.AddScoped<ICurrentContextService, CurrentContextService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
         }
     }
 }

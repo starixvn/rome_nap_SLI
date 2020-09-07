@@ -2,12 +2,18 @@
 {
     using Fanex.Data.Repository;
     using NAP.SLI.Common.Models;
+    using NAP.SLI.Common.Services;
 
     public class ChangePasswordCriteria : NonQueryResult, INonQueryCommand
     {
-        public int UserId { get; set; }
+        private readonly ICurrentUserService currentUserService;
 
-        public int CustId { get; set; }
+        public ChangePasswordCriteria(ICurrentUserService currentUserService)
+        => (this.currentUserService) = (currentUserService);
+
+        public int UserId => currentUserService.UserId;
+
+        public int CustId => currentUserService.UserId;
 
         public string OldPassword { get; set; }
 

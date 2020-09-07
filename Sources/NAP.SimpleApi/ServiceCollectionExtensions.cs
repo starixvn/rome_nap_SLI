@@ -4,35 +4,45 @@
     using NAP.SimpleApi.Models;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public static class ServiceCollectionExtensions
     {
-        private static Configuration singletonConfiguration;
-
-        public static IServiceCollection AddSimpleApi(this IServiceCollection services, IEnumerable<RequestOption> requestOptions, IRequestOptionContext requestActivator)
-        {
-            Register(services, new Configuration(requestOptions, requestActivator));
-            return services;
-        }
+        public static IEnumerable<RequestOption> RequestOptions { get; private set; } = new List<RequestOption>();
+        private static bool isServiceRegistered = false;
 
         public static IServiceCollection AddSimpleApi(this IServiceCollection services, Type type)
         {
-            var configuration = Register(services);
+            RegisterService(services);
             var profile = Activator.CreateInstance(type) as Profile;
-            configuration.Add(profile.Prefix, profile.RequestOptions);
+            var requestOptions = profile.RequestOptions.Select(x =>
+            {
+                string apiKey = string.IsNullOrEmpty(profile.Prefix) ? x.ApiKey : $"{profile.Prefix}:{x.ApiKey}";
+                return new RequestOption(apiKey, x.CriteriaType, x.ActionType);
+            });
+            RequestOptions = RequestOptions.Concat(requestOptions);
+            ValidateDuplicateKeys();
             return services;
         }
 
-        private static Configuration Register(this IServiceCollection services)
+        private static void ValidateDuplicateKeys()
         {
-            return singletonConfiguration ?? Register(services, new Configuration());
+            var duplicateApiKeys = RequestOptions.GroupBy(x => x.ApiKey).Where(g => g.Count() > 1).Select(g => g.Key);
+            if (duplicateApiKeys.Any())
+            {
+                throw new InvalidOperationException("Duplicate API Keys: " + string.Join(", ", duplicateApiKeys));
+            }
         }
 
-        private static Configuration Register(this IServiceCollection services, Configuration configuration)
+        private static void RegisterService(this IServiceCollection services)
         {
-            singletonConfiguration = configuration;
-            services.AddSingleton(configuration);
-            return configuration;
+            if (isServiceRegistered)
+            {
+                return;
+            }
+
+            services.AddScoped<IRequestOptionContext, RequestOptionContext>();
+            isServiceRegistered = true;
         }
     }
 }

@@ -1,28 +1,40 @@
 ﻿namespace NAP.SimpleApi.Models
 {
     using Fanex.Data.Repository;
-    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.DependencyInjection;
     using NAP.SimpleApi.Helpers;
-    using Newtonsoft.Json.Linq;
+    using NAP.SimpleApi.Requests;
     using System;
+    using System.Linq;
 
     public interface IRequestOptionContext
     {
-        void AuthorizeRequest(HttpContext httpContext, RequestOption request);
-
-        ICriteria CreateCriteria(HttpContext httpContext, RequestOption request, JObject payload);
+        ICriteria CreateCriteria(SimpleApiRequest request, ActionTypes actionType);
     }
 
     public class RequestOptionContext: IRequestOptionContext
     {
-        public virtual void AuthorizeRequest(HttpContext httpContext, RequestOption request)
-        {
-        }
+        private readonly IServiceProvider serviceProvider;
 
-        public virtual ICriteria CreateCriteria(HttpContext httpContext, RequestOption request, JObject payload)
+        public RequestOptionContext(IServiceProvider serviceProvider)
+            => (this.serviceProvider) = (serviceProvider);
+
+        public virtual ICriteria CreateCriteria(SimpleApiRequest request, ActionTypes actionType)
         {
-            var criteria = (ICriteria)Activator.CreateInstance(request.CriteriaType);
-            ObjectHelper.CopyProperties(payload, criteria);
+            var requestOptions = ServiceCollectionExtensions.RequestOptions;
+            var requestOption = requestOptions.FirstOrDefault(x => x.ApiKey == request.ApiKey && x.ActionType == actionType);
+            if (requestOption == null)
+            {
+                throw new InvalidOperationException("ApiKey not found");
+            }
+
+            var criteria = ActivatorUtilities.CreateInstance(serviceProvider, requestOption.CriteriaType) as ICriteria;
+            ObjectHelper.CopyProperties(request.Data, criteria);
+            if (!criteria.IsValid())
+            {
+                throw new InvalidOperationException("Invalid criteria");
+            }
+
             return criteria;
         }
     }

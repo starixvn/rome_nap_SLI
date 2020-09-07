@@ -6,7 +6,6 @@
     using NAP.SLI.Authentication.Requests;
     using System.Threading.Tasks;
 
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AuthenticationController : Controller
