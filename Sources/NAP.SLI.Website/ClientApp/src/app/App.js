@@ -63,7 +63,8 @@ const App = ({ account, loggedIn, logout, isOpen }) => {
 App.propTypes = {
   account: PropTypes.object.isRequired,
   loggedIn: PropTypes.bool.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired
 };
 
 const connectedApp = connect(

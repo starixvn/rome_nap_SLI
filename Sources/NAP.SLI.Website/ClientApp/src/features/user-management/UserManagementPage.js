@@ -99,7 +99,7 @@ UserManagementPage.propTypes = {
 }
 
 const connectedUserManagementPage = connect(
-  state => state.user,
+  state => state.userManagement,
   dispatch => bindActionCreators(actions, dispatch)
 )(UserManagementPage);
 
