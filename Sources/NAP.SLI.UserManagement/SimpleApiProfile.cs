@@ -1,6 +1,7 @@
 ﻿namespace NAP.SLI.UserManagement
 {
     using NAP.SimpleApi;
+    using NAP.SLI.UserManagement.Commands;
     using NAP.SLI.UserManagement.Criteria;
 
     public class SimpleApiProfile : Profile
@@ -9,6 +10,7 @@
             :base("user-management")
         {
             AddQuery<QueryUserCriteria>("query-user");
+            AddCommand<UpdateUserStatusCommand>("update-user-status");
         }
     }
 }
