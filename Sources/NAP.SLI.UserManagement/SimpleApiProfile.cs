@@ -11,6 +11,7 @@
         {
             AddQuery<QueryUserCriteria>("query-user");
             AddCommand<UpdateUserStatusCommand>("update-user-status");
+            AddCommand<ChangeUserPasswordCommand>("change-user-password");
         }
     }
 }
