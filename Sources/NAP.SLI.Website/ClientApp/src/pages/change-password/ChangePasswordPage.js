@@ -6,18 +6,15 @@ import PropTypes from 'prop-types';
 import { accountActions } from '../../reducers/Account';
 import './ChangePasswordPage.scss';
 
-const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, message }) => {
+const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, showError, message, isSuccessful }) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [_message, setMessage] = useState(message);
-  useEffect(() => { setMessage(message) }, [message]);
 
   const handleSubmit = event => {
     event.preventDefault();
-    setMessage('');
     if (confirmPassword !== newPassword) {
-      setMessage('New password and confirm password does not match');
+      showError('New password and confirm password does not match');
       return;
     }
 
@@ -26,9 +23,11 @@ const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, message
 
   return (
     <Form className="change-password-page" noValidate onSubmit={handleSubmit}>
-      {_message && <div className="text-center alert alert-danger" role="alert">
-        {_message}
-      </div>}
+      {message &&
+        <div className={`text-center alert ${isSuccessful ? 'alert-success' : 'alert-danger'}`} role="alert">
+          {message}
+        </div>
+      }
       <FormGroup>
         <Label for="oldPassword" className="col-form-label">Old Password</Label>
         <Input type="password" id="oldPassword" value={oldPassword} onChange={event => setOldPassword(event.target.value)} />
@@ -53,6 +52,8 @@ const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, message
 ChangePasswordPage.propTypes = {
   changePassword: PropTypes.func.isRequired,
   toggleChangePasswordModal: PropTypes.func.isRequired,
+  showError: PropTypes.func.isRequired,
+  isSuccessful: PropTypes.bool,
   message: PropTypes.string
 };
 

@@ -24,19 +24,22 @@ const changePassword = (oldPassword, newPassword) => {
     try {
       const response = await axios.post('/simple-api/command', payload);
       var data = response.data;
-      if (data.isSucessful) {
-        dispatch({ type: ActionTypes.CHANGE_PASSWORD_SUCCESS, data: { users: data } });
+      if (data.isSuccessful) {
+        dispatch({ type: ActionTypes.CHANGE_PASSWORD_SUCCESS, data: { message: 'Password changed successfully' } });
       } else {
         dispatch({ type: ActionTypes.CHANGE_PASSWORD_FAILURE, data: { message: data.errMsg } });
       }
     } catch (response) {
-      dispatch({ type: ActionTypes.CHANGE_PASSWORD_FAILURE, data: { message: response.data } });
+      dispatch({ type: ActionTypes.CHANGE_PASSWORD_FAILURE, data: { message: data.errMsg } });
     }
   };
 }
 
+const showError = (message) => ({ type: ActionTypes.CHANGE_PASSWORD_FAILURE, data: { message } });
+
 export const accountActions = {
   toggleChangePasswordModal: () => ({ type: ActionTypes.CHANGE_PASSWORD_TOGGLE_MODAL }),
+  showError,
   changePassword
 };
 
@@ -53,11 +56,14 @@ export const reducer = (state = initialState, action) => {
       };
     case ActionTypes.CHANGE_PASSWORD_SUCCESS:
       return {
-        ...state
+        ...state,
+        isSuccessful: true,
+        message: action.data.message
       };
     case ActionTypes.CHANGE_PASSWORD_FAILURE:
       return {
         ...state,
+        isSuccessful: false,
         message: action.data.message
       };
     default:
