@@ -1,14 +1,14 @@
 import axios from 'axios';
-const CryptoJS = require('../shared/CryptoJS');
+const CryptoJS = require('../../../common/libs/CryptoJS');
 
 const ActionTypes = {
-  CHANGE_PASSWORD_TOGGLE_MODAL: 'CHANGE_PASSWORD_TOGGLE_MODAL',
+  CHANGE_PASSWORD_TOGGLE: 'CHANGE_PASSWORD_TOGGLE',
   CHANGE_PASSWORD_REQUEST: 'CHANGE_PASSWORD_REQUEST',
   CHANGE_PASSWORD_SUCCESS: 'CHANGE_PASSWORD_SUCCESS',
   CHANGE_PASSWORD_FAILURE: 'CHANGE_PASSWORD_FAILURE'
 }
 
-const initialState = { isChangePasswordOpen: false };
+const initialState = { isOpen: false };
 
 const changePassword = (oldPassword, newPassword) => {
   return async (dispatch) => {
@@ -37,18 +37,18 @@ const changePassword = (oldPassword, newPassword) => {
 
 const showError = (message) => ({ type: ActionTypes.CHANGE_PASSWORD_FAILURE, data: { message } });
 
-export const accountActions = {
-  toggleChangePasswordModal: () => ({ type: ActionTypes.CHANGE_PASSWORD_TOGGLE_MODAL }),
+export const actions = {
+  toggle: () => ({ type: ActionTypes.CHANGE_PASSWORD_TOGGLE }),
   showError,
   changePassword
 };
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.CHANGE_PASSWORD_TOGGLE_MODAL:
+    case ActionTypes.CHANGE_PASSWORD_TOGGLE:
       return {
         ...state,
-        isChangePasswordOpen: !state.isChangePasswordOpen
+        isOpen: !state.isOpen
       };
     case ActionTypes.CHANGE_PASSWORD_REQUEST:
       return {

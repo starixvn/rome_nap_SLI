@@ -25,7 +25,7 @@ const query = (data) => {
   };
 }
 
-export const userActions = {
+export const actions = {
   query
 };
 

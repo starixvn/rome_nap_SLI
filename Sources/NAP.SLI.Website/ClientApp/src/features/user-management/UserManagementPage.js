@@ -6,7 +6,7 @@ import { mdiAccountPlus } from '@mdi/js';
 import Select from 'react-select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { userActions } from '../../reducers/User';
+import { actions } from './reducer';
 import './UserManagementPage.scss';
 
 const groupOptions = [
@@ -100,7 +100,7 @@ UserManagementPage.propTypes = {
 
 const connectedUserManagementPage = connect(
   state => state.user,
-  dispatch => bindActionCreators(userActions, dispatch)
+  dispatch => bindActionCreators(actions, dispatch)
 )(UserManagementPage);
 
 export { connectedUserManagementPage as UserManagementPage };

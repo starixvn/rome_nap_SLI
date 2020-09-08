@@ -6,10 +6,10 @@ import { Redirect } from "react-router";
 import PropTypes from 'prop-types';
 import Icon from '@mdi/react';
 import { mdiAccount, mdiLock } from '@mdi/js';
-import { authenticationActions } from '../../reducers/Authentication';
+import { actions } from './reducer';
 import './LoginPage.scss';
-import { ReactComponent as Firefox } from './firefox.svg';
-import { ReactComponent as Chrome } from './chrome.svg';
+import { ReactComponent as Firefox } from './images/firefox.svg';
+import { ReactComponent as Chrome } from './images/chrome.svg';
 
 const LoginPage = ({ login, loggingIn, message, loggedIn }) => {
   const [username, setUsername] = useState('');
@@ -67,7 +67,7 @@ LoginPage.propTypes = {
 
 const connectedLoginPage = connect(
   state => state.authentication,
-  dispatch => bindActionCreators(authenticationActions, dispatch)
+  dispatch => bindActionCreators(actions, dispatch)
 )(LoginPage);
 
 export { connectedLoginPage as LoginPage };

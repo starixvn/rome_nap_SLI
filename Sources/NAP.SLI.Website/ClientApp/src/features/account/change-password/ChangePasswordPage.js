@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Form, Label, Input, Button, FormGroup } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import { accountActions } from '../../reducers/Account';
+import { actions } from './reducer';
 import './ChangePasswordPage.scss';
 
-const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, showError, message, isSuccessful }) => {
+const ChangePasswordPage = ({ changePassword, toggle, showError, message, isSuccessful }) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -43,7 +43,7 @@ const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, showErr
       <FormGroup>
         <Label className="col-form-label"></Label>
         <Button type="submit" color="primary" className="mr-1">Submit</Button>
-        <Button type="button" color="secondary" onClick={toggleChangePasswordModal}>Cancel</Button>
+        <Button type="button" color="secondary" onClick={toggle}>Cancel</Button>
       </FormGroup>
     </Form>
   );
@@ -51,7 +51,7 @@ const ChangePasswordPage = ({ changePassword, toggleChangePasswordModal, showErr
 
 ChangePasswordPage.propTypes = {
   changePassword: PropTypes.func.isRequired,
-  toggleChangePasswordModal: PropTypes.func.isRequired,
+  toggle: PropTypes.func.isRequired,
   showError: PropTypes.func.isRequired,
   isSuccessful: PropTypes.bool,
   message: PropTypes.string
@@ -59,7 +59,7 @@ ChangePasswordPage.propTypes = {
 
 const connectedChangePasswordPage = connect(
   state => state.account,
-  dispatch => bindActionCreators(accountActions, dispatch)
+  dispatch => bindActionCreators(actions, dispatch)
 )(ChangePasswordPage);
 
 export { connectedChangePasswordPage as ChangePasswordPage };

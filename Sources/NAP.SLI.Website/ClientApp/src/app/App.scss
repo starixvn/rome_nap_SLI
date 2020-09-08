@@ -6,6 +6,12 @@ $alert-padding-x: 1rem;
 // Import Bootstrap and its default variables
 @import "~bootstrap/scss/bootstrap.scss";
 
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
 svg {
   fill: currentColor;
 }

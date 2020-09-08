@@ -1,5 +1,5 @@
 import axios from 'axios';
-const CryptoJS = require('../shared/CryptoJS');
+const CryptoJS = require('../../../common/libs/CryptoJS');
 
 const ActionTypes = {
   LOGIN_REQUEST: 'AUTHENTICATION_LOGIN_REQUEST',
@@ -8,8 +8,8 @@ const ActionTypes = {
   LOGOUT: 'AUTHENTICATION_LOGOUT'
 }
 
-const user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { loggingIn: false, loggedIn: true, user } : { loggingIn: false, loggedIn: false };
+const account = JSON.parse(localStorage.getItem('account'));
+const initialState = account ? { loggingIn: false, loggedIn: true, account } : { loggingIn: false, loggedIn: false };
 
 const login = (username, password) => {
   return async (dispatch) => {
@@ -23,10 +23,10 @@ const login = (username, password) => {
       return;
     }
 
-    const user = {
+    const account = {
       username
     };
-    dispatch({ type: ActionTypes.LOGIN_REQUEST, data: { user } });
+    dispatch({ type: ActionTypes.LOGIN_REQUEST, data: { account } });
 
     try {
       const payload = {
@@ -35,9 +35,9 @@ const login = (username, password) => {
       };
       const response = await axios.post('/api/authentication/login', payload);
       const { groupId, token } = response.data;
-      Object.assign(user, { groupId, token });
-      localStorage.setItem('user', JSON.stringify(user));
-      dispatch({ type: ActionTypes.LOGIN_SUCCESS, data: { user } });
+      Object.assign(account, { groupId, token });
+      localStorage.setItem('account', JSON.stringify(account));
+      dispatch({ type: ActionTypes.LOGIN_SUCCESS, data: { account } });
     } catch (response) {
       dispatch({ type: ActionTypes.LOGIN_FAILURE, data: { message: response.data } });
     }
@@ -46,12 +46,12 @@ const login = (username, password) => {
 
 const logout = () => {
   return (dispatch) => {
-    localStorage.removeItem('user');
+    localStorage.removeItem('account');
     dispatch({ type: ActionTypes.LOGOUT });
   }
 }
 
-export const authenticationActions = {
+export const actions = {
   login,
   logout
 };
@@ -62,7 +62,7 @@ export const reducer = (state = initialState, action) => {
       return {
         loggingIn: true,
         loggedIn: false,
-        user: action.data.user
+        account: action.data.account
       };
     case ActionTypes.LOGIN_SET_MESSAGE:
       return {
@@ -74,7 +74,7 @@ export const reducer = (state = initialState, action) => {
         ...state,
         loggingIn: false,
         loggedIn: true,
-        user: action.data.user,
+        account: action.data.account,
         message: ''
       };
     case ActionTypes.LOGIN_FAILURE:
