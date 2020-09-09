@@ -4,6 +4,9 @@ const ActionTypes = {
   USER_MANAGEMENT_QUERY_REQUEST: 'USER_MANAGEMENT_QUERY_REQUEST',
   USER_MANAGEMENT_QUERY_SUCCESS: 'USER_MANAGEMENT_QUERY_SUCCESS',
   USER_MANAGEMENT_QUERY_FAILURE: 'USER_MANAGEMENT_QUERY_FAILURE'
+  QUERY_FAILURE: 'USER_QUERY_FAILURE',
+  UPDATE_STATUS_SUCCESS: 'USER_UPDATE_STATUS_SUCCESS',
+  UPDATE_STATUS_FAILURE: 'USER_UPDATE_STATUS_FAILURE'
 }
 
 const initialState = { users: [] };
@@ -25,8 +28,27 @@ const query = (data) => {
   };
 }
 
+const onUserStatusChange = (status, user) => {
+  return async (dispatch) => {
+    const payload = {
+      apiKey: 'user-management:update-user-status',
+      data: {
+        custId: user.custId,
+        closed: !status
+      }
+    };
+    try {
+      const response = await axios.post('/simple-api/command', payload);
+      dispatch({ type: ActionTypes.UPDATE_STATUS_SUCCESS, data: { userId: user.custId, status } })
+    } catch (error) {
+      dispatch({ type: ActionTypes.UPDATE_STATUS_FAILURE, data: { message: error.data } });
+    }
+  };
+}
+
 export const actions = {
-  query
+  query,
+  onUserStatusChange
 };
 
 export const reducer = (state = initialState, action) => {
@@ -45,6 +67,17 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         message: action.data.message
+      };
+    case ActionTypes.UPDATE_STATUS_SUCCESS:
+      return {
+        ...state,
+        users: state.users.map((user, i) => user.custId === action.data.userId ? { ...user, closed: !action.data.status } : user),
+        message: 'Update Success!'
+      };
+    case ActionTypes.UPDATE_STATUS_FAILURE:
+      return {
+        ...state,
+        message: 'Update Failed!'
       };
     default:
       return state;

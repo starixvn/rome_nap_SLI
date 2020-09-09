@@ -7,6 +7,8 @@
   <Function Name="Administration">
     <Setting Key="SLI_User_Sel" SpName="SLI_User_Sel" DbName="DBCUST.CustDB.bodbAdminNet" />
     <Setting Key="SLI_User_Ins" SpName="SLI_User_Ins" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="SLI_User_Upd" SpName="SLI_User_Upd" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_User_Upd" SpName="SLI_User_Upd" DbName="DBCUST.CustDB.bodbAdminNet" /> 
+    <Setting Key="AdminUpdClosed" SpName="Acc_Con_AdminUpdClosed" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="Acc_CustomerUpdPwdReset" SpName="Acc_CustomerUpdPwdReset" DbName="DBCUST.CustDB.bodbAdminNet" />
   </Function>
 </Functions>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Label, Form, Input, Button, FormGroup, Table } from 'reactstrap';
-import Icon from '@mdi/react';
-import { mdiAccountPlus } from '@mdi/js';
+import Icon from '@mdi/react'; 
+import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
 import Select from 'react-select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ const groupOptions = [
   { value: 1, label: 'Admin' }
 ];
 
-const UserManagementPage = ({ users, query }) => {
+const UserManagementPage = ({ users, query, onUserStatusChange }) => {
   const [username, setUsername] = useState('');
   const [groupOption, setGroupOption] = useState(groupOptions[0]);
 
@@ -61,7 +61,7 @@ const UserManagementPage = ({ users, query }) => {
           <Button type="submit" color="primary" className="btn-block">Search</Button>
         </FormGroup>
       </Form>
-      <Table hover>
+      <Table hover bordered striped>
         <thead>
           <tr>
             <th>USER NAME</th>
@@ -82,9 +82,9 @@ const UserManagementPage = ({ users, query }) => {
               <td>{user.lastName}</td>
               <td>{user.groupId}</td>
               <td>{user.creator}</td>
-              <td>{user.createdDate}</td>
-              <td>{user.closed}</td>
-              <td>Password</td>
+              <td>{user.createdDate}</td> 
+              <td><Input type="checkbox" checked={!user.closed} onChange={e => onUserStatusChange(e.target.checked, user)} value="true" /></td>
+              <td><Icon path={mdiLockReset} size={1} /></td>
             </tr>
           )}
         </tbody>
@@ -95,7 +95,8 @@ const UserManagementPage = ({ users, query }) => {
 
 UserManagementPage.propTypes = {
   users: PropTypes.array.isRequired,
-  query: PropTypes.func.isRequired
+  query: PropTypes.func.isRequired,
+  onUserStatusChange: PropTypes.func.isRequired
 }
 
 const connectedUserManagementPage = connect(
