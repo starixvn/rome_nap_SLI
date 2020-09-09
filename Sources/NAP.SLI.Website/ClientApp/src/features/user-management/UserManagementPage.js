@@ -86,7 +86,7 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
               <td>{user.creator}</td>
               <td>{user.createdDate}</td>
               <td><Input type="checkbox" checked={!user.closed} onChange={e => onUserStatusChange(e.target.checked, user)} value="true" /></td>
-              <td><Icon path={mdiLockReset} size={1} onClick={e => openResetUserPasswordModal(user)} /></td>
+              <td><Icon path={mdiLockReset} size={1} onClick={() => openResetUserPasswordModal(user)} /></td>
             </tr>
           )}
         </tbody>
@@ -99,7 +99,8 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
 UserManagementPage.propTypes = {
   users: PropTypes.array.isRequired,
   query: PropTypes.func.isRequired,
-  onUserStatusChange: PropTypes.func.isRequired
+  onUserStatusChange: PropTypes.func.isRequired,
+  openResetUserPasswordModal: PropTypes.func.isRequired
 }
 
 const connectedUserManagementPage = connect(

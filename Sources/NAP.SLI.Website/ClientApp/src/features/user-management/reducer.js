@@ -40,7 +40,7 @@ const onUserStatusChange = (status, user) => {
     };
     
     try {
-      const response = await axios.post('/simple-api/command', payload);
+      await axios.post('/simple-api/command', payload);
       dispatch({ type: ActionTypes.UPDATE_STATUS_SUCCESS, data: { userId: user.custId, status } })
     } catch (error) {
       dispatch({ type: ActionTypes.UPDATE_STATUS_FAILURE, data: { message: error.data } });
@@ -73,7 +73,7 @@ export const reducer = (state = initialState, action) => {
     case ActionTypes.UPDATE_STATUS_SUCCESS:
       return {
         ...state,
-        users: state.users.map((user, i) => user.custId === action.data.userId ? { ...user, closed: !action.data.status } : user),
+        users: state.users.map((user) => user.custId === action.data.userId ? { ...user, closed: !action.data.status } : user),
         message: 'Update Success!'
       };
     case ActionTypes.UPDATE_STATUS_FAILURE:
