@@ -1,0 +1,1 @@
+export const matchPassword = (value, allValues) => (value === allValues.newPassword);

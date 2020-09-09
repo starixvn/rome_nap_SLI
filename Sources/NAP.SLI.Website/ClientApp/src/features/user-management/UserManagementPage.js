@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Label, Form, Input, Button, FormGroup, Table } from 'reactstrap';
-import Icon from '@mdi/react'; 
+import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
 import Select from 'react-select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions } from './reducer';
 import './UserManagementPage.scss';
+import { ResetUserPasswordModal } from './reset-user-password/ResetUserPasswordModal';
+import { actions as resetPasswordActions } from './reset-user-password/reducer';
 
 const groupOptions = [
   { value: null, label: 'All Groups' },
@@ -15,7 +17,7 @@ const groupOptions = [
   { value: 1, label: 'Admin' }
 ];
 
-const UserManagementPage = ({ users, query, onUserStatusChange }) => {
+const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPasswordModal }) => {
   const [username, setUsername] = useState('');
   const [groupOption, setGroupOption] = useState(groupOptions[0]);
 
@@ -82,13 +84,14 @@ const UserManagementPage = ({ users, query, onUserStatusChange }) => {
               <td>{user.lastName}</td>
               <td>{user.groupId}</td>
               <td>{user.creator}</td>
-              <td>{user.createdDate}</td> 
+              <td>{user.createdDate}</td>
               <td><Input type="checkbox" checked={!user.closed} onChange={e => onUserStatusChange(e.target.checked, user)} value="true" /></td>
-              <td><Icon path={mdiLockReset} size={1} /></td>
+              <td><Icon path={mdiLockReset} size={1} onClick={e => openResetUserPasswordModal(user)} /></td>
             </tr>
           )}
         </tbody>
       </Table>
+      <ResetUserPasswordModal />
     </div>
   );
 };
@@ -101,7 +104,7 @@ UserManagementPage.propTypes = {
 
 const connectedUserManagementPage = connect(
   state => state.userManagement,
-  dispatch => bindActionCreators(actions, dispatch)
+  dispatch => bindActionCreators(Object.assign({}, actions, { openResetUserPasswordModal: resetPasswordActions.toggle }), dispatch)
 )(UserManagementPage);
 
 export { connectedUserManagementPage as UserManagementPage };
