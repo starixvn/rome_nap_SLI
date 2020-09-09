@@ -28,9 +28,6 @@ const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar, isOpen
         <Collapse className="d-sm-inline-flex" isOpen={isOpen} navbar>
           <ul className="navbar-nav mr-auto">
             <NavItem>
-              <NavLink className="nav-link" activeClassName="active" exact to="/customer">Customer</NavLink>
-            </NavItem>
-            <NavItem>
               <NavLink className="nav-link" activeClassName="active" to="/reports">Reports</NavLink>
             </NavItem>
             <NavItem>

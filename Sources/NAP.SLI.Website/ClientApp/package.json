@@ -5,7 +5,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
+    "test": "react-scripts test",
     "lint": "eslint ./src/"
   },
   "dependencies": {
@@ -35,7 +35,7 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "eslint-plugin-sonarjs": "^0.5.0",
     "node-sass": "^4.13.1",
-    "react-app-rewired": "^2.1.5",
+    "react-app-rewired": "^2.1.6",
     "react-scripts": "^3.3.0"
   },
   "browserslist": {

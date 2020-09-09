@@ -16,7 +16,6 @@ import { UserManagementPage } from '../features/user-management/UserManagementPa
 import { LoginPage } from '../features/account/authentication/LoginPage';
 import { HomePage } from '../features/home/HomePage';
 import { ChangePasswordModal } from '../features/account/change-password/ChangePasswordModal';
-import { CustomerPage } from '../features/customer/CustomerPage';
 
 const App = ({ account, loggedIn, logout, isOpen }) => {
   useEffect(() => {
@@ -38,7 +37,7 @@ const App = ({ account, loggedIn, logout, isOpen }) => {
 
         return Promise.reject(error.response);
       });
-  }, [loggedIn]);
+  });
 
   return (
     <BrowserRouter>
@@ -50,7 +49,6 @@ const App = ({ account, loggedIn, logout, isOpen }) => {
           <Switch>
             <Route path="/login" component={LoginPage} />
             <PrivateRoute exact path="/" component={HomePage} />
-            <PrivateRoute path="/customer" component={CustomerPage} />
             <PrivateRoute path="/administration" component={UserManagementPage} />
             <Route component={NotFoundPage} />
           </Switch>
@@ -61,7 +59,7 @@ const App = ({ account, loggedIn, logout, isOpen }) => {
 };
 
 App.propTypes = {
-  account: PropTypes.object.isRequired,
+  account: PropTypes.object,
   loggedIn: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired

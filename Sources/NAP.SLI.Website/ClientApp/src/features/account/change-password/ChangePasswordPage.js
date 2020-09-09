@@ -58,7 +58,7 @@ ChangePasswordPage.propTypes = {
 };
 
 const connectedChangePasswordPage = connect(
-  state => state.account,
+  state => state.changePassword,
   dispatch => bindActionCreators(actions, dispatch)
 )(ChangePasswordPage);
 

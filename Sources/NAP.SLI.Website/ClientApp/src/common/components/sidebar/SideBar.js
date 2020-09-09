@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { actions } from './reducer';
+import './SideBar.scss';
 
 const SideBar = ({ isOpen, toggle }) => {
+
+  const [username, setUsername] = useState('');
+
+  const handleSubmit = event => {
+    event.preventDefault();
+  };
 
   return (
     <div className={classNames("sidebar", { "is-open": isOpen })}>
@@ -15,7 +23,13 @@ const SideBar = ({ isOpen, toggle }) => {
         </span>
       </div>
       <div className="side-menu">
-        SideBar
+        <Form inline className="form-customer" onSubmit={handleSubmit}>
+          <FormGroup className="mr-5">
+            <Label for="username" className="mr-2">Username</Label>
+            <Input type="text" id="username" value={username} onChange={event => setUsername(event.target.value)} />
+          </FormGroup>
+          <Button type="submit">Search</Button>
+        </Form>
       </div>
     </div>
   );
