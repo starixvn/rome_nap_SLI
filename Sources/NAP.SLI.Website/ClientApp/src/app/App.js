@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Container } from 'reactstrap';
 import { NavMenu } from '../common/components/nav/NavMenu';
 import { SideBar } from '../common/components/sidebar/SideBar';
 import { PrivateRoute } from '../common/components/PrivateRoute';
@@ -16,6 +15,7 @@ import { UserManagementPage } from '../features/user-management/UserManagementPa
 import { LoginPage } from '../features/account/authentication/LoginPage';
 import { HomePage } from '../features/home/HomePage';
 import { ChangePasswordModal } from '../features/account/change-password/ChangePasswordModal';
+import { Container } from 'reactstrap';
 
 const App = ({ account, loggedIn, logout, isOpen }) => {
   useEffect(() => {
@@ -41,18 +41,20 @@ const App = ({ account, loggedIn, logout, isOpen }) => {
 
   return (
     <BrowserRouter>
-      <div className="wrapper">
-        {loggedIn && isOpen && <SideBar />}
-        <Container fluid>
+      <div className={`wrapper ${isOpen ? 'open' : ''}`}>
+        {loggedIn && <div className="sidebar"><SideBar /></div>}
+        <div className="content">
           {loggedIn && <NavMenu />}
           {loggedIn && <ChangePasswordModal />}
-          <Switch>
-            <Route path="/login" component={LoginPage} />
-            <PrivateRoute exact path="/" component={HomePage} />
-            <PrivateRoute path="/administration" component={UserManagementPage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </Container>
+          <Container fluid className="main">
+            <Switch>
+              <Route path="/login" component={LoginPage} />
+              <PrivateRoute exact path="/" component={HomePage} />
+              <PrivateRoute path="/administration" component={UserManagementPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </Container>
+        </div>
       </div>
     </BrowserRouter>
   );

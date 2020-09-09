@@ -2,6 +2,11 @@
 $body-bg: #ededec;
 $alert-padding-y: 0.5rem;
 $alert-padding-x: 1rem;
+$font-size-base: 0.875rem;
+$input-btn-padding-x: 0.5rem;
+$input-btn-padding-y: 0.25rem;
+$spacer: 0.5rem;
+$sidebar-width: 321px;
 
 // Import Bootstrap and its default variables
 @import "~bootstrap/scss/bootstrap.scss";
@@ -10,6 +15,53 @@ $alert-padding-x: 1rem;
   display: flex;
   width: 100%;
   align-items: stretch;
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: $sidebar-width;
+    border-right: 1px solid $border-color;
+    padding: 0.5rem;
+    display: none;
+    z-index: 999;
+  }
+
+  .content {
+    width: 100%;
+    min-height: 100vh;
+    transition: all 0.3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    nav {
+      background: #eee;
+      position: fixed;
+      left: 0;
+      right: 0;
+      z-index: 999;
+    }
+
+    .main {
+      margin-top: 50px;
+    }
+  }
+
+  &.open {
+    .sidebar {
+      display: block;
+    }
+
+    .content {
+      width: calc(100% - #{$sidebar-width});
+
+      nav {
+        left: $sidebar-width;
+      }
+    }
+  }
 }
 
 svg {
@@ -21,4 +73,12 @@ button {
     margin-top: -5px;
     margin-right: 5px;
   }
+}
+
+.page-title {
+  font-size: 1.05rem;
+  border-bottom: 1px solid #ccc;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding-bottom: 0.25rem;
 }

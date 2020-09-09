@@ -38,7 +38,7 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
 
   return (
     <div className="user-management-page">
-      <h4>User Management</h4>
+      <div className="page-title">User Management</div>
       <Form inline className="mb-2">
         <FormGroup className="mr-2">
           <Button type="button" className="btn-block" onClick={addNewUser}>
