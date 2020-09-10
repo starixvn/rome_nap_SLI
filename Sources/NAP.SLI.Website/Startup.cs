@@ -65,9 +65,9 @@ namespace NAP.SLI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.RegisterCommonModule();
-            services.AddSimpleApi(typeof(Authentication.SimpleApiProfile));
-            services.AddMediatR(typeof(Authentication.AutoMapperProfile));
-            services.AddAutoMapper(typeof(Authentication.AutoMapperProfile));
+            services.AddSimpleApi(typeof(Account.SimpleApiProfile));
+            services.AddMediatR(typeof(Account.AutoMapperProfile));
+            services.AddAutoMapper(typeof(Account.AutoMapperProfile));
             services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
         }
 

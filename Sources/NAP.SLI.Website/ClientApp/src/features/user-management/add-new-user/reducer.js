@@ -15,11 +15,12 @@ const handleSubmit = (values) => {
         const payload = {
             apiKey: 'user-management:add-new-user',
             data: {
-                username: values.username,
-                password: CryptoJS.CfsEnCode(values.password),
-                firstname: values.firstname,
-                lastname: values.lastname,
-                group: values.group
+                userName: values.username,
+                userPwd: CryptoJS.CfsEnCode(values.password),
+                firstName: values.firstname ?? "",
+                lastName: values.lastname ?? "",
+                group: values.group,
+                isABS: false
             }
         };
 
@@ -28,7 +29,7 @@ const handleSubmit = (values) => {
             if (response.data.errCode !== 0) {
                 dispatch({ type: ActionTypes.ADD_NEW_USER_FAILURE, data: { message: response.data.errMsg } });
             } else {
-                dispatch({ type: ActionTypes.ADD_NEW_USER_SUCCESS, data: { message: 'Add User successfully.' } });
+                dispatch({ type: ActionTypes.ADD_NEW_USER_SUCCESS, data: { message: `Add User ${response.data.userName} successfully.` } });
                 setTimeout(() => {
                     dispatch({ type: ActionTypes.TOGGLE_ADD_NEW_USER_MODAL })
                 }, 3000);

@@ -12,6 +12,8 @@ import { AddNewUserModal } from './add-new-user/AddNewUserModal';
 import { ResetUserPasswordModal } from './reset-user-password/ResetUserPasswordModal';
 import { actions as resetPasswordActions } from './reset-user-password/reducer';
 import { actions as addNewUserActions } from './add-new-user/reducer';
+import { actions as editUserInfoActions } from './edit-user/reducer';
+import { EditUserModal } from './edit-user/EditUserModal';
 
 const groupOptions = [
   { value: null, label: 'All Groups' },
@@ -19,7 +21,7 @@ const groupOptions = [
   { value: 1, label: 'Admin' }
 ];
 
-const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPasswordModal, openAddNewUserModal }) => {
+const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPasswordModal, openAddNewUserModal, openEditUserModal }) => {
   const [username, setUsername] = useState('');
   const [groupOption, setGroupOption] = useState(groupOptions[0]);
 
@@ -78,7 +80,7 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
         <tbody>
           {users.map(user =>
             <tr key={`Row_${user.custId}`}>
-              <td>{user.userName}</td>
+              <td onClick={() => openEditUserModal(user)}>{user.userName}</td>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
               <td>{user.groupId}</td>
@@ -91,6 +93,7 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
         </tbody>
       </Table>
       <AddNewUserModal />
+      <EditUserModal />
       <ResetUserPasswordModal />
     </div>
   );
@@ -101,7 +104,8 @@ UserManagementPage.propTypes = {
   query: PropTypes.func.isRequired,
   onUserStatusChange: PropTypes.func.isRequired,
   openResetUserPasswordModal: PropTypes.func.isRequired,
-  openAddNewUserModal: PropTypes.func.isRequired
+  openAddNewUserModal: PropTypes.func.isRequired,
+  openEditUserModal: PropTypes.func.isRequired
 }
 
 const connectedUserManagementPage = connect(
@@ -111,7 +115,8 @@ const connectedUserManagementPage = connect(
       actions,
       {
         openResetUserPasswordModal: resetPasswordActions.open,
-        openAddNewUserModal: addNewUserActions.openAddNewUserModal
+        openAddNewUserModal: addNewUserActions.openAddNewUserModal,
+        openEditUserModal: editUserInfoActions.openEditUserModal
       }),
     dispatch)
 )(UserManagementPage);

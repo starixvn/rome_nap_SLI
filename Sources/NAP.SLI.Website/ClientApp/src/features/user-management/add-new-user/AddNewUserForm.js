@@ -7,7 +7,7 @@ const renderField = (field) => (
     <FormGroup row>
         <Label sm={4}>{field.label}</Label>
         <Col className={field.meta.asyncValidating ? 'async-validating' : ''} sm={8}>
-            <Input {...field.input} type={field.type} />
+            <Input {...field.input} type={field.type} autoComplete="off" />
             {field.meta.touched && field.error && <span>{field.error}</span>}
         </Col>
     </FormGroup>
@@ -73,5 +73,6 @@ AddNewUserForm.propTypes = {
 export default reduxForm({
     form: 'addNewUserForm',
     validate,
-    enableReinitialize: true
+    enableReinitialize: true,
+    initialValues: {username: "", password: ""}
 })(AddNewUserForm)
