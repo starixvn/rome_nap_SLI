@@ -4,6 +4,7 @@ import * as Authentication from '../features/account/authentication/reducer';
 import * as ChangePassword from '../features/account/change-password/reducer';
 import * as UserManagement from '../features/user-management/reducer';
 import * as ResetUserPassword from '../features/user-management/reset-user-password/reducer';
+import * as AddNewUser from '../features/user-management/add-new-user/reducer';
 import { reducer as formReducer } from 'redux-form'
 
 const createRootReducer = () => combineReducers({
@@ -12,6 +13,7 @@ const createRootReducer = () => combineReducers({
   changePassword: ChangePassword.reducer,
   userManagement: UserManagement.reducer,
   resetUserPassword: ResetUserPassword.reducer,
+  addnewUser: AddNewUser.reducer,
   form: formReducer
 })
 

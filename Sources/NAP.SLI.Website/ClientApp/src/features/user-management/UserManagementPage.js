@@ -8,8 +8,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions } from './reducer';
 import './UserManagementPage.scss';
+import { AddNewUserModal } from './add-new-user/AddNewUserModal';
 import { ResetUserPasswordModal } from './reset-user-password/ResetUserPasswordModal';
 import { actions as resetPasswordActions } from './reset-user-password/reducer';
+import { actions as addNewUserActions } from './add-new-user/reducer';
 
 const groupOptions = [
   { value: null, label: 'All Groups' },
@@ -17,7 +19,7 @@ const groupOptions = [
   { value: 1, label: 'Admin' }
 ];
 
-const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPasswordModal }) => {
+const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPasswordModal, openAddNewUserModal }) => {
   const [username, setUsername] = useState('');
   const [groupOption, setGroupOption] = useState(groupOptions[0]);
 
@@ -30,9 +32,6 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
     query(data);
   };
 
-  const addNewUser = () => {
-  }
-
   const addExistingUser = () => {
   }
 
@@ -41,7 +40,7 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
       <div className="page-title">User Management</div>
       <Form inline className="mb-2">
         <FormGroup className="mr-2">
-          <Button type="button" className="btn-block" onClick={addNewUser}>
+          <Button type="button" className="btn-block" onClick={() => openAddNewUserModal(groupOptions)}>
             <Icon path={mdiAccountPlus} size={1} /> Add New User
           </Button>
         </FormGroup>
@@ -91,6 +90,7 @@ const UserManagementPage = ({ users, query, onUserStatusChange, openResetUserPas
           )}
         </tbody>
       </Table>
+      <AddNewUserModal />
       <ResetUserPasswordModal />
     </div>
   );
@@ -100,12 +100,20 @@ UserManagementPage.propTypes = {
   users: PropTypes.array.isRequired,
   query: PropTypes.func.isRequired,
   onUserStatusChange: PropTypes.func.isRequired,
-  openResetUserPasswordModal: PropTypes.func.isRequired
+  openResetUserPasswordModal: PropTypes.func.isRequired,
+  openAddNewUserModal: PropTypes.func.isRequired
 }
 
 const connectedUserManagementPage = connect(
   state => state.userManagement,
-  dispatch => bindActionCreators(Object.assign({}, actions, { openResetUserPasswordModal: resetPasswordActions.open }), dispatch)
+  dispatch => bindActionCreators(
+    Object.assign({},
+      actions,
+      {
+        openResetUserPasswordModal: resetPasswordActions.open,
+        openAddNewUserModal: addNewUserActions.openAddNewUserModal
+      }),
+    dispatch)
 )(UserManagementPage);
 
 export { connectedUserManagementPage as UserManagementPage };
