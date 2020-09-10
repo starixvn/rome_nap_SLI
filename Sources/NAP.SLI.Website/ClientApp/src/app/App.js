@@ -1,6 +1,5 @@
 import './App.scss';
-import React, { useEffect } from 'react';
-import { interceptors } from 'axios';
+import React from 'react';
 import { Route } from 'react-router';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
@@ -17,28 +16,7 @@ import { HomePage } from '../features/home/HomePage';
 import { ChangePasswordModal } from '../features/account/change-password/ChangePasswordModal';
 import { Container } from 'reactstrap';
 
-const App = ({ account, loggedIn, logout, isOpen }) => {
-  useEffect(() => {
-    interceptors.request.use(
-      config => {
-        if (loggedIn) {
-          config.headers['Authorization'] = 'bearer ' + account.token;
-        }
-
-        return config;
-      }
-    );
-    interceptors.response.use(
-      response => response,
-      error => {
-        if (error.response.status === 401) {
-          logout();
-        }
-
-        return Promise.reject(error.response);
-      });
-  });
-
+const App = ({ loggedIn, isOpen }) => {
   return (
     <BrowserRouter>
       <div className={`wrapper ${isOpen ? 'open' : ''}`}>
@@ -61,9 +39,7 @@ const App = ({ account, loggedIn, logout, isOpen }) => {
 };
 
 App.propTypes = {
-  account: PropTypes.object,
   loggedIn: PropTypes.bool.isRequired,
-  logout: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired
 };
 

@@ -15,7 +15,7 @@ namespace NAP.SLI
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using NAP.SimpleApi;
-    using NAP.SLI.Authentication.Models;
+    using NAP.SLI.Account.Models;
     using NAP.SLI.Common;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;

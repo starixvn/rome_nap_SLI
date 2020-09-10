@@ -1,13 +1,13 @@
-﻿namespace NAP.SLI.Authentication.Handlers
+﻿namespace NAP.SLI.Account.Handlers
 {
     using AutoMapper;
     using Fanex.Data.Repository;
     using MediatR;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
-    using NAP.SLI.Authentication.Criteria;
-    using NAP.SLI.Authentication.Models;
-    using NAP.SLI.Authentication.Requests;
+    using NAP.SLI.Account.Criteria;
+    using NAP.SLI.Account.Models;
+    using NAP.SLI.Account.Requests;
     using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;

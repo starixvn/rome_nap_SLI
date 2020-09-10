@@ -1,7 +1,7 @@
-﻿namespace NAP.SLI.Authentication
+﻿namespace NAP.SLI.Account
 {
     using NAP.SimpleApi;
-    using NAP.SLI.Authentication.Criteria;
+    using NAP.SLI.Account.Criteria;
 
     public class SimpleApiProfile : Profile
     {

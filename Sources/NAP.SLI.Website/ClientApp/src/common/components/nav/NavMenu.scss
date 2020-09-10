@@ -1,11 +1,10 @@
-﻿a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿nav {
+  .navbar-nav {
+    text-transform: uppercase !important;
+    font-weight: 500;
+  }
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
 }
-
-

@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.Authentication.Models
+﻿namespace NAP.SLI.Account.Models
 {
     using NAP.SLI.Common.Models;
 

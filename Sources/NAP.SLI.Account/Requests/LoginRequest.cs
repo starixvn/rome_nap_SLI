@@ -1,7 +1,7 @@
-﻿namespace NAP.SLI.Authentication.Requests
+﻿namespace NAP.SLI.Account.Requests
 {
     using MediatR;
-    using NAP.SLI.Authentication.Models;
+    using NAP.SLI.Account.Models;
     using System.ComponentModel.DataAnnotations;
 
     public class LoginRequest : IRequest<LoginResult>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import storage from './storage';
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
 const ActionTypes = {
@@ -8,7 +9,31 @@ const ActionTypes = {
   LOGOUT: 'AUTHENTICATION_LOGOUT'
 }
 
-const account = JSON.parse(localStorage.getItem('account'));
+const installAxiosIntercepts = () => {
+  axios.interceptors.request.use(
+    config => {
+      const account = storage.get();
+      const token = account?.token;
+      if (token) {
+        config.headers['Authorization'] = 'bearer ' + token;
+      }
+
+      return config;
+    }
+  );
+  axios.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response.status === 401) {
+        logout();
+      }
+
+      return Promise.reject(error.response);
+    });
+}
+
+installAxiosIntercepts();
+const account = storage.get();
 const initialState = account ? { loggingIn: false, loggedIn: true, account } : { loggingIn: false, loggedIn: false };
 
 const login = (username, password) => {
@@ -36,7 +61,7 @@ const login = (username, password) => {
       const response = await axios.post('/api/authentication/login', payload);
       const { groupId, token } = response.data;
       Object.assign(account, { groupId, token });
-      localStorage.setItem('account', JSON.stringify(account));
+      storage.save(account);
       dispatch({ type: ActionTypes.LOGIN_SUCCESS, data: { account } });
     } catch (response) {
       dispatch({ type: ActionTypes.LOGIN_FAILURE, data: { message: response.data } });
@@ -46,7 +71,7 @@ const login = (username, password) => {
 
 const logout = () => {
   return (dispatch) => {
-    localStorage.removeItem('account');
+    storage.remove();
     dispatch({ type: ActionTypes.LOGOUT });
   }
 }

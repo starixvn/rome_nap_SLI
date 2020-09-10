@@ -1,9 +1,9 @@
-﻿namespace NAP.SLI.Authentication.Controllers
+﻿namespace NAP.SLI.Account.Controllers
 {
     using MediatR;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using NAP.SLI.Authentication.Requests;
+    using NAP.SLI.Account.Requests;
     using System.Threading.Tasks;
 
     [ApiController]

@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.Authentication.Criteria
+﻿namespace NAP.SLI.Account.Criteria
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
