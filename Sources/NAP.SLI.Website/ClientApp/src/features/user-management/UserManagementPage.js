@@ -105,7 +105,7 @@ UserManagementPage.propTypes = {
 
 const connectedUserManagementPage = connect(
   state => state.userManagement,
-  dispatch => bindActionCreators(Object.assign({}, actions, { openResetUserPasswordModal: resetPasswordActions.toggle }), dispatch)
+  dispatch => bindActionCreators(Object.assign({}, actions, { openResetUserPasswordModal: resetPasswordActions.open }), dispatch)
 )(UserManagementPage);
 
 export { connectedUserManagementPage as UserManagementPage };

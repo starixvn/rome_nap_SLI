@@ -10,14 +10,14 @@ const renderFields = (fields) => (
         <FormGroup row>
             <Label sm={4}>New Password</Label>
             <Col className={fields.newPassword.meta.asyncValidating ? 'async-validating' : ''} sm={8}>
-                <Input {...fields.newPassword.input} type={fields.newPassword.type} placeholder={fields.newPassword.label} />
+                <Input {...fields.newPassword.input} type="password" />
                 {fields.newPassword.meta.touched && fields.newPassword.meta.error && <span>{fields.newPassword.meta.error}</span>}
             </Col>
         </FormGroup>
         <FormGroup row>
             <Label sm={4}>Confirm Password</Label>
             <Col sm={8} className={fields.confirmPassword.meta.asyncValidating ? 'async-validating' : ''}>
-                <Input {...fields.confirmPassword.input} type={fields.confirmPassword.type} placeholder={fields.confirmPassword.label} />
+                <Input {...fields.confirmPassword.input} type="password"/>
                 {fields.confirmPassword.meta.touched && fields.confirmPassword.meta.error && <span>{fields.confirmPassword.meta.error}</span>}
             </Col>
         </FormGroup>
@@ -31,7 +31,7 @@ const ResetUserPasswordForm = props => {
         <FormGroup row>
             <Label sm={4}>Username</Label>
             <Col sm={8}>
-                <Input plaintext value={username} />
+                <Input plaintext defaultValue={username} />
             </Col>
         </FormGroup>
         <Fields
@@ -42,6 +42,7 @@ const ResetUserPasswordForm = props => {
                 confirmPassword: [required, matchPassword]
             }}
         />
+        <Input type="submit" value="Submit" />
     </Form>);
 };
 

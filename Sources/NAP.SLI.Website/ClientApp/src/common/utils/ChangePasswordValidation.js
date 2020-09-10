@@ -1,1 +1,1 @@
-export const matchPassword = (value, allValues) => (value === allValues.newPassword);
+export const matchPassword = (value, allValues) => (value === allValues.newPassword ? undefined : 'New password and confirm password does not match');
