@@ -19,13 +19,26 @@
         [HttpPost("[action]")]
         public async Task<IActionResult> Login([FromBody]LoginRequest request)
         {
-            var loginResult = await mediator.Send(request);
-            if (!loginResult.IsSuccessful)
+            var result = await mediator.Send(request);
+            if (!result.IsSuccessful)
             {
-                return BadRequest(loginResult.ErrMsg);
+                return BadRequest(result.ErrMsg);
             }
 
-            return Ok(loginResult);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Refresh([FromBody]RefreshRequest request)
+        {
+            var result = await mediator.Send(request);
+            if (!result.IsSuccessful)
+            {
+                return BadRequest(result.ErrMsg);
+            }
+
+            return Ok(result);
         }
     }
 }

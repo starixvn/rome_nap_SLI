@@ -4,7 +4,7 @@
     using NAP.SLI.Account.Models;
     using System.ComponentModel.DataAnnotations;
 
-    public class LoginRequest : IRequest<LoginResult>
+    public class LoginRequest : IRequest<AuthenticationModel>
     {
         [Required]
         [StringLength(50, MinimumLength = 1)]

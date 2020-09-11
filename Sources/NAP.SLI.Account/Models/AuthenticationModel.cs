@@ -2,7 +2,7 @@
 {
     using NAP.SLI.Common.Models;
 
-    public class LoginResult : NonQueryResult
+    public class AuthenticationModel : NonQueryResult
     {
         public int UserId { get; set; }
 

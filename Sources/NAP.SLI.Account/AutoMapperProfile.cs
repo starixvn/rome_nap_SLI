@@ -8,7 +8,7 @@
     {
         public AutoMapperProfile()
         {
-            CreateMap<LoginCriteria, LoginResult>();
+            CreateMap<LoginCriteria, AuthenticationModel>();
         }
     }
 }
