@@ -1,5 +1,30 @@
 namespace NAP.SLI
 {
+    using AutoMapper;
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using Fanex.Data.SqlServer;
+    using MediatR;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
+    using NAP.SimpleApi;
+    using NAP.SLI.Account;
+    using NAP.SLI.Account.Models;
+    using NAP.SLI.Common;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
