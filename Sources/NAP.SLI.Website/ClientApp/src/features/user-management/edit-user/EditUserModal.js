@@ -1,12 +1,12 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Alert, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import ProTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions } from './reducer';
 import EditUserInforForm from './EditUserForm';
 
-const EditUserModal = ({ isOpen, user, toggle }) => {
+const EditUserModal = ({ isOpen, user, message, isSuccessful, toggle, handleSubmit }) => {
     const userInfor = {
         custId: user?.custId,
         username: user?.userName,
@@ -17,7 +17,12 @@ const EditUserModal = ({ isOpen, user, toggle }) => {
         <Modal isOpen={isOpen} toggle={toggle} unmountOnClose={true}>
             <ModalHeader toggle={toggle}>Edit User Information</ModalHeader>
             <ModalBody>
-                <EditUserInforForm initialValues={userInfor} />
+                {message &&
+                    <Alert className={"text-center"} color={isSuccessful ? 'success' : 'danger'} role="alert">
+                        {message}
+                    </Alert>
+                }
+                <EditUserInforForm onSubmit={handleSubmit} initialValues={userInfor} />
             </ModalBody>
         </Modal>
     );
@@ -26,7 +31,10 @@ const EditUserModal = ({ isOpen, user, toggle }) => {
 EditUserModal.propTypes = {
     isOpen: ProTypes.bool.isRequired,
     user: ProTypes.object,
-    toggle: ProTypes.func.isRequired
+    message: ProTypes.string,
+    isSuccessful: ProTypes.bool,
+    toggle: ProTypes.func.isRequired,
+    handleSubmit: ProTypes.func.isRequired
 };
 
 const connectEditUserModal = connect(

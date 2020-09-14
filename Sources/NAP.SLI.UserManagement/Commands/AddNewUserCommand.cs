@@ -6,7 +6,7 @@ namespace NAP.SLI.UserManagement.Commands
     public class AddNewUserCommnad : NonQueryCommand
     {
         private readonly ICurrentUserService currentUserService;
-        
+
         public AddNewUserCommnad(ICurrentUserService currentUserService)
         {
             this.currentUserService = currentUserService;
@@ -20,25 +20,19 @@ namespace NAP.SLI.UserManagement.Commands
 
         public string UserPwd { get; set; }
 
-        public int CustId { get; set; }
-
         public int UserId => currentUserService.UserId;
 
         public int GroupId { get; set; }
 
-        public bool IsABS { get; set; }
-
-        public string System { get; set; }
-
-        public string Language { get; set; }
+        public bool IsAddNew { get; set; }
 
         public int ErrCode { get; set; }
 
         public string ErrMsg { get; set; }
         public override string GetSettingKey()
-            => "Acc_Con_AdminIns";
+            => "SLI_User_Ins";
 
         public override bool IsValid()
-         => !string.IsNullOrEmpty(UserName) && !string.IsNullOrWhiteSpace(UserPwd) && UserId > 0;
+         => !string.IsNullOrEmpty(UserName) && UserId > 0;
     }
 }

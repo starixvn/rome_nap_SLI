@@ -1,7 +1,17 @@
 import React from 'react';
 const { Form, FormGroup, Label, Input, Col } = require("reactstrap");
 import PropTypes from 'prop-types';
-import { reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
+
+const renderField = (field) => (
+    <FormGroup row>
+        <Label sm={4}>{field.label}</Label>
+        <Col className={field.meta.asyncValidating ? 'async-validating' : ''} sm={8}>
+            <Input {...field.input} type={field.type} autoComplete="off" />
+            {field.meta.touched && field.error && <span>{field.error}</span>}
+        </Col>
+    </FormGroup>
+);
 
 const EditUserInforForm = (props) => {
     const { handleSubmit, groups, initialValues } = props;
@@ -14,18 +24,16 @@ const EditUserInforForm = (props) => {
                     <Input name="username" plaintext defaultValue={initialValues.username} />
                 </Col>
             </FormGroup>
-            <FormGroup row>
-                <Label sm={4}>First Name</Label>
-                <Col sm={8}>
-                    <Input type="text" name="firstname" defaultValue={initialValues.firstname} />
-                </Col>
-            </FormGroup>
-            <FormGroup row>
-                <Label sm={4}>Last Name</Label>
-                <Col sm={8}>
-                    <Input type="text" name="lastname" defaultValue={initialValues.lastname} />
-                </Col>
-            </FormGroup>
+            <Field
+                name="firstname"
+                label="First Name"
+                component={renderField}
+                defaultValue={initialValues.firstname} />
+            <Field
+                name="lastname"
+                label="Last Name"
+                component={renderField}
+                defaultValue={initialValues.firstname} />
             <FormGroup row>
                 <Label sm={4}>Groups</Label>
                 <Col sm={8}>

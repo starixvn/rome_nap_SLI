@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const ActionTypes = {
     OPEN_EDIT_USER: "OPEN_EDIT_USER",
     TOGGLE_EDIT_USER: "TOGGLE_EDIT_USER",
@@ -7,9 +9,40 @@ const ActionTypes = {
 
 const initialState = { isOpen: false };
 
+const handleSubmit = (values) => {
+    return async (dispatch) => {
+        const payload = {
+            apiKey: 'user-management:update-user',
+            data: {
+                custId: values.custId,
+                userName: values.username,
+                firstName: values.firstname ?? "",
+                lastName: values.lastname ?? "",
+                groupId: values.group
+            }
+        };
+
+        try {
+            var response = await axios.post('/simple-api/command', payload);
+            if (response.data.errCode !== 0) {
+                dispatch({ type: ActionTypes.EDIT_USER_FAILURE, data: { message: response.data.errMsg } });
+            } else {
+                dispatch({ type: ActionTypes.EDIT_USER_SUCCESS, data: { message: `Update User ${response.data.userName} successfully.` } });
+                setTimeout(() => {
+                    dispatch({ type: ActionTypes.TOGGLE_EDIT_USER })
+                }, 3000);
+            }
+
+        } catch (error) {
+            dispatch({ type: ActionTypes.EDIT_USER_FAILURE, data: { message: "Internal Error." } });
+        }
+    };
+}
+
 export const actions = {
     openEditUserModal: (user) => ({ type: ActionTypes.OPEN_EDIT_USER, data: { user: user } }),
-    toggle: () => ({ type: ActionTypes.TOGGLE_EDIT_USER })
+    toggle: () => ({ type: ActionTypes.TOGGLE_EDIT_USER }),
+    handleSubmit
 }
 
 export const reducer = (state = initialState, action) => {
@@ -24,6 +57,18 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isOpen: !state.isOpen
+            };
+        case ActionTypes.EDIT_USER_SUCCESS:
+            return {
+                ...state,
+                message: action.data.message,
+                isSuccessful: true
+            };
+        case ActionTypes.EDIT_USER_FAILURE:
+            return {
+                ...state,
+                message: action.data.message,
+                isSuccessful: false
             };
         default:
             return state;

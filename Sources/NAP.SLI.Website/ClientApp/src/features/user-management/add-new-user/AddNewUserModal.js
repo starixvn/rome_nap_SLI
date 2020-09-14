@@ -1,23 +1,23 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Alert, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { actions } from "./reducer";
 import AddNewUserForm from "./AddNewUserForm";
 
-const AddNewUserModal = ({ isOpen, groups , isSuccessful, message, toggle, handleSubmit }) => {
+const AddNewUserModal = ({ isOpen, groups, isSuccessful, message, toggle, handleSubmit }) => {
 
     return (
         <Modal isOpen={isOpen} toggle={toggle} unmountOnClose={true}>
             <ModalHeader toggle={toggle}>Add New User</ModalHeader>
             <ModalBody>
                 {message &&
-                    <div className={`text-center alert ${isSuccessful ? 'alert-success' : 'alert-danger'}`} role="alert">
+                    <Alert className={"text-center"} color={isSuccessful ? 'success' : 'danger'} role="alert">
                         {message}
-                    </div>
+                    </Alert>
                 }
-                <AddNewUserForm onSubmit={handleSubmit} groups={groups}/>
+                <AddNewUserForm onSubmit={handleSubmit} groups={groups} />
             </ModalBody>
         </Modal>
     );
@@ -33,7 +33,7 @@ AddNewUserModal.propTypes = {
 };
 
 const connectedAddNewUserModal = connect(
-    state => state.addnewUser,
+    state => state.addNewUser,
     dispatch => bindActionCreators(actions, dispatch)
 )(AddNewUserModal);
 

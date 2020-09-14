@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Alert, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
@@ -13,9 +13,9 @@ const ResetUserPasswordModal = ({ username, custId, isOpen, isSuccessful, messag
             <ModalHeader toggle={toggle}>Reset Password</ModalHeader>
             <ModalBody>
                 {message &&
-                    <div className={`text-center alert ${isSuccessful ? 'alert-success' : 'alert-danger'}`} role="alert">
+                    <Alert className={"text-center"} color={isSuccessful ? 'success' : 'danger'} role="alert">
                         {message}
-                    </div>
+                    </Alert>
                 }
                 <ResetUserPasswordForm onSubmit={handleSubmit} username={username} initialValues={{ custId: custId }} />
             </ModalBody>

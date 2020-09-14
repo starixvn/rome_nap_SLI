@@ -20,7 +20,7 @@ const handleSubmit = (values) => {
                 firstName: values.firstname ?? "",
                 lastName: values.lastname ?? "",
                 group: values.group,
-                isABS: false
+                isAddNew: true
             }
         };
 

@@ -1,0 +1,74 @@
+import axios from 'axios';
+
+const ActionTypes = {
+    OPEN_ADD_EXIST_USER_MODAL: "OPEN_ADD_EXIST_USER_MODAL",
+    TOGGLE_ADD_EXIST_USER_MODAL: "TOGGLE_ADD_EXIST_USER_MODAL",
+    ADD_EXIST_USER_SUCCESS: "ADD_EXIST_USER_SUCCESS",
+    ADD_EXIST_USER_FAILURE: "ADD_EXIST_USER_FAILURE"
+};
+
+const initialState = { isOpen: false };
+
+const handleSubmit = (values) => {
+    return async (dispatch) => {
+        const payload = {
+            apiKey: 'user-management:add-new-user',
+            data: {
+                userName: values.username,
+                group: values.group,
+                isAddNew: false
+            }
+        };
+
+        try {
+            var response = await axios.post('/simple-api/command', payload);
+            if (response.data.errCode !== 0) {
+                dispatch({ type: ActionTypes.ADD_EXIST_USER_FAILURE, data: { message: response.data.errMsg } });
+            } else {
+                dispatch({ type: ActionTypes.ADD_EXIST_USER_SUCCESS, data: { message: `Add User ${response.data.userName} successfully.` } });
+                setTimeout(() => {
+                    dispatch({ type: ActionTypes.TOGGLE_ADD_EXIST_USER_MODAL })
+                }, 3000);
+            }
+
+        } catch (error) {
+            dispatch({ type: ActionTypes.ADD_EXIST_USER_FAILURE, data: { message: "Internal Error." } });
+        }
+    };
+}
+
+export const actions = {
+    openAddExistUserModal: (groups) => ({ type: ActionTypes.OPEN_ADD_EXIST_USER_MODAL, data: { groups: groups } }),
+    toggle: () => ({ type: ActionTypes.TOGGLE_ADD_EXIST_USER_MODAL }),
+    handleSubmit
+};
+
+export const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case ActionTypes.OPEN_ADD_EXIST_USER_MODAL:
+            return {
+                ...state,
+                groups: action.data.groups,
+                isOpen: true
+            };
+        case ActionTypes.TOGGLE_ADD_EXIST_USER_MODAL:
+            return {
+                ...state,
+                isOpen: !state.isOpen
+            };
+        case ActionTypes.ADD_EXIST_USER_SUCCESS:
+            return {
+                ...state,
+                message: action.data.message,
+                isSuccessful: true
+            };
+        case ActionTypes.ADD_EXIST_USER_FAILURE:
+            return {
+                ...state,
+                message: action.data.message,
+                isSuccessful: false
+            };
+        default:
+            return state;
+    }
+};

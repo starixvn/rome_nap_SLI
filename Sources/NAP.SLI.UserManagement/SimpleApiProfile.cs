@@ -13,6 +13,7 @@
             AddCommand<UpdateUserStatusCommand>("update-user-status");
             AddCommand<ChangeUserPasswordCommand>("change-user-password");
             AddCommand<AddNewUserCommnad>("add-new-user");
+            AddCommand<UpdateUserCommand>("update-user");
         }
     }
 }

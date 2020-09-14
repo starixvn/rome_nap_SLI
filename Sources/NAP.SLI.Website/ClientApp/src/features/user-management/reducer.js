@@ -32,7 +32,7 @@ const query = (data) => {
 const onUserStatusChange = (status, user) => {
   return async (dispatch) => {
     const payload = {
-      apiKey: 'user-management:update-user-status',
+      apiKey: 'user-management:update-user',
       data: {
         custId: user.custId,
         closed: !status

@@ -13,11 +13,10 @@ const initialState = { isOpen: false, custId: 0, username: "" };
 const handleSubmit = (values) => {
     return async (dispatch) => {
         const payload = {
-            apiKey: 'user-management:change-user-password',
+            apiKey: 'user-management:update-user',
             data: {
                 custId: values.custId,
-                userPwd: CryptoJS.CfsEnCode(values.newPassword),
-                isForcedChangePwd: true
+                userPwd: CryptoJS.CfsEnCode(values.newPassword)
             }
         };
 
