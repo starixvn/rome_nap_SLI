@@ -12,8 +12,14 @@ function remove() {
   localStorage.removeItem(storageKey);
 }
 
+const getToken = () => {
+  const account = get();
+  return account?.token;
+}
+
 export default {
   save,
   get,
-  remove
+  remove,
+  getToken
 }

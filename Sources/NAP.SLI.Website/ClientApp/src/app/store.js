@@ -2,7 +2,7 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import createRootReducer from './reducers';
 
-export default function configureStore(initialState) {
+const configureStore = (initialState) => {
   const middleware = [
     thunk
   ];
@@ -30,3 +30,7 @@ export default function configureStore(initialState) {
 
   return store;
 }
+
+const initialState = window.initialReduxState;
+const store = configureStore(initialState);
+export default store;

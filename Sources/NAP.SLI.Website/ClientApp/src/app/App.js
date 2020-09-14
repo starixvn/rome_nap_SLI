@@ -26,7 +26,7 @@ const App = ({ loggedIn, isOpen }) => {
           {loggedIn && <ChangePasswordModal />}
           <Container fluid className="main">
             <Switch>
-              <Route path="/login" component={LoginPage} />
+              <Route path="/login" component={LoginPage} location={location} />
               <PrivateRoute exact path="/" component={HomePage} />
               <PrivateRoute path="/administration" component={UserManagementPage} />
               <Route component={NotFoundPage} />
