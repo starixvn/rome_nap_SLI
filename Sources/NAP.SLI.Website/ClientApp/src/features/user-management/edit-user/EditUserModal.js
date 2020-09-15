@@ -39,7 +39,7 @@ EditUserModal.propTypes = {
     isSuccessful: ProTypes.bool,
     toggle: ProTypes.func.isRequired,
     updateUser: ProTypes.func.isRequired,
-    callback: ProTypes.func.isRequired
+    callback: ProTypes.func
 };
 
 const connectEditUserModal = connect(

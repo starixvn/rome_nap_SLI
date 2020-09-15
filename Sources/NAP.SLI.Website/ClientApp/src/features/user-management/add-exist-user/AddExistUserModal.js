@@ -30,7 +30,7 @@ AddExistUserModal.propTypes = {
     message: PropTypes.string,
     toggle: PropTypes.func.isRequired,
     addExistUser: PropTypes.func.isRequired,
-    callback: PropTypes.func.isRequired
+    callback: PropTypes.func
 };
 
 const connectedAddExistUserModal = connect(

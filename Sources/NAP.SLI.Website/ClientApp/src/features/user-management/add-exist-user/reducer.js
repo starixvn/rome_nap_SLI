@@ -15,7 +15,7 @@ const addExistUser = (values, callback) => {
             apiKey: 'user-management:add-new-user',
             data: {
                 userName: values.username,
-                group: values.group,
+                groupId: values.group,
                 isAddNew: false
             }
         };

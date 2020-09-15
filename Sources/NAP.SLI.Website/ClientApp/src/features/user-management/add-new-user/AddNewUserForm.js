@@ -13,6 +13,17 @@ const renderField = (field) => (
     </FormGroup>
 );
 
+const renderSelect = (field) => (
+    <FormGroup row>
+        <Label sm={4}>{field.label}</Label>
+        <Col sm={8}>
+            <Input {...field.input} type="select">
+                {field.children}
+            </Input>
+        </Col>
+    </FormGroup>
+);
+
 const validate = (values) => {
     const errors = {}
     if (!values.username) {
@@ -49,17 +60,11 @@ const AddNewUserForm = props => {
             label="Last Name"
             component={renderField}
         />
-        <FormGroup row>
-            <Label sm={4}>Group</Label>
-            <Col sm={8}>
-                <Input type="select" name="group">
-                    {groups && groups.map(group =>
-                        <option key={group.value} value={group.value}>{group.label}</option>
-                    )};
-                </Input>
-            </Col>
-
-        </FormGroup>
+        <Field name="group" label="Group" component={renderSelect}>
+            {groups && groups.map(group =>
+                <option key={group.value} value={group.value}>{group.label}</option>
+            )};
+        </Field>
         <Input type="submit" value="Submit" />
     </Form>);
 };
@@ -74,5 +79,5 @@ export default reduxForm({
     form: 'addNewUserForm',
     validate,
     enableReinitialize: true,
-    initialValues: {username: "", password: ""}
+    initialValues: { username: "", password: "" }
 })(AddNewUserForm)

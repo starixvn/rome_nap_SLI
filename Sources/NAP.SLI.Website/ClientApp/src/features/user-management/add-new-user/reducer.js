@@ -19,7 +19,7 @@ const addNewUser = (values, callback) => {
                 userPwd: CryptoJS.CfsEnCode(values.password),
                 firstName: values.firstname ?? "",
                 lastName: values.lastname ?? "",
-                group: values.group,
+                groupId: values.group,
                 isAddNew: true
             }
         };

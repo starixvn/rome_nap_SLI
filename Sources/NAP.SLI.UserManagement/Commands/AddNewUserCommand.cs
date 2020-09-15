@@ -22,7 +22,7 @@ namespace NAP.SLI.UserManagement.Commands
 
         public int UserId => currentUserService.UserId;
 
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
 
         public bool IsAddNew { get; set; }
 

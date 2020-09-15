@@ -31,7 +31,7 @@ AddNewUserModal.propTypes = {
     message: PropTypes.string,
     toggle: PropTypes.func.isRequired,
     addNewUser: PropTypes.func.isRequired,
-    callback: PropTypes.func.isRequired
+    callback: PropTypes.func
 };
 
 const connectedAddNewUserModal = connect(
