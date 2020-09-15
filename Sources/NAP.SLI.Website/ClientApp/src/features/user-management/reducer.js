@@ -10,7 +10,7 @@ const ActionTypes = {
   CHANGE_PASSWORD_FAILURE: 'CHANGE_USER_PASSWORD_FAILURE'
 }
 
-const initialState = { users: [], isOpen: false };
+const initialState = { users: [], isOpen: false, queryParams: {username: '', groupOption: null} };
 
 const query = (data) => {
   return async (dispatch) => {
@@ -29,7 +29,7 @@ const query = (data) => {
   };
 };
 
-const onUserStatusChange = (status, user) => {
+const changeUserStatus = (status, user) => {
   return async (dispatch) => {
     const payload = {
       apiKey: 'user-management:update-user',
@@ -38,10 +38,10 @@ const onUserStatusChange = (status, user) => {
         closed: !status
       }
     };
-    
+
     try {
       await axios.post('/simple-api/command', payload);
-      dispatch({ type: ActionTypes.UPDATE_STATUS_SUCCESS, data: { userId: user.custId, status } })
+      dispatch({ type: ActionTypes.UPDATE_STATUS_SUCCESS, data: { userId: user.custId, status } });
     } catch (error) {
       dispatch({ type: ActionTypes.UPDATE_STATUS_FAILURE, data: { message: error.data } });
     }
@@ -50,7 +50,7 @@ const onUserStatusChange = (status, user) => {
 
 export const actions = {
   query,
-  onUserStatusChange
+  changeUserStatus
 };
 
 export const reducer = (state = initialState, action) => {
@@ -63,23 +63,26 @@ export const reducer = (state = initialState, action) => {
     case ActionTypes.QUERY_SUCCESS:
       return {
         ...state,
+        message: null,
         users: action.data.users
       };
     case ActionTypes.QUERY_FAILURE:
       return {
         ...state,
-        message: action.data.message
+        message: action.data.message,
+        isSuccessful: false
       };
     case ActionTypes.UPDATE_STATUS_SUCCESS:
       return {
         ...state,
-        users: state.users.map((user) => user.custId === action.data.userId ? { ...user, closed: !action.data.status } : user),
-        message: 'Update Success!'
+        message: 'Update Success!',
+        isSuccessful: true
       };
     case ActionTypes.UPDATE_STATUS_FAILURE:
       return {
         ...state,
-        message: 'Update Failed!'
+        message: 'Update Failed!',
+        isSuccessful: false
       };
     default:
       return state;

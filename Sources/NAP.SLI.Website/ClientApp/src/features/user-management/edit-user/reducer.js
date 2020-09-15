@@ -9,7 +9,7 @@ const ActionTypes = {
 
 const initialState = { isOpen: false };
 
-const handleSubmit = (values) => {
+const updateUser = (values, callback) => {
     return async (dispatch) => {
         const payload = {
             apiKey: 'user-management:update-user',
@@ -29,7 +29,8 @@ const handleSubmit = (values) => {
             } else {
                 dispatch({ type: ActionTypes.EDIT_USER_SUCCESS, data: { message: `Update User ${response.data.userName} successfully.` } });
                 setTimeout(() => {
-                    dispatch({ type: ActionTypes.TOGGLE_EDIT_USER })
+                    dispatch({ type: ActionTypes.TOGGLE_EDIT_USER });
+                    callback();
                 }, 3000);
             }
 
@@ -40,9 +41,9 @@ const handleSubmit = (values) => {
 }
 
 export const actions = {
-    openEditUserModal: (user) => ({ type: ActionTypes.OPEN_EDIT_USER, data: { user: user } }),
+    openEditUserModal: (user, callback) => ({ type: ActionTypes.OPEN_EDIT_USER, data: { user, callback } }),
     toggle: () => ({ type: ActionTypes.TOGGLE_EDIT_USER }),
-    handleSubmit
+    updateUser
 }
 
 export const reducer = (state = initialState, action) => {
@@ -51,6 +52,7 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.data.user,
+                callback: action.data.callback,
                 isOpen: true
             };
         case ActionTypes.TOGGLE_EDIT_USER:

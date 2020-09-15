@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import { actions } from "./reducer";
 import AddNewUserForm from "./AddNewUserForm";
 
-const AddNewUserModal = ({ isOpen, groups, isSuccessful, message, toggle, handleSubmit }) => {
+const AddNewUserModal = ({ isOpen, groups, isSuccessful, message, toggle, addNewUser, callback }) => {
+    const handleSubmit = (values) => addNewUser(values, callback);
 
     return (
         <Modal isOpen={isOpen} toggle={toggle} unmountOnClose={true}>
@@ -29,7 +30,8 @@ AddNewUserModal.propTypes = {
     isSuccessful: PropTypes.bool,
     message: PropTypes.string,
     toggle: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired
+    addNewUser: PropTypes.func.isRequired,
+    callback: PropTypes.func.isRequired
 };
 
 const connectedAddNewUserModal = connect(

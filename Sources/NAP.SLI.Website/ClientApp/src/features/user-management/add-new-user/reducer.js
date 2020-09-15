@@ -10,7 +10,7 @@ const ActionTypes = {
 
 const initialState = { isOpen: false, groups: [] };
 
-const handleSubmit = (values) => {
+const addNewUser = (values, callback) => {
     return async (dispatch) => {
         const payload = {
             apiKey: 'user-management:add-new-user',
@@ -31,7 +31,8 @@ const handleSubmit = (values) => {
             } else {
                 dispatch({ type: ActionTypes.ADD_NEW_USER_SUCCESS, data: { message: `Add User ${response.data.userName} successfully.` } });
                 setTimeout(() => {
-                    dispatch({ type: ActionTypes.TOGGLE_ADD_NEW_USER_MODAL })
+                    dispatch({ type: ActionTypes.TOGGLE_ADD_NEW_USER_MODAL });
+                    callback();
                 }, 3000);
             }
 
@@ -42,9 +43,9 @@ const handleSubmit = (values) => {
 }
 
 export const actions = {
-    openAddNewUserModal: (groups) => ({ type: ActionTypes.OPEN_ADD_NEW_USER_MODAL, data: { groups: groups } }),
+    openAddNewUserModal: (groups, callback) => ({ type: ActionTypes.OPEN_ADD_NEW_USER_MODAL, data: { groups: groups, callback } }),
     toggle: () => ({ type: ActionTypes.TOGGLE_ADD_NEW_USER_MODAL }),
-    handleSubmit
+    addNewUser
 };
 
 export const reducer = (state = initialState, action) => {
@@ -53,7 +54,8 @@ export const reducer = (state = initialState, action) => {
             return {
                 groups: action.data.groups,
                 message: undefined,
-                isOpen: true
+                isOpen: true,
+                callback: action.data.callback
             };
         case ActionTypes.TOGGLE_ADD_NEW_USER_MODAL:
             return {

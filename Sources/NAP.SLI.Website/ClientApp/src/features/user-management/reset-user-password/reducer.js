@@ -10,7 +10,7 @@ const ActionTypes = {
 
 const initialState = { isOpen: false, custId: 0, username: "" };
 
-const handleSubmit = (values) => {
+const resetUserPassword = (values) => {
     return async (dispatch) => {
         const payload = {
             apiKey: 'user-management:update-user',
@@ -27,7 +27,7 @@ const handleSubmit = (values) => {
             } else {
                 dispatch({ type: ActionTypes.RESET_PASSWORD_SUCCESS, data: { message: 'Password reset successfully.' } });
                 setTimeout(() => {
-                    dispatch({ type: ActionTypes.TOGGLE_RESET_PASSWORD_MODAL })
+                    dispatch({ type: ActionTypes.TOGGLE_RESET_PASSWORD_MODAL });
                 }, 3000);
             }
 
@@ -38,9 +38,9 @@ const handleSubmit = (values) => {
 }
 
 export const actions = {
-    open: (user) => ({ type: ActionTypes.OPEN_RESET_PASSWORD_MODAL, data: { username: user.userName, custId: user.custId } }),
+    open: (user, callback) => ({ type: ActionTypes.OPEN_RESET_PASSWORD_MODAL, data: { username: user.userName, custId: user.custId, callback } }),
     toggle: () => ({ type: ActionTypes.TOGGLE_RESET_PASSWORD_MODAL }),
-    handleSubmit
+    resetUserPassword
 };
 
 export const reducer = (state = initialState, action) => {

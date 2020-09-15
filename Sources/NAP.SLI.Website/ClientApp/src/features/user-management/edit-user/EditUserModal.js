@@ -6,7 +6,11 @@ import { bindActionCreators } from 'redux';
 import { actions } from './reducer';
 import EditUserInforForm from './EditUserForm';
 
-const EditUserModal = ({ isOpen, user, message, isSuccessful, toggle, handleSubmit }) => {
+const EditUserModal = ({ isOpen, user, message, isSuccessful, toggle, updateUser, callback }) => {
+    const handleSubmit = (values) => {
+        updateUser(values, callback);
+    };
+
     const userInfor = {
         custId: user?.custId,
         username: user?.userName,
@@ -34,7 +38,8 @@ EditUserModal.propTypes = {
     message: ProTypes.string,
     isSuccessful: ProTypes.bool,
     toggle: ProTypes.func.isRequired,
-    handleSubmit: ProTypes.func.isRequired
+    updateUser: ProTypes.func.isRequired,
+    callback: ProTypes.func.isRequired
 };
 
 const connectEditUserModal = connect(

@@ -6,8 +6,7 @@ import PropTypes from 'prop-types';
 import { actions } from "./reducer";
 import ResetUserPasswordForm from "./ResetUserPasswordForm";
 
-const ResetUserPasswordModal = ({ username, custId, isOpen, isSuccessful, message, toggle, handleSubmit }) => {
-
+const ResetUserPasswordModal = ({ username, custId, isOpen, isSuccessful, message, toggle, resetUserPassword }) => {
     return (
         <Modal isOpen={isOpen} toggle={toggle} unmountOnClose={true}>
             <ModalHeader toggle={toggle}>Reset Password</ModalHeader>
@@ -17,7 +16,7 @@ const ResetUserPasswordModal = ({ username, custId, isOpen, isSuccessful, messag
                         {message}
                     </Alert>
                 }
-                <ResetUserPasswordForm onSubmit={handleSubmit} username={username} initialValues={{ custId: custId }} />
+                <ResetUserPasswordForm onSubmit={resetUserPassword} username={username} initialValues={{ custId: custId }} />
             </ModalBody>
         </Modal>
     );
@@ -30,7 +29,7 @@ ResetUserPasswordModal.propTypes = {
     isSuccessful: PropTypes.bool,
     message: PropTypes.string,
     toggle: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired
+    resetUserPassword: PropTypes.func.isRequired
 };
 
 const connectedResetUserPasswordModal = connect(

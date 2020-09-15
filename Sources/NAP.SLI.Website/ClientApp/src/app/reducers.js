@@ -7,6 +7,7 @@ import * as ResetUserPassword from '../features/user-management/reset-user-passw
 import * as AddNewUser from '../features/user-management/add-new-user/reducer';
 import * as AddExistUser from '../features/user-management/add-exist-user/reducer';
 import * as EditUser from '../features/user-management/edit-user/reducer';
+import * as ConfirmBox from '../common/components/confirm-box/reducer';
 import { reducer as formReducer } from 'redux-form'
 
 const createRootReducer = () => combineReducers({
@@ -18,6 +19,7 @@ const createRootReducer = () => combineReducers({
   addNewUser: AddNewUser.reducer,
   addExistUser: AddExistUser.reducer,
   editUser: EditUser.reducer,
+  confirmBox: ConfirmBox.reducer,
   form: formReducer
 })
 

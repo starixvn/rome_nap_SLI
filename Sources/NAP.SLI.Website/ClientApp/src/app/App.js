@@ -14,6 +14,7 @@ import { UserManagementPage } from '../features/user-management/UserManagementPa
 import { LoginPage } from '../features/account/authentication/LoginPage';
 import { HomePage } from '../features/home/HomePage';
 import { ChangePasswordModal } from '../features/account/change-password/ChangePasswordModal';
+import { ConfirmBox } from '../common/components/confirm-box/ConfirmBox';
 import { Container } from 'reactstrap';
 
 const App = ({ loggedIn, isOpen }) => {
@@ -31,6 +32,7 @@ const App = ({ loggedIn, isOpen }) => {
               <PrivateRoute path="/administration" component={UserManagementPage} />
               <Route component={NotFoundPage} />
             </Switch>
+            <ConfirmBox />
           </Container>
         </div>
       </div>
