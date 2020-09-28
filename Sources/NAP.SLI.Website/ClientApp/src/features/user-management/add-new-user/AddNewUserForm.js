@@ -69,7 +69,6 @@ const AddNewUserForm = props => {
     </Form>);
 };
 
-
 AddNewUserForm.propTypes = {
     groups: PropTypes.array,
     handleSubmit: PropTypes.func.isRequired

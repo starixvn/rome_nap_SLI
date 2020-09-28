@@ -38,6 +38,7 @@
     <ProjectReference Include="..\NAP.SLI.Account\NAP.SLI.Account.csproj" />
     <ProjectReference Include="..\NAP.SLI.Common\NAP.SLI.Common.csproj" />
     <ProjectReference Include="..\NAP.SLI.UserManagement\NAP.SLI.UserManagement.csproj" />
+    <ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

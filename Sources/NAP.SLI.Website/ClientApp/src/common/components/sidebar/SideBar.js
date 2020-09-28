@@ -1,24 +1,47 @@
-import React, { useState } from 'react';
-import { Form, FormGroup, Input, Button } from 'reactstrap';
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import './SideBar.scss';
+import { Form, Input } from 'reactstrap';
+import AsyncSelect from 'react-select/async';
+import { CustomerPage } from '../../../features/customer/CustomerPage';
+import { actions } from './reducer';
 
-const SideBar = () => {
-
-  const [username, setUsername] = useState('');
+const SideBar = ({ queryUsername }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
   };
 
+  const handleQueryUsername = (value) => {
+    return queryUsername(value);
+  };
+
   return (
-    <Form inline className="form-search" onSubmit={handleSubmit}>
-      <FormGroup className="mr-2">
-        <Input className="username" type="text" placeholder="Input username" value={username} onChange={event => setUsername(event.target.value)} />
-      </FormGroup>
-      <Button type="submit">Search</Button>
-    </Form>
+    <div>
+      <Form id="searchUsername" inline className="form-search" onSubmit={handleSubmit}>
+        <div className="username mr-2">
+          <AsyncSelect name="searchUsername" placeholder="Username"
+            components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
+            loadOptions={handleQueryUsername}
+          />
+        </div>
+        <Input className="form-search-btn" type="submit" value="Search" />
+      </Form>
+
+      <CustomerPage></CustomerPage>
+    </div>
   );
 }
 
+SideBar.propTypes = {
+  queryUsername: PropTypes.func
+};
 
-export { SideBar };
+const connectedSideBar = connect(
+  null,
+  dispatch => bindActionCreators(actions, dispatch)
+)(SideBar);
+
+export { connectedSideBar as SideBar };

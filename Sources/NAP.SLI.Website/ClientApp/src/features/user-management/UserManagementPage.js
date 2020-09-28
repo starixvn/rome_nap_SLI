@@ -107,7 +107,7 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
         <tbody>
           {users.map(user =>
             <tr key={`Row_${user.custId}`}>
-              <td onClick={() => openEditUserModal(user, queryCallback)}>{user.userName}</td>
+              <td><p className="btn btn-link" onClick={() => openEditUserModal(user, queryCallback)}>{user.userName}</p></td>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
               <td>{user.groupId}</td>

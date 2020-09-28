@@ -5,4 +5,7 @@
     <Setting Key="SLI_ReCheckIn" SpName="SLI_ReCheckIn" DbName="DBCUST.CustDB.bodbAdminNet" />
     <Setting Key="SLI_CheckOut" SpName="SLI_CheckOut" DbName="DBCUST.CustDB.bodbAdminNet" />
   </Function>
+  <Function Name="Customer">
+    <Setting Key="Acc_CustomerSelUserSearch" SpName="Acc_CustomerSelUserSearch" DbName="DBAGE.bodb02.bodbAdminNet" />
+  </Function>
 </Functions>

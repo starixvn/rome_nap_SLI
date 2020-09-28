@@ -71,6 +71,7 @@ namespace NAP.SLI
             services.AddMediatR(typeof(Account.AutoMapperProfile));
             services.AddAutoMapper(typeof(Account.AutoMapperProfile));
             services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
+            services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
         }
 
         private void ConfigureAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
