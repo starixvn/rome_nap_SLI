@@ -18,8 +18,16 @@
         public SimpleApiController(IRequestOptionContext requestOptionContext, IDynamicRepository dynamicRepository)
             => (this.requestOptionContext, this.dynamicRepository) = (requestOptionContext, dynamicRepository);
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Get()
+        {
+            var criteria = requestOptionContext.CreateCriteria(HttpContext.Request.Query, ActionTypes.Query);
+            var data = await dynamicRepository.GetAsync<object>(criteria);
+            return Ok(data);
+        }
+
         [HttpPost("[action]")]
-        public async Task<IActionResult> Query([FromBody]SimpleApiRequest request)
+        public async Task<IActionResult> Query([FromBody] SimpleApiRequest request)
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Query);
             var data = await dynamicRepository.FetchAsync<object>(criteria);
@@ -27,7 +35,15 @@
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Command([FromBody]SimpleApiRequest request)
+        public async Task<IActionResult> QueryMultiple([FromBody] SimpleApiRequest request)
+        {
+            var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Query);
+            var data = await dynamicRepository.FetchMultipleAsync<object, object>(criteria);
+            return Ok(data);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Command([FromBody] SimpleApiRequest request)
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Command);
             await dynamicRepository.ExecuteAsync((INonQueryCommand)criteria);

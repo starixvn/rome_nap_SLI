@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import * as SideBar from '../common/components/sidebar/reducer';
+import * as Customer from '../features/customer/CustomerReducer';
 import * as Authentication from '../features/account/authentication/reducer';
 import * as ChangePassword from '../features/account/change-password/reducer';
 import * as UserManagement from '../features/user-management/reducer';
@@ -12,6 +13,7 @@ import { reducer as formReducer } from 'redux-form'
 
 const createRootReducer = () => combineReducers({
   sideBar: SideBar.reducer,
+  customer: Customer.reducer,
   authentication: Authentication.reducer,
   changePassword: ChangePassword.reducer,
   userManagement: UserManagement.reducer,

@@ -9,6 +9,7 @@ namespace NAP.SLI.Customer
             :base("customer")
         {
             AddQuery<QueryUsernameCriteria>("query-username"); 
+            AddQuery<QueryCustByUsernameCriteria>("query-multiple-cust-by-username");
         }
     }
 }

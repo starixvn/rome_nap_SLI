@@ -7,5 +7,6 @@
   </Function>
   <Function Name="Customer">
     <Setting Key="Acc_CustomerSelUserSearch" SpName="Acc_CustomerSelUserSearch" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_CustomerSelAllInfo" SpName="SLI_CustomerSelAllInfo" DbName="DBAGE.bodb02.bodbAdminNet" />
   </Function>
 </Functions>

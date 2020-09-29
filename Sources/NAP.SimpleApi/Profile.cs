@@ -21,7 +21,7 @@
             Prefix = prefix;
             RequestOptions = new List<RequestOption>();
         }
-
+        
         public void AddQuery<T>(string apiKey) where T : ICriteria
         {
             Add(apiKey, typeof(T), ActionTypes.Query);
