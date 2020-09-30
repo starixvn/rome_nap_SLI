@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Collapse } from 'reactstrap';
+import { Container, Row, Col, Collapse, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import './Customer.scss';
+import BalanaceInfo from './childviews/BalanceInfo';
+import Setting from './childviews/Settings';
 
 const CustomerPage = ({ customer, headline }) => {
     if (!customer) {
@@ -18,17 +20,22 @@ const CustomerPage = ({ customer, headline }) => {
         setRotation(isOpen ? 270 : 0);
     };
 
+    let breakHeadline = "";
     let customerSuper = "";
     let customerMaster = "";
     let customerAgent = "";
     let customerMember = "";
 
 
+
     if (headline.superID) {
-        customerSuper = <Row >
-            <Col xs="5">Super:</Col>
-            <Col xs="7">{headline.superName}</Col>
-        </Row>;
+        breakHeadline = ""
+        customerSuper = <>
+            <Row >
+                <Col xs="5">Super:</Col>
+                <Col xs="7">{headline.superName}</Col>
+            </Row>
+        </>;
     }
 
     if (headline.masterID) {
@@ -54,13 +61,18 @@ const CustomerPage = ({ customer, headline }) => {
 
     return (
         <>
+            {breakHeadline}
             <Container>
                 {customerSuper}
                 {customerMaster}
                 {customerAgent}
                 {customerMember}
             </Container>
-            <Container onClick={toggle} className="d-flex bg-info"><span className="customer-label">{customer.username}</span><FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={rotation}></FontAwesomeIcon></Container>
+            <div className="bg-lightgrey text-primary">
+                <hr />
+                <Container onClick={toggle} className="d-flex"><span className="customer-label">{customer.username}</span><FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={rotation}></FontAwesomeIcon></Container>
+                <hr />
+            </div>
             <Collapse isOpen={isOpen}>
                 <Container>
                     <Row>
@@ -85,6 +97,15 @@ const CustomerPage = ({ customer, headline }) => {
                     </Row>
                 </Container>
             </Collapse>
+            <hr />
+            <Container className="d-flex align-items-center justify-content-center">
+                <Button className="mr-3" color="primary">Bet List</Button>
+                <Button className="ml-3" color="primary">Statement</Button>
+            </Container>
+            <hr />
+            <BalanaceInfo />
+            <hr />
+            <Setting />
         </>
 
     );

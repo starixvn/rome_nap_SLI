@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using NAP.SimpleApi.Models;
     using NAP.SimpleApi.Requests;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     [Authorize]
@@ -38,7 +39,7 @@
         public async Task<IActionResult> QueryMultiple([FromBody] SimpleApiRequest request)
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Query);
-            var data = await dynamicRepository.FetchMultipleAsync<object, object>(criteria);
+            var data = await dynamicRepository.FetchMultipleAsync<object, object, object>(criteria);
             return Ok(data);
         }
 
