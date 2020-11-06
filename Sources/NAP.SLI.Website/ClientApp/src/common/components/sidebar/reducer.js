@@ -6,7 +6,7 @@ const ActionTypes = {
 
 const initialState = { isOpen: false };
 
-const queryUsername = value => {
+const queryUsernameSuggestion = value => {
 	return async () => {
 
 		if (!value.length || value.length < 2) {
@@ -14,51 +14,35 @@ const queryUsername = value => {
 		}
 
 		const payload = {
-			apiKey: 'customer:query-username',
+			apiKey: 'customer:query-username-suggestion',
 			data: {
 				userName: value
 			}
 		};
 
-		try {
-			var response = await axios.post('/simple-api/query', payload);
-			var result = [];
-			response.data.forEach(user => {
-				result.push({ value: user.username, label: user.username });
-			});
-
-			return result;
-		} catch {
-			return [];
-		}
+		var response = await axios.post('/simple-api/query', payload);
+		return response.data;
 	};
 }
 
-const searchUsername = username => {
+const queryUserInformation = username => {
 	return async (dispatch) => {
 		const payload = {
-			apiKey: 'customer:query-multiple-cust-by-username',
+			apiKey: 'customer:query-user-information',
 			data: {
 				username: username
 			}
 		};
 
-		try {
-			var response = await axios.post("/simple-api/queryMultiple", payload);
-			if (response.status === 200) {
-				dispatch({ type: "CUSTOMER::GET_SUCCESS", data: { customer: response.data.item1[0], headline: response.data.item2[0] } });
-			}
-
-		} catch (error) {
-			console.log(error);
-		}
+		var response = await axios.post("/simple-api/query", payload);
+		dispatch({ type: "CUSTOMER::GET_SUCCESS", data: { customer: response.data[0], headline: response.data[1] } });
 	};
 }
 
 export const actions = {
 	toggle: () => ({ type: ActionTypes.SIDE_BAR_TOGGLE }),
-	queryUsername,
-	searchUsername
+	queryUsernameSuggestion,
+	queryUserInformation
 };
 
 export const reducer = (state = initialState, action) => {

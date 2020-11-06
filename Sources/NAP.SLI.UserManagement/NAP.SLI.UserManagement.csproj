@@ -6,6 +6,7 @@
     <OutputType>Library</OutputType>
     <StartupObject />
     <AssemblyName>NAP.SLI.UserManagement</AssemblyName>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,9 +1,9 @@
 ﻿namespace NAP.SimpleApi
 {
-    using Fanex.Data.Repository;
-    using NAP.SimpleApi.Models;
     using System;
     using System.Collections.Generic;
+    using Fanex.Data.Repository;
+    using NAP.SimpleApi.Models;
 
     public abstract class Profile
     {
@@ -21,7 +21,7 @@
             Prefix = prefix;
             RequestOptions = new List<RequestOption>();
         }
-        
+
         public void AddQuery<T>(string apiKey) where T : ICriteria
         {
             Add(apiKey, typeof(T), ActionTypes.Query);

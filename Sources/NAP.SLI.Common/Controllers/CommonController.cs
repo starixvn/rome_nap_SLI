@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using System;
 
     [AllowAnonymous]
     [ApiController]
@@ -12,7 +11,7 @@
         [HttpGet("[action]")]
         public void Exception()
         {
-            //throw new NotSupportedException("Test");
+            ////throw new NotSupportedException("Test");
         }
     }
 }

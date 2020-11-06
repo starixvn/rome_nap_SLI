@@ -1,8 +1,8 @@
-namespace NAP.SLI.Customer.Criterias
+namespace NAP.SLI.Customer.Criteria
 {
     using Fanex.Data.Repository;
 
-    public class QueryCustByUsernameCriteria : CriteriaBase
+    public class QueryUserInformationCriteria : CriteriaBase
     {
         public string Username { get; set; }
 
@@ -10,6 +10,6 @@ namespace NAP.SLI.Customer.Criterias
             => "SLI_CustomerSelAllInfo";
 
         public override bool IsValid()
-            => true;
+            => !string.IsNullOrWhiteSpace(Username);
     }
 }

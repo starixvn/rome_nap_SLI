@@ -1,12 +1,13 @@
 ﻿namespace NAP.SimpleApi.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SimpleApi.Helpers;
     using NAP.SimpleApi.Models;
     using NAP.SimpleApi.Requests;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     [Authorize]
     [ApiController]
@@ -31,16 +32,15 @@
         public async Task<IActionResult> Query([FromBody] SimpleApiRequest request)
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Query);
-            var data = await dynamicRepository.FetchAsync<object>(criteria);
-            return Ok(data);
-        }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> QueryMultiple([FromBody] SimpleApiRequest request)
-        {
-            var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Query);
-            var data = await dynamicRepository.FetchMultipleAsync<object, object, object>(criteria);
-            return Ok(data);
+            var data = await dynamicRepository.FetchMultipleAsync(criteria);
+            if(data.Count() == 1)
+            {
+                return Ok(data.First());
+            }
+            else
+            {
+                return Ok(data);
+            }
         }
 
         [HttpPost("[action]")]

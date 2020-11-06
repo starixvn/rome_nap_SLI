@@ -1,15 +1,15 @@
 namespace NAP.SLI.Customer
 {
     using NAP.SimpleApi;
-    using NAP.SLI.Customer.Criterias;
+    using NAP.SLI.Customer.Criteria;
 
     public class SimpleApiProfile : Profile
     {
         public SimpleApiProfile()
-            :base("customer")
+            : base("customer")
         {
-            AddQuery<QueryUsernameCriteria>("query-username"); 
-            AddQuery<QueryCustByUsernameCriteria>("query-multiple-cust-by-username");
+            AddQuery<QueryUsernameSuggestionCriteria>("query-username-suggestion");
+            AddQuery<QueryUserInformationCriteria>("query-user-information");
         }
     }
 }

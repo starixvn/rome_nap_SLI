@@ -1,40 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import './SideBar.scss';
 import { Form, Input } from 'reactstrap';
-import AsyncSelect from 'react-select/async';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { CustomerPage } from '../../../features/customer/CustomerPage';
 import { actions } from './reducer';
 
-const SideBar = ({ queryUsername, searchUsername }) => {
+const SideBar = ({ queryUsernameSuggestion, queryUserInformation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [options, setOptions] = useState([]);
   const [username, setUsername] = useState('');
 
   const handleSubmit = event => {
     event.preventDefault();
-    searchUsername(username);
+    queryUserInformation(username);
   };
 
-  const handleQueryUsername = (value) => {
-    return queryUsername(value);
+  const handleSearch = (value) => {
+    setIsLoading(true);
+    setUsername(value);
+    queryUsernameSuggestion(value)
+      .then((items) => {
+        setOptions(items);
+        setIsLoading(false);
+      });
   };
 
-  const handleChange = option => {
-    setUsername(option.value);
+  const handleChange = (option) => {
+    option && option.length > 0 && setUsername(option[0].username);
   }
 
   return (
     <div>
       <Form id="searchUsername" inline className="form-search" onSubmit={handleSubmit}>
         <div className="username mr-2">
-          <AsyncSelect
-            name="searchUsername"
-            placeholder="Username"
-            components={{ DropdownIndicator: () => null, IndicatorSeparator: () => null }}
-            loadOptions={handleQueryUsername}
+          <AsyncTypeahead
+            filterBy={() => true}
+            id="async-example"
+            isLoading={isLoading}
+            labelKey="username"
+            minLength={2}
+            options={options}
+            placeholder="Input an username"
+            onSearch={handleSearch}
             onChange={handleChange}
-            onBlurResetsInput={false}
+            renderMenuItemChildren={(option) => (
+              <Fragment>
+                <span>{option.username}</span>
+              </Fragment>
+            )}
           />
         </div>
         <Input className="form-search-btn" type="submit" value="Search" />
@@ -46,8 +62,8 @@ const SideBar = ({ queryUsername, searchUsername }) => {
 }
 
 SideBar.propTypes = {
-  queryUsername: PropTypes.func,
-  searchUsername: PropTypes.func
+  queryUsernameSuggestion: PropTypes.func.isRequired,
+  queryUserInformation: PropTypes.func.isRequired
 };
 
 const connectedSideBar = connect(
