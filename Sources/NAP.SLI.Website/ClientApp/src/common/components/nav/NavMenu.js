@@ -19,7 +19,7 @@ const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar, isOpen
   }, []);
 
   return (
-    <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+    <Navbar className="navbar-expand border-bottom box-shadow">
       <Button type="button" onClick={toggleSideBar}>
         {isOpenSideBar ? <Icon path={mdiArrowCollapseLeft} size={0.6} /> : <Icon path={mdiArrowCollapseRight} size={0.6} />}
       </Button>

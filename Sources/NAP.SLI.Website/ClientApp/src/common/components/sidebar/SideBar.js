@@ -1,9 +1,9 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import './SideBar.scss';
-import { Form, Input } from 'reactstrap';
+import { Button, Form, Navbar } from 'reactstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { CustomerPage } from '../../../features/customer/CustomerPage';
 import { actions } from './reducer';
@@ -33,31 +33,27 @@ const SideBar = ({ queryUsernameSuggestion, queryUserInformation }) => {
   }
 
   return (
-    <div>
-      <Form id="searchUsername" inline className="form-search" onSubmit={handleSubmit}>
-        <div className="username mr-2">
-          <AsyncTypeahead
-            filterBy={() => true}
-            id="async-example"
-            isLoading={isLoading}
-            labelKey="username"
-            minLength={2}
-            options={options}
-            placeholder="Input an username"
-            onSearch={handleSearch}
-            onChange={handleChange}
-            renderMenuItemChildren={(option) => (
-              <Fragment>
-                <span>{option.username}</span>
-              </Fragment>
-            )}
-          />
-        </div>
-        <Input className="form-search-btn" type="submit" value="Search" />
-      </Form>
-
+    <>
+      <Navbar className="navbar-expand border-bottom box-shadow">
+        <Form inline className="form-search" onSubmit={handleSubmit}>
+          <div className="username mr-3">
+            <AsyncTypeahead
+              filterBy={() => true}
+              isLoading={isLoading}
+              labelKey="username"
+              minLength={2}
+              options={options}
+              placeholder="Input an username"
+              onSearch={handleSearch}
+              onChange={handleChange}
+              renderMenuItemChildren={option => <span>{option.username}</span>}
+            />
+          </div>
+          <Button color="primary" type="submit">Search</Button>
+        </Form>
+      </Navbar>
       <CustomerPage></CustomerPage>
-    </div>
+    </>
   );
 }
 

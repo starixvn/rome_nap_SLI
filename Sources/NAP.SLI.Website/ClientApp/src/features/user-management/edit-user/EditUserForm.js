@@ -1,5 +1,5 @@
 import React from 'react';
-const { Form, FormGroup, Label, Input, Col } = require("reactstrap");
+import { Form, FormGroup, Label, Input, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 
@@ -20,9 +20,7 @@ const EditUserInforForm = (props) => {
         <Form onSubmit={handleSubmit}>
             <FormGroup row>
                 <Label sm={4}>User Name</Label>
-                <Col sm={8}>
-                    <Input name="username" plaintext defaultValue={initialValues.username} />
-                </Col>
+                <Label sm={8}>{initialValues.username}</Label>
             </FormGroup>
             <Field
                 name="firstname"
@@ -44,7 +42,7 @@ const EditUserInforForm = (props) => {
                     </Input>
                 </Col>
             </FormGroup>
-            <Input type="submit" value="Submit" />
+            <Input className="btn-primary" type="submit" value="Submit" />
         </Form>
     );
 }

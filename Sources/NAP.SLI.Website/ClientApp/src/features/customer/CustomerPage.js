@@ -10,89 +10,66 @@ import Setting from './childviews/Settings';
 
 const CustomerPage = ({ customer, headline }) => {
     if (!customer) {
-        return (<div></div>);
+        return <></>;
     }
+
     const [isOpen, setIsOpen] = useState(true);
     const [rotation, setRotation] = useState(0);
 
     const toggle = () => {
-        setIsOpen(!isOpen);
-        setRotation(isOpen ? 270 : 0);
+        const newIsOpen = !isOpen;
+        setIsOpen(newIsOpen);
+        setRotation(newIsOpen ? 0 : 180);
     };
-
-    let breakHeadline = "";
-    let customerSuper = "";
-    let customerMaster = "";
-    let customerAgent = "";
-    let customerMember = "";
-
-
-
-    if (headline.superID) {
-        breakHeadline = ""
-        customerSuper = <>
-            <Row >
-                <Col xs="5">Super:</Col>
-                <Col xs="7">{headline.superName}</Col>
-            </Row>
-        </>;
-    }
-
-    if (headline.masterID) {
-        customerMaster = <Row >
-            <Col xs="5">Master:</Col>
-            <Col xs="7">{headline.masterName}</Col>
-        </Row>;
-    }
-
-    if (headline.agentID) {
-        customerAgent = <Row >
-            <Col xs="5">Agent:</Col>
-            <Col xs="7">{headline.agentName}</Col>
-        </Row>;
-    }
-
-    if (headline.memberID) {
-        customerMember = <Row >
-            <Col xs="5">Member:</Col>
-            <Col xs="7">{headline.memberName}</Col>
-        </Row>;
-    }
 
     return (
         <>
-            {breakHeadline}
             <Container>
-                {customerSuper}
-                {customerMaster}
-                {customerAgent}
-                {customerMember}
+                {headline.superID && <Row >
+                    <Col xs="5">Super</Col>
+                    <Col xs="7">{headline.superName}</Col>
+                </Row>}
+                {headline.masterID && <Row>
+                    <Col xs="5">Master</Col>
+                    <Col xs="7">{headline.masterName}</Col>
+                </Row>}
+                {headline.agentID && <Row>
+                    <Col xs="5">Agent</Col>
+                    <Col xs="7">{headline.agentName}</Col>
+                </Row>}
+                {headline.memberID && <Row>
+                    <Col xs="5">Member</Col>
+                    <Col xs="7">{headline.memberName}</Col>
+                </Row>}
             </Container>
             <div className="bg-lightgrey text-primary">
                 <hr />
-                <Container onClick={toggle} className="d-flex"><span className="customer-label">{customer.username}</span><FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={rotation}></FontAwesomeIcon></Container>
+                <Container onClick={toggle} className="d-flex">
+                    <span className="customer-label">{customer.username}</span>
+                    <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={rotation}></FontAwesomeIcon>
+                </Container>
                 <hr />
             </div>
             <Collapse isOpen={isOpen}>
                 <Container>
                     <Row>
-                        <Col xs="5">Name:</Col>
+                        <Col xs="5">Name</Col>
                         <Col xs="7">{customer.firstname} - {customer.lastname}</Col>
                     </Row>
                     <Row>
-                        <Col xs="5">Nick Name:</Col>
+                        <Col xs="5">Nick Name</Col>
                         <Col xs="7">{customer.username2}</Col>
                     </Row>
                     <Row>
-                        <Col xs="5">Fax:</Col>
+                        <Col xs="5">Fax</Col>
                         <Col xs="7">{customer.fax}</Col>
                     </Row>
                     <Row>
-                        <Col xs="5">Phone:</Col>
+                        <Col xs="5">Phone</Col>
                         <Col xs="7">{customer.phone}</Col>
                     </Row>
                     <Row>
-                        <Col xs="5">Mobile:</Col>
+                        <Col xs="5">Mobile</Col>
                         <Col xs="7">{customer.mobilephone}</Col>
                     </Row>
                 </Container>
@@ -107,7 +84,6 @@ const CustomerPage = ({ customer, headline }) => {
             <hr />
             <Setting />
         </>
-
     );
 };
 

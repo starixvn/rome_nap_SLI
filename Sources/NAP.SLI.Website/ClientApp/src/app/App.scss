@@ -11,6 +11,10 @@ $sidebar-width: 321px;
 // Import Bootstrap and its default variables
 @import "~bootstrap/scss/bootstrap.scss";
 
+body {
+  background: #fff;
+}
+
 .wrapper {
   display: flex;
   width: 100%;
@@ -23,7 +27,6 @@ $sidebar-width: 321px;
     height: 100vh;
     width: $sidebar-width;
     border-right: 1px solid $border-color;
-    padding: 0.5rem;
     display: none;
     z-index: 999;
   }
@@ -81,4 +84,8 @@ button {
   font-weight: 500;
   margin-bottom: 1rem;
   padding-bottom: 0.25rem;
+}
+
+.color-currency {
+  color: rgb(255, 114, 0);
 }

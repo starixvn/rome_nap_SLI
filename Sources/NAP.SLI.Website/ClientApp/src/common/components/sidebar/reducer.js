@@ -35,7 +35,11 @@ const queryUserInformation = username => {
 		};
 
 		var response = await axios.post("/simple-api/query", payload);
-		dispatch({ type: "CUSTOMER::GET_SUCCESS", data: { customer: response.data[0], headline: response.data[1] } });
+		if (response.data.length === 0) {
+			console.log('There is no information available.');
+		} else {
+			dispatch({ type: "CUSTOMER::GET_SUCCESS", data: { customer: response.data[0][0], headline: response.data[1][0] } });
+		}
 	};
 }
 

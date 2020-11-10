@@ -1,7 +1,17 @@
 ﻿nav {
+  background-color: #576b9d !important;
+
   .navbar-nav {
     text-transform: uppercase !important;
     font-weight: 500;
+
+    .nav-link {
+      color: #fff;
+
+      &:hover {
+        background: #4d608c;
+      }
+    }
   }
 }
 
