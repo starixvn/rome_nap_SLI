@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Container, Row, Col, Collapse, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import './Customer.scss';
-import BalanaceInfo from './childviews/BalanceInfo';
-import Setting from './childviews/Settings';
+import NavTabs from '../../common/components/nav-tabs/NavTabs';
+import BalanceInfo from './childviews/BalanceInformation';
+import DownlineList from './childviews/DownlineList';
+import BasicSetting from './childviews/BasicSetting';
+import DetailSetting from './childviews/DetailSetting';
+import LoginInformation from './childviews/LoginInformation';
+import OnlineList from './childviews/OnlineList';
+import Report from './childviews/Report';
 
 const CustomerPage = ({ customer, headline }) => {
     if (!customer) {
@@ -22,10 +28,41 @@ const CustomerPage = ({ customer, headline }) => {
         setRotation(newIsOpen ? 0 : 180);
     };
 
+    const tabList1 = useMemo(
+        () => [{
+            text: 'Balance Info',
+            component: BalanceInfo
+        }, {
+            text: 'Downline List',
+            component: DownlineList
+        }],
+        []
+    );
+
+    const tabList2 = useMemo(
+        () => [{
+            text: 'Settings',
+            component: BasicSetting
+        }, {
+            text: 'Detail',
+            component: DetailSetting
+        }, {
+            text: 'Login',
+            component: LoginInformation
+        }, {
+            text: 'Online List',
+            component: OnlineList
+        }, {
+            text: 'Report',
+            component: Report
+        }],
+        []
+    );
+
     return (
         <>
             <Container>
-                {headline.superID && <Row >
+                {headline.superID && <Row>
                     <Col xs="5">Super</Col>
                     <Col xs="7">{headline.superName}</Col>
                 </Row>}
@@ -36,10 +73,6 @@ const CustomerPage = ({ customer, headline }) => {
                 {headline.agentID && <Row>
                     <Col xs="5">Agent</Col>
                     <Col xs="7">{headline.agentName}</Col>
-                </Row>}
-                {headline.memberID && <Row>
-                    <Col xs="5">Member</Col>
-                    <Col xs="7">{headline.memberName}</Col>
                 </Row>}
             </Container>
             <div className="bg-lightgrey text-primary">
@@ -76,13 +109,13 @@ const CustomerPage = ({ customer, headline }) => {
             </Collapse>
             <hr />
             <Container className="d-flex align-items-center justify-content-center">
-                <Button className="mr-3" color="primary">Bet List</Button>
+                {headline.memberID && <Button className="mr-3" color="primary">Bet List</Button>}
                 <Button className="ml-3" color="primary">Statement</Button>
             </Container>
             <hr />
-            <BalanaceInfo />
+            <NavTabs tabList={tabList1} />
             <hr />
-            <Setting />
+            <NavTabs tabList={tabList2} />
         </>
     );
 };

@@ -38,6 +38,7 @@ const SideBar = ({ queryUsernameSuggestion, queryUserInformation }) => {
         <Form inline className="form-search" onSubmit={handleSubmit}>
           <div className="username mr-3">
             <AsyncTypeahead
+              id='username-suggestion'
               filterBy={() => true}
               isLoading={isLoading}
               labelKey="username"
