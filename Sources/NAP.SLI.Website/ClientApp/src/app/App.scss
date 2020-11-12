@@ -1,43 +1,21 @@
 // Override default variables before the import
-$body-bg: #ededec;
-$alert-padding-y: 0.5rem;
-$alert-padding-x: 1rem;
-$font-size-base: 0.875rem;
-$input-btn-padding-x: 0.5rem;
-$input-btn-padding-y: 0.25rem;
-$spacer: 0.5rem;
-$sidebar-width: 321px;
+@import './variables.scss';
 
 // Import Bootstrap and its default variables
 @import "~bootstrap/scss/bootstrap.scss";
-
-body {
-  background: #fff;
-}
 
 .wrapper {
   display: flex;
   width: 100%;
   align-items: stretch;
 
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: $sidebar-width;
-    border-right: 1px solid $border-color;
-    display: none;
-    z-index: 999;
-  }
-
   .content {
     width: 100%;
     min-height: 100vh;
-    transition: all 0.3s;
     position: absolute;
     top: 0;
     right: 0;
+    overflow: hidden;
 
     nav {
       background: #eee;
@@ -48,7 +26,9 @@ body {
     }
 
     .main {
-      margin-top: 50px;
+      height: calc(100vh - #{$navbar-height});
+      margin-top: $navbar-height;
+      overflow: auto;
     }
   }
 
@@ -88,4 +68,12 @@ button {
 
 .color-currency {
   color: rgb(255, 114, 0);
+}
+
+.font-weight-500 {
+  font-weight: 500;
+}
+
+.bg-lightgrey {
+  background-color: lightgray;
 }

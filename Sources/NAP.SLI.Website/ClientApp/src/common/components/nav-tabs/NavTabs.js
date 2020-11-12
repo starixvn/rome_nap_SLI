@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Nav, NavLink, NavItem, TabContent, TabPane } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import './NavTabs.scss';
 
 const propTypes = {
     tabList: PropTypes.array.isRequired,
@@ -13,12 +14,12 @@ const defaultProps = {
     activeIndex: 0
 };
 
-const NavTabs = ({ tabList, activeIndex }) => {
+const NavTabs = ({ tabList, activeIndex, className }) => {
     const [activeTab, setActiveTab] = useState(activeIndex);
 
     return (
-        <>
-            <Nav tabs>
+        <div className={className}>
+            <Nav tabs className="bg-lightgrey font-weight-500">
                 {tabList.map((tab, index) =>
                     <NavItem key={index}>
                         <NavLink className={classNames({ active: activeTab === index })} onClick={() => setActiveTab(index)}>
@@ -34,7 +35,7 @@ const NavTabs = ({ tabList, activeIndex }) => {
                     </TabPane>
                 )}
             </TabContent>
-        </>
+        </div>
     );
 }
 

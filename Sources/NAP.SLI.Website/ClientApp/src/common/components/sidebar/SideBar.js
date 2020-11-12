@@ -1,8 +1,8 @@
+import './SideBar.scss';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
-import './SideBar.scss';
 import { Button, Form, Navbar } from 'reactstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { CustomerPage } from '../../../features/customer/CustomerPage';
@@ -33,7 +33,7 @@ const SideBar = ({ queryUsernameSuggestion, queryUserInformation }) => {
   }
 
   return (
-    <>
+    <div className="sidebar border-right">
       <Navbar className="navbar-expand border-bottom box-shadow">
         <Form inline className="form-search" onSubmit={handleSubmit}>
           <div className="username mr-3">
@@ -54,7 +54,7 @@ const SideBar = ({ queryUsernameSuggestion, queryUserInformation }) => {
         </Form>
       </Navbar>
       <CustomerPage></CustomerPage>
-    </>
+    </div>
   );
 }
 

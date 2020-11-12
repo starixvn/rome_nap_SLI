@@ -21,7 +21,7 @@ const App = ({ loggedIn, isOpen }) => {
   return (
     <BrowserRouter>
       <div className={`wrapper ${isOpen ? 'open' : ''}`}>
-        {loggedIn && <div className="sidebar"><SideBar /></div>}
+        {loggedIn && <SideBar />}
         <div className="content">
           {loggedIn && <NavMenu />}
           {loggedIn && <ChangePasswordModal />}

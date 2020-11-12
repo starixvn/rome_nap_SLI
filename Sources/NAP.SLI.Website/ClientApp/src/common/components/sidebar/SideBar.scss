@@ -1,9 +1,19 @@
-.form-search {
-  padding: 0.2rem;
+@import '../../../app/variables';
 
-  .username {
-    .rbt-input {
-      width: 230px;
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: $sidebar-width;
+  display: none;
+  z-index: 999;
+
+  .form-search {
+    .username {
+      .rbt-input {
+        width: 240px;
+      }
     }
   }
 }

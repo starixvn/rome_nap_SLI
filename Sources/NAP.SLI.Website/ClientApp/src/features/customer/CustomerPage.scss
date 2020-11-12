@@ -1,0 +1,14 @@
+@import '../../app/variables';
+
+.customer-page {
+    overflow-y: auto;
+    height: calc(100vh - #{$navbar-height});
+
+    .tabs-balance-downline {
+        height: 220px;
+    }
+
+    .customer-label {
+        width: inherit;
+    }
+}

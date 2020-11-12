@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import './Customer.scss';
+import './CustomerPage.scss';
 import NavTabs from '../../common/components/nav-tabs/NavTabs';
 import BalanceInfo from './childviews/BalanceInformation';
 import DownlineList from './childviews/DownlineList';
@@ -41,7 +41,7 @@ const CustomerPage = ({ customer, headline }) => {
 
     const tabList2 = useMemo(
         () => [{
-            text: 'Settings',
+            text: 'Setting',
             component: BasicSetting
         }, {
             text: 'Detail',
@@ -60,8 +60,8 @@ const CustomerPage = ({ customer, headline }) => {
     );
 
     return (
-        <>
-            <Container>
+        <div className="customer-page">
+            <Container className="my-3">
                 {headline.superID && <Row>
                     <Col xs="5">Super</Col>
                     <Col xs="7">{headline.superName}</Col>
@@ -75,48 +75,45 @@ const CustomerPage = ({ customer, headline }) => {
                     <Col xs="7">{headline.agentName}</Col>
                 </Row>}
             </Container>
-            <div className="bg-lightgrey text-primary">
-                <hr />
-                <Container onClick={toggle} className="d-flex">
-                    <span className="customer-label">{customer.username}</span>
-                    <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={rotation}></FontAwesomeIcon>
-                </Container>
-                <hr />
+            <div className="mb-3">
+                <div className="py-2 font-weight-500 bg-lightgrey text-primary">
+                    <Container onClick={toggle} className="d-flex">
+                        <span className="customer-label">{customer.username}</span>
+                        <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={rotation}></FontAwesomeIcon>
+                    </Container>
+                </div>
+                <Collapse isOpen={isOpen}>
+                    <Container className="pb-2 border-bottom">
+                        <Row>
+                            <Col xs="5">Name</Col>
+                            <Col xs="7">{customer.firstname} - {customer.lastname}</Col>
+                        </Row>
+                        <Row>
+                            <Col xs="5">Nick Name</Col>
+                            <Col xs="7">{customer.username2}</Col>
+                        </Row>
+                        <Row>
+                            <Col xs="5">Fax</Col>
+                            <Col xs="7">{customer.fax}</Col>
+                        </Row>
+                        <Row>
+                            <Col xs="5">Phone</Col>
+                            <Col xs="7">{customer.phone}</Col>
+                        </Row>
+                        <Row>
+                            <Col xs="5">Mobile</Col>
+                            <Col xs="7">{customer.mobilephone}</Col>
+                        </Row>
+                    </Container>
+                </Collapse>
             </div>
-            <Collapse isOpen={isOpen}>
-                <Container>
-                    <Row>
-                        <Col xs="5">Name</Col>
-                        <Col xs="7">{customer.firstname} - {customer.lastname}</Col>
-                    </Row>
-                    <Row>
-                        <Col xs="5">Nick Name</Col>
-                        <Col xs="7">{customer.username2}</Col>
-                    </Row>
-                    <Row>
-                        <Col xs="5">Fax</Col>
-                        <Col xs="7">{customer.fax}</Col>
-                    </Row>
-                    <Row>
-                        <Col xs="5">Phone</Col>
-                        <Col xs="7">{customer.phone}</Col>
-                    </Row>
-                    <Row>
-                        <Col xs="5">Mobile</Col>
-                        <Col xs="7">{customer.mobilephone}</Col>
-                    </Row>
-                </Container>
-            </Collapse>
-            <hr />
-            <Container className="d-flex align-items-center justify-content-center">
+            <Container className="d-flex align-items-center justify-content-center mb-3">
                 {headline.memberID && <Button className="mr-3" color="primary">Bet List</Button>}
                 <Button className="ml-3" color="primary">Statement</Button>
             </Container>
-            <hr />
-            <NavTabs tabList={tabList1} />
-            <hr />
+            <NavTabs className="mb-3 tabs-balance-downline" tabList={tabList1} />
             <NavTabs tabList={tabList2} />
-        </>
+        </div>
     );
 };
 
