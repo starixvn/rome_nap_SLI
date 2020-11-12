@@ -15,7 +15,6 @@ import { LoginPage } from '../features/account/authentication/LoginPage';
 import { HomePage } from '../features/home/HomePage';
 import { ChangePasswordModal } from '../features/account/change-password/ChangePasswordModal';
 import { ConfirmBox } from '../common/components/confirm-box/ConfirmBox';
-import { Container } from 'reactstrap';
 
 const App = ({ loggedIn, isOpen }) => {
   return (
@@ -25,7 +24,7 @@ const App = ({ loggedIn, isOpen }) => {
         <div className="content">
           {loggedIn && <NavMenu />}
           {loggedIn && <ChangePasswordModal />}
-          <Container fluid className="main">
+          <div className="main">
             <Switch>
               <Route path="/login" component={LoginPage} location={location} />
               <PrivateRoute exact path="/" component={HomePage} />
@@ -33,7 +32,7 @@ const App = ({ loggedIn, isOpen }) => {
               <Route component={NotFoundPage} />
             </Switch>
             <ConfirmBox />
-          </Container>
+          </div>
         </div>
       </div>
     </BrowserRouter>

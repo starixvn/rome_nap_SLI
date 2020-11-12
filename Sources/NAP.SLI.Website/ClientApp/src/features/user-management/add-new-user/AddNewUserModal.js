@@ -7,7 +7,6 @@ import { actions } from "./reducer";
 import AddNewUserForm from "./AddNewUserForm";
 
 const AddNewUserModal = ({ isOpen, groups, isSuccessful, message, toggle, addNewUser, callback }) => {
-    const handleSubmit = (values) => addNewUser(values, callback);
 
     return (
         <Modal isOpen={isOpen} toggle={toggle} unmountOnClose={true}>
@@ -18,7 +17,7 @@ const AddNewUserModal = ({ isOpen, groups, isSuccessful, message, toggle, addNew
                         {message}
                     </Alert>
                 }
-                <AddNewUserForm onSubmit={handleSubmit} groups={groups} />
+                <AddNewUserForm onSubmit={(values) => addNewUser(values, callback)} groups={groups} />
             </ModalBody>
         </Modal>
     );

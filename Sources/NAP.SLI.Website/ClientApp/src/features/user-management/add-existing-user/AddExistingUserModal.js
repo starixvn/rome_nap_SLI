@@ -4,38 +4,38 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { actions } from "./reducer";
-import AddExistUserForm from "./AddExistUserForm";
+import AddExistingUserForm from "./AddExistingUserForm";
 
-const AddExistUserModal = ({ isOpen, groups, isSuccessful, message, toggle, addExistUser, callback }) => {
-    const handleSubmit = (values) => addExistUser(values, callback);
+const AddExistingUserModal = ({ isOpen, groups, isSuccessful, message, toggle, addExistingUser, callback }) => {
+    const handleSubmit = (values) => addExistingUser(values, callback);
     return (
         <Modal isOpen={isOpen} toggle={toggle} unmountOnClose={true}>
-            <ModalHeader toggle={toggle}>Add Exist User</ModalHeader>
+            <ModalHeader toggle={toggle}>Add Existing User</ModalHeader>
             <ModalBody>
                 {message &&
                     <Alert className={"text-center"} color={isSuccessful ? 'success' : 'danger'} role="alert">
                         {message}
                     </Alert>
                 }
-                <AddExistUserForm onSubmit={handleSubmit} groups={groups} />
+                <AddExistingUserForm onSubmit={handleSubmit} groups={groups} />
             </ModalBody>
         </Modal>
     );
 };
 
-AddExistUserModal.propTypes = {
+AddExistingUserModal.propTypes = {
     groups: PropTypes.array,
     isOpen: PropTypes.bool.isRequired,
     isSuccessful: PropTypes.bool,
     message: PropTypes.string,
     toggle: PropTypes.func.isRequired,
-    addExistUser: PropTypes.func.isRequired,
+    addExistingUser: PropTypes.func.isRequired,
     callback: PropTypes.func
 };
 
-const connectedAddExistUserModal = connect(
-    state => state.addExistUser,
+const connectedAddExistingUserModal = connect(
+    state => state.addExistingUser,
     dispatch => bindActionCreators(actions, dispatch)
-)(AddExistUserModal);
+)(AddExistingUserModal);
 
-export { connectedAddExistUserModal as AddExistUserModal };
+export { connectedAddExistingUserModal as AddExistingUserModal };

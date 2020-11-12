@@ -32,7 +32,7 @@ const LoginPage = ({ login, loggingIn, message, loggedIn }) => {
         <InputGroup>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>
-              <Icon path={mdiAccount} size={1} />
+              <Icon path={mdiAccount} />
             </InputGroupText>
           </InputGroupAddon>
           <Input type="text" placeholder="Username" maxLength="50" value={username} onChange={event => setUsername(event.target.value)} />
@@ -42,7 +42,7 @@ const LoginPage = ({ login, loggingIn, message, loggedIn }) => {
         <InputGroup>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>
-              <Icon path={mdiLock} size={1} />
+              <Icon path={mdiLock} />
             </InputGroupText>
           </InputGroupAddon>
           <Input type="password" placeholder="Password" maxLength="50" value={password} onChange={event => setPassword(event.target.value)} />

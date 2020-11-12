@@ -1,6 +1,6 @@
 import React from 'react';
-import { reduxForm, Field } from 'redux-form'
-import { Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { reduxForm, Field } from 'redux-form';
+import { Form, FormGroup, Label, Input, Col, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 const renderField = (field) => (
@@ -35,42 +35,48 @@ const validate = (values) => {
     return errors
 }
 
-const AddNewUserForm = props => {
-    const { handleSubmit, groups } = props;
+const AddNewUserForm = ({ handleSubmit, groups }) => {
 
-    return (<Form onSubmit={handleSubmit}>
-        <Field
-            name="username"
-            label="User Name"
-            component={renderField}
-        />
-        <Field
-            name="password"
-            label="Password"
-            component={renderField}
-            type="password"
-        />
-        <Field
-            name="firstname"
-            label="First Name"
-            component={renderField}
-        />
-        <Field
-            name="lastname"
-            label="Last Name"
-            component={renderField}
-        />
-        <Field name="group" label="Group" component={renderSelect}>
-            {groups && groups.map(group =>
-                <option key={group.value} value={group.value}>{group.label}</option>
-            )};
-        </Field>
-        <Input type="submit" value="Submit" />
-    </Form>);
+    return (
+        <Form onSubmit={handleSubmit}>
+            <Field
+                name="username"
+                label="User Name"
+                component={renderField}
+            />
+            <Field
+                name="password"
+                label="Password"
+                component={renderField}
+                type="password"
+            />
+            <Field
+                name="firstname"
+                label="First Name"
+                component={renderField}
+            />
+            <Field
+                name="lastname"
+                label="Last Name"
+                component={renderField}
+            />
+            <Field name="group" label="Group" component={renderSelect}>
+                {groups && groups.map(group =>
+                    <option key={group.value} value={group.value}>{group.label}</option>
+                )};
+            </Field>
+            <FormGroup row>
+                <Label sm={4}></Label>
+                <Col sm={8}>
+                    <Button type="submit" color="primary">Submit</Button>
+                </Col>
+            </FormGroup>
+        </Form>
+    );
 };
 
 AddNewUserForm.propTypes = {
-    groups: PropTypes.array,
+    groups: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired
 };
 
@@ -79,4 +85,4 @@ export default reduxForm({
     validate,
     enableReinitialize: true,
     initialValues: { username: "", password: "" }
-})(AddNewUserForm)
+})(AddNewUserForm);

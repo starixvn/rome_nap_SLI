@@ -4,14 +4,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Icon from '@mdi/react';
-import { mdiArrowCollapseLeft, mdiArrowCollapseRight } from '@mdi/js';
+import { mdiViewDashboard } from '@mdi/js';
 import { NavLink } from 'react-router-dom';
 import { actions as authenticationActions } from '../../../features/account/authentication/reducer';
 import { actions as changePasswordActions } from '../../../features/account/change-password/reducer';
 import { actions as sideBarActions } from '../sidebar/reducer';
 import './NavMenu.scss';
 
-const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar, isOpenSideBar }) => {
+const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = useCallback(() => {
@@ -20,8 +20,8 @@ const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar, isOpen
 
   return (
     <Navbar className="navbar-expand border-bottom box-shadow">
-      <Button type="button" onClick={toggleSideBar}>
-        {isOpenSideBar ? <Icon path={mdiArrowCollapseLeft} size={0.6} /> : <Icon path={mdiArrowCollapseRight} size={0.6} />}
+      <Button className="mr-3" color="outline-light" onClick={toggleSideBar}>
+        <Icon path={mdiViewDashboard} />
       </Button>
       <NavbarToggler onClick={handleToggle} className="mr-2" />
       <Collapse className="d-sm-inline-flex" isOpen={isOpen} navbar>
@@ -37,8 +37,8 @@ const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar, isOpen
           </NavItem>
         </ul>
         <UncontrolledDropdown>
-          <DropdownToggle caret>
-            Welcome {username}
+          <DropdownToggle caret color="outline-light">
+            Welcome <span className="font-weight-500">{username}</span>
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem onClick={toggleChangePassword}>Change password</DropdownItem>
@@ -52,14 +52,13 @@ const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar, isOpen
 
 NavMenu.propTypes = {
   username: PropTypes.string.isRequired,
-  isOpenSideBar: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired,
   toggleChangePassword: PropTypes.func.isRequired,
   toggleSideBar: PropTypes.func.isRequired
 };
 
 const connectedNavMenu = connect(
-  state => Object.assign({}, state.authentication.account, { isOpenSideBar: state.sideBar.isOpen }),
+  state => Object.assign({}, state.authentication.account),
   dispatch => bindActionCreators(Object.assign(
     {},
     {

@@ -42,7 +42,7 @@ const ChangePasswordPage = ({ changePassword, toggle, showError, message, isSucc
       </FormGroup>
       <FormGroup>
         <Label className="col-form-label"></Label>
-        <Button type="submit" color="primary" className="mr-1">Submit</Button>
+        <Button type="submit" color="primary" className="mr-2">Submit</Button>
         <Button type="button" color="secondary" onClick={toggle}>Cancel</Button>
       </FormGroup>
     </Form>

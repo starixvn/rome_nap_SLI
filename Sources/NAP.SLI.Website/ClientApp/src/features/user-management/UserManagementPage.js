@@ -3,35 +3,34 @@ import PropTypes from 'prop-types';
 import { Alert, Label, Form, Input, Button, FormGroup, Table } from 'reactstrap';
 import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
-import Select from 'react-select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions } from './reducer';
 import './UserManagementPage.scss';
 import { AddNewUserModal } from './add-new-user/AddNewUserModal';
-import { AddExistUserModal } from './add-exist-user/AddExistUserModal';
+import { AddExistingUserModal } from './add-existing-user/AddExistingUserModal';
 import { EditUserModal } from './edit-user/EditUserModal';
 import { ResetUserPasswordModal } from './reset-user-password/ResetUserPasswordModal';
 import { actions as resetPasswordActions } from './reset-user-password/reducer';
 import { actions as addNewUserActions } from './add-new-user/reducer';
-import { actions as addExistUserActions } from './add-exist-user/reducer';
+import { actions as addExistingUserActions } from './add-existing-user/reducer';
 import { actions as editUserInfoActions } from './edit-user/reducer';
 import { actions as confirmBox } from '../../common/components/confirm-box/reducer';
 
 const groupOptions = [
-  { value: null, label: 'All Groups' },
   { value: 0, label: 'User' },
   { value: 1, label: 'Admin' }
 ];
+const groupOptionsWithAll = [{ value: undefined, label: 'All Groups' }].concat(groupOptions);
 
-const UserManagementPage = ({ users, query, message, isSuccessful, changeUserStatus, openResetUserPasswordModal, openAddNewUserModal, openAddExistUserModal, openEditUserModal, openConfirmBox }) => {
+const UserManagementPage = ({ users, query, message, isSuccessful, changeUserStatus, openResetUserPasswordModal, openAddNewUserModal, openAddExistingUserModal, openEditUserModal, openConfirmBox }) => {
   const [username, setUsername] = useState('');
-  const [groupOption, setGroupOption] = useState(groupOptions[0]);
+  const [groupId, setGroupId] = useState(groupOptionsWithAll[0].value);
 
   const handleStatusClick = (checked, user) => {
     const data = {
       username,
-      groupId: groupOption.value
+      groupId
     };
     var updateCallback = () => {
       changeUserStatus(checked, user);
@@ -47,7 +46,7 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
   const queryCallback = () => {
     const data = {
       username,
-      groupId: groupOption.value
+      groupId
     };
     query(data);
   };
@@ -57,30 +56,37 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
     queryCallback();
   };
 
-
+  const handleSelectChange = event => {
+    const groupId = parseInt(event.target.value);
+    setGroupId(isNaN(groupId) ? undefined : groupId);
+  };
 
   return (
     <div className="user-management-page">
       <div className="page-title">User Management</div>
-      <Form inline className="mb-2">
+      <Form inline className="mb-3">
         <FormGroup className="mr-2">
           <Button type="button" className="btn-block" onClick={() => openAddNewUserModal(groupOptions, queryCallback)}>
-            <Icon path={mdiAccountPlus} size={1} /> Add New User
+            <Icon path={mdiAccountPlus} /> Add New User
           </Button>
         </FormGroup>
         <FormGroup>
-          <Button type="button" className="btn-block" onClick={() => openAddExistUserModal(groupOptions, queryCallback)}>
-            <Icon path={mdiAccountPlus} size={1} /> Add Existing User
+          <Button type="button" className="btn-block" onClick={() => openAddExistingUserModal(groupOptions, queryCallback)}>
+            <Icon path={mdiAccountPlus} /> Add Existing User
           </Button>
         </FormGroup>
       </Form>
-      <Form inline className="mb-2" onSubmit={handleSubmit} noValidate>
+      <Form inline className="mb-3" onSubmit={handleSubmit} noValidate>
         <FormGroup className="mr-5">
           <Label for="username" className="mr-2">Username</Label>
           <Input id="username" type="text" maxLength="50" value={username} onChange={event => setUsername(event.target.value)} />
         </FormGroup>
         <FormGroup className="mr-5">
-          <Select className="group-select" options={groupOptions} value={groupOption} onChange={setGroupOption} isSearchable={false} />
+          <Input type="select" value={groupId} onChange={(event) => handleSelectChange(event)}>
+            {groupOptionsWithAll.map((option, index) =>
+              <option key={index} value={option.value}>{option.label}</option>
+            )}
+          </Input>
         </FormGroup>
         <FormGroup>
           <Button type="submit" color="primary" className="btn-block">Search</Button>
@@ -114,13 +120,13 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
               <td>{user.creator}</td>
               <td>{user.createdDate}</td>
               <td><Input type="checkbox" checked={!user.closed} onChange={e => handleStatusClick(e.target.checked, user)} value="true" /></td>
-              <td><Icon path={mdiLockReset} size={1} onClick={() => openResetUserPasswordModal(user, queryCallback)} /></td>
+              <td><Icon path={mdiLockReset} onClick={() => openResetUserPasswordModal(user, queryCallback)} /></td>
             </tr>
           )}
         </tbody>
       </Table>
       <AddNewUserModal />
-      <AddExistUserModal />
+      <AddExistingUserModal />
       <EditUserModal />
       <ResetUserPasswordModal />
     </div>
@@ -135,7 +141,7 @@ UserManagementPage.propTypes = {
   changeUserStatus: PropTypes.func.isRequired,
   openResetUserPasswordModal: PropTypes.func.isRequired,
   openAddNewUserModal: PropTypes.func.isRequired,
-  openAddExistUserModal: PropTypes.func.isRequired,
+  openAddExistingUserModal: PropTypes.func.isRequired,
   openEditUserModal: PropTypes.func.isRequired,
   openConfirmBox: PropTypes.func.isRequired
 }
@@ -148,7 +154,7 @@ const connectedUserManagementPage = connect(
       {
         openResetUserPasswordModal: resetPasswordActions.open,
         openAddNewUserModal: addNewUserActions.openAddNewUserModal,
-        openAddExistUserModal: addExistUserActions.openAddExistUserModal,
+        openAddExistingUserModal: addExistingUserActions.openAddExistingUserModal,
         openEditUserModal: editUserInfoActions.openEditUserModal,
         openConfirmBox: confirmBox.openConfirmBox
       }),

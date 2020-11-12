@@ -28,6 +28,7 @@
     .main {
       height: calc(100vh - #{$navbar-height});
       margin-top: $navbar-height;
+      padding: $grid-gutter-width / 2;
       overflow: auto;
     }
   }
@@ -48,21 +49,22 @@
 }
 
 svg {
+  width: 1.2rem;
+  height: 1.2rem;
   fill: currentColor;
 }
 
 button {
   svg {
     margin-top: -5px;
-    margin-right: 5px;
   }
 }
 
 .page-title {
   font-size: 1.05rem;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid $border-color;
   font-weight: 500;
-  margin-bottom: 1rem;
+  margin-bottom: $grid-gutter-width / 2;
   padding-bottom: 0.25rem;
 }
 

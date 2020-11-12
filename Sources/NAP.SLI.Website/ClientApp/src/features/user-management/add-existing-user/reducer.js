@@ -9,7 +9,7 @@ const ActionTypes = {
 
 const initialState = { isOpen: false };
 
-const addExistUser = (values, callback) => {
+const addExistingUser = (values, callback) => {
     return async (dispatch) => {
         const payload = {
             apiKey: 'user-management:add-new-user',
@@ -39,9 +39,9 @@ const addExistUser = (values, callback) => {
 }
 
 export const actions = {
-    openAddExistUserModal: (groups, callback) => ({ type: ActionTypes.OPEN_ADD_EXIST_USER_MODAL, data: { groups: groups, callback } }),
+    openAddExistingUserModal: (groups, callback) => ({ type: ActionTypes.OPEN_ADD_EXIST_USER_MODAL, data: { groups: groups, callback } }),
     toggle: () => ({ type: ActionTypes.TOGGLE_ADD_EXIST_USER_MODAL }),
-    addExistUser
+    addExistingUser
 };
 
 export const reducer = (state = initialState, action) => {

@@ -1,8 +1,7 @@
 import React from 'react';
-import { Col, FormGroup, Label, Input, Form } from 'reactstrap';
+import { Col, FormGroup, Label, Input, Form, Button } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form';
 import PropTypes from 'prop-types';
-
 
 const renderField = (field) => (
     <FormGroup row>
@@ -25,7 +24,7 @@ const renderSelect = (field) => (
     </FormGroup>
 );
 
-const AddExistUserForm = props => {
+const AddExistingUserForm = props => {
     const { handleSubmit, groups } = props;
 
     return (
@@ -40,17 +39,22 @@ const AddExistUserForm = props => {
                     <option key={group.value} value={group.value}>{group.label}</option>
                 )};
             </Field>
-            <Input type="submit" value="Submit" />
+            <FormGroup row>
+                <Label sm={4}></Label>
+                <Col sm={8}>
+                    <Button type="submit" color="primary">Submit</Button>
+                </Col>
+            </FormGroup>
         </Form>
     );
 };
 
-AddExistUserForm.propTypes = {
+AddExistingUserForm.propTypes = {
     groups: PropTypes.array,
     handleSubmit: PropTypes.func.isRequired
 };
 
 export default reduxForm({
-    form: "addExistUserForm",
+    form: "addExistingUserForm",
     enableReinitialize: true
-})(AddExistUserForm);
+})(AddExistingUserForm);
