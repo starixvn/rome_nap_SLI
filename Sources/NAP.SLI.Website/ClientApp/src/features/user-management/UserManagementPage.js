@@ -16,16 +16,11 @@ import { actions as addNewUserActions } from './add-new-user/reducer';
 import { actions as addExistingUserActions } from './add-existing-user/reducer';
 import { actions as editUserInfoActions } from './edit-user/reducer';
 import { actions as confirmBox } from '../../common/components/confirm-box/reducer';
-
-const groupOptions = [
-  { value: 0, label: 'User' },
-  { value: 1, label: 'Admin' }
-];
-const groupOptionsWithAll = [{ value: undefined, label: 'All Groups' }].concat(groupOptions);
+import { UserGroupSelectOptionsWithAll, getGroupName } from '../../common/models/UserGroup';
 
 const UserManagementPage = ({ users, query, message, isSuccessful, changeUserStatus, openResetUserPasswordModal, openAddNewUserModal, openAddExistingUserModal, openEditUserModal, openConfirmBox }) => {
   const [username, setUsername] = useState('');
-  const [groupId, setGroupId] = useState(groupOptionsWithAll[0].value);
+  const [groupId, setGroupId] = useState(UserGroupSelectOptionsWithAll[0].value);
 
   const handleStatusClick = (checked, user) => {
     const data = {
@@ -66,12 +61,12 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
       <div className="page-title">User Management</div>
       <Form inline className="mb-3">
         <FormGroup className="mr-2">
-          <Button type="button" className="btn-block" onClick={() => openAddNewUserModal(groupOptions, queryCallback)}>
+          <Button type="button" className="btn-block" onClick={() => openAddNewUserModal(queryCallback)}>
             <Icon path={mdiAccountPlus} /> Add New User
           </Button>
         </FormGroup>
         <FormGroup>
-          <Button type="button" className="btn-block" onClick={() => openAddExistingUserModal(groupOptions, queryCallback)}>
+          <Button type="button" className="btn-block" onClick={() => openAddExistingUserModal(queryCallback)}>
             <Icon path={mdiAccountPlus} /> Add Existing User
           </Button>
         </FormGroup>
@@ -83,7 +78,7 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
         </FormGroup>
         <FormGroup className="mr-5">
           <Input type="select" value={groupId} onChange={(event) => handleSelectChange(event)}>
-            {groupOptionsWithAll.map((option, index) =>
+            {UserGroupSelectOptionsWithAll.map((option, index) =>
               <option key={index} value={option.value}>{option.label}</option>
             )}
           </Input>
@@ -100,27 +95,43 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
       <Table hover bordered striped>
         <thead>
           <tr>
-            <th>USER NAME</th>
-            <th>FIRST NAME</th>
-            <th>LAST NAME</th>
-            <th>GROUP NAME</th>
-            <th>CREATOR</th>
-            <th>CREATED DATE</th>
-            <th>ACTIVE</th>
-            <th>PASSWORD</th>
+            <th className="text-center">USER NAME</th>
+            <th className="text-center">FIRST NAME</th>
+            <th className="text-center">LAST NAME</th>
+            <th className="text-center">GROUP NAME</th>
+            <th className="text-center">CREATOR</th>
+            <th className="text-center">CREATED DATE</th>
+            <th className="text-center">ACTIVE</th>
+            <th className="text-center">PASSWORD</th>
           </tr>
         </thead>
         <tbody>
           {users.map(user =>
             <tr key={`Row_${user.custId}`}>
-              <td><p className="btn btn-link" onClick={() => openEditUserModal(user, queryCallback)}>{user.userName}</p></td>
-              <td>{user.firstName}</td>
-              <td>{user.lastName}</td>
-              <td>{user.groupId}</td>
-              <td>{user.creator}</td>
-              <td>{user.createdDate}</td>
-              <td><Input type="checkbox" checked={!user.closed} onChange={e => handleStatusClick(e.target.checked, user)} value="true" /></td>
-              <td><Icon path={mdiLockReset} onClick={() => openResetUserPasswordModal(user, queryCallback)} /></td>
+              <td>
+                <span className="text-link" onClick={() => openEditUserModal(user, queryCallback)}>{user.userName}</span>
+              </td>
+              <td>
+                {user.firstName}
+              </td>
+              <td>
+                {user.lastName}
+              </td>
+              <td>
+                {getGroupName(user.groupId)}
+              </td>
+              <td>
+                {user.creator}
+              </td>
+              <td className="text-center">
+                {user.createdDate}
+              </td>
+              <td className="text-center">
+                <Input type="checkbox" checked={!user.closed} onChange={e => handleStatusClick(e.target.checked, user)} value="true" />
+              </td>
+              <td className="text-center">
+                <Icon className="cursor-pointer" path={mdiLockReset} onClick={() => openResetUserPasswordModal(user, queryCallback)} />
+              </td>
             </tr>
           )}
         </tbody>

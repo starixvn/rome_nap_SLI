@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, FormGroup, Label, Input, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import { UserGroupSelectOptions } from '../../../common/models/UserGroup';
 
 const renderField = (field) => (
     <FormGroup row>
@@ -13,8 +14,7 @@ const renderField = (field) => (
     </FormGroup>
 );
 
-const EditUserInforForm = (props) => {
-    const { handleSubmit, groups, initialValues } = props;
+const EditUserForm = ({ handleSubmit, initialValues }) => {
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -36,7 +36,7 @@ const EditUserInforForm = (props) => {
                 <Label sm={4}>Groups</Label>
                 <Col sm={8}>
                     <Input type="select" name="group">
-                        {groups && groups.map(group =>
+                        {UserGroupSelectOptions.map(group =>
                             <option key={group.value} value={group.value}>{group.label}</option>
                         )};
                     </Input>
@@ -47,13 +47,12 @@ const EditUserInforForm = (props) => {
     );
 }
 
-EditUserInforForm.propTypes = {
+EditUserForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
-    groups: PropTypes.array,
     initialValues: PropTypes.object
 };
 
 export default reduxForm({
-    form: 'editUserInforForm',
+    form: 'editUserForm',
     enableReinitialize: true
-})(EditUserInforForm)
+})(EditUserForm)

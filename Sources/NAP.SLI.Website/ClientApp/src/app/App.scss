@@ -26,7 +26,7 @@
     }
 
     .main {
-      height: calc(100vh - #{$navbar-height});
+      height: calc(100% - #{$navbar-height});
       margin-top: $navbar-height;
       padding: $grid-gutter-width / 2;
       overflow: auto;
@@ -78,4 +78,17 @@ button {
 
 .bg-lightgrey {
   background-color: lightgray;
+}
+
+.text-link {
+  cursor: pointer;
+  color: $link-color;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { actions } from "./reducer";
 import AddExistingUserForm from "./AddExistingUserForm";
 
-const AddExistingUserModal = ({ isOpen, groups, isSuccessful, message, toggle, addExistingUser, callback }) => {
+const AddExistingUserModal = ({ isOpen, isSuccessful, message, toggle, addExistingUser, callback }) => {
     const handleSubmit = (values) => addExistingUser(values, callback);
     return (
         <Modal isOpen={isOpen} toggle={toggle} unmountOnClose={true}>
@@ -17,14 +17,13 @@ const AddExistingUserModal = ({ isOpen, groups, isSuccessful, message, toggle, a
                         {message}
                     </Alert>
                 }
-                <AddExistingUserForm onSubmit={handleSubmit} groups={groups} />
+                <AddExistingUserForm onSubmit={handleSubmit} />
             </ModalBody>
         </Modal>
     );
 };
 
 AddExistingUserModal.propTypes = {
-    groups: PropTypes.array,
     isOpen: PropTypes.bool.isRequired,
     isSuccessful: PropTypes.bool,
     message: PropTypes.string,

@@ -2,8 +2,8 @@ import React from 'react';
 import { reduxForm, Fields } from 'redux-form'
 import { Form, FormGroup, Label, Input, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { required } from '../../../common/utils/FieldValidation';
-import { matchPassword } from '../../../common/utils/ChangePasswordValidation';
+import { required } from '../../../common/utils/Validators';
+import { matchPassword } from '../../../common/utils/Validators';
 
 const renderFields = (fields) => (
     <div>

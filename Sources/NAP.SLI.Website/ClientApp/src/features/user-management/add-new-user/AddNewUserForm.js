@@ -2,6 +2,7 @@ import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Form, FormGroup, Label, Input, Col, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
+import { UserGroupSelectOptions } from '../../../common/models/UserGroup';
 
 const renderField = (field) => (
     <FormGroup row>
@@ -35,7 +36,7 @@ const validate = (values) => {
     return errors
 }
 
-const AddNewUserForm = ({ handleSubmit, groups }) => {
+const AddNewUserForm = ({ handleSubmit }) => {
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -61,7 +62,7 @@ const AddNewUserForm = ({ handleSubmit, groups }) => {
                 component={renderField}
             />
             <Field name="group" label="Group" component={renderSelect}>
-                {groups && groups.map(group =>
+                {UserGroupSelectOptions.map(group =>
                     <option key={group.value} value={group.value}>{group.label}</option>
                 )};
             </Field>
@@ -76,7 +77,6 @@ const AddNewUserForm = ({ handleSubmit, groups }) => {
 };
 
 AddNewUserForm.propTypes = {
-    groups: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired
 };
 

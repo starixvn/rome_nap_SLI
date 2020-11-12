@@ -4,7 +4,7 @@ import ProTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions } from './reducer';
-import EditUserInforForm from './EditUserForm';
+import EditUserForm from './EditUserForm';
 
 const EditUserModal = ({ isOpen, user, message, isSuccessful, toggle, updateUser, callback }) => {
     const handleSubmit = (values) => {
@@ -26,7 +26,7 @@ const EditUserModal = ({ isOpen, user, message, isSuccessful, toggle, updateUser
                         {message}
                     </Alert>
                 }
-                <EditUserInforForm onSubmit={handleSubmit} initialValues={userInfor} />
+                <EditUserForm onSubmit={handleSubmit} initialValues={userInfor} />
             </ModalBody>
         </Modal>
     );
