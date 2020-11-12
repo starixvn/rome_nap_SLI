@@ -64,15 +64,15 @@ const CustomerPage = ({ customer, headline }) => {
             <Container className="my-3">
                 {headline.superID && <Row>
                     <Col xs="5">Super</Col>
-                    <Col xs="7">{headline.superName}</Col>
+                    <Col xs="7"><span className="text-link">{headline.superName}</span></Col>
                 </Row>}
                 {headline.masterID && <Row>
                     <Col xs="5">Master</Col>
-                    <Col xs="7">{headline.masterName}</Col>
+                    <Col xs="7"><span className="text-link">{headline.masterName}</span></Col>
                 </Row>}
                 {headline.agentID && <Row>
                     <Col xs="5">Agent</Col>
-                    <Col xs="7">{headline.agentName}</Col>
+                    <Col xs="7"><span className="text-link">{headline.agentName}</span></Col>
                 </Row>}
             </Container>
             <div className="mb-3">

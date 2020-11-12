@@ -40,7 +40,7 @@ const ChangePasswordPage = ({ changePassword, toggle, showError, message, isSucc
         <Label for="confirmPassword" className="col-form-label">Confirm Password</Label>
         <Input type="password" id="confirmPassword" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} />
       </FormGroup>
-      <FormGroup>
+      <FormGroup className="mt-5">
         <Label className="col-form-label"></Label>
         <Button type="submit" color="primary" className="mr-2">Submit</Button>
         <Button type="button" color="secondary" onClick={toggle}>Cancel</Button>

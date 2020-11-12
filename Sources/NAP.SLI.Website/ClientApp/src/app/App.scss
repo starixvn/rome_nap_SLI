@@ -28,7 +28,7 @@
     .main {
       height: calc(100% - #{$navbar-height});
       margin-top: $navbar-height;
-      padding: $grid-gutter-width / 2;
+      padding: 0 $grid-gutter-width / 2;
       overflow: auto;
     }
   }
@@ -63,9 +63,10 @@ button {
 .page-title {
   font-size: 1.05rem;
   border-bottom: 1px solid $border-color;
-  font-weight: 500;
+  font-weight: bold;
   margin-bottom: $grid-gutter-width / 2;
-  padding-bottom: 0.25rem;
+  padding: 0.5rem 0;
+  text-transform: uppercase;
 }
 
 .color-currency {

@@ -66,7 +66,7 @@ const AddNewUserForm = ({ handleSubmit }) => {
                     <option key={group.value} value={group.value}>{group.label}</option>
                 )};
             </Field>
-            <FormGroup row>
+            <FormGroup row className="mt-5">
                 <Label sm={4}></Label>
                 <Col sm={8}>
                     <Button type="submit" color="primary">Submit</Button>

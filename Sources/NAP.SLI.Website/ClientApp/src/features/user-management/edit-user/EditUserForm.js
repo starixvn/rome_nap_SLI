@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Col, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import { UserGroupSelectOptions } from '../../../common/models/UserGroup';
@@ -42,7 +42,12 @@ const EditUserForm = ({ handleSubmit, initialValues }) => {
                     </Input>
                 </Col>
             </FormGroup>
-            <Input className="btn-primary" type="submit" value="Submit" />
+            <FormGroup row className="mt-5">
+                <Label sm={4}></Label>
+                <Col sm={8}>
+                    <Button type="submit" color="primary">Submit</Button>
+                </Col>
+            </FormGroup>
         </Form>
     );
 }

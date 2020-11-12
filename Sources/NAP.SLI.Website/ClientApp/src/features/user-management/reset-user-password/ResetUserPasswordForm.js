@@ -1,6 +1,6 @@
 import React from 'react';
 import { reduxForm, Fields } from 'redux-form'
-import { Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Col, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { required } from '../../../common/utils/Validators';
 import { matchPassword } from '../../../common/utils/Validators';
@@ -17,7 +17,7 @@ const renderFields = (fields) => (
         <FormGroup row>
             <Label sm={4}>Confirm Password</Label>
             <Col sm={8} className={fields.confirmPassword.meta.asyncValidating ? 'async-validating' : ''}>
-                <Input {...fields.confirmPassword.input} type="password"/>
+                <Input {...fields.confirmPassword.input} type="password" />
                 {fields.confirmPassword.meta.touched && fields.confirmPassword.meta.error && <span>{fields.confirmPassword.meta.error}</span>}
             </Col>
         </FormGroup>
@@ -42,7 +42,12 @@ const ResetUserPasswordForm = props => {
                 confirmPassword: [required, matchPassword]
             }}
         />
-        <Input type="submit" value="Submit" />
+        <FormGroup row className="mt-5">
+            <Label sm={4}></Label>
+            <Col sm={8}>
+                <Button type="submit" color="primary">Submit</Button>
+            </Col>
+        </FormGroup>
     </Form>);
 };
 
