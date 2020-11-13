@@ -29,7 +29,6 @@
       height: calc(100% - #{$navbar-height});
       margin-top: $navbar-height;
       padding: 0 $grid-gutter-width / 2;
-      overflow: auto;
     }
   }
 
@@ -61,7 +60,7 @@ button {
 }
 
 .page-title {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   border-bottom: 1px solid $border-color;
   font-weight: bold;
   margin-bottom: $grid-gutter-width / 2;
@@ -92,4 +91,8 @@ button {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.width-inherit {
+  width: inherit;
 }

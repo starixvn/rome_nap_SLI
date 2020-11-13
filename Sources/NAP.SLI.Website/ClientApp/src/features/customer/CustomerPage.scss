@@ -3,12 +3,4 @@
 .customer-page {
     overflow-y: auto;
     height: calc(100% - #{$navbar-height});
-
-    .tabs-balance-downline {
-        height: 220px;
-    }
-
-    .customer-label {
-        width: inherit;
-    }
 }

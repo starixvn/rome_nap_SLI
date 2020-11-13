@@ -1,63 +1,18 @@
-import React, { useState, useMemo } from 'react';
-import { Container, Row, Col, Collapse, Button } from 'reactstrap';
+import './CustomerPage.scss';
+import React, { useState } from 'react';
+import { Container, Row, Col, Collapse } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import './CustomerPage.scss';
-import NavTabs from '../../common/components/nav-tabs/NavTabs';
-import BalanceInfo from './childviews/BalanceInformation';
-import DownlineList from './childviews/DownlineList';
-import BasicSetting from './childviews/BasicSetting';
-import DetailSetting from './childviews/DetailSetting';
-import LoginInformation from './childviews/LoginInformation';
-import OnlineList from './childviews/OnlineList';
-import Report from './childviews/Report';
 
 const CustomerPage = ({ customer, headline }) => {
     if (!customer) {
         return <></>;
     }
 
-    const [isOpen, setIsOpen] = useState(true);
-    const [rotation, setRotation] = useState(0);
-
-    const toggle = () => {
-        const newIsOpen = !isOpen;
-        setIsOpen(newIsOpen);
-        setRotation(newIsOpen ? 0 : 180);
-    };
-
-    const tabList1 = useMemo(
-        () => [{
-            text: 'Balance Info',
-            component: BalanceInfo
-        }, {
-            text: 'Downline List',
-            component: DownlineList
-        }],
-        []
-    );
-
-    const tabList2 = useMemo(
-        () => [{
-            text: 'Setting',
-            component: BasicSetting
-        }, {
-            text: 'Detail',
-            component: DetailSetting
-        }, {
-            text: 'Login',
-            component: LoginInformation
-        }, {
-            text: 'Online List',
-            component: OnlineList
-        }, {
-            text: 'Report',
-            component: Report
-        }],
-        []
-    );
+    const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
+    const [isOpenReports, setIsOpenReports] = useState(true);
 
     return (
         <div className="customer-page">
@@ -77,12 +32,12 @@ const CustomerPage = ({ customer, headline }) => {
             </Container>
             <div className="mb-3">
                 <div className="py-2 font-weight-500 bg-lightgrey text-primary">
-                    <Container onClick={toggle} className="d-flex">
-                        <span className="customer-label">{customer.username}</span>
-                        <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={rotation}></FontAwesomeIcon>
+                    <Container onClick={() => setIsOpenCustomerInfo(!isOpenCustomerInfo)} className="d-flex">
+                        <span className="width-inherit">{customer.username}</span>
+                        <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenCustomerInfo ? 0 : 180}></FontAwesomeIcon>
                     </Container>
                 </div>
-                <Collapse isOpen={isOpen}>
+                <Collapse isOpen={isOpenCustomerInfo}>
                     <Container className="pb-2 border-bottom">
                         <Row>
                             <Col xs="5">Name</Col>
@@ -107,12 +62,30 @@ const CustomerPage = ({ customer, headline }) => {
                     </Container>
                 </Collapse>
             </div>
-            <Container className="d-flex align-items-center justify-content-center mb-3">
-                {headline.memberID && <Button className="mr-3" color="primary">Bet List</Button>}
-                <Button className="ml-3" color="primary">Statement</Button>
-            </Container>
-            <NavTabs className="mb-3 tabs-balance-downline" tabList={tabList1} />
-            <NavTabs tabList={tabList2} />
+            <div className="mb-3">
+                <div className="py-2 font-weight-500 bg-lightgrey text-primary">
+                    <Container>
+                        <div className="text-link">VIEW SETTING</div>
+                    </Container>
+                </div>
+            </div>
+            <div className="mb-3">
+                <div className="py-2 font-weight-500 bg-lightgrey text-primary">
+                    <Container onClick={() => setIsOpenReports(!isOpenReports)} className="d-flex">
+                        <span className="width-inherit">REPORTS</span>
+                        <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenReports ? 0 : 180}></FontAwesomeIcon>
+                    </Container>
+                </div>
+                <Collapse isOpen={isOpenReports}>
+                    <Container className="pb-2 border-bottom">
+                        <div className="text-link">Master Win Loss Detail</div>
+                        <div className="text-link">Match Win Loss Detail</div>
+                        <div className="text-link">Win Loss By Bet Type</div>
+                        <div className="text-link">Win Loss Analysis</div>
+                        <div className="text-link">BetList</div>
+                    </Container>
+                </Collapse>
+            </div>
         </div>
     );
 };
