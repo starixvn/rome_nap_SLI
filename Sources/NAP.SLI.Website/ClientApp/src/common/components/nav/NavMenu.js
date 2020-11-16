@@ -1,15 +1,16 @@
 import React, { useState, useCallback } from 'react';
-import { Collapse, Navbar, NavbarToggler, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
+import { Collapse, Navbar, Nav, NavLink, NavbarToggler, NavItem, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Button } from 'reactstrap';
+import { NavLink as RRNavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Icon from '@mdi/react';
 import { mdiViewDashboard } from '@mdi/js';
-import { NavLink } from 'react-router-dom';
 import { actions as authenticationActions } from '../../../features/account/authentication/reducer';
 import { actions as changePasswordActions } from '../../../features/account/change-password/reducer';
 import { actions as sideBarActions } from '../sidebar/reducer';
 import './NavMenu.scss';
+import { RouteLinks } from '../../models/Constants';
 
 const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,11 +26,13 @@ const NavMenu = ({ username, logout, toggleChangePassword, toggleSideBar }) => {
       </Button>
       <NavbarToggler onClick={handleToggle} className="mr-2" />
       <Collapse className="d-sm-inline-flex" isOpen={isOpen} navbar>
-        <ul className="navbar-nav mr-auto">
+        <Nav className="mr-auto">
           <NavItem>
-            <NavLink className="nav-link" activeClassName="active" to="/administration">Administration</NavLink>
+            <NavLink tag={RRNavLink} className="nav-link" to={RouteLinks.USER_MANAGEMENT}>
+              User Management
+            </NavLink>
           </NavItem>
-        </ul>
+        </Nav>
         <UncontrolledDropdown>
           <DropdownToggle caret color="outline-light">
             Welcome <span className="font-weight-500">{username}</span>

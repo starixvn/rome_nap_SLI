@@ -1,10 +1,13 @@
 import './CustomerPage.scss';
 import React, { useState } from 'react';
-import { Container, Row, Col, Collapse } from 'reactstrap';
+import { Container, Row, Col, Collapse, Nav, NavLink, NavItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { Link } from 'react-router-dom';
+import { RouteLinks } from '../../common/models/Constants';
+import { CustomerRole } from '../../common/models/CustomerRole';
 
 const CustomerPage = ({ customer, headline }) => {
     if (!customer) {
@@ -38,7 +41,7 @@ const CustomerPage = ({ customer, headline }) => {
                     </Container>
                 </div>
                 <Collapse isOpen={isOpenCustomerInfo}>
-                    <Container className="pb-2 border-bottom">
+                    <Container className="pb-2">
                         <Row>
                             <Col xs="5">Name</Col>
                             <Col xs="7">{customer.firstname} - {customer.lastname}</Col>
@@ -65,7 +68,15 @@ const CustomerPage = ({ customer, headline }) => {
             <div className="mb-3">
                 <div className="py-2 font-weight-500 bg-lightgrey text-primary">
                     <Container>
-                        <div className="text-link">VIEW SETTING</div>
+                        <Link to={{
+                            pathname: RouteLinks.CUSTOMER_SETTING,
+                            state: {
+                                custid: customer.custid,
+                                roleId: customer.roleid
+                            }
+                        }}>
+                            VIEW SETTING
+                        </Link>
                     </Container>
                 </div>
             </div>
@@ -77,12 +88,20 @@ const CustomerPage = ({ customer, headline }) => {
                     </Container>
                 </div>
                 <Collapse isOpen={isOpenReports}>
-                    <Container className="pb-2 border-bottom">
-                        <div className="text-link">Master Win Loss Detail</div>
-                        <div className="text-link">Match Win Loss Detail</div>
-                        <div className="text-link">Win Loss By Bet Type</div>
-                        <div className="text-link">Win Loss Analysis</div>
-                        <div className="text-link">BetList</div>
+                    <Container className="pb-2">
+                        <Nav vertical>
+                            {customer.roleid !== CustomerRole.Member && <>
+                                <NavItem><NavLink to={RouteLinks.MASTER_WIN_LOSS_DETAIL}>Master Win Loss Detail</NavLink></NavItem>
+                                <NavItem><NavLink to={RouteLinks.MATCH_WIN_LOSS_DETAIL}>Match Win Loss Detail</NavLink></NavItem>
+                                <NavItem><NavLink to={RouteLinks.WIN_LOSS_BY_BETTYPE}>Win Loss By Bet Type</NavLink></NavItem>
+                                <NavItem><NavLink to={RouteLinks.WIN_LOSS_ANALYSIS}>Win Loss Analysis</NavLink></NavItem>
+                            </>}
+                            {customer.roleid === CustomerRole.Member && <>
+                                <NavItem>
+                                    <NavLink to={RouteLinks.BET_LIST}>Bet List</NavLink>
+                                </NavItem>
+                            </>}
+                        </Nav>
                     </Container>
                 </Collapse>
             </div>

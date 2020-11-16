@@ -15,6 +15,8 @@ import { LoginPage } from '../features/account/authentication/LoginPage';
 import { HomePage } from '../features/home/HomePage';
 import { ChangePasswordModal } from '../features/account/change-password/ChangePasswordModal';
 import { ConfirmBox } from '../common/components/confirm-box/ConfirmBox';
+import { RouteLinks } from '../common/models/Constants';
+import { CustomerSettingPage } from '../features/customer-setting/CustomerSettingPage';
 
 const App = ({ loggedIn, isOpen }) => {
   return (
@@ -28,7 +30,8 @@ const App = ({ loggedIn, isOpen }) => {
             <Switch>
               <Route path="/login" component={LoginPage} location={location} />
               <PrivateRoute exact path="/" component={HomePage} />
-              <PrivateRoute path="/administration" component={UserManagementPage} />
+              <PrivateRoute path={RouteLinks.USER_MANAGEMENT} component={UserManagementPage} />
+              <PrivateRoute path={RouteLinks.CUSTOMER_SETTING} component={CustomerSettingPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ConfirmBox />
