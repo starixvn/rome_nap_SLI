@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Label, Form, Input, Button, FormGroup, Table } from 'reactstrap';
+import { Alert, Label, Form, Input, Button, FormGroup, Table, Container } from 'reactstrap';
 import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
 import { bindActionCreators } from 'redux';
@@ -59,34 +59,36 @@ const UserManagementPage = ({ users, query, message, isSuccessful, changeUserSta
   return (
     <div className="user-management-page">
       <div className="page-title">User Management</div>
-      <Form inline className="mb-3">
-        <FormGroup className="mr-2">
-          <Button type="button" className="btn-block" onClick={() => openAddNewUserModal(queryCallback)}>
-            <Icon path={mdiAccountPlus} /> Add New User
+      <Container fluid className="filter">
+        <Form inline className="mb-3">
+          <FormGroup className="mr-2">
+            <Button type="button" className="btn-block" onClick={() => openAddNewUserModal(queryCallback)}>
+              <Icon path={mdiAccountPlus} /> Add New User
           </Button>
-        </FormGroup>
-        <FormGroup>
-          <Button type="button" className="btn-block" onClick={() => openAddExistingUserModal(queryCallback)}>
-            <Icon path={mdiAccountPlus} /> Add Existing User
+          </FormGroup>
+          <FormGroup>
+            <Button type="button" className="btn-block" onClick={() => openAddExistingUserModal(queryCallback)}>
+              <Icon path={mdiAccountPlus} /> Add Existing User
           </Button>
-        </FormGroup>
-      </Form>
-      <Form inline className="mb-3" onSubmit={handleSubmit} noValidate>
-        <FormGroup className="mr-5">
-          <Label for="username" className="mr-2">Username</Label>
-          <Input id="username" type="text" maxLength="50" value={username} onChange={event => setUsername(event.target.value)} />
-        </FormGroup>
-        <FormGroup className="mr-5">
-          <Input type="select" value={groupId} onChange={(event) => handleSelectChange(event)}>
-            {UserGroupSelectOptionsWithAll.map((option, index) =>
-              <option key={index} value={option.value}>{option.label}</option>
-            )}
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Button type="submit" color="primary" className="btn-block">Search</Button>
-        </FormGroup>
-      </Form>
+          </FormGroup>
+        </Form>
+        <Form inline className="mb-3" onSubmit={handleSubmit} noValidate>
+          <FormGroup className="mr-5">
+            <Label for="username" className="mr-2">Username</Label>
+            <Input id="username" type="text" maxLength="50" value={username} onChange={event => setUsername(event.target.value)} />
+          </FormGroup>
+          <FormGroup className="mr-5">
+            <Input type="select" value={groupId} onChange={(event) => handleSelectChange(event)}>
+              {UserGroupSelectOptionsWithAll.map((option, index) =>
+                <option key={index} value={option.value}>{option.label}</option>
+              )}
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Button type="submit" color="primary" className="btn-block">Search</Button>
+          </FormGroup>
+        </Form>
+      </Container>
       {message &&
         <Alert className={"text-center"} color={isSuccessful ? 'success' : 'danger'} role="alert">
           {message}

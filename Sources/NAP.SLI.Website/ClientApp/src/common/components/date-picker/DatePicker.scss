@@ -1,0 +1,8 @@
+@import '~react-datetime/css/react-datetime.css';
+@import '../../../app/variables.scss';
+
+.date-picker {
+    input {
+        background-color: $input-bg !important;
+    }
+}

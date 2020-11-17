@@ -63,7 +63,7 @@ button {
   font-size: 1.2rem;
   border-bottom: 1px solid $border-color;
   font-weight: bold;
-  margin-bottom: $grid-gutter-width / 2;
+  margin-bottom: 1rem;
   padding: 0.5rem 0;
   text-transform: uppercase;
 }
@@ -99,4 +99,11 @@ button {
 
 .nav-link {
   cursor: pointer;
+}
+
+.filter {
+  border: 1px solid $border-color;
+  padding: $grid-gutter-width / 2;
+  margin-bottom: 1rem;
+  background-color: #eee;
 }
