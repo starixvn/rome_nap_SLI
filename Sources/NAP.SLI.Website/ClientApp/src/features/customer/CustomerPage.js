@@ -1,11 +1,11 @@
 import './CustomerPage.scss';
 import React, { useState } from 'react';
 import { Container, Row, Col, Collapse, Nav, NavLink, NavItem } from 'reactstrap';
+import { NavLink as RRNavLink, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom';
 import { RouteLinks } from '../../common/models/Constants';
 import { CustomerRole } from '../../common/models/CustomerRole';
 
@@ -91,14 +91,22 @@ const CustomerPage = ({ customer, headline }) => {
                     <Container className="pb-2">
                         <Nav vertical>
                             {customer.roleid !== CustomerRole.Member && <>
-                                <NavItem><NavLink to={RouteLinks.MASTER_WIN_LOSS_DETAIL}>Master Win Loss Detail</NavLink></NavItem>
-                                <NavItem><NavLink to={RouteLinks.MATCH_WIN_LOSS_DETAIL}>Match Win Loss Detail</NavLink></NavItem>
-                                <NavItem><NavLink to={RouteLinks.WIN_LOSS_BY_BETTYPE}>Win Loss By Bet Type</NavLink></NavItem>
-                                <NavItem><NavLink to={RouteLinks.WIN_LOSS_ANALYSIS}>Win Loss Analysis</NavLink></NavItem>
+                                <NavItem>
+                                    <NavLink tag={RRNavLink} to={RouteLinks.MASTER_WIN_LOSS_DETAIL}>Master Win Loss Detail</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={RRNavLink} to={RouteLinks.MATCH_WIN_LOSS_DETAIL}>Match Win Loss Detail</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={RRNavLink} to={RouteLinks.WIN_LOSS_BY_BETTYPE}>Win Loss By Bet Type</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={RRNavLink} to={RouteLinks.WIN_LOSS_ANALYSIS}>Win Loss Analysis</NavLink>
+                                </NavItem>
                             </>}
                             {customer.roleid === CustomerRole.Member && <>
                                 <NavItem>
-                                    <NavLink to={RouteLinks.BET_LIST}>Bet List</NavLink>
+                                    <NavLink tag={RRNavLink} to={RouteLinks.BET_LIST}>Bet List</NavLink>
                                 </NavItem>
                             </>}
                         </Nav>

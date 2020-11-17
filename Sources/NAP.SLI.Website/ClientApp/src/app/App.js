@@ -17,6 +17,10 @@ import { ChangePasswordModal } from '../features/account/change-password/ChangeP
 import { ConfirmBox } from '../common/components/confirm-box/ConfirmBox';
 import { RouteLinks } from '../common/models/Constants';
 import { CustomerSettingPage } from '../features/customer-setting/CustomerSettingPage';
+import { MasterWinLossDetailPage } from '../features/reports/master-win-loss-detail/MasterWinLossDetailPage';
+import { MatchWinLossDetailPage } from '../features/reports/match-win-loss-detail/MatchWinLossDetailPage';
+import { WinLossByBetTypePage } from '../features/reports/win-loss-by-bet-type/WinLossByBetTypePage';
+import { WinLossAnalysisPage } from '../features/reports/win-loss-analysis/WinLossAnalysisPage';
 
 const App = ({ loggedIn, isOpen }) => {
   return (
@@ -32,6 +36,10 @@ const App = ({ loggedIn, isOpen }) => {
               <PrivateRoute exact path="/" component={HomePage} />
               <PrivateRoute path={RouteLinks.USER_MANAGEMENT} component={UserManagementPage} />
               <PrivateRoute path={RouteLinks.CUSTOMER_SETTING} component={CustomerSettingPage} />
+              <PrivateRoute path={RouteLinks.MASTER_WIN_LOSS_DETAIL} component={MasterWinLossDetailPage} />
+              <PrivateRoute path={RouteLinks.MATCH_WIN_LOSS_DETAIL} component={MatchWinLossDetailPage} />
+              <PrivateRoute path={RouteLinks.WIN_LOSS_BY_BETTYPE} component={WinLossByBetTypePage} />
+              <PrivateRoute path={RouteLinks.WIN_LOSS_ANALYSIS} component={WinLossAnalysisPage} />
               <Route component={NotFoundPage} />
             </Switch>
             <ConfirmBox />

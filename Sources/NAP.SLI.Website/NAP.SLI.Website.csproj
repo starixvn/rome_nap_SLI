@@ -38,6 +38,8 @@
     <ProjectReference Include="..\NAP.SimpleApi\NAP.SimpleApi.csproj" />
     <ProjectReference Include="..\NAP.SLI.Account\NAP.SLI.Account.csproj" />
     <ProjectReference Include="..\NAP.SLI.Common\NAP.SLI.Common.csproj" />
+    <ProjectReference Include="..\NAP.SLI.CustomerSetting\NAP.SLI.CustomerSetting.csproj" />
+    <ProjectReference Include="..\NAP.SLI.Report\NAP.SLI.Report.csproj" />
     <ProjectReference Include="..\NAP.SLI.UserManagement\NAP.SLI.UserManagement.csproj" />
     <ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
   </ItemGroup>
