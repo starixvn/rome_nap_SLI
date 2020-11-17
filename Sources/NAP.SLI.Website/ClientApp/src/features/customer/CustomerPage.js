@@ -92,16 +92,44 @@ const CustomerPage = ({ customer, headline }) => {
                         <Nav vertical>
                             {customer.roleid !== CustomerRole.Member && <>
                                 <NavItem>
-                                    <NavLink tag={RRNavLink} to={RouteLinks.MASTER_WIN_LOSS_DETAIL}>Master Win Loss Detail</NavLink>
+                                    <NavLink tag={RRNavLink} to={{
+                                        pathname: RouteLinks.MASTER_WIN_LOSS_DETAIL,
+                                        state: {
+                                            username: customer.username,
+                                        }
+                                    }}>
+                                        Master Win Loss Detail
+                                    </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={RRNavLink} to={RouteLinks.MATCH_WIN_LOSS_DETAIL}>Match Win Loss Detail</NavLink>
+                                    <NavLink tag={RRNavLink} to={{
+                                        pathname: RouteLinks.MATCH_WIN_LOSS_DETAIL,
+                                        state: {
+                                            username: customer.username,
+                                        }
+                                    }}>
+                                        Match Win Loss Detail
+                                    </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={RRNavLink} to={RouteLinks.WIN_LOSS_BY_BETTYPE}>Win Loss By Bet Type</NavLink>
+                                    <NavLink tag={RRNavLink} to={{
+                                        pathname: RouteLinks.WIN_LOSS_BY_BETTYPE,
+                                        state: {
+                                            username: customer.username,
+                                        }
+                                    }}>
+                                        Win Loss By Bet Type
+                                    </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={RRNavLink} to={RouteLinks.WIN_LOSS_ANALYSIS}>Win Loss Analysis</NavLink>
+                                    <NavLink tag={RRNavLink} to={{
+                                        pathname: RouteLinks.WIN_LOSS_ANALYSIS,
+                                        state: {
+                                            username: customer.username,
+                                        }
+                                    }}>
+                                        Win Loss Analysis
+                                    </NavLink>
                                 </NavItem>
                             </>}
                             {customer.roleid === CustomerRole.Member && <>

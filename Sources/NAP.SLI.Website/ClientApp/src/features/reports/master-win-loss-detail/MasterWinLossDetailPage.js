@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { Label, Form, Input, Button, FormGroup, Container } from 'reactstrap';
 import { DatePicker } from '../../../common/components/date-picker/DatePicker';
+import PropTypes from 'prop-types';
 
-const MasterWinLossDetailPage = () => {
-    const [username, setUsername] = useState('');
+const propTypes = {
+    location: PropTypes.object.isRequired
+};
+
+const MasterWinLossDetailPage = ({ location }) => {
+    const state = location.state || {};
+    const [username, setUsername] = useState(state.username);
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -34,5 +40,7 @@ const MasterWinLossDetailPage = () => {
         </div>
     );
 }
+
+MasterWinLossDetailPage.propTypes = propTypes;
 
 export { MasterWinLossDetailPage };

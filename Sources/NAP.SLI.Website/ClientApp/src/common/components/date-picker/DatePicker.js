@@ -8,11 +8,11 @@ import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 const DatePicker = () => {
     const renderInput = (props, openCalendar) => {
         return (
-            <InputGroup className="date-picker">
+            <InputGroup className="date-picker" onClick={openCalendar}>
                 <Input {...props} />
                 <InputGroupAddon addonType="append">
                     <InputGroupText>
-                        <Icon path={mdiCalendar} onClick={openCalendar} />
+                        <Icon path={mdiCalendar} />
                     </InputGroupText>
                 </InputGroupAddon>
             </InputGroup>
