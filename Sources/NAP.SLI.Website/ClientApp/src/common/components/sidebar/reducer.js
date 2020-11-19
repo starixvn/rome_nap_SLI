@@ -25,20 +25,17 @@ const queryUsernameSuggestion = value => {
 	};
 }
 
-const queryUserInformation = username => {
+const getCustomerInformation = username => {
 	return async (dispatch) => {
 		const payload = {
-			apiKey: 'customer:query-user-information',
-			data: {
-				username: username
-			}
+			username
 		};
 
-		var response = await axios.post("/simple-api/query", payload);
+		var response = await axios.post("/api/customer/information", payload);
 		if (response.data.length === 0) {
 			console.log('There is no information available.');
 		} else {
-			dispatch({ type: "CUSTOMER::GET_SUCCESS", data: { customer: response.data[0][0], headline: response.data[1][0] } });
+			dispatch({ type: "CUSTOMER::GET_SUCCESS", data: response.data });
 		}
 	};
 }
@@ -46,7 +43,7 @@ const queryUserInformation = username => {
 export const actions = {
 	toggle: () => ({ type: ActionTypes.SIDE_BAR_TOGGLE }),
 	queryUsernameSuggestion,
-	queryUserInformation
+	getCustomerInformation
 };
 
 export const reducer = (state = initialState, action) => {

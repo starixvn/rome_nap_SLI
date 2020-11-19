@@ -1,5 +1,9 @@
 namespace NAP.SLI
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Text;
     using AutoMapper;
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -18,12 +22,9 @@ namespace NAP.SLI
     using NAP.SLI.Account;
     using NAP.SLI.Account.Models;
     using NAP.SLI.Common;
+    using NAP.SLI.Customer;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
 
     public class Startup
     {
@@ -67,8 +68,10 @@ namespace NAP.SLI
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.RegisterCommonModule();
             services.RegisterAccountModule();
+            services.RegisterCustomerModule();
             services.AddSimpleApi(typeof(Account.SimpleApiProfile));
             services.AddMediatR(typeof(Account.AutoMapperProfile));
+            services.AddMediatR(typeof(Customer.SimpleApiProfile));
             services.AddAutoMapper(typeof(Account.AutoMapperProfile));
             services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
             services.AddSimpleApi(typeof(Customer.SimpleApiProfile));

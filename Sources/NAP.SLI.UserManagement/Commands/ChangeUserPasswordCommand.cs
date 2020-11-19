@@ -1,9 +1,10 @@
 namespace NAP.SLI.UserManagement.Commands
 {
     using Fanex.Data.Repository;
+    using NAP.SLI.Common.Criteria;
     using NAP.SLI.Common.Services;
 
-    public class ChangeUserPasswordCommand : NonQueryCommand
+    public class ChangeUserPasswordCommand : ResultCriteriaBase, INonQueryCommand
     {
         private readonly ICurrentUserService currentUserService;
 
@@ -26,10 +27,6 @@ namespace NAP.SLI.UserManagement.Commands
 
         public string LoginIp { get; set; }
         
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
-
         public override string GetSettingKey()
             => "Acc_CustomerUpdPwdReset";
 

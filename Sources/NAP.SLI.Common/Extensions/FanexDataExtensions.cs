@@ -1,8 +1,8 @@
 ﻿namespace NAP.SLI.Common.Extensions
 {
-    using Fanex.Data.Repository;
-    using NAP.SLI.Common.Models;
     using System;
+    using Fanex.Data.Repository;
+    using NAP.SLI.Common.Criteria;
 
     public static class FanexDataExtensions
     {
@@ -14,7 +14,7 @@
             }
         }
 
-        public static void ThrowExceptionIfFailed(this NonQueryResult result)
+        public static void ThrowExceptionIfFailed(this ResultCriteriaBase result)
         {
             if (!result.IsSuccessful)
             {

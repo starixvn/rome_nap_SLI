@@ -7,36 +7,39 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { RouteLinks } from '../../common/models/Constants';
-import { CustomerRole } from '../../common/models/CustomerRole';
+import { CustomerLevels } from '../../common/models/CustomerLevel';
 
-const CustomerPage = ({ customer, headline }) => {
-    if (!customer) {
+const CustomerPage = ({ searchCustomer }) => {
+    if (!searchCustomer) {
         return <></>;
     }
 
+    const { generalInformation, headline } = searchCustomer;
+    const { custId, roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
+    const { superId, superName, masterId, masterName, agentId, agentName } = headline;
     const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
     const [isOpenReports, setIsOpenReports] = useState(true);
 
     return (
         <div className="customer-page">
             <Container className="my-3">
-                {headline.superID && <Row>
+                {superId > 0 && <Row>
                     <Col xs="5">Super</Col>
-                    <Col xs="7"><span className="text-link">{headline.superName}</span></Col>
+                    <Col xs="7"><span className="text-link">{superName}</span></Col>
                 </Row>}
-                {headline.masterID && <Row>
+                {masterId > 0 && <Row>
                     <Col xs="5">Master</Col>
-                    <Col xs="7"><span className="text-link">{headline.masterName}</span></Col>
+                    <Col xs="7"><span className="text-link">{masterName}</span></Col>
                 </Row>}
-                {headline.agentID && <Row>
+                {agentId > 0 && <Row>
                     <Col xs="5">Agent</Col>
-                    <Col xs="7"><span className="text-link">{headline.agentName}</span></Col>
+                    <Col xs="7"><span className="text-link">{agentName}</span></Col>
                 </Row>}
             </Container>
             <div className="mb-3">
                 <div className="py-2 font-weight-500 bg-lightgrey text-primary">
                     <Container onClick={() => setIsOpenCustomerInfo(!isOpenCustomerInfo)} className="d-flex">
-                        <span className="width-inherit">{customer.username}</span>
+                        <span className="width-inherit">{username}</span>
                         <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenCustomerInfo ? 0 : 180}></FontAwesomeIcon>
                     </Container>
                 </div>
@@ -44,23 +47,23 @@ const CustomerPage = ({ customer, headline }) => {
                     <Container className="pb-2">
                         <Row>
                             <Col xs="5">Name</Col>
-                            <Col xs="7">{customer.firstname} - {customer.lastname}</Col>
+                            <Col xs="7">{firstName} - {lastName}</Col>
                         </Row>
                         <Row>
                             <Col xs="5">Nick Name</Col>
-                            <Col xs="7">{customer.username2}</Col>
+                            <Col xs="7">{username2}</Col>
                         </Row>
                         <Row>
                             <Col xs="5">Fax</Col>
-                            <Col xs="7">{customer.fax}</Col>
+                            <Col xs="7">{fax}</Col>
                         </Row>
                         <Row>
                             <Col xs="5">Phone</Col>
-                            <Col xs="7">{customer.phone}</Col>
+                            <Col xs="7">{phone}</Col>
                         </Row>
                         <Row>
                             <Col xs="5">Mobile</Col>
-                            <Col xs="7">{customer.mobilephone}</Col>
+                            <Col xs="7">{mobilePhone}</Col>
                         </Row>
                     </Container>
                 </Collapse>
@@ -71,8 +74,8 @@ const CustomerPage = ({ customer, headline }) => {
                         <Link to={{
                             pathname: RouteLinks.CUSTOMER_SETTING,
                             state: {
-                                custid: customer.custid,
-                                roleId: customer.roleid
+                                custId,
+                                roleId
                             }
                         }}>
                             VIEW SETTING
@@ -90,12 +93,12 @@ const CustomerPage = ({ customer, headline }) => {
                 <Collapse isOpen={isOpenReports}>
                     <Container className="pb-2">
                         <Nav vertical>
-                            {customer.roleid !== CustomerRole.Member && <>
+                            {roleId !== CustomerLevels.Member && <>
                                 <NavItem>
                                     <NavLink tag={RRNavLink} to={{
                                         pathname: RouteLinks.MASTER_WIN_LOSS_DETAIL,
                                         state: {
-                                            username: customer.username,
+                                            custId,
                                         }
                                     }}>
                                         Master Win Loss Detail
@@ -105,7 +108,7 @@ const CustomerPage = ({ customer, headline }) => {
                                     <NavLink tag={RRNavLink} to={{
                                         pathname: RouteLinks.MATCH_WIN_LOSS_DETAIL,
                                         state: {
-                                            username: customer.username,
+                                            custId,
                                         }
                                     }}>
                                         Match Win Loss Detail
@@ -115,7 +118,7 @@ const CustomerPage = ({ customer, headline }) => {
                                     <NavLink tag={RRNavLink} to={{
                                         pathname: RouteLinks.WIN_LOSS_BY_BETTYPE,
                                         state: {
-                                            username: customer.username,
+                                            custId,
                                         }
                                     }}>
                                         Win Loss By Bet Type
@@ -125,14 +128,14 @@ const CustomerPage = ({ customer, headline }) => {
                                     <NavLink tag={RRNavLink} to={{
                                         pathname: RouteLinks.WIN_LOSS_ANALYSIS,
                                         state: {
-                                            username: customer.username,
+                                            custId,
                                         }
                                     }}>
                                         Win Loss Analysis
                                     </NavLink>
                                 </NavItem>
                             </>}
-                            {customer.roleid === CustomerRole.Member && <>
+                            {roleId === CustomerLevels.Member && <>
                                 <NavItem>
                                     <NavLink tag={RRNavLink} to={RouteLinks.BET_LIST}>Bet List</NavLink>
                                 </NavItem>
@@ -146,12 +149,11 @@ const CustomerPage = ({ customer, headline }) => {
 };
 
 CustomerPage.propTypes = {
-    customer: PropTypes.object,
-    headline: PropTypes.object
+    searchCustomer: PropTypes.object
 };
 
 const connectedCustomerPage = connect(
-    state => state.customer
+    state => state.searchCustomer
 )(CustomerPage);
 
 export { connectedCustomerPage as CustomerPage };

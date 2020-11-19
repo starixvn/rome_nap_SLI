@@ -24,7 +24,7 @@
         public async Task<IActionResult> Get()
         {
             var criteria = requestOptionContext.CreateCriteria(HttpContext.Request.Query, ActionTypes.Query);
-            var data = await dynamicRepository.GetAsync<object>(criteria);
+            var data = await dynamicRepository.GetAsync<object>(criteria).ConfigureAwait(false);
             return Ok(data);
         }
 
@@ -32,7 +32,7 @@
         public async Task<IActionResult> Query([FromBody] SimpleApiRequest request)
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Query);
-            var data = await dynamicRepository.FetchMultipleAsync(criteria);
+            var data = await dynamicRepository.FetchMultipleAsync(criteria).ConfigureAwait(false);
             if(data.Count() == 1)
             {
                 return Ok(data.First());
@@ -47,7 +47,7 @@
         public async Task<IActionResult> Command([FromBody] SimpleApiRequest request)
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Command);
-            await dynamicRepository.ExecuteAsync((INonQueryCommand)criteria);
+            await dynamicRepository.ExecuteAsync((INonQueryCommand)criteria).ConfigureAwait(false);
             return Ok(criteria);
         }
     }

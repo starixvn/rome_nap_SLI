@@ -19,7 +19,7 @@
         [HttpPost("[action]")]
         public async Task<IActionResult> Login([FromBody]LoginRequest request)
         {
-            var result = await mediator.Send(request);
+            var result = await mediator.Send(request).ConfigureAwait(false);
             if (!result.IsSuccessful)
             {
                 return BadRequest(result.ErrMsg);
@@ -32,7 +32,7 @@
         [AllowAnonymous]
         public async Task<IActionResult> Refresh([FromBody]RefreshRequest request)
         {
-            var result = await mediator.Send(request);
+            var result = await mediator.Send(request).ConfigureAwait(false);
             if (!result.IsSuccessful)
             {
                 return BadRequest(result.ErrMsg);

@@ -2,10 +2,10 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using NAP.SLI.Common.Models;
+    using NAP.SLI.Common.Criteria;
     using NAP.SLI.Common.Services;
 
-    public class ChangePasswordCriteria : NonQueryResult, INonQueryCommand
+    public class ChangePasswordCriteria : ResultCriteriaBase, INonQueryCommand
     {
         private readonly ICurrentUserService currentUserService;
 
@@ -22,9 +22,9 @@
         [SpParam(SqlParamName = "UserPwd")]
         public string NewPassword { get; set; }
 
-        public string GetSettingKey() => "SLI_User_Upd";
+        public override string GetSettingKey() => "SLI_User_Upd";
 
-        public bool IsValid() => UserId > 0 && CustId > 0
+        public override bool IsValid() => UserId > 0 && CustId > 0
             && !string.IsNullOrWhiteSpace(OldPassword)
             && !string.IsNullOrWhiteSpace(NewPassword);
     }

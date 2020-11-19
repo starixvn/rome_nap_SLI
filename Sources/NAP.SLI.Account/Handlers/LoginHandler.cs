@@ -39,7 +39,7 @@
                 Platform = currentContextService.GetPlatform()
             };
             criteria.ThrowExceptionIfInvalid();
-            await dynamicRepository.ExecuteAsync(criteria);
+            await dynamicRepository.ExecuteAsync(criteria).ConfigureAwait(false);
             var loginResult = mapper.Map<AuthenticationModel>(criteria);
             if (loginResult.IsSuccessful)
             {

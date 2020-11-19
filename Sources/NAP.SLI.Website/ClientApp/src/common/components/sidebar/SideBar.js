@@ -8,14 +8,14 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { CustomerPage } from '../../../features/customer/CustomerPage';
 import { actions } from './reducer';
 
-const SideBar = ({ queryUsernameSuggestion, queryUserInformation }) => {
+const SideBar = ({ queryUsernameSuggestion, getCustomerInformation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [username, setUsername] = useState('');
 
   const handleSubmit = event => {
     event.preventDefault();
-    queryUserInformation(username);
+    getCustomerInformation(username);
   };
 
   const handleSearch = (value) => {
@@ -60,7 +60,7 @@ const SideBar = ({ queryUsernameSuggestion, queryUserInformation }) => {
 
 SideBar.propTypes = {
   queryUsernameSuggestion: PropTypes.func.isRequired,
-  queryUserInformation: PropTypes.func.isRequired
+  getCustomerInformation: PropTypes.func.isRequired
 };
 
 const connectedSideBar = connect(

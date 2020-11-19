@@ -27,7 +27,7 @@ const updateUser = (values, callback) => {
             if (response.data.errCode !== 0) {
                 dispatch({ type: ActionTypes.EDIT_USER_FAILURE, data: { message: response.data.errMsg } });
             } else {
-                dispatch({ type: ActionTypes.EDIT_USER_SUCCESS, data: { message: `Update User ${response.data.userName} successfully.` } });
+                dispatch({ type: ActionTypes.EDIT_USER_SUCCESS, data: { message: `Update successfully.` } });
                 setTimeout(() => {
                     dispatch({ type: ActionTypes.TOGGLE_EDIT_USER });
                     callback();

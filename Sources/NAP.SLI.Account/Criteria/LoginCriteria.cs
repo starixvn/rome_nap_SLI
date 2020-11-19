@@ -2,8 +2,9 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using NAP.SLI.Common.Criteria;
 
-    public class LoginCriteria: NonQueryCommand
+    public class LoginCriteria: ResultCriteriaBase, INonQueryCommand
     {
         public string Username { get; set; }
 
@@ -25,10 +26,6 @@
         public int UserId { get; set; }
 
         public int GroupId { get; set; }
-
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
 
         public override string GetSettingKey() => "SLI_UserLogin";
 

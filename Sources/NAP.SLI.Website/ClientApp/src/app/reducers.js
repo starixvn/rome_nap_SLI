@@ -13,7 +13,7 @@ import { reducer as formReducer } from 'redux-form'
 
 const createRootReducer = () => combineReducers({
   sideBar: SideBar.reducer,
-  customer: Customer.reducer,
+  searchCustomer: Customer.reducer,
   authentication: Authentication.reducer,
   changePassword: ChangePassword.reducer,
   userManagement: UserManagement.reducer,

@@ -1,9 +1,10 @@
 namespace NAP.SLI.UserManagement.Commands
 {
     using Fanex.Data.Repository;
+    using NAP.SLI.Common.Criteria;
     using NAP.SLI.Common.Services;
 
-    public class AddNewUserCommnad : NonQueryCommand
+    public class AddNewUserCommnad : ResultCriteriaBase, INonQueryCommand
     {
         private readonly ICurrentUserService currentUserService;
 
@@ -26,9 +27,6 @@ namespace NAP.SLI.UserManagement.Commands
 
         public bool IsAddNew { get; set; }
 
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
         public override string GetSettingKey()
             => "SLI_User_Ins";
 

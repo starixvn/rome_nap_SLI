@@ -1,9 +1,10 @@
 namespace NAP.SLI.UserManagement.Commands
 {
     using Fanex.Data.Repository;
+    using NAP.SLI.Common.Criteria;
     using NAP.SLI.Common.Services;
 
-    public class UpdateUserCommand : NonQueryCommand
+    public class UpdateUserCommand : ResultCriteriaBase, INonQueryCommand
     {
         private readonly ICurrentUserService currentUserService;
 
@@ -28,10 +29,6 @@ namespace NAP.SLI.UserManagement.Commands
 
         public int? GroupId { get; set; }
         
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
-
         public override string GetSettingKey()
             => "SLI_User_Upd";
 

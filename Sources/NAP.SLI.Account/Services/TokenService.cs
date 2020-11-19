@@ -1,13 +1,13 @@
 ﻿namespace NAP.SLI.Account.Services
 {
-    using Microsoft.Extensions.Options;
-    using Microsoft.IdentityModel.Tokens;
-    using NAP.SLI.Account.Models;
-    using NAP.SLI.Common.Models;
     using System;
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Text;
+    using Microsoft.Extensions.Options;
+    using Microsoft.IdentityModel.Tokens;
+    using NAP.SLI.Account.Models;
+    using NAP.SLI.Common.Models;
 
     public interface ITokenService
     {
@@ -81,7 +81,7 @@
             {
                 return new AuthenticationModel
                 {
-                    ErrCode = 1,
+                    ErrCode = ErrorCodes.GenericError,
                     ErrMsg = ex.Message
                 };
             }

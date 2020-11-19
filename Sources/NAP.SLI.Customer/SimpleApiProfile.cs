@@ -9,7 +9,6 @@ namespace NAP.SLI.Customer
             : base("customer")
         {
             AddQuery<QueryUsernameSuggestionCriteria>("query-username-suggestion");
-            AddQuery<QueryUserInformationCriteria>("query-user-information");
         }
     }
 }

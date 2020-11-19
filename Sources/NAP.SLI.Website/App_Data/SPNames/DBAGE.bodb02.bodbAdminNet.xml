@@ -9,4 +9,19 @@
     <Setting Key="Acc_CustomerSelUserSearch" SpName="Acc_CustomerSelUserSearch" DbName="DBAGE.bodb02.bodbAdminNet" />
     <Setting Key="SLI_CustomerSelAllInfo" SpName="SLI_CustomerSelAllInfo" DbName="DBAGE.bodb02.bodbAdminNet" />
   </Function>
+  <Funtion Name="Report">
+    <Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossDetail_Master" SpName="SLI_Rpt_WinLossDetail_Master" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossDetail_Agent" SpName="SLI_Rpt_WinLossDetail_Agent" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossDetail_Member" SpName="SLI_Rpt_WinLossDetail_Member" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_MatchWinLossDetail_Master" SpName="SLI_Rpt_MatchWinLossDetail_Master" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_MatchWinLossDetail_Agent" SpName="SLI_Rpt_MatchWinLossDetail_Agent" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_MatchWinLossDetail_Member" SpName="SLI_Rpt_MatchWinLossDetail_Member" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinlossAnalysis_Master" SpName="SLI_Rpt_WinlossAnalysis_Master" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinlossAnalysis_Agent" SpName="SLI_Rpt_WinlossAnalysis_Agent" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinlossAnalysis_Member" SpName="SLI_Rpt_WinlossAnalysis_Member" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossByBettype_Master" SpName="SLI_Rpt_WinLossByBettype_Master" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossByBettype_Agent" SpName="SLI_Rpt_WinLossByBettype_Agent" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossByBettype_Member" SpName="SLI_Rpt_WinLossByBettype_Member" DbName="DBAGE.bodb02.bodbAdminNet" />
+  </Funtion>
 </Functions>

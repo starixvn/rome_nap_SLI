@@ -1,9 +1,10 @@
 namespace NAP.SLI.UserManagement.Commands
 {
     using Fanex.Data.Repository;
+    using NAP.SLI.Common.Criteria;
     using NAP.SLI.Common.Services;
 
-    public class UpdateUserStatusCommand : NonQueryCommand
+    public class UpdateUserStatusCommand : ResultCriteriaBase, INonQueryCommand
     {
         private readonly ICurrentUserService currentUserService;
 
@@ -23,10 +24,6 @@ namespace NAP.SLI.UserManagement.Commands
         public bool IsABS { get; set; }
 
         public string System { get; set; }
-
-        public int ErrCode { get; set; }
-
-        public string ErrMsg { get; set; }
 
         public override string GetSettingKey() => "AdminUpdClosed";
 
