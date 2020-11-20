@@ -1,0 +1,9 @@
+@import '~react-datetime/css/react-datetime.css';
+@import '../../../app/variables.scss';
+
+.month-picker {
+    input {
+        text-align: center;
+        background-color: $input-bg !important;
+    }
+}

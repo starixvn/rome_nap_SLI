@@ -5,13 +5,22 @@ import Datetime from 'react-datetime';
 import Icon from '@mdi/react';
 import { mdiCalendar } from '@mdi/js';
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
+import { minDate, maxDate } from '../../utils/DateUtils';
 
 const propTypes = {
     value: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    minValue: PropTypes.object,
+    maxValue: PropTypes.object
+};
+
+const defaultProps = {
+    minValue: minDate,
+    maxValue: maxDate
 };
 
 const DatePicker = (props) => {
+    const { minValue, maxValue } = props;
     const [value, setValue] = useState(props.value);
 
     useEffect(() => {
@@ -38,10 +47,15 @@ const DatePicker = (props) => {
     const handleOnChange = (value) => {
         setValue(value);
         props.onChange && props.onChange(value);
-    }
+    };
 
-    return <Datetime value={value} onChange={handleOnChange} closeOnSelect={true} timeFormat={false} inputProps={inputProps} renderInput={renderInput} />;
-}
+    const isValidDate = (current) => {
+        return current.isSameOrAfter(minValue) && current.isSameOrBefore(maxValue);
+    };
+
+    return <Datetime isValidDate={isValidDate} value={value} onChange={handleOnChange} closeOnSelect={true} timeFormat={false} inputProps={inputProps} renderInput={renderInput} />;
+};
 
 DatePicker.propTypes = propTypes;
+DatePicker.defaultProps = defaultProps;
 export { DatePicker };

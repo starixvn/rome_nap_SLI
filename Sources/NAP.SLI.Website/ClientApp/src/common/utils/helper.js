@@ -1,11 +1,3 @@
-export const FormatStrings = {
-  Date: 'MM/DD/YYYY'
-}
-
-export const formatDate = (moment) => {
-  return moment.format(FormatStrings.Date);
-}
-
 export const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
@@ -19,3 +11,15 @@ export const generateSelectOptions = (obj, getNameCallback) => {
     };
   });
 };
+
+export const generateRangeSelectOptions = (from, to) => {
+  const options = [];
+  for (let value = from; value <= to; value++) {
+    options.push({
+      label: value.toString(),
+      value
+    });
+  }
+
+  return options;
+}

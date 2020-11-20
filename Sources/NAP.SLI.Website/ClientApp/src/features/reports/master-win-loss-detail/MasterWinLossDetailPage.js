@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { NormalFilter } from './NormalFilter';
 import { HistoryFilter } from './HistoryFilter';
+import { getToday, minDate, maxDate } from '../../../common/utils/DateUtils';
 
 const propTypes = {
     location: PropTypes.object.isRequired
@@ -16,6 +17,11 @@ const MasterWinLossDetailPage = (props) => {
     const state = props.location.state || {};
     const { custId } = state;
     const [mode, setMode] = useState(Modes.Normal);
+
+    const normalFromDate = getToday();
+    const normalToDate = getToday();
+    const historyFromDate = getToday();
+    const historyToDate = getToday();
 
     const handleSubmit = (data) => {
         console.log(data);
@@ -33,8 +39,8 @@ const MasterWinLossDetailPage = (props) => {
         <div className="master-win-loss-detail-page">
             <div className="page-title">Master Win Loss Detail {custId}</div>
             {mode === Modes.Normal
-                ? <NormalFilter submit={handleSubmit} toggle={handleToggle} />
-                : <HistoryFilter submit={handleSubmit} toggle={handleToggle} />}
+                ? <NormalFilter fromDate={normalFromDate} toDate={normalToDate} minDate={minDate} maxDate={maxDate} submit={handleSubmit} toggle={handleToggle} />
+                : <HistoryFilter fromDate={historyFromDate} toDate={historyToDate} minDate={minDate} maxDate={maxDate} submit={handleSubmit} toggle={handleToggle} />}
         </div>
     );
 }
