@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NAP.SimpleApi\NAP.SimpleApi.csproj" />
     <ProjectReference Include="..\NAP.SLI.Common\NAP.SLI.Common.csproj" />
+    <ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

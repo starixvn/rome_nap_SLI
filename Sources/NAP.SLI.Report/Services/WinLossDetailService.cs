@@ -1,0 +1,64 @@
+﻿namespace NAP.SLI.Report.Services
+{
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using NAP.SLI.Common.Models;
+    using NAP.SLI.Common.Services;
+    using NAP.SLI.Report.Criteria;
+    using NAP.SLI.Report.Models.WinLossDetail;
+    using NAP.SLI.Report.Requests;
+
+    public interface IWinLossDetailService
+    {
+        Task<QueryModel> Query(WinLossDetailQueryRequest request);
+    }
+
+    public class WinLossDetailService : IWinLossDetailService
+    {
+        private readonly IReportService reportService;
+        private readonly IDynamicRepositoryEx dynamicRepositoryEx;
+
+        public WinLossDetailService(IReportService reportService, IDynamicRepositoryEx dynamicRepositoryEx)
+        {
+            this.reportService = reportService;
+            this.dynamicRepositoryEx = dynamicRepositoryEx;
+        }
+
+        public async Task<QueryModel> Query(WinLossDetailQueryRequest request)
+        {
+            var balanceUpDayModel = await reportService.GetBalanceUpDay().ConfigureAwait(false);
+            var criteria = new QueryWinLossDetailCriteria(request.RoleId, request.IsHistory, balanceUpDayModel)
+            {
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize
+            };
+            return await Query(criteria).ConfigureAwait(false);
+        }
+
+        private async Task<QueryModel> Query(QueryWinLossDetailCriteria criteria)
+        {
+            IEnumerable<object> records = Enumerable.Empty<object>();
+            switch (criteria.RoleId)
+            {
+                case (int)CustomerLevels.Super:
+                    records = await dynamicRepositoryEx.FetchAsync<ViewSuperModel>(criteria).ConfigureAwait(false);
+                    break;
+                case (int)CustomerLevels.Master:
+                    records = await dynamicRepositoryEx.FetchAsync<ViewMasterModel>(criteria).ConfigureAwait(false);
+                    break;
+                case (int)CustomerLevels.Agent:
+                    records = await dynamicRepositoryEx.FetchAsync<ViewAgentModel>(criteria).ConfigureAwait(false);
+                    break;
+            }
+
+            return new QueryModel
+            {
+                Records = records,
+                TotalRecords = criteria.TotalRecords
+            };
+        }
+    }
+}

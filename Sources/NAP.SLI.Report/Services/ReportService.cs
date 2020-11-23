@@ -1,12 +1,13 @@
 ﻿namespace NAP.SLI.Report.Services
 {
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using NAP.SLI.Report.Criteria;
     using NAP.SLI.Report.Models;
 
     public interface IReportService
     {
-        BalanceUpDayModel GetBalanceUpDay();
+        Task<BalanceUpDayModel> GetBalanceUpDay();
     }
 
     public class ReportService : IReportService
@@ -18,9 +19,9 @@
             this.dynamicRepository = dynamicRepository;
         }
 
-        public BalanceUpDayModel GetBalanceUpDay()
+        public async Task<BalanceUpDayModel> GetBalanceUpDay()
         {
-            return dynamicRepository.Get<BalanceUpDayModel>(new GetBalanceUpDayCriteria());
+            return await dynamicRepository.GetAsync<BalanceUpDayModel>(new GetBalanceUpDayCriteria()).ConfigureAwait(false);
         }
     }
 }

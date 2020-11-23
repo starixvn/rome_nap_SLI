@@ -8,7 +8,7 @@ const ActionTypes = {
   CHANGE_PASSWORD_FAILURE: 'CHANGE_PASSWORD_FAILURE'
 }
 
-const initialState = { isOpen: false };
+const initialState = { isOpen: false, isLoading: false };
 
 const changePassword = (oldPassword, newPassword) => {
   return async (dispatch) => {
@@ -52,17 +52,20 @@ export const reducer = (state = initialState, action) => {
       };
     case ActionTypes.CHANGE_PASSWORD_REQUEST:
       return {
-        ...state
+        ...state,
+        isLoading: true
       };
     case ActionTypes.CHANGE_PASSWORD_SUCCESS:
       return {
         ...state,
+        isLoading: false,
         isSuccessful: true,
         message: action.data.message
       };
     case ActionTypes.CHANGE_PASSWORD_FAILURE:
       return {
         ...state,
+        isLoading: false,
         isSuccessful: false,
         message: action.data.message
       };

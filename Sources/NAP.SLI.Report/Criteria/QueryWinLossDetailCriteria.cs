@@ -1,20 +1,27 @@
 ﻿namespace NAP.SLI.Report.Criteria
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Report.Models;
 
     public class QueryWinLossDetailCriteria : CriteriaBase
     {
-        private readonly CustomerLevels customerLevel;
         private readonly BalanceUpDayModel balanceUpDayModel;
 
-        public QueryWinLossDetailCriteria(CustomerLevels customerLevel, BalanceUpDayModel balanceUpDayModel)
+        public QueryWinLossDetailCriteria(int roleId, bool isHistory, BalanceUpDayModel balanceUpDayModel)
         {
-            this.customerLevel = customerLevel;
+            RoleId = roleId;
+            IsHistory = isHistory;
             this.balanceUpDayModel = balanceUpDayModel;
         }
+
+        [SpParam(Ignored = true)]
+        public int RoleId { get; }
+
+        [SpParam(Ignored = true)]
+        public bool IsHistory { get; }
 
         public int CustId { get; set; }
 
@@ -34,16 +41,16 @@
 
         public override string GetSettingKey()
         {
-            switch (customerLevel)
+            switch (RoleId)
             {
-                case CustomerLevels.Super:
+                case (int)CustomerLevels.Super:
                     return "SLI_Rpt_WinLossDetail_Master";
-                case CustomerLevels.Master:
+                case (int)CustomerLevels.Master:
                     return "SLI_Rpt_WinLossDetail_Agent";
-                case CustomerLevels.Agent:
+                case (int)CustomerLevels.Agent:
                     return "SLI_Rpt_WinLossDetail_Member";
                 default:
-                    throw new NotImplementedException(nameof(customerLevel));
+                    throw new NotImplementedException(nameof(RoleId));
             }
         }
 

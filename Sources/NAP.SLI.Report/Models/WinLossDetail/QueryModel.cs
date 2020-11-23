@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
 
-    public class QueryModel<T>
+    public class QueryModel
     {
-        public IEnumerable<T> Rows { get; set; }
+        public IEnumerable<object> Records { get; set; }
 
-        public T Total { get; set; }
+        public int TotalRecords { get; set; }
     }
 }

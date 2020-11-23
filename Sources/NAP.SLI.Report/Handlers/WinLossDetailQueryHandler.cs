@@ -5,12 +5,20 @@
     using MediatR;
     using NAP.SLI.Report.Models.WinLossDetail;
     using NAP.SLI.Report.Requests;
+    using NAP.SLI.Report.Services;
 
-    public class WinLossDetailQueryHandler : IRequestHandler<WinLossDetailQueryRequest, QueryModel<object>>
+    public class WinLossDetailQueryHandler : IRequestHandler<WinLossDetailQueryRequest, QueryModel>
     {
-        public Task<QueryModel<object>> Handle(WinLossDetailQueryRequest request, CancellationToken cancellationToken)
+        private readonly IWinLossDetailService winLossDetailService;
+
+        public WinLossDetailQueryHandler(IWinLossDetailService winLossDetailService)
         {
-            throw new System.NotImplementedException();
+            this.winLossDetailService = winLossDetailService;
+        }
+
+        public async Task<QueryModel> Handle(WinLossDetailQueryRequest request, CancellationToken cancellationToken)
+        {
+            return await winLossDetailService.Query(request).ConfigureAwait(false);
         }
     }
 }

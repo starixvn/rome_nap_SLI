@@ -13,11 +13,26 @@
 
     public interface IDynamicRepositoryEx
     {
+        Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria);
+
         Task<(IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet)> FetchMultipleAsync<TFirst, TSecond>(ICriteria criteria);
     }
 
     public class DynamicRepositoryEx : IDynamicRepositoryEx
     {
+        public Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria) => FetchAsync<T>(criteria, default);
+
+        public async Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria, CancellationToken cancellationToken)
+        {
+            criteria.ThrowExceptionIfInvalid();
+            using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                var result = await objectDb.QueryAsync<T>(criteria, cancellationToken: cancellationToken).ConfigureAwait(false);
+                UpdateCriteria(criteria, objectDb.GetOutputParams());
+                return result;
+            }
+        }
+
         public Task<(IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet)> FetchMultipleAsync<TFirst, TSecond>(ICriteria criteria)
             => FetchMultipleAsync<TFirst, TSecond>(criteria, default);
 
@@ -37,18 +52,16 @@
             Type[] mappingTypes,
             CancellationToken cancellationToken)
         {
-            var result = InitializeFetchMultipleResultSet(mappingTypes);
             criteria.ThrowExceptionIfInvalid();
+            var result = InitializeFetchMultipleResultSet(mappingTypes);
 
             using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
                 using (var multiResultReader = await objectDb.QueryMultipleAsync(criteria, cancellationToken: cancellationToken).ConfigureAwait(false))
                 {
                     UpdateCriteria(criteria, objectDb.GetOutputParams());
-                    var resultCriteria = criteria as ResultCriteriaBase;
                     var index = 0;
-
-                    if (resultCriteria != null && !resultCriteria.IsSuccessful)
+                    if (criteria is ResultCriteriaBase resultCriteria && !resultCriteria.IsSuccessful)
                     {
                         while (index < mappingTypes.Length)
                         {
