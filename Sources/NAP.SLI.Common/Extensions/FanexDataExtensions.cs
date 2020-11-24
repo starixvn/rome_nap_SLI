@@ -16,7 +16,7 @@
 
         public static void ThrowExceptionIfFailed(this ResultCriteriaBase result)
         {
-            if (!result.IsSuccessful)
+            if (!result.IsSuccess)
             {
                 throw new InvalidOperationException(result.ErrMsg);
             }

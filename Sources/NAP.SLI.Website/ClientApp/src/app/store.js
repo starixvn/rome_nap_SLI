@@ -1,36 +1,34 @@
-import { applyMiddleware, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import createRootReducer from './reducers';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-const configureStore = (initialState) => {
-  const middleware = [
-    thunk
-  ];
+// import * as ConfirmBox from '../common/components/confirm-box/reducer';
 
-  // In development, use the browser's Redux dev tools extension if installed
-  const enhancers = [];
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
-    enhancers.push(window.devToolsExtension());
-  }
+import sidebarReducer from '../features/sidebar/reducer';
+import authenticationReducer from '../features/account/authentication/reducer';
+import changePasswordReducer from '../features/account/change-password/reducer';
+import userManagementReducer from '../features/user-management/reducer';
+import addNewUserReducer from '../features/user-management/add-new-user/reducer';
+import addExistingUserReducer from '../features/user-management/add-existing-user/reducer';
+import editUserReducer from '../features/user-management/edit-user/reducer';
+import resetUserPasswordReducer from '../features/user-management/reset-user-password/reducer';
 
-  const store = createStore(
-    createRootReducer(),
-    initialState,
-    compose(applyMiddleware(...middleware), ...enhancers)
-  );
+const middleware = [
+  ...getDefaultMiddleware(),
+  /*YOUR CUSTOM MIDDLEWARES HERE*/
+];
 
-  // Hot reloading
-  if (module.hot) {
-    // Enable Webpack hot module replacement for reducers
-    module.hot.accept('./reducers', () => {
-      store.replaceReducer(createRootReducer());
-    });
-  }
+const store = configureStore({
+  reducer: {
+    sidebar: sidebarReducer,
+    authentication: authenticationReducer,
+    changePassword: changePasswordReducer,
+    userManagement: userManagementReducer,
+    addNewUser: addNewUserReducer,
+    addExistingUser: addExistingUserReducer,
+    editUser: editUserReducer,
+    resetUserPassword: resetUserPasswordReducer
+  },
+  middleware
+});
 
-  return store;
-}
 
-const initialState = window.initialReduxState;
-const store = configureStore(initialState);
 export default store;

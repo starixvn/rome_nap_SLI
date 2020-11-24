@@ -1,25 +1,25 @@
+import './LoginPage.scss';
 import React, { useState } from 'react';
 import { Form, Input, Button, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Alert } from 'reactstrap';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from "react-router";
-import PropTypes from 'prop-types';
 import Icon from '@mdi/react';
 import { mdiAccount, mdiLock } from '@mdi/js';
-import { actions } from './reducer';
-import './LoginPage.scss';
+import { login } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
 
-const LoginPage = ({ login, loggingIn, message, loggedIn }) => {
+const LoginPage = () => {
+  const dispatch = useDispatch();
+  const { loggingIn, message, isLoggedIn } = useSelector(state => state.authentication);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    login(username.trim(), password);
+    dispatch(login(username.trim(), password));
   };
 
-  if (loggedIn) {
+  if (isLoggedIn) {
     return <Redirect to='/' />;
   }
 
@@ -58,16 +58,4 @@ const LoginPage = ({ login, loggingIn, message, loggedIn }) => {
   );
 };
 
-LoginPage.propTypes = {
-  loggingIn: PropTypes.bool.isRequired,
-  login: PropTypes.func.isRequired,
-  loggedIn: PropTypes.bool.isRequired,
-  message: PropTypes.string
-};
-
-const connectedLoginPage = connect(
-  state => state.authentication,
-  dispatch => bindActionCreators(actions, dispatch)
-)(LoginPage);
-
-export { connectedLoginPage as LoginPage };
+export default LoginPage;

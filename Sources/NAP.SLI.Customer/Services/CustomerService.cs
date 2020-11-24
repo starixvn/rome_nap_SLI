@@ -27,7 +27,7 @@
                 Username = username
             };
             var result = await dynamicRepositoryEx.FetchMultipleAsync<GeneralInformationModel, HeadlineModel>(criteria).ConfigureAwait(false);
-            if (criteria.IsSuccessful)
+            if (criteria.IsSuccess)
             {
                 return new CustomerModel
                 {

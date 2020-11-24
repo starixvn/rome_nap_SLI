@@ -1,10 +1,73 @@
 import axios from 'axios';
 import storage from './storage';
+import { createSlice } from '@reduxjs/toolkit';
 import store from '../../../app/store';
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
 const refreshTimeout = 10 * 60 * 1000;
 let refreshTimer;
+
+const account = storage.get();
+const slice = createSlice({
+  name: 'authentication',
+  initialState: account ? { isLoading: false, account } : { isLoading: false },
+  reducers: {
+    loginRequest: (state) => {
+      state.isLoading = true;
+    },
+    loginFailure: (state, action) => {
+      state.isLoading = false;
+      state.message = action.payload.message;
+    },
+    loginSuccess: (state, action) => {
+      state.isLoading = false;
+      state.account = action.payload.account;
+      state.message = '';
+    },
+    logoutSuccess: (state) => {
+      state.isLoading = false;
+      state.account = undefined;
+    }
+  },
+});
+
+export const { loginRequest, loginFailure, loginSuccess, logoutSuccess } = slice.actions;
+
+export const login = (username, password) => async (dispatch) => {
+  if (!username) {
+    dispatch(loginFailure({ message: 'Please enter username' }));
+    return;
+  }
+
+  if (!password) {
+    dispatch(loginFailure({ message: 'Please enter password' }));
+    return;
+  }
+
+  const account = {
+    username
+  };
+  dispatch(loginRequest());
+
+  try {
+    const payload = {
+      username,
+      password: CryptoJS.CfsEnCode(password)
+    };
+    const response = await axios.post('/api/authentication/login', payload);
+    const { userId, groupId, token } = response.data;
+    Object.assign(account, { userId, groupId, token });
+    storage.save(account);
+    dispatch(loginSuccess({ account }));
+  } catch (error) {
+    dispatch(loginFailure({ message: error.message }));
+  }
+}
+
+export const logout = () => (dispatch) => {
+  storage.remove();
+  dispatch(logoutSuccess());
+}
 
 const installAxiosIntercepts = () => {
   axios.interceptors.request.use(
@@ -21,7 +84,7 @@ const installAxiosIntercepts = () => {
     response => response,
     error => {
       if (error.response.status === 401) {
-        store.dispatch({ type: ActionTypes.LOGOUT });
+        store.dispatch(logout);
       }
 
       return Promise.reject(error);
@@ -54,105 +117,11 @@ const refreshToken = async () => {
     }
   }
   catch {
-    store.dispatch({ type: ActionTypes.LOGOUT });
+    store.dispatch(logout());
   }
 }
 
 installAxiosIntercepts();
 refreshToken();
 
-export const ActionTypes = {
-  LOGIN_REQUEST: 'AUTHENTICATION_LOGIN_REQUEST',
-  LOGIN_SUCCESS: 'AUTHENTICATION_LOGIN_SUCCESS',
-  LOGIN_FAILURE: 'AUTHENTICATION_LOGIN_FAILURE',
-  LOGIN_SET_MESSAGE: 'AUTHENTICATION_LOGIN_SET_MESSAGE',
-  LOGOUT: 'AUTHENTICATION_LOGOUT'
-}
-
-const account = storage.get();
-const initialState = account ? { loggingIn: false, loggedIn: true, account } : { loggingIn: false, loggedIn: false };
-
-const login = (username, password) => {
-  return async (dispatch) => {
-    if (!username) {
-      dispatch({ type: ActionTypes.LOGIN_FAILURE, data: { message: 'Please enter username' } });
-      return;
-    }
-
-    if (!password) {
-      dispatch({ type: ActionTypes.LOGIN_FAILURE, data: { message: 'Please enter password' } });
-      return;
-    }
-
-    const account = {
-      username
-    };
-    dispatch({ type: ActionTypes.LOGIN_REQUEST, data: { account } });
-
-    try {
-      const payload = {
-        username,
-        password: CryptoJS.CfsEnCode(password)
-      };
-      const response = await axios.post('/api/authentication/login', payload);
-      const { userId, groupId, token } = response.data;
-      Object.assign(account, { userId, groupId, token });
-      storage.save(account);
-      dispatch({ type: ActionTypes.LOGIN_SUCCESS, data: { account } });
-    } catch (error) {
-      dispatch({ type: ActionTypes.LOGIN_FAILURE, data: { message: error.response.data } });
-    }
-  };
-}
-
-const logout = () => {
-  return (dispatch) => {
-    storage.remove();
-    dispatch({ type: ActionTypes.LOGOUT });
-  }
-}
-
-export const actions = {
-  login,
-  logout
-};
-
-export const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ActionTypes.LOGIN_REQUEST:
-      return {
-        loggingIn: true,
-        loggedIn: false,
-        account: action.data.account
-      };
-    case ActionTypes.LOGIN_SET_MESSAGE:
-      return {
-        ...state,
-        message: action.data.message
-      };
-    case ActionTypes.LOGIN_SUCCESS:
-      startRefreshTimer();
-      return {
-        ...state,
-        loggingIn: false,
-        loggedIn: true,
-        account: action.data.account,
-        message: ''
-      };
-    case ActionTypes.LOGIN_FAILURE:
-      return {
-        ...state,
-        loggingIn: false,
-        loggedIn: false,
-        message: action.data.message
-      };
-    case ActionTypes.LOGOUT:
-      clearRefreshTimer();
-      return {
-        loggingIn: false,
-        loggedIn: false
-      };
-    default:
-      return state;
-  }
-};
+export default slice.reducer;

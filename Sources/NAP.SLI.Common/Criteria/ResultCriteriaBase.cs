@@ -11,6 +11,6 @@
         public string ErrMsg { get; set; }
 
         [SpParam(Ignored = true)]
-        public bool IsSuccessful => ErrCode == ErrorCodes.OK;
+        public bool IsSuccess => ErrCode == ErrorCodes.OK;
     }
 }

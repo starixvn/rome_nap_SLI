@@ -41,7 +41,7 @@
             criteria.ThrowExceptionIfInvalid();
             await dynamicRepository.ExecuteAsync(criteria).ConfigureAwait(false);
             var loginResult = mapper.Map<AuthenticationModel>(criteria);
-            if (loginResult.IsSuccessful)
+            if (loginResult.IsSuccess)
             {
                 var tokenModel = new TokenModel(request.Username, loginResult.UserId, loginResult.GroupId);
                 loginResult.Token = tokenService.Generate(tokenModel);

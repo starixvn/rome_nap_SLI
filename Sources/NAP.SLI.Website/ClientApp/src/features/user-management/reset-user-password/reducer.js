@@ -1,76 +1,50 @@
 import axios from 'axios';
+import { createSlice } from '@reduxjs/toolkit';
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
-const ActionTypes = {
-    OPEN_RESET_PASSWORD_MODAL: 'UM::RESET_PASSWORD_MODAL::OPEN',
-    TOGGLE_RESET_PASSWORD_MODAL: 'UM::RESET_PASSWORD_MODAL::TOGGLE',
-    RESET_PASSWORD_SUCCESS: 'UM::RESET_PASSWORD::SUCCESS',
-    RESET_PASSWORD_FAILURE: 'UM::RESET_PASSWORD::FAILURE'
-}
-
-const initialState = { isOpen: false, custId: 0, username: "" };
-
-const resetUserPassword = (values) => {
-    return async (dispatch) => {
-        const payload = {
-            apiKey: 'user-management:update-user',
-            data: {
-                custId: values.custId,
-                userPwd: CryptoJS.CfsEnCode(values.newPassword)
-            }
-        };
-
-        try {
-            var response = await axios.post('/simple-api/command', payload);
-            if (response.data.errCode !== 0) {
-                dispatch({ type: ActionTypes.RESET_PASSWORD_FAILURE, data: { message: response.data.errMsg } });
-            } else {
-                dispatch({ type: ActionTypes.RESET_PASSWORD_SUCCESS, data: { message: 'Password reset successfully.' } });
-                setTimeout(() => {
-                    dispatch({ type: ActionTypes.TOGGLE_RESET_PASSWORD_MODAL });
-                }, 3000);
-            }
-
-        } catch (error) {
-            dispatch({ type: ActionTypes.RESET_PASSWORD_FAILURE, data: { message: "Internal Error." } });
-        }
-    };
-}
-
-export const actions = {
-    open: (user, callback) => ({ type: ActionTypes.OPEN_RESET_PASSWORD_MODAL, data: { username: user.userName, custId: user.custId, callback } }),
-    toggle: () => ({ type: ActionTypes.TOGGLE_RESET_PASSWORD_MODAL }),
-    resetUserPassword
-};
-
-export const reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case ActionTypes.OPEN_RESET_PASSWORD_MODAL:
-            return {
-                ...state,
-                username: action.data.username,
-                custId: action.data.custId,
-                message: undefined,
-                isOpen: true
-            };
-        case ActionTypes.TOGGLE_RESET_PASSWORD_MODAL:
-            return {
-                ...state,
-                isOpen: !state.isOpen
-            };
-        case ActionTypes.RESET_PASSWORD_SUCCESS:
-            return {
-                ...state,
-                message: action.data.message,
-                isSuccessful: true
-            };
-        case ActionTypes.RESET_PASSWORD_FAILURE:
-            return {
-                ...state,
-                message: action.data.message,
-                isSuccessful: false
-            };
-        default:
-            return state;
+const slice = createSlice({
+  name: 'reset-user-password',
+  initialState: {
+    user: {},
+    isOpen: false
+  },
+  reducers: {
+    toggleModal: (state, action) => {
+      state.isOpen = !state.isOpen;
+      if (action.payload) {
+        state.user = action.payload.user;
+      }
+    },
+    resetPasswordRequest: (state) => {
+      state.isLoading = false;
+    },
+    resetPasswordSuccess: (state) => {
+      state.isLoading = false;
+    },
+    resetPasswordFailure: (state) => {
+      state.isLoading = false;
     }
-};
+  }
+});
+
+export const { toggleModal, resetPasswordRequest, resetPasswordSuccess, resetPasswordFailure } = slice.actions;
+
+export const resetPassword = (values) => async (dispatch) => {
+  const payload = {
+    apiKey: 'user-management:update-user',
+    data: {
+      custId: values.custId,
+      userPwd: CryptoJS.CfsEnCode(values.newPassword)
+    }
+  };
+
+  dispatch(resetPasswordRequest());
+  const response = await axios.post('/simple-api/command', payload);
+  if (response.data.isSuccess) {
+    dispatch(resetPasswordSuccess());
+  } else {
+    dispatch(resetPasswordFailure());
+  }
+}
+
+export default slice.reducer;

@@ -1,21 +1,20 @@
 import './SideBar.scss';
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
 import { Button, Form, Navbar } from 'reactstrap';
+import { useDispatch } from 'react-redux';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { CustomerPage } from '../../../features/customer/CustomerPage';
-import { actions } from './reducer';
+import CustomerPage from './customer/Page';
+import { queryUsernameSuggestion, getCustomerInformation } from './reducer';
 
-const SideBar = ({ queryUsernameSuggestion, getCustomerInformation }) => {
+const SideBar = () => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [username, setUsername] = useState('');
 
   const handleSubmit = event => {
     event.preventDefault();
-    getCustomerInformation(username);
+    dispatch(getCustomerInformation(username));
   };
 
   const handleSearch = (value) => {
@@ -58,14 +57,4 @@ const SideBar = ({ queryUsernameSuggestion, getCustomerInformation }) => {
   );
 }
 
-SideBar.propTypes = {
-  queryUsernameSuggestion: PropTypes.func.isRequired,
-  getCustomerInformation: PropTypes.func.isRequired
-};
-
-const connectedSideBar = connect(
-  null,
-  dispatch => bindActionCreators(actions, dispatch)
-)(SideBar);
-
-export { connectedSideBar as SideBar };
+export default SideBar;

@@ -1,90 +1,59 @@
 import axios from 'axios';
+import { createSlice } from '@reduxjs/toolkit';
 
-const ActionTypes = {
-  QUERY_REQUEST: 'USER_MANAGEMENT::QUERY_REQUEST',
-  QUERY_SUCCESS: 'USER_MANAGEMENT::QUERY_SUCCESS',
-  QUERY_FAILURE: 'USER_MANAGEMENT::QUERY_FAILURE',
-  UPDATE_STATUS_SUCCESS: 'USER_MANAGEMENT::UPDATE_STATUS_SUCCESS',
-  UPDATE_STATUS_FAILURE: 'USER_MANAGEMENT::UPDATE_STATUS_FAILURE',
-  CHANGE_PASSWORD_SUCCESS: 'USER_MANAGEMENT::CHANGE_USER_PASSWORD_SUCCESS',
-  CHANGE_PASSWORD_FAILURE: 'USER_MANAGEMENT::CHANGE_USER_PASSWORD_FAILURE'
-}
-
-const initialState = { users: [], isOpen: false, queryParams: {username: '', groupOption: null} };
-
-const query = (data) => {
-  return async (dispatch) => {
-    const payload = {
-      apiKey: 'user-management:query-user',
-      data
-    };
-    dispatch({ type: ActionTypes.QUERY_REQUEST, data });
-
-    try {
-      const response = await axios.post('/simple-api/query', payload);
-      dispatch({ type: ActionTypes.QUERY_SUCCESS, data: { users: response.data } });
-    } catch (response) {
-      dispatch({ type: ActionTypes.QUERY_FAILURE, data: { message: response.data } });
-    }
-  };
-};
-
-const changeUserStatus = (status, user) => {
-  return async (dispatch) => {
-    const payload = {
-      apiKey: 'user-management:update-user',
-      data: {
-        custId: user.custId,
-        closed: !status
-      }
-    };
-
-    try {
-      await axios.post('/simple-api/command', payload);
-      dispatch({ type: ActionTypes.UPDATE_STATUS_SUCCESS, data: { userId: user.custId, status } });
-    } catch (error) {
-      dispatch({ type: ActionTypes.UPDATE_STATUS_FAILURE, data: { message: error.data } });
-    }
-  };
-};
-
-export const actions = {
-  query,
-  changeUserStatus
-};
-
-export const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case ActionTypes.QUERY_REQUEST:
-      return {
-        ...state,
-        payload: action.data.payload
-      };
-    case ActionTypes.QUERY_SUCCESS:
-      return {
-        ...state,
-        message: null,
-        users: action.data.users
-      };
-    case ActionTypes.QUERY_FAILURE:
-      return {
-        ...state,
-        message: action.data.message,
-        isSuccessful: false
-      };
-    case ActionTypes.UPDATE_STATUS_SUCCESS:
-      return {
-        ...state,
-        message: 'Update Success!',
-        isSuccessful: true
-      };
-    case ActionTypes.UPDATE_STATUS_FAILURE:
-      return {
-        ...state,
-        message: 'Update Failed!',
-        isSuccessful: false
-      };
-    default:
-      return state;
+const slice = createSlice({
+  name: 'sidebar',
+  initialState: {
+    users: undefined,
+    isOpen: false,
+    isLoading: false,
+    queryParams:
+      { username: '', groupOption: null }
+  },
+  reducers: {
+    queryRequest: (state) => {
+      state.isLoading = true;
+      state.users = undefined;
+    },
+    querySuccess: (state, action) => {
+      state.isLoading = false;
+      state.users = action.payload.users;
+    },
+    updateStatusRequest: (state) => {
+      state.isLoading = true;
+      state.users = undefined;
+    },
+    updateStatusSuccess: (state, action) => {
+      state.isLoading = false;
+      state.users = action.payload.users;
+    },
   }
+});
+
+export const { queryRequest, querySuccess, updateStatusRequest, updateStatusSuccess } = slice.actions;
+
+export const query = (data) => async (dispatch) => {
+  const payload = {
+    apiKey: 'user-management:query-user',
+    data
+  };
+  dispatch(queryRequest());
+  const response = await axios.post('/simple-api/query', payload);
+  dispatch(querySuccess({ users: response.data }));
 };
+
+export const changeUserStatus = (status, user) => async (dispatch) => {
+  const payload = {
+    apiKey: 'user-management:update-user',
+    data: {
+      custId: user.custId,
+      closed: !status
+    }
+  };
+
+  dispatch(updateStatusRequest());
+  await axios.post('/simple-api/command', payload);
+  dispatch(updateStatusSuccess({ userId: user.custId, status }));
+};
+
+export default slice.reducer;

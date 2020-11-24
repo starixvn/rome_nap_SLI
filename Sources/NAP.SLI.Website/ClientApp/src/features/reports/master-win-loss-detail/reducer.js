@@ -38,14 +38,14 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        isSuccessful: true,
+        isSuccess: true,
         data: action.data
       };
     case ActionTypes.WIN_LOSS_DETAIL_QUERY_FAILURE:
       return {
         ...state,
         isLoading: false,
-        isSuccessful: false,
+        isSuccess: false,
         message: action.data.message
       };
     default:

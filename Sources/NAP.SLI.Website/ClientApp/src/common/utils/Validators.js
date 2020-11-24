@@ -1,2 +1,0 @@
-export const required = value => (value ? undefined : 'Required');
-export const matchPassword = (value, allValues) => (value === allValues.newPassword ? undefined : 'New password and confirm password does not match');

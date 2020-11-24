@@ -61,7 +61,7 @@
                 {
                     UpdateCriteria(criteria, objectDb.GetOutputParams());
                     var index = 0;
-                    if (criteria is ResultCriteriaBase resultCriteria && !resultCriteria.IsSuccessful)
+                    if (criteria is ResultCriteriaBase resultCriteria && !resultCriteria.IsSuccess)
                     {
                         while (index < mappingTypes.Length)
                         {
