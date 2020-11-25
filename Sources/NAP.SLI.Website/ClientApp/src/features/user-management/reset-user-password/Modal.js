@@ -56,7 +56,7 @@ const ResetUserPasswordModal = () => {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                  <Label sm={4}>Password</Label>
+                  <Label sm={4}>Confirm Password</Label>
                   <Col sm={8}>
                     <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword && touched.confirmPassword} />
                     <FormFeedback>{errors.confirmPassword}</FormFeedback>

@@ -12,6 +12,7 @@ import LoginPage from '../features/account/authentication/LoginPage';
 import HomePage from '../features/home/Page';
 import ChangePasswordModal from '../features/account/change-password/Modal';
 import { ConfirmBox } from '../common/components/confirm-box/ConfirmBox';
+import ToastContainer from '../common/components/toast/ToastContainer';
 import { RouteLinks } from '../common/models/Constants';
 import CustomerSettingPage from '../features/customer-setting/Page';
 import MasterWinLossDetailPage from '../features/reports/master-win-loss-detail/Page';
@@ -46,6 +47,7 @@ const App = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </BrowserRouter>
   );
 };

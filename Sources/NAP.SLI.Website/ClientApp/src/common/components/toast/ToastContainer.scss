@@ -1,0 +1,15 @@
+.toast-container {
+  position: relative;
+  margin-top: 20px;
+
+  .toast {
+    z-index: 1052;
+    cursor: pointer;
+
+    .toast-body {
+      text-align: center;
+      color: #fff;
+    }
+  }
+
+}

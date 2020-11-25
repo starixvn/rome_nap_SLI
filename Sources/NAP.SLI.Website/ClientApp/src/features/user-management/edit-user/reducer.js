@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
+import { success, error } from '../../../common/components/toast/reducer';
+import { patchUser } from '../reducer';
 
 const slice = createSlice({
   name: 'edit-user',
@@ -13,40 +15,35 @@ const slice = createSlice({
       if (action.payload) {
         state.user = action.payload.user;
       }
-    },
-    updateRequest: (state) => {
-      state.isLoading = false;
-    },
-    updateSuccess: (state) => {
-      state.isLoading = false;
-    },
-    updateFailure: (state) => {
-      state.isLoading = false;
     }
   }
 });
 
-export const { toggleModal, updateRequest, updateSuccess, updateFailure } = slice.actions;
+export const { toggleModal } = slice.actions;
 
-export const update = (values) => async (dispatch) => {
+export const update = (values, callback) => async (dispatch) => {
+  const data = {
+    custId: values.custId,
+    firstName: values.firstName,
+    lastName: values.lastName,
+    groupId: parseInt(values.groupId)
+  };
   const payload = {
     apiKey: 'user-management:update-user',
-    data: {
-      custId: values.custId,
-      userName: values.username,
-      firstName: values.firstname ?? "",
-      lastName: values.lastname ?? "",
-      groupId: values.group
-    }
+    data
   };
 
-  dispatch(updateRequest());
   const response = await axios.post('/simple-api/command', payload);
-  if (response.data.isSuccess) {
-    dispatch(updateSuccess());
+  const { isSuccess, errMsg } = response.data;
+  if (isSuccess) {
+    dispatch(success('Updated successfully'));
+    dispatch(toggleModal());
+    dispatch(patchUser({ data }));
   } else {
-    dispatch(updateFailure());
+    dispatch(error(errMsg));
   }
+
+  callback();
 }
 
 export default slice.reducer;

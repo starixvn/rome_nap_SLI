@@ -1,29 +1,21 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 const CryptoJS = require('../../../common/libs/CryptoJS');
+import { success, error } from '../../../common/components/toast/reducer';
 
 const slice = createSlice({
-  name: 'sidebar',
+  name: 'add-new-user',
   initialState: {
     isOpen: false
   },
   reducers: {
     toggleModal: (state) => {
       state.isOpen = !state.isOpen;
-    },
-    addRequest: (state) => {
-      state.isLoading = false;
-    },
-    addSuccess: (state) => {
-      state.isLoading = false;
-    },
-    addFailure: (state) => {
-      state.isLoading = false;
     }
   }
 });
 
-export const { toggleModal, addRequest, addSuccess, addFailure } = slice.actions;
+export const { toggleModal } = slice.actions;
 
 export const add = (values) => async (dispatch) => {
   const payload = {
@@ -38,12 +30,12 @@ export const add = (values) => async (dispatch) => {
     }
   };
 
-  dispatch(addRequest());
   var response = await axios.post('/simple-api/command', payload);
-  if (response.data.isSuccess) {
-    dispatch(addSuccess());
+  const { isSuccess, message } = response.data;
+  if (isSuccess) {
+    dispatch(success('Success'));
   } else {
-    dispatch(addFailure());
+    dispatch(error(message));
   }
 }
 

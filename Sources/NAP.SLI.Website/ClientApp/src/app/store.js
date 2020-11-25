@@ -1,7 +1,7 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 // import * as ConfirmBox from '../common/components/confirm-box/reducer';
-
+import toastReducer from '../common/components/toast/reducer';
 import sidebarReducer from '../features/sidebar/reducer';
 import authenticationReducer from '../features/account/authentication/reducer';
 import changePasswordReducer from '../features/account/change-password/reducer';
@@ -18,6 +18,7 @@ const middleware = [
 
 const store = configureStore({
   reducer: {
+    toast: toastReducer,
     sidebar: sidebarReducer,
     authentication: authenticationReducer,
     changePassword: changePasswordReducer,

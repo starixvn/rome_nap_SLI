@@ -61,7 +61,7 @@ const AddExistingUserModal = () => {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                  <Label sm={4}>Groups</Label>
+                  <Label sm={4}>Group</Label>
                   <Col sm={8}>
                     <FormikSelect name="groupId" options={UserGroupSelectOptions} />
                   </Col>

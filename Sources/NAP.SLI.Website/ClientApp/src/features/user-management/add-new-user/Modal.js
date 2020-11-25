@@ -42,7 +42,7 @@ const AddNewUserModal = () => {
           onSubmit={(values, { setSubmitting }) => {
             console.log(values);
             setSubmitting(false);
-            //dispatch(add(values));
+            dispatch(add(values));
           }}
         >
           {({

@@ -2,13 +2,15 @@ import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 
 const slice = createSlice({
-  name: 'sidebar',
+  name: 'user-management',
   initialState: {
     users: undefined,
     isOpen: false,
     isLoading: false,
-    queryParams:
-      { username: '', groupOption: null }
+    queryParams: {
+      username: '',
+      groupId: undefined
+    }
   },
   reducers: {
     queryRequest: (state) => {
@@ -27,10 +29,15 @@ const slice = createSlice({
       state.isLoading = false;
       state.users = action.payload.users;
     },
+    patchUser: (state, action) => {
+      const { data } = action.payload;
+      const user = state.users.filter(u => u.custId === data.custId)[0];
+      Object.assign(user, data);
+    }
   }
 });
 
-export const { queryRequest, querySuccess, updateStatusRequest, updateStatusSuccess } = slice.actions;
+export const { queryRequest, querySuccess, updateStatusRequest, updateStatusSuccess, patchUser } = slice.actions;
 
 export const query = (data) => async (dispatch) => {
   const payload = {
