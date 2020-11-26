@@ -28,24 +28,16 @@ const MonthPicker = (props) => {
     setValue(props.value);
   }, [props.value]);
 
-  const goPreviousMonth = () => {
-    setValue(moment(value).subtract(1, 'months'));
-  };
-
-  const goNextMonth = () => {
-    setValue(moment(value).add(1, 'months'));
-  };
-
   const renderInput = (props, openCalendar) => {
     return (
       <InputGroup className="month-picker">
-        <InputGroupAddon addonType="prepend" onClick={goPreviousMonth}>
+        <InputGroupAddon addonType="prepend" onClick={() => handleOnChange(moment(value).subtract(1, 'months'))}>
           <InputGroupText>
             <Icon path={mdiArrowLeftBold} />
           </InputGroupText>
         </InputGroupAddon>
         <div onClick={openCalendar}><Input {...props} /></div>
-        <InputGroupAddon addonType="append" onClick={goNextMonth}>
+        <InputGroupAddon addonType="append" onClick={() => handleOnChange(moment(value).add(1, 'months'))}>
           <InputGroupText>
             <Icon path={mdiArrowRightBold} />
           </InputGroupText>

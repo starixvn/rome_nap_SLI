@@ -20,7 +20,7 @@ const slice = createSlice({
       state.isLoading = false;
       state.customer = action.payload.customer;
     },
-    getCustomerInformationFailure: (state, action) => {
+    getCustomerInformationFailure: (state) => {
       state.isLoading = false;
       state.customer = null;
     },
@@ -37,7 +37,7 @@ export const queryUsernameSuggestion = async (value) => {
     }
   };
 
-  var response = await axios.post('/simple-api/query', payload);
+  const response = await axios.post('/simple-api/query', payload);
   return response.data;
 }
 
@@ -47,7 +47,7 @@ export const getCustomerInformation = (username) => async (dispatch) => {
   };
 
   dispatch(getCustomerInformationRequest());
-  var response = await axios.post("/api/customer/information", payload);
+  const response = await axios.post("/api/customer/information", payload);
   if (response.data.length === 0) {
     dispatch(getCustomerInformationFailure());
   } else {

@@ -18,24 +18,27 @@ const slice = createSlice({
 export const { toggleModal } = slice.actions;
 
 export const add = (values, callback) => async (dispatch) => {
-  const payload = {
-    apiKey: 'user-management:add-new-user',
-    data: {
-      userName: values.userName,
-      groupId: values.groupId,
-      isAddNew: false
+  try {
+    const payload = {
+      apiKey: 'user-management:add-new-user',
+      data: {
+        userName: values.userName,
+        groupId: values.groupId,
+        isAddNew: false
+      }
+    };
+    const response = await axios.post('/simple-api/command', payload);
+    const { isSuccess, errMsg } = response.data;
+    if (isSuccess) {
+      dispatch(success('Added successfully'));
+      dispatch(toggleModal());
+      dispatch(query());
+    } else {
+      dispatch(error(errMsg));
     }
-  };
-
-  var response = await axios.post('/simple-api/command', payload);
-  callback();
-  const { isSuccess, errMsg } = response.data;
-  if (isSuccess) {
-    dispatch(success('Added successfully'));
-    dispatch(toggleModal());
-    dispatch(query());
-  } else {
-    dispatch(error(errMsg));
+  }
+  finally {
+    callback();
   }
 }
 

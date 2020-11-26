@@ -27,25 +27,28 @@ export const { queryRequest, querySuccess, updateStatusRequest, updateStatusSucc
 
 let queryData;
 export const query = (values, callback) => async (dispatch) => {
-  let data = queryData;
-  if (values) {
-    const groupId = parseInt(values.groupId);
-    data = {
-      userName: values.userName,
-      groupId: groupId === AllGroupsId ? undefined : groupId
+  try {
+    let data = queryData;
+    if (values) {
+      const groupId = parseInt(values.groupId);
+      data = {
+        userName: values.userName,
+        groupId: groupId === AllGroupsId ? undefined : groupId
+      };
+      queryData = data;
+    }
+
+    const payload = {
+      apiKey: 'user-management:query-user',
+      data
     };
-    queryData = data;
+    dispatch(queryRequest());
+    const response = await axios.post('/simple-api/query', payload);
+    dispatch(querySuccess({ users: response.data }));
   }
-
-  const payload = {
-    apiKey: 'user-management:query-user',
-    data
-  };
-
-  dispatch(queryRequest());
-  const response = await axios.post('/simple-api/query', payload);
-  callback();
-  dispatch(querySuccess({ users: response.data }));
+  finally {
+    callback();
+  }
 };
 
 export const updateUserStatus = (data) => async (dispatch) => {

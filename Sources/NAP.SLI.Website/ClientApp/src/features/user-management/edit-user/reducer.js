@@ -22,26 +22,29 @@ const slice = createSlice({
 export const { toggleModal } = slice.actions;
 
 export const update = (values, callback) => async (dispatch) => {
-  const data = {
-    custId: values.custId,
-    firstName: values.firstName,
-    lastName: values.lastName,
-    groupId: parseInt(values.groupId)
-  };
-  const payload = {
-    apiKey: 'user-management:update-user',
-    data
-  };
-
-  const response = await axios.post('/simple-api/command', payload);
-  callback();
-  const { isSuccess, errMsg } = response.data;
-  if (isSuccess) {
-    dispatch(success('Updated successfully'));
-    dispatch(toggleModal());
-    dispatch(patchUser({ data }));
-  } else {
-    dispatch(error(errMsg));
+  try {
+    const data = {
+      custId: values.custId,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      groupId: parseInt(values.groupId)
+    };
+    const payload = {
+      apiKey: 'user-management:update-user',
+      data
+    };
+    const response = await axios.post('/simple-api/command', payload);
+    const { isSuccess, errMsg } = response.data;
+    if (isSuccess) {
+      dispatch(success('Updated successfully'));
+      dispatch(toggleModal());
+      dispatch(patchUser({ data }));
+    } else {
+      dispatch(error(errMsg));
+    }
+  }
+  finally {
+    callback();
   }
 }
 

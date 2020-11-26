@@ -18,22 +18,25 @@ const slice = createSlice({
 export const { toggleModal } = slice.actions;
 
 export const changePassword = (values, callback) => async (dispatch) => {
-  const payload = {
-    apiKey: 'account:change-password',
-    data: {
-      oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
-      newPassword: CryptoJS.CfsEnCode(values.newPassword)
+  try {
+    const payload = {
+      apiKey: 'account:change-password',
+      data: {
+        oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
+        newPassword: CryptoJS.CfsEnCode(values.newPassword)
+      }
+    };
+    const response = await axios.post('/simple-api/command', payload);
+    const { isSuccess, errMsg } = response.data;
+    if (isSuccess) {
+      dispatch(success('Password changed successfully'));
+      dispatch(toggleModal());
+    } else {
+      dispatch(error(errMsg));
     }
-  };
-
-  const response = await axios.post('/simple-api/command', payload);
-  callback();
-  var { isSuccess, errMsg } = response.data;
-  if (isSuccess) {
-    dispatch(success('Password changed successfully'));
-    dispatch(toggleModal());
-  } else {
-    dispatch(error(errMsg));
+  }
+  finally {
+    callback();
   }
 }
 

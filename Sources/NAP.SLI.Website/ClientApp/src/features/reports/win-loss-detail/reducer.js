@@ -37,17 +37,21 @@ const slice = createSlice({
 export const { toggleMode, queryRequest, querySuccess } = slice.actions;
 
 export const query = (data, callback) => async (dispatch) => {
-  dispatch(queryRequest({
-    fromDate: formatDate(data.fromDate),
-    toDate: formatDate(data.toDate)
-  }));
-  Object.assign(data, {
-    pageSize: 25,
-    pageIndex: 0
-  });
-  const response = await axios.post('/api/winlossdetail/query', data);
-  callback();
-  dispatch(querySuccess({ data: response.data }));
+  try {
+    dispatch(queryRequest({
+      fromDate: formatDate(data.fromDate),
+      toDate: formatDate(data.toDate)
+    }));
+    Object.assign(data, {
+      pageSize: 25,
+      pageIndex: 0
+    });
+    const response = await axios.post('/api/winlossdetail/query', data);
+    dispatch(querySuccess({ data: response.data }));
+  }
+  finally {
+    callback();
+  }
 }
 
 export default slice.reducer;

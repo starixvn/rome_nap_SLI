@@ -1,11 +1,10 @@
 import axios from 'axios';
 import storage from './storage';
 import { createSlice } from '@reduxjs/toolkit';
-import store from '../../../app/store';
 const CryptoJS = require('../../../common/libs/CryptoJS');
+import { installAxiosIntercepts } from './axios';
 
-const refreshTimeout = 10 * 60 * 1000;
-let refreshTimer;
+installAxiosIntercepts();
 
 const account = storage.get();
 const slice = createSlice({
@@ -28,24 +27,29 @@ const slice = createSlice({
 export const { loginFailure, loginSuccess, logoutSuccess } = slice.actions;
 
 export const login = (values, callback) => async (dispatch) => {
-  const payload = {
-    username: values.userName.trim(),
-    password: CryptoJS.CfsEnCode(values.password)
-  };
-  const response = await axios.post('/api/authentication/login', payload);
-  callback();
-  const { userId, groupId, token, isSuccess, errMsg } = response.data;
-  if (isSuccess) {
-    const account = {
-      username: payload.username,
-      userId,
-      groupId,
-      token
+  try {
+    const payload = {
+      username: values.userName.trim(),
+      password: CryptoJS.CfsEnCode(values.password)
+    };
+
+    const response = await axios.post('/api/authentication/login', payload);
+    const { userId, groupId, token, isSuccess, errMsg } = response.data;
+    if (isSuccess) {
+      const account = {
+        username: payload.username,
+        userId,
+        groupId,
+        token
+      }
+      storage.save(account);
+      dispatch(loginSuccess({ account }));
+    } else {
+      dispatch(loginFailure({ message: errMsg }));
     }
-    storage.save(account);
-    dispatch(loginSuccess({ account }));
-  } else {
-    dispatch(loginFailure({ message: errMsg }));
+  }
+  finally {
+    callback();
   }
 }
 
@@ -54,32 +58,13 @@ export const logout = () => (dispatch) => {
   dispatch(logoutSuccess());
 }
 
-const installAxiosIntercepts = () => {
-  axios.interceptors.request.use(
-    config => {
-      const token = storage.getToken();
-      if (token) {
-        config.headers['Authorization'] = 'bearer ' + token;
-      }
-
-      return config;
-    }
-  );
-  axios.interceptors.response.use(
-    response => response,
-    error => {
-      if (error.response.status === 401) {
-        store.dispatch(logout);
-      }
-
-      return Promise.reject(error);
-    });
-}
+let refreshTimer = undefined;
+const refreshTimeout = 10 * 60 * 1000;
 
 const clearRefreshTimer = () => {
-  if (refreshTimer != null) {
+  if (refreshTimer) {
     clearTimeout(refreshTimer);
-    refreshTimer = null;
+    refreshTimer = undefined;
   }
 }
 
@@ -101,12 +86,13 @@ const refreshToken = async () => {
       startRefreshTimer();
     }
   }
-  catch {
-    store.dispatch(logout());
+  catch (e) {
+    console.error(e);
   }
 }
 
-installAxiosIntercepts();
-refreshToken();
+if (account) {
+  refreshToken();
+}
 
 export default slice.reducer;
