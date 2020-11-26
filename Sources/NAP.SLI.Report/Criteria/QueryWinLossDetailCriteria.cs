@@ -10,18 +10,16 @@
     {
         private readonly BalanceUpDayModel balanceUpDayModel;
 
-        public QueryWinLossDetailCriteria(int roleId, bool isHistory, BalanceUpDayModel balanceUpDayModel)
+        public QueryWinLossDetailCriteria(BalanceUpDayModel balanceUpDayModel)
         {
-            RoleId = roleId;
-            IsHistory = isHistory;
             this.balanceUpDayModel = balanceUpDayModel;
         }
 
         [SpParam(Ignored = true)]
-        public int RoleId { get; }
+        public int RoleId { get; set; }
 
         [SpParam(Ignored = true)]
-        public bool IsHistory { get; }
+        public bool IsHistory { get; set; }
 
         public int CustId { get; set; }
 
@@ -32,6 +30,8 @@
         public DateTime BalanceUpDay => balanceUpDayModel.BalanceUpDay;
 
         public DateTime MoveBetsDay => balanceUpDayModel.MoveBetsDay;
+
+        public string ProductIds => "1";
 
         public int PageSize { get; set; }
 

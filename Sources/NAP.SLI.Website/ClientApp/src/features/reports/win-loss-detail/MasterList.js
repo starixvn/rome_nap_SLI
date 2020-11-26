@@ -4,11 +4,7 @@ import { Table } from 'reactstrap';
 
 const MasterList = () => {
   const { data } = useSelector(state => state.winLossDetail);
-  if (!data) {
-    return <></>;
-  }
-
-  const { records, totalRecords } = data;
+  const { records } = data;
 
   const renderTableBody = () => {
     if (records.length === 0) {

@@ -18,13 +18,14 @@ const generateDateOptions = (date) => {
 
 const propTypes = {
   custId: PropTypes.number.isRequired,
+  roleId: PropTypes.number.isRequired,
   minDate: PropTypes.object.isRequired,
   maxDate: PropTypes.object.isRequired
 };
 
 const HistoryFilter = (props) => {
   const dispatch = useDispatch();
-  const { custId, minDate, maxDate } = props;
+  const { custId, roleId, minDate, maxDate } = props;
 
   const month = getToday();
   const dateOptions = generateDateOptions(month);
@@ -44,7 +45,6 @@ const HistoryFilter = (props) => {
   return (
     <Formik
       initialValues={{
-        custId,
         month,
         dateOptions,
         fromDateOption,
@@ -55,7 +55,8 @@ const HistoryFilter = (props) => {
         const fromDate = moment(month).date(values.fromDateOption);
         const toDate = moment(month).date(values.toDateOption);
         dispatch(query({
-          custId: values.custId,
+          custId,
+          roleId,
           fromDate,
           toDate
         }, () => setSubmitting(false)));

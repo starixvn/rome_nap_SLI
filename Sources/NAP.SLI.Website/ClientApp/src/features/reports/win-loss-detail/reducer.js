@@ -11,7 +11,9 @@ const slice = createSlice({
   name: 'win-loss-detail',
   initialState: {
     mode: Modes.Normal,
-    data: undefined
+    data: undefined,
+    pageSize: 25,
+    pageIndex: 0
   },
   reducers: {
     toggleMode: (state) => {
@@ -22,7 +24,6 @@ const slice = createSlice({
       }
     },
     queryRequest: (state, action) => {
-      state.custId = action.payload.custId;
       state.fromDate = action.payload.fromDate;
       state.toDate = action.payload.toDate;
       state.data = undefined;
@@ -37,10 +38,13 @@ export const { toggleMode, queryRequest, querySuccess } = slice.actions;
 
 export const query = (data, callback) => async (dispatch) => {
   dispatch(queryRequest({
-    custId: data.custId,
     fromDate: formatDate(data.fromDate),
     toDate: formatDate(data.toDate)
   }));
+  Object.assign(data, {
+    pageSize: 25,
+    pageIndex: 0
+  });
   const response = await axios.post('/api/winlossdetail/query', data);
   callback();
   dispatch(querySuccess({ data: response.data }));

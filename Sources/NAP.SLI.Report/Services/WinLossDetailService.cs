@@ -28,8 +28,11 @@
         public async Task<QueryModel> Query(WinLossDetailQueryRequest request)
         {
             var balanceUpDayModel = await reportService.GetBalanceUpDay().ConfigureAwait(false);
-            var criteria = new QueryWinLossDetailCriteria(request.RoleId, request.IsHistory, balanceUpDayModel)
+            var criteria = new QueryWinLossDetailCriteria(balanceUpDayModel)
             {
+                CustId = request.CustId,
+                RoleId = request.RoleId,
+                IsHistory = request.IsHistory,
                 FromDate = request.FromDate,
                 ToDate = request.ToDate,
                 PageIndex = request.PageIndex,

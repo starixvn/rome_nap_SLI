@@ -12,13 +12,14 @@ const yesterday = getYesterday();
 
 const propTypes = {
   custId: PropTypes.number.isRequired,
+  roleId: PropTypes.number.isRequired,
   minDate: PropTypes.object.isRequired,
   maxDate: PropTypes.object.isRequired
 };
 
 const NormalFilter = (props) => {
   const dispatch = useDispatch();
-  const { custId, minDate, maxDate } = props;
+  const { custId, roleId, minDate, maxDate } = props;
 
   const setDateAndSubmit = (date, setFieldValue, handleSubmit) => {
     setFieldValue('fromDate', date);
@@ -29,12 +30,15 @@ const NormalFilter = (props) => {
   return (
     <Formik
       initialValues={{
-        custId,
         fromDate: getToday(),
         toDate: getToday()
       }}
       onSubmit={(values, { setSubmitting }) => {
-        dispatch(query(values, () => setSubmitting(false)));
+        dispatch(query({
+          custId,
+          roleId,
+          ...values
+        }, () => setSubmitting(false)));
       }}
     >
       {({
