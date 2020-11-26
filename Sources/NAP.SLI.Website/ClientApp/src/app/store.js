@@ -1,6 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-// import * as ConfirmBox from '../common/components/confirm-box/reducer';
+import confirmationReducer from '../common/components/confirmation/reducer';
 import toastReducer from '../common/components/toast/reducer';
 import sidebarReducer from '../features/sidebar/reducer';
 import authenticationReducer from '../features/account/authentication/reducer';
@@ -18,6 +18,7 @@ const middleware = [
 
 const store = configureStore({
   reducer: {
+    confirmation: confirmationReducer,
     toast: toastReducer,
     sidebar: sidebarReducer,
     authentication: authenticationReducer,
@@ -30,6 +31,5 @@ const store = configureStore({
   },
   middleware
 });
-
 
 export default store;

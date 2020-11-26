@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Col, Button, FormFeedback } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Col, Button, FormFeedback, Spinner, ModalFooter } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
@@ -17,61 +17,60 @@ const ResetUserPasswordModal = () => {
   const dispatch = useDispatch();
   const { isOpen, user } = useSelector(state => state.resetUserPassword);
 
-  const handleToggle = () => {
-    dispatch(toggleModal());
-  }
-
   return (
-    <Modal isOpen={isOpen} toggle={handleToggle}>
-      <ModalHeader toggle={handleToggle}>Reset Password</ModalHeader>
-      <ModalBody>
-        <Formik
-          initialValues={{
-            password: '',
-            confirmPassword: ''
-          }}
-          validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            console.log(values);
-            setSubmitting(false);
-            //dispatch(resetPassword(values));
-          }}
-        >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            isSubmitting
-          }) => (
-              <Form onSubmit={handleSubmit}>
-                <FormGroup row>
-                  <Label sm={4}>User Name</Label>
-                  <Label sm={8}>{user.userName}</Label>
-                </FormGroup>
-                <FormGroup row>
-                  <Label sm={4}>Password</Label>
-                  <Col sm={8}>
-                    <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
-                    <FormFeedback>{errors.password}</FormFeedback>
-                  </Col>
-                </FormGroup>
-                <FormGroup row>
-                  <Label sm={4}>Confirm Password</Label>
-                  <Col sm={8}>
-                    <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword && touched.confirmPassword} />
-                    <FormFeedback>{errors.confirmPassword}</FormFeedback>
-                  </Col>
-                </FormGroup>
-                <FormGroup row className="mt-5">
-                  <Label sm={4}></Label>
-                  <Col sm={8}>
-                    <Button type="submit" color="primary" disabled={isSubmitting}>Submit</Button>
-                  </Col>
-                </FormGroup>
-              </Form>
-            )}
-        </Formik>
-      </ModalBody>
+    <Modal isOpen={isOpen} unmountOnClose>
+      <Formik
+        initialValues={{
+          custId: user.custId,
+          password: '',
+          confirmPassword: ''
+        }}
+        validationSchema={validationSchema}
+        onSubmit={(values, { setSubmitting }) => {
+          dispatch(resetPassword(values), () => setSubmitting(false));
+        }}
+      >
+        {({
+          errors,
+          touched,
+          handleSubmit,
+          isSubmitting
+        }) => (
+            <Form onSubmit={handleSubmit}>
+              <fieldset disabled={isSubmitting}>
+                <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal()) })}>
+                  Reset Password
+              </ModalHeader>
+                <ModalBody>
+                  <FormGroup row>
+                    <Label sm={4}>User Name</Label>
+                    <Label sm={8}>{user.userName}</Label>
+                  </FormGroup>
+                  <FormGroup row>
+                    <Label sm={4}>Password</Label>
+                    <Col sm={8}>
+                      <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
+                      <FormFeedback>{errors.password}</FormFeedback>
+                    </Col>
+                  </FormGroup>
+                  <FormGroup row>
+                    <Label sm={4}>Confirm Password</Label>
+                    <Col sm={8}>
+                      <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword && touched.confirmPassword} />
+                      <FormFeedback>{errors.confirmPassword}</FormFeedback>
+                    </Col>
+                  </FormGroup>
+                </ModalBody>
+                <ModalFooter>
+                  <Button type="submit" color="primary">
+                    {isSubmitting && <Spinner className='mr-3' />}
+                    Submit
+                  </Button>
+                </ModalFooter>
+              </fieldset>
+            </Form>
+          )}
+      </Formik>
     </Modal>
   );
 };

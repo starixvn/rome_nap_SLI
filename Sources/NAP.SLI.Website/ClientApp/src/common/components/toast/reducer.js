@@ -19,8 +19,10 @@ const slice = createSlice({
 
 export const { show, hide } = slice.actions;
 
+let timeout;
 const autoHide = () => (dispatch) => {
-  setTimeout(() => dispatch(hide()), 3000);
+  clearTimeout(timeout);
+  timeout = setTimeout(() => dispatch(hide()), 3000);
 }
 
 export const success = (message) => (dispatch) => {

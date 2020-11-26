@@ -1,32 +1,18 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
+import { AllGroupsId } from '../../common/models/UserGroup';
+import { success, error } from '../../common/components/toast/reducer';
 
 const slice = createSlice({
   name: 'user-management',
   initialState: {
-    users: undefined,
-    isOpen: false,
-    isLoading: false,
-    queryParams: {
-      username: '',
-      groupId: undefined
-    }
+    users: undefined
   },
   reducers: {
     queryRequest: (state) => {
-      state.isLoading = true;
       state.users = undefined;
     },
     querySuccess: (state, action) => {
-      state.isLoading = false;
-      state.users = action.payload.users;
-    },
-    updateStatusRequest: (state) => {
-      state.isLoading = true;
-      state.users = undefined;
-    },
-    updateStatusSuccess: (state, action) => {
-      state.isLoading = false;
       state.users = action.payload.users;
     },
     patchUser: (state, action) => {
@@ -39,28 +25,43 @@ const slice = createSlice({
 
 export const { queryRequest, querySuccess, updateStatusRequest, updateStatusSuccess, patchUser } = slice.actions;
 
-export const query = (data) => async (dispatch) => {
+let queryData;
+export const query = (values, callback) => async (dispatch) => {
+  let data = queryData;
+  if (values) {
+    const groupId = parseInt(values.groupId);
+    data = {
+      userName: values.userName,
+      groupId: groupId === AllGroupsId ? undefined : groupId
+    };
+    queryData = data;
+  }
+
   const payload = {
     apiKey: 'user-management:query-user',
     data
   };
+
   dispatch(queryRequest());
   const response = await axios.post('/simple-api/query', payload);
+  callback();
   dispatch(querySuccess({ users: response.data }));
 };
 
-export const changeUserStatus = (status, user) => async (dispatch) => {
+export const updateUserStatus = (data) => async (dispatch) => {
   const payload = {
     apiKey: 'user-management:update-user',
-    data: {
-      custId: user.custId,
-      closed: !status
-    }
+    data
   };
 
-  dispatch(updateStatusRequest());
-  await axios.post('/simple-api/command', payload);
-  dispatch(updateStatusSuccess({ userId: user.custId, status }));
+  const response = await axios.post('/simple-api/command', payload);
+  const { isSuccess, errMsg } = response.data;
+  if (isSuccess) {
+    dispatch(success('Updated successfully'));
+    dispatch(patchUser({ data }));
+  } else {
+    dispatch(error(errMsg));
+  }
 };
 
 export default slice.reducer;

@@ -34,6 +34,7 @@ export const update = (values, callback) => async (dispatch) => {
   };
 
   const response = await axios.post('/simple-api/command', payload);
+  callback();
   const { isSuccess, errMsg } = response.data;
   if (isSuccess) {
     dispatch(success('Updated successfully'));
@@ -42,8 +43,6 @@ export const update = (values, callback) => async (dispatch) => {
   } else {
     dispatch(error(errMsg));
   }
-
-  callback();
 }
 
 export default slice.reducer;

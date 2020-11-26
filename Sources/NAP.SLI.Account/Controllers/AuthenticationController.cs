@@ -20,11 +20,6 @@
         public async Task<IActionResult> Login([FromBody]LoginRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.ErrMsg);
-            }
-
             return Ok(result);
         }
 
@@ -33,11 +28,6 @@
         public async Task<IActionResult> Refresh([FromBody]RefreshRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.ErrMsg);
-            }
-
             return Ok(result);
         }
     }

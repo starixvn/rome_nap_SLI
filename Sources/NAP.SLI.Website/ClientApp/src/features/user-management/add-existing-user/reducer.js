@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
+import { success, error } from '../../../common/components/toast/reducer';
+import { query } from '../reducer';
 
 const slice = createSlice({
   name: 'add-existing-user',
@@ -9,37 +11,31 @@ const slice = createSlice({
   reducers: {
     toggleModal: (state) => {
       state.isOpen = !state.isOpen;
-    },
-    addRequest: (state) => {
-      state.isLoading = false;
-    },
-    addSuccess: (state) => {
-      state.isLoading = false;
-    },
-    addFailure: (state) => {
-      state.isLoading = false;
     }
   }
 });
 
-export const { toggleModal, addRequest, addSuccess, addFailure } = slice.actions;
+export const { toggleModal } = slice.actions;
 
-export const add = (values) => async (dispatch) => {
+export const add = (values, callback) => async (dispatch) => {
   const payload = {
     apiKey: 'user-management:add-new-user',
     data: {
-      username: values.username,
+      userName: values.userName,
       groupId: values.groupId,
       isAddNew: false
     }
   };
 
-  dispatch(addRequest());
   var response = await axios.post('/simple-api/command', payload);
-  if (response.data.isSuccess) {
-    dispatch(addSuccess());
+  callback();
+  const { isSuccess, errMsg } = response.data;
+  if (isSuccess) {
+    dispatch(success('Added successfully'));
+    dispatch(toggleModal());
+    dispatch(query());
   } else {
-    dispatch(addFailure());
+    dispatch(error(errMsg));
   }
 }
 

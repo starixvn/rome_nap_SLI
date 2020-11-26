@@ -6,7 +6,7 @@ import { NavLink as RRNavLink } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiViewDashboard } from '@mdi/js';
 import { logout } from '../account/authentication/reducer';
-import { toggleChangePasswordModal } from '../account/change-password/reducer';
+import { toggleModal } from '../account/change-password/reducer';
 import { toggle } from '../sidebar/reducer';
 import { RouteLinks } from '../../common/models/Constants';
 
@@ -38,7 +38,7 @@ const NavMenu = () => {
             Welcome <span className="font-weight-500">{username}</span>
           </DropdownToggle>
           <DropdownMenu right>
-            <DropdownItem onClick={() => dispatch(toggleChangePasswordModal())}>Change password</DropdownItem>
+            <DropdownItem onClick={() => dispatch(toggleModal())}>Change password</DropdownItem>
             <DropdownItem onClick={() => dispatch(logout())}>Sign Out</DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

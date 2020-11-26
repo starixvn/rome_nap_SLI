@@ -1,60 +1,84 @@
 import './LoginPage.scss';
-import React, { useState } from 'react';
-import { Form, Input, Button, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Alert } from 'reactstrap';
+import React from 'react';
+import { Form, Input, Button, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Alert, Spinner, FormFeedback } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from "react-router";
+import { Formik, Field } from 'formik';
+import * as Yup from 'yup';
 import Icon from '@mdi/react';
 import { mdiAccount, mdiLock } from '@mdi/js';
 import { login } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
 
+const validationSchema = Yup.object().shape({
+  userName: Yup.string()
+    .required('Username is required'),
+  password: Yup.string()
+    .required('Password is required')
+});
+
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const { loggingIn, message, isLoggedIn } = useSelector(state => state.authentication);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    dispatch(login(username.trim(), password));
-  };
-
-  if (isLoggedIn) {
-    return <Redirect to='/' />;
-  }
+  const { message } = useSelector(state => state.authentication);
 
   return (
-    <Form className="login-page" onSubmit={handleSubmit} noValidate>
-      {message && <Alert color="danger" className="text-center" role="alert">
-        {message}
-      </Alert>}
-      <FormGroup>
-        <InputGroup>
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <Icon path={mdiAccount} />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input type="text" placeholder="Username" maxLength="50" value={username} onChange={event => setUsername(event.target.value)} />
-        </InputGroup>
-      </FormGroup>
-      <FormGroup>
-        <InputGroup>
-          <InputGroupAddon addonType="prepend">
-            <InputGroupText>
-              <Icon path={mdiLock} />
-            </InputGroupText>
-          </InputGroupAddon>
-          <Input type="password" placeholder="Password" maxLength="50" value={password} onChange={event => setPassword(event.target.value)} />
-        </InputGroup>
-      </FormGroup>
-      <FormGroup>
-        <Button type="submit" color="primary" className="btn-block" disabled={loggingIn}>Login</Button>
-      </FormGroup>
-      <div>
-        Best view in <Firefox className="browser-icon" />Firefox 60+ <Chrome className="browser-icon" />Chrome 67+
-      </div>
-    </Form>
+    <Formik
+      initialValues={{
+        userName: '',
+        password: ''
+      }}
+      validationSchema={validationSchema}
+      onSubmit={(values, { setSubmitting }) => {
+        dispatch(login(values, () => setSubmitting(false)));
+      }}
+    >
+      {({
+        errors,
+        touched,
+        handleSubmit,
+        isSubmitting
+      }) => (
+          <Form className="login-page" onSubmit={handleSubmit}>
+            <fieldset disabled={isSubmitting}>
+              {message && <Alert color="danger" className="text-center" role="alert">
+                {message}
+              </Alert>}
+              <FormGroup className="mb-5">
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <Icon path={mdiAccount} />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName && touched.userName} />
+                  <FormFeedback tooltip>{errors.userName}</FormFeedback>
+                </InputGroup>
+              </FormGroup>
+              <FormGroup className="mb-5">
+                <InputGroup>
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>
+                      <Icon path={mdiLock} />
+                    </InputGroupText>
+                  </InputGroupAddon>
+                  <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
+                  <FormFeedback tooltip>{errors.password}</FormFeedback>
+                </InputGroup>
+              </FormGroup>
+              <FormGroup>
+                <Button type="submit" color="primary" className="btn-block">
+                  {isSubmitting && <Spinner className='mr-3' />}
+                  Login
+                </Button>
+              </FormGroup>
+              <div>
+                Best view in <Firefox className="browser-icon" /> Firefox 60+  <Chrome className="browser-icon" /> Chrome 67+
+              </div>
+            </fieldset>
+          </Form>
+        )}
+    </Formik>
   );
 };
 

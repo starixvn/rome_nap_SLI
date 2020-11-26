@@ -11,7 +11,7 @@ import UserManagementPage from '../features/user-management/Page';
 import LoginPage from '../features/account/authentication/LoginPage';
 import HomePage from '../features/home/Page';
 import ChangePasswordModal from '../features/account/change-password/Modal';
-import { ConfirmBox } from '../common/components/confirm-box/ConfirmBox';
+import Confirmation from '../common/components/confirmation/Confirmation';
 import ToastContainer from '../common/components/toast/ToastContainer';
 import { RouteLinks } from '../common/models/Constants';
 import CustomerSettingPage from '../features/customer-setting/Page';
@@ -43,10 +43,10 @@ const App = () => {
               <PrivateRoute path={RouteLinks.WIN_LOSS_ANALYSIS} component={WinLossAnalysisPage} />
               <Route component={NotFoundPage} />
             </Switch>
-            {/* <ConfirmBox /> */}
           </div>
         </div>
       </div>
+      <Confirmation />
       <ToastContainer />
     </BrowserRouter>
   );

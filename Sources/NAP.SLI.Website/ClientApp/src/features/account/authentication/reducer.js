@@ -12,55 +12,40 @@ const slice = createSlice({
   name: 'authentication',
   initialState: account ? { isLoading: false, account } : { isLoading: false },
   reducers: {
-    loginRequest: (state) => {
-      state.isLoading = true;
-    },
     loginFailure: (state, action) => {
-      state.isLoading = false;
       state.message = action.payload.message;
     },
     loginSuccess: (state, action) => {
-      state.isLoading = false;
       state.account = action.payload.account;
       state.message = '';
     },
     logoutSuccess: (state) => {
-      state.isLoading = false;
       state.account = undefined;
     }
   },
 });
 
-export const { loginRequest, loginFailure, loginSuccess, logoutSuccess } = slice.actions;
+export const { loginFailure, loginSuccess, logoutSuccess } = slice.actions;
 
-export const login = (username, password) => async (dispatch) => {
-  if (!username) {
-    dispatch(loginFailure({ message: 'Please enter username' }));
-    return;
-  }
-
-  if (!password) {
-    dispatch(loginFailure({ message: 'Please enter password' }));
-    return;
-  }
-
-  const account = {
-    username
+export const login = (values, callback) => async (dispatch) => {
+  const payload = {
+    username: values.userName.trim(),
+    password: CryptoJS.CfsEnCode(values.password)
   };
-  dispatch(loginRequest());
-
-  try {
-    const payload = {
-      username,
-      password: CryptoJS.CfsEnCode(password)
-    };
-    const response = await axios.post('/api/authentication/login', payload);
-    const { userId, groupId, token } = response.data;
-    Object.assign(account, { userId, groupId, token });
+  const response = await axios.post('/api/authentication/login', payload);
+  callback();
+  const { userId, groupId, token, isSuccess, errMsg } = response.data;
+  if (isSuccess) {
+    const account = {
+      username: payload.username,
+      userId,
+      groupId,
+      token
+    }
     storage.save(account);
     dispatch(loginSuccess({ account }));
-  } catch (error) {
-    dispatch(loginFailure({ message: error.message }));
+  } else {
+    dispatch(loginFailure({ message: errMsg }));
   }
 }
 

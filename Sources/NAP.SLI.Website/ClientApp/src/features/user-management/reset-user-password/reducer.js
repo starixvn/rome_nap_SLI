@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 const CryptoJS = require('../../../common/libs/CryptoJS');
+import { success, error } from '../../../common/components/toast/reducer';
 
 const slice = createSlice({
   name: 'reset-user-password',
@@ -14,36 +15,29 @@ const slice = createSlice({
       if (action.payload) {
         state.user = action.payload.user;
       }
-    },
-    resetPasswordRequest: (state) => {
-      state.isLoading = false;
-    },
-    resetPasswordSuccess: (state) => {
-      state.isLoading = false;
-    },
-    resetPasswordFailure: (state) => {
-      state.isLoading = false;
     }
   }
 });
 
 export const { toggleModal, resetPasswordRequest, resetPasswordSuccess, resetPasswordFailure } = slice.actions;
 
-export const resetPassword = (values) => async (dispatch) => {
+export const resetPassword = (values, callback) => async (dispatch) => {
   const payload = {
     apiKey: 'user-management:update-user',
     data: {
       custId: values.custId,
-      userPwd: CryptoJS.CfsEnCode(values.newPassword)
+      userPwd: CryptoJS.CfsEnCode(values.password)
     }
   };
 
-  dispatch(resetPasswordRequest());
   const response = await axios.post('/simple-api/command', payload);
-  if (response.data.isSuccess) {
-    dispatch(resetPasswordSuccess());
+  callback();
+  const { isSuccess, errMsg } = response.data;
+  if (isSuccess) {
+    dispatch(success('Updated successfully'));
+    dispatch(toggleModal());
   } else {
-    dispatch(resetPasswordFailure());
+    dispatch(error(errMsg));
   }
 }
 

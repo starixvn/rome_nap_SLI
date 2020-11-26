@@ -1,10 +1,11 @@
 import './Page.scss';
-import React, { useState } from 'react';
-import { Label, Form, Input, Button, FormGroup, Table, Container } from 'reactstrap';
+import React from 'react';
+import { Label, Form, Input, Button, FormGroup, Table, Container, Spinner } from 'reactstrap';
 import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
 import { useSelector, useDispatch } from 'react-redux';
-import { query } from './reducer';
+import { Formik, Field } from 'formik';
+import { query, updateUserStatus } from './reducer';
 import AddNewUserModal from './add-new-user/Modal';
 import { toggleModal as toggleAddNewUserModel } from './add-new-user/reducer';
 import AddExistingUserModal from './add-existing-user/Modal';
@@ -14,41 +15,26 @@ import { toggleModal as toggleEditUserModal } from './edit-user/reducer';
 import ResetUserPasswordModal from './reset-user-password/Modal';
 import { toggleModal as toggleResetUserPasswordModal } from './reset-user-password/reducer';
 import { UserGroupSelectOptionsWithAll, getGroupName } from '../../common/models/UserGroup';
+import FormikSelect from '../../common/components/select/FormikSelect';
+import { confirm } from '../../common/components/confirmation/reducer';
 
 const UserManagementPage = () => {
   const dispatch = useDispatch();
   const { users } = useSelector(state => state.userManagement);
-  const [username, setUsername] = useState('');
-  const [groupId, setGroupId] = useState(UserGroupSelectOptionsWithAll[0].value);
 
-  const handleStatusClick = (checked, user) => {
-    const data = {
-      username,
-      groupId
-    };
-    var updateCallback = () => {
-      changeUserStatus(checked, user);
-      setTimeout(() => {
-        query(data);
-      }, 3000);
-    };
-    var title = checked ? "Activate User" : "Deactivate User";
-    var message = `Are you sure to ${checked ? 'activate' : 'deactivate'} [${user.userName}] user?`;
-    openConfirmBox(title, message, updateCallback);
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    const data = {
-      username,
-      groupId
-    };
-    dispatch(query(data));
-  };
-
-  const handleSelectChange = (event) => {
-    const groupId = parseInt(event.target.value);
-    setGroupId(isNaN(groupId) ? undefined : groupId);
+  const handleStatusClick = (user) => {
+    const newClosed = !user.closed;
+    const title = newClosed ? "Deactivate User" : "Activate User";
+    const message = `Are you sure to ${newClosed ? 'deactivate' : 'activate'} user [${user.userName}]?`;
+    dispatch(confirm({
+      title,
+      message
+    }, () => {
+      dispatch(updateUserStatus({
+        custId: user.custId,
+        closed: newClosed
+      }))
+    }));
   };
 
   const renderTableBody = () => {
@@ -85,7 +71,7 @@ const UserManagementPage = () => {
               {user.createdDate}
             </td>
             <td className="text-center">
-              <Input type="checkbox" checked={!user.closed} onChange={e => handleStatusClick(e.target.checked, user)} />
+              <Input type="checkbox" checked={!user.closed} onChange={e => handleStatusClick(user)} />
             </td>
             <td className="text-center">
               <Icon className="cursor-pointer" path={mdiLockReset} onClick={() => dispatch(toggleResetUserPasswordModal({ user }))} />
@@ -112,22 +98,38 @@ const UserManagementPage = () => {
           </Button>
           </FormGroup>
         </Form>
-        <Form inline className="mb-3" onSubmit={handleSubmit} noValidate>
-          <FormGroup className="mr-5">
-            <Label for="username" className="mr-2">Username</Label>
-            <Input id="username" type="text" maxLength="50" value={username} onChange={event => setUsername(event.target.value)} />
-          </FormGroup>
-          <FormGroup className="mr-5">
-            <Input type="select" value={groupId} onChange={(event) => handleSelectChange(event)}>
-              {UserGroupSelectOptionsWithAll.map((option, index) =>
-                <option key={index} value={option.value}>{option.label}</option>
-              )}
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Button type="submit" color="primary" className="btn-block">Search</Button>
-          </FormGroup>
-        </Form>
+        <Formik
+          initialValues={{
+            userName: '',
+            groupId: UserGroupSelectOptionsWithAll[0].value
+          }}
+          onSubmit={(values, { setSubmitting }) => {
+            dispatch(query(values, () => setSubmitting(false)));
+          }}
+        >
+          {({
+            handleSubmit,
+            isSubmitting
+          }) => (
+              <Form className="mb-3" onSubmit={handleSubmit}>
+                <fieldset disabled={isSubmitting} className="form-inline">
+                  <FormGroup className="mr-5">
+                    <Label for="userName" className="mr-2">Username</Label>
+                    <Input name="userName" type="text" autoComplete="off" tag={Field} />
+                  </FormGroup>
+                  <FormGroup className="mr-5">
+                    <FormikSelect name="groupId" options={UserGroupSelectOptionsWithAll} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Button type="submit" color="primary">
+                      {isSubmitting && <Spinner className='mr-3' />}
+                      Search
+                    </Button>
+                  </FormGroup>
+                </fieldset>
+              </Form>
+            )}
+        </Formik>
       </Container>
       {users && <Table hover bordered striped>
         <thead>

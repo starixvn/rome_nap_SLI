@@ -1,60 +1,40 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 const CryptoJS = require('../../../common/libs/CryptoJS');
+import { success, error } from '../../../common/components/toast/reducer';
 
 const slice = createSlice({
   name: 'change-password',
   initialState: {
-    isLoading: false,
     isOpen: false,
-    isSuccess: false,
-    message: ''
   },
   reducers: {
-    changePasswordRequest: (state) => {
-      state.isLoading = true;
-    },
-    changePasswordFailure: (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.message = action.payload.message;
-    },
-    changePasswordSuccess: (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = true;
-      state.message = action.payload.message;
-    },
-    toggleChangePasswordModal: (state) => {
+    toggleModal: (state) => {
       state.isOpen = !state.isOpen;
     }
   },
 });
 
-export const { changePasswordRequest, changePasswordFailure, changePasswordSuccess, toggleChangePasswordModal } = slice.actions;
+export const { toggleModal } = slice.actions;
 
-export const changePassword = (oldPassword, newPassword) => async (dispatch) => {
+export const changePassword = (values, callback) => async (dispatch) => {
   const payload = {
     apiKey: 'account:change-password',
     data: {
-      oldPassword: CryptoJS.CfsEnCode(oldPassword),
-      newPassword: CryptoJS.CfsEnCode(newPassword)
+      oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
+      newPassword: CryptoJS.CfsEnCode(values.newPassword)
     }
   };
-  dispatch(changePasswordRequest());
 
-  try {
-    const response = await axios.post('/simple-api/command', payload);
-    var data = response.data;
-    if (data.isSuccess) {
-      dispatch(changePasswordSuccess({ message: 'Password changed successfully' }));
-    } else {
-      dispatch(changePasswordFailure({ message: data.errMsg }));
-    }
-  } catch (response) {
-    dispatch(changePasswordFailure({ message: data.errMsg }));
+  const response = await axios.post('/simple-api/command', payload);
+  callback();
+  var { isSuccess, errMsg } = response.data;
+  if (isSuccess) {
+    dispatch(success('Password changed successfully'));
+    dispatch(toggleModal());
+  } else {
+    dispatch(error(errMsg));
   }
 }
-
-export const showError = (message) => (dispatch) => dispatch(changePasswordFailure({ message }));
 
 export default slice.reducer;
