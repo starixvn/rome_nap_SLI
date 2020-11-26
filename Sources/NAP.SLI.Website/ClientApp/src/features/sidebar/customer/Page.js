@@ -18,7 +18,7 @@ const CustomerPage = () => {
   }
 
   const { generalInformation, headline } = customer;
-  const { custId, roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
+  const { roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
   const { superId, superName, masterId, masterName, agentId, agentName } = headline;
 
   return (
@@ -75,8 +75,7 @@ const CustomerPage = () => {
             <Link to={{
               pathname: RouteLinks.CUSTOMER_SETTING,
               state: {
-                custId,
-                roleId
+                ...generalInformation
               }
             }}>
               VIEW SETTING
@@ -97,9 +96,9 @@ const CustomerPage = () => {
               {roleId !== CustomerLevels.Member && <>
                 <NavItem>
                   <NavLink tag={RRNavLink} to={{
-                    pathname: RouteLinks.MASTER_WIN_LOSS_DETAIL,
+                    pathname: RouteLinks.WIN_LOSS_DETAIL,
                     state: {
-                      custId,
+                      ...generalInformation
                     }
                   }}>
                     Master Win Loss Detail
@@ -109,7 +108,7 @@ const CustomerPage = () => {
                   <NavLink tag={RRNavLink} to={{
                     pathname: RouteLinks.MATCH_WIN_LOSS_DETAIL,
                     state: {
-                      custId,
+                      ...generalInformation
                     }
                   }}>
                     Match Win Loss Detail
@@ -119,7 +118,7 @@ const CustomerPage = () => {
                   <NavLink tag={RRNavLink} to={{
                     pathname: RouteLinks.WIN_LOSS_BY_BETTYPE,
                     state: {
-                      custId,
+                      ...generalInformation
                     }
                   }}>
                     Win Loss By Bet Type
@@ -129,7 +128,7 @@ const CustomerPage = () => {
                   <NavLink tag={RRNavLink} to={{
                     pathname: RouteLinks.WIN_LOSS_ANALYSIS,
                     state: {
-                      custId,
+                      ...generalInformation
                     }
                   }}>
                     Win Loss Analysis

@@ -23,6 +23,8 @@ namespace NAP.SLI
     using NAP.SLI.Account.Models;
     using NAP.SLI.Common;
     using NAP.SLI.Customer;
+    using NAP.SLI.Report;
+    using NAP.SLI.Report.Controllers;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
 
@@ -67,14 +69,20 @@ namespace NAP.SLI
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.RegisterCommonModule();
+
             services.RegisterAccountModule();
-            services.RegisterCustomerModule();
+            services.AddMediatR(typeof(Account.SimpleApiProfile));
             services.AddSimpleApi(typeof(Account.SimpleApiProfile));
-            services.AddMediatR(typeof(Account.AutoMapperProfile));
-            services.AddMediatR(typeof(Customer.SimpleApiProfile));
             services.AddAutoMapper(typeof(Account.AutoMapperProfile));
-            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
+
+            services.RegisterCustomerModule();
+            services.AddMediatR(typeof(Customer.SimpleApiProfile));
             services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
+
+            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
+
+            services.RegisterReportModule();
+            services.AddMediatR(typeof(WinLossDetailController));
         }
 
         private void ConfigureAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)

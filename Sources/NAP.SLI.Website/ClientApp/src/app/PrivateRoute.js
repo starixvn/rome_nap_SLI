@@ -10,10 +10,11 @@ const propTypes = {
 
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
   const { account } = useSelector(state => state.authentication);
+  const isLoggined = account !== undefined;
 
   return (
     <Route {...rest} render={props => (
-      account
+      isLoggined
         ? <Component {...props} />
         : <Redirect to={{ pathname: '/login', state: { from: location } }} />
     )} />

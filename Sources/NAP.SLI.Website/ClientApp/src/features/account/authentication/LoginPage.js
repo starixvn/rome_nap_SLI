@@ -20,7 +20,12 @@ const validationSchema = Yup.object().shape({
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const { message } = useSelector(state => state.authentication);
+  const { message, account } = useSelector(state => state.authentication);
+  const isLoggedIn = account !== undefined;
+
+  if (isLoggedIn) {
+    return <Redirect to='/' />;
+  }
 
   return (
     <Formik
