@@ -19,6 +19,7 @@ import WinLossDetailPage from '../features/reports/win-loss-detail/Page';
 import MatchWinLossDetailPage from '../features/reports/match-win-loss-detail/Page';
 import WinLossByBetTypePage from '../features/reports/win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from '../features/reports/win-loss-analysis/Page';
+import BetListPage from '../features/reports/bet-list/Page';
 
 const App = () => {
   const { account } = useSelector(state => state.authentication);
@@ -42,6 +43,7 @@ const App = () => {
               <PrivateRoute path={RouteLinks.MATCH_WIN_LOSS_DETAIL} component={MatchWinLossDetailPage} />
               <PrivateRoute path={RouteLinks.WIN_LOSS_BY_BETTYPE} component={WinLossByBetTypePage} />
               <PrivateRoute path={RouteLinks.WIN_LOSS_ANALYSIS} component={WinLossAnalysisPage} />
+              <PrivateRoute path={RouteLinks.BET_LIST} component={BetListPage} />
               <PrivateRoute component={NotFoundPage} />
             </Switch>
           </div>

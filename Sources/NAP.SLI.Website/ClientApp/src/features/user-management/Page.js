@@ -17,6 +17,7 @@ import { toggleModal as toggleResetUserPasswordModal } from './reset-user-passwo
 import { UserGroupSelectOptionsWithAll, getGroupName } from '../../common/models/UserGroup';
 import FormikSelect from '../../common/components/select/FormikSelect';
 import { confirm } from '../../common/components/confirmation/reducer';
+import { formatDateTime } from '../../common/utils/DateUtils';
 
 const UserManagementPage = () => {
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ const UserManagementPage = () => {
               {user.creator}
             </td>
             <td className="text-center">
-              {user.createdDate}
+              {formatDateTime(user.createdDate)}
             </td>
             <td className="text-center">
               <Input type="checkbox" checked={!user.closed} onChange={e => handleStatusClick(user)} />

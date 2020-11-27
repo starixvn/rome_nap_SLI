@@ -1,16 +1,27 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from '../../../common/models/CustomerLevel';
+import { RouteLinks } from '../../../common/models/Constants';
 
 const TableComponent = () => {
   const { data, customer } = useSelector(state => state.winLossDetail);
+  const history = useHistory();
   const { records, total } = data;
   const { roleId } = customer;
   const removedColumnTotal = roleId === CustomerLevels.Master ? 1 : roleId === CustomerLevels.Agent ? 2 : 0;
 
   const handleUsernameClicked = (record) => {
+    if (roleId === CustomerLevels.Agent) {
+      history.push(RouteLinks.BET_LIST, {
+        custId: record.custId,
+        username: record.username
+      });
+      return;
+    }
+
     console.log(record);
   }
 

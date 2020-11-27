@@ -1,11 +1,16 @@
 import moment from 'moment';
 
 export const FormatStrings = {
-  Date: 'MM/DD/YYYY'
+  Date: 'MM/DD/YYYY',
+  DateTime: 'MM/DD/YYYY hh:mm:ss A'
 }
 
-export const formatDate = (moment) => {
-  return moment.format(FormatStrings.Date);
+export const formatDate = (date) => {
+  return moment(date).format(FormatStrings.Date);
+}
+
+export const formatDateTime = (date) => {
+  return moment(date).format(FormatStrings.DateTime);
 }
 
 export const minDate = moment('01/01/1970', FormatStrings.Date);
