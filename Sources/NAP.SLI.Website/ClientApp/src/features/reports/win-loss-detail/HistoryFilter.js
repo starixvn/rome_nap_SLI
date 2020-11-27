@@ -36,12 +36,6 @@ const HistoryFilter = (props) => {
     setFieldValue('dateOptions', generateDateOptions(value));
   }
 
-  const setDateAndSubmit = (date, setFieldValue, handleSubmit) => {
-    setFieldValue('month', date);
-    handleMonthChange(date, setFieldValue);
-    handleSubmit();
-  }
-
   return (
     <Formik
       initialValues={{
@@ -87,16 +81,6 @@ const HistoryFilter = (props) => {
                   <Button type="submit" color="primary">
                     {isSubmitting && <Spinner className='mr-3' />}
                     Submit
-                  </Button>
-                </FormGroup>
-                <FormGroup className="mr-2">
-                  <Button onClick={() => setDateAndSubmit(today, setFieldValue, handleSubmit)} type="button" color="primary">
-                    {formatDate(today)}
-                  </Button>
-                </FormGroup>
-                <FormGroup>
-                  <Button onClick={() => setDateAndSubmit(yesterday, setFieldValue, handleSubmit)} type="button" color="primary">
-                    {formatDate(yesterday)}
                   </Button>
                 </FormGroup>
               </fieldset>

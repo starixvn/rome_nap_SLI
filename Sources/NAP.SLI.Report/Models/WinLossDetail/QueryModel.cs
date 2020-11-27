@@ -6,6 +6,8 @@
     {
         public IEnumerable<object> Records { get; set; }
 
+        public object Total { get; set; }
+
         public int TotalRecords { get; set; }
     }
 }

@@ -1,9 +1,9 @@
-import React from 'react';
-import { Label, Form, Button, FormGroup, Container, Spinner } from 'reactstrap';
+import React, { useState } from 'react';
+import { Label, Form, Button, FormGroup, Container, Spinner, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Formik } from 'formik';
 import PropTypes from 'prop-types';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
-import { formatDate, getToday, getYesterday } from '../../../common/utils/DateUtils';
+import { formatDate, getToday, getYesterday, ReportDateRanges } from '../../../common/utils/DateUtils';
 import { query, toggleMode } from './reducer';
 import { useDispatch } from 'react-redux';
 
@@ -19,12 +19,23 @@ const propTypes = {
 
 const NormalFilter = (props) => {
   const dispatch = useDispatch();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownIndex, setDropdownIndex] = useState(0);
   const { custId, roleId, minDate, maxDate } = props;
 
-  const setDateAndSubmit = (date, setFieldValue, handleSubmit) => {
-    setFieldValue('fromDate', date);
-    setFieldValue('toDate', date);
-    handleSubmit();
+  const handleDropdownItemClick = (index, setFieldValue, handleSubmit) => {
+    setDropdownIndex(index);
+    const range = ReportDateRanges[index].getRange();
+    if (range) {
+      const { from, to } = range;
+      setFieldValue('fromDate', from);
+      setFieldValue('toDate', to);
+      handleSubmit();
+    }
+  }
+
+  const onDateChange = () => {
+    setDropdownIndex(ReportDateRanges.length - 1);
   }
 
   return (
@@ -51,27 +62,31 @@ const NormalFilter = (props) => {
               <fieldset disabled={isSubmitting} className="form-inline">
                 <FormGroup className="mr-5">
                   <Label className="mr-2">From</Label>
-                  <FormikDatePicker name="fromDate" minValue={minDate} maxValue={maxDate} />
+                  <FormikDatePicker name="fromDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
                 </FormGroup>
                 <FormGroup className="mr-5">
                   <Label className="mr-2">To</Label>
-                  <FormikDatePicker name="toDate" minValue={minDate} maxValue={maxDate} />
+                  <FormikDatePicker name="toDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
                 </FormGroup>
-                <FormGroup className="mr-2">
+                <FormGroup className="mr-5">
                   <Button type="submit" color="primary">
                     {isSubmitting && <Spinner className='mr-3' />}
-                  Submit
-                </Button>
-                </FormGroup>
-                <FormGroup className="mr-2">
-                  <Button onClick={() => setDateAndSubmit(today, setFieldValue, handleSubmit)} type="button" color="primary">
-                    {formatDate(today)}
+                    Submit
                   </Button>
                 </FormGroup>
                 <FormGroup>
-                  <Button onClick={() => setDateAndSubmit(yesterday, setFieldValue, handleSubmit)} type="button" color="primary">
-                    {formatDate(yesterday)}
-                  </Button>
+                  <Dropdown isOpen={dropdownOpen} toggle={() => setDropdownOpen(!dropdownOpen)}>
+                    <DropdownToggle color="primary" caret>
+                      {ReportDateRanges[dropdownIndex].label}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {ReportDateRanges.map((option, index) =>
+                        <DropdownItem key={index} onClick={() => handleDropdownItemClick(index, setFieldValue, handleSubmit)}>
+                          {option.label}
+                        </DropdownItem>
+                      )}
+                    </DropdownMenu>
+                  </Dropdown>
                 </FormGroup>
               </fieldset>
             </Form>

@@ -31,7 +31,7 @@
 
         public DateTime MoveBetsDay => balanceUpDayModel.MoveBetsDay;
 
-        public string ProductIds => "1";
+        public string ProductIds => ((int)Common.Models.ProductIds.NumberGame).ToString();
 
         public int PageSize { get; set; }
 
@@ -54,6 +54,6 @@
             }
         }
 
-        public override bool IsValid() => CustId > 0;
+        public override bool IsValid() => CustId > 0 && PageIndex > 0 && PageSize > 0;
     }
 }

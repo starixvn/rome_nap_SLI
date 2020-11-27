@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
+import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
 
 const MasterList = () => {
   const { data } = useSelector(state => state.winLossDetail);
@@ -20,30 +21,30 @@ const MasterList = () => {
     return (
       <>
         {records.map(record =>
-          <tr key={`Row_${user.custId}`}>
+          <tr key={`Row_${record.custId}`}>
             <td>
-              <span className="text-link" onClick={() => dispatch(toggleEditUserModal({ user }))}>{user.userName}</span>
+              <span className="text-link" onClick={() => dispatch(handleUsernameClicked({ record }))}>{record.username}</span>
             </td>
-            <td>
-              {user.firstName}
+            <td className="text-right">
+              {formatInteger(record.betCount)}
             </td>
-            <td>
-              {user.lastName}
+            <td className="text-right">
+              {formatDecimal(record.turnover)}
             </td>
-            <td>
-              {getGroupName(user.groupId)}
+            <td className="text-right">
+              {formatDecimal(record.memberWinLoss)}
             </td>
-            <td>
-              {user.creator}
+            <td className="text-right">
+              {formatDecimal(record.agentWinLoss)}
             </td>
-            <td className="text-center">
-              {user.createdDate}
+            <td className="text-right">
+              {formatDecimal(record.masterWinLoss)}
             </td>
-            <td className="text-center">
-              <Input type="checkbox" checked={!user.closed} onChange={e => handleStatusClick(user)} />
+            <td className="text-right">
+              {formatDecimal(record.superWinLoss)}
             </td>
-            <td className="text-center">
-              <Icon className="cursor-pointer" path={mdiLockReset} onClick={() => dispatch(toggleResetUserPasswordModal({ user }))} />
+            <td className="text-right">
+              {formatDecimal(record.companyWinLoss)}
             </td>
           </tr>
         )}
@@ -56,7 +57,7 @@ const MasterList = () => {
       <thead>
         <tr>
           <th className="text-center align-middle" rowSpan='2'>Username</th>
-          <th className="text-center align-middle" rowSpan='2'>No. of Ticket</th>
+          <th className="text-center align-middle" rowSpan='2'>Bet Count</th>
           <th className="text-center align-middle" rowSpan='2'>Turnover</th>
           <th className="text-center" colSpan='5'>Win/Loss</th>
         </tr>

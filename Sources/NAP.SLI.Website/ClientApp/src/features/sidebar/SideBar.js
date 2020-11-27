@@ -1,6 +1,6 @@
 import './SideBar.scss';
 import React, { useState } from 'react';
-import { Button, Form, Navbar } from 'reactstrap';
+import { Button, Form, Navbar, Spinner } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import CustomerPage from './customer/Page';

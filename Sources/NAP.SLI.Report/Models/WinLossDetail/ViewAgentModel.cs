@@ -8,7 +8,7 @@
 
         public decimal BetCount { get; set; }
 
-        public decimal TurnOver { get; set; }
+        public decimal Turnover { get; set; }
 
         public decimal MemberWinLoss { get; set; }
 

@@ -34,6 +34,10 @@ const slice = createSlice({
   }
 });
 
+const calculateCompanyWinLoss = (record) => {
+  record.companyWinLoss = record.memberWinLoss + record.agentWinLoss + record.masterWinLoss || 0 + record.superWinLoss || 0;
+};
+
 export const { toggleMode, queryRequest, querySuccess } = slice.actions;
 
 export const query = (data, callback) => async (dispatch) => {
@@ -44,9 +48,12 @@ export const query = (data, callback) => async (dispatch) => {
     }));
     Object.assign(data, {
       pageSize: 25,
-      pageIndex: 0
+      pageIndex: 1
     });
     const response = await axios.post('/api/winlossdetail/query', data);
+    const { records, total } = response.data;
+    records.forEach((record) => calculateCompanyWinLoss(record));
+    calculateCompanyWinLoss(total);
     dispatch(querySuccess({ data: response.data }));
   }
   finally {

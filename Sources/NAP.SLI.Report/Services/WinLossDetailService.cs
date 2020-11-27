@@ -1,5 +1,6 @@
 ﻿namespace NAP.SLI.Report.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -43,23 +44,26 @@
 
         private async Task<QueryModel> Query(QueryWinLossDetailCriteria criteria)
         {
-            IEnumerable<object> records = Enumerable.Empty<object>();
+            (IEnumerable<object> firstResultSet, IEnumerable<object> secondResultSet) result;
             switch (criteria.RoleId)
             {
                 case (int)CustomerLevels.Super:
-                    records = await dynamicRepositoryEx.FetchAsync<ViewSuperModel>(criteria).ConfigureAwait(false);
+                    result = await dynamicRepositoryEx.FetchMultipleAsync<ViewSuperModel, ViewSuperModel>(criteria).ConfigureAwait(false);
                     break;
                 case (int)CustomerLevels.Master:
-                    records = await dynamicRepositoryEx.FetchAsync<ViewMasterModel>(criteria).ConfigureAwait(false);
+                    result = await dynamicRepositoryEx.FetchMultipleAsync<ViewMasterModel, ViewMasterModel>(criteria).ConfigureAwait(false);
                     break;
                 case (int)CustomerLevels.Agent:
-                    records = await dynamicRepositoryEx.FetchAsync<ViewAgentModel>(criteria).ConfigureAwait(false);
+                    result = await dynamicRepositoryEx.FetchMultipleAsync<ViewAgentModel, ViewAgentModel>(criteria).ConfigureAwait(false);
                     break;
+                default:
+                    throw new NotImplementedException();
             }
 
             return new QueryModel
             {
-                Records = records,
+                Records = result.firstResultSet,
+                Total = result.secondResultSet.First(),
                 TotalRecords = criteria.TotalRecords
             };
         }
