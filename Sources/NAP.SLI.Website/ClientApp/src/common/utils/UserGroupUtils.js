@@ -1,4 +1,4 @@
-import { generateSelectOptions } from "../utils/SelectUtils";
+import { generateSelectOptions } from "./SelectUtils";
 
 export const AllGroupsId = -1;
 export const UserGroup = {

@@ -3,6 +3,7 @@ import React from 'react';
 import { Route } from 'react-router';
 import { BrowserRouter, Switch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { RouteLinks } from '../common/utils/RouteUtils';
 import NavMenu from '../features/nav/NavMenu';
 import SideBar from '../features/sidebar/SideBar';
 import PrivateRoute from './PrivateRoute';
@@ -13,13 +14,13 @@ import HomePage from '../features/home/Page';
 import ChangePasswordModal from '../features/account/change-password/Modal';
 import Confirmation from '../common/components/confirmation/Confirmation';
 import ToastContainer from '../common/components/toast/ToastContainer';
-import { RouteLinks } from '../common/models/Constants';
 import CustomerSettingPage from '../features/customer-setting/Page';
 import WinLossDetailPage from '../features/reports/win-loss-detail/Page';
 import MatchWinLossDetailPage from '../features/reports/match-win-loss-detail/Page';
 import WinLossByBetTypePage from '../features/reports/win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from '../features/reports/win-loss-analysis/Page';
 import BetListPage from '../features/reports/bet-list/Page';
+import ResultsPage from '../features/reports/results/Page';
 
 const App = () => {
   const { account } = useSelector(state => state.authentication);
@@ -44,6 +45,7 @@ const App = () => {
               <PrivateRoute path={RouteLinks.WIN_LOSS_BY_BETTYPE} component={WinLossByBetTypePage} />
               <PrivateRoute path={RouteLinks.WIN_LOSS_ANALYSIS} component={WinLossAnalysisPage} />
               <PrivateRoute path={RouteLinks.BET_LIST} component={BetListPage} />
+              <PrivateRoute path={RouteLinks.RESULTS} component={ResultsPage} />
               <PrivateRoute component={NotFoundPage} />
             </Switch>
           </div>

@@ -5,8 +5,8 @@ import { Container, Row, Col, Collapse, Nav, NavLink, NavItem } from 'reactstrap
 import { NavLink as RRNavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { RouteLinks } from '../../../common/models/Constants';
-import { CustomerLevels, getDownlineLevel, getLevelName } from '../../../common/models/CustomerLevel';
+import { RouteLinks } from '../../../common/utils/RouteUtils';
+import { CustomerLevels, getDownlineLevel, getLevelName } from '../../../common/utils/CustomerLevelUtils';
 
 const CustomerPage = () => {
   const { customer } = useSelector(state => state.sidebar);

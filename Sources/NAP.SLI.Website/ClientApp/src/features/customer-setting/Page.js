@@ -4,7 +4,7 @@ import SuperSettingPage from './super-setting/Page';
 import MasterSettingPage from './master-setting/Page';
 import AgentSettingPage from './agent-setting/Page';
 import MemberSettingPage from './member-setting/Page';
-import { CustomerLevels } from '../../common/models/CustomerLevel';
+import { CustomerLevels } from '../../common/utils/CustomerLevelUtils';
 
 const propTypes = {
   location: PropTypes.object.isRequired

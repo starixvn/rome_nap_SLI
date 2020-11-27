@@ -4,7 +4,7 @@ import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
 import { minDate, maxDate } from '../../../common/utils/DateUtils';
 import { useSelector } from 'react-redux';
-import { getDownlineLevel, getLevelName } from '../../../common/models/CustomerLevel';
+import { getDownlineLevel, getLevelName } from '../../../common/utils/CustomerLevelUtils';
 import Table from './Table';
 
 const propTypes = {

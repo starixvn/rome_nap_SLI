@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { update, toggleModal } from './reducer';
-import { UserGroupSelectOptions } from '../../../common/models/UserGroup';
+import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 
 const validationSchema = Yup.object().shape({

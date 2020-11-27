@@ -8,7 +8,7 @@ import { mdiViewDashboard } from '@mdi/js';
 import { logout } from '../account/authentication/reducer';
 import { toggleModal } from '../account/change-password/reducer';
 import { toggle } from '../sidebar/reducer';
-import { RouteLinks } from '../../common/models/Constants';
+import { RouteLinks } from '../../common/utils/RouteUtils';
 
 const NavMenu = () => {
   const dispatch = useDispatch();

@@ -14,7 +14,7 @@ import EditUserModal from './edit-user/Modal';
 import { toggleModal as toggleEditUserModal } from './edit-user/reducer';
 import ResetUserPasswordModal from './reset-user-password/Modal';
 import { toggleModal as toggleResetUserPasswordModal } from './reset-user-password/reducer';
-import { UserGroupSelectOptionsWithAll, getGroupName } from '../../common/models/UserGroup';
+import { UserGroupSelectOptionsWithAll, getGroupName } from '../../common/utils/UserGroupUtils';
 import FormikSelect from '../../common/components/select/FormikSelect';
 import { confirm } from '../../common/components/confirmation/reducer';
 import { formatDateTime } from '../../common/utils/DateUtils';

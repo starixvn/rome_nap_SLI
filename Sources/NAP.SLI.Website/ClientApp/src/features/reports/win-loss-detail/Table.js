@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
-import { CustomerLevels, isUplineOrSameLevel } from '../../../common/models/CustomerLevel';
-import { RouteLinks } from '../../../common/models/Constants';
+import { CustomerLevels, isUplineOrSameLevel } from '../../../common/utils/CustomerLevelUtils';
+import { RouteLinks } from '../../../common/utils/RouteUtils';
 
 const TableComponent = () => {
   const { data, customer } = useSelector(state => state.winLossDetail);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
-import { AllGroupsId } from '../../common/models/UserGroup';
+import { AllGroupsId } from '../../common/utils/UserGroupUtils';
 import { success, error } from '../../common/components/toast/reducer';
 
 const slice = createSlice({
