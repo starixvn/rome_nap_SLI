@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner } from 'reactstrap';
 import { Formik } from 'formik';
 import FormikMonthPicker from '../../../common/components/month-picker/FormikMonthPicker';
-import { getToday, getYesterday } from '../../../common/utils/DateUtils';
+import { getToday } from '../../../common/utils/DateUtils';
 import PropTypes from 'prop-types';
 import { generateRangeSelectOptions } from '../../../common/utils/SelectUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';

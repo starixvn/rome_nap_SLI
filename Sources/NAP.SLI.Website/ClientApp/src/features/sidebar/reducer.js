@@ -5,29 +5,27 @@ const slice = createSlice({
   name: 'sidebar',
   initialState: {
     customer: undefined,
-    isOpen: false,
-    isLoading: false
+    message: undefined,
+    isOpen: false
   },
   reducers: {
     toggle: (state) => {
       state.isOpen = !state.isOpen;
     },
     getCustomerInformationRequest: (state) => {
-      state.isLoading = true;
+      state.message = undefined;
       state.customer = undefined;
     },
     getCustomerInformationSuccess: (state, action) => {
-      state.isLoading = false;
       state.customer = action.payload.customer;
     },
-    getCustomerInformationFailure: (state) => {
-      state.isLoading = false;
-      state.customer = null;
+    getCustomerInformationFailure: (state, action) => {
+      state.message = action.payload.message;
     },
   }
 });
 
-export const { toggle, getCustomerInformationRequest, getCustomerInformationSuccess } = slice.actions;
+export const { toggle, getCustomerInformationRequest, getCustomerInformationFailure, getCustomerInformationSuccess } = slice.actions;
 
 export const queryUsernameSuggestion = async (value) => {
   const payload = {
@@ -41,17 +39,27 @@ export const queryUsernameSuggestion = async (value) => {
   return response.data;
 }
 
-export const getCustomerInformation = (username) => async (dispatch) => {
-  const payload = {
-    username
-  };
-
-  dispatch(getCustomerInformationRequest());
-  const response = await axios.post("/api/customer/information", payload);
-  if (response.data.length === 0) {
-    dispatch(getCustomerInformationFailure());
-  } else {
-    dispatch(getCustomerInformationSuccess({ customer: response.data }));
+export const getCustomerInformation = (username, callback) => async (dispatch) => {
+  try {
+    const payload = {
+      username
+    };
+    dispatch(getCustomerInformationRequest());
+    const response = await axios.post("/api/customer/information", payload);
+    const { isSuccess, errMsg, generalInformation, headline } = response.data;
+    if (isSuccess) {
+      dispatch(getCustomerInformationSuccess({
+        customer: {
+          generalInformation,
+          headline
+        }
+      }));
+    } else {
+      dispatch(getCustomerInformationFailure({ message: errMsg }));
+    }
+  }
+  finally {
+    callback();
   }
 }
 

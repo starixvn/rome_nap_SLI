@@ -23,6 +23,8 @@ const CustomerSettingPage = ({ location }) => {
         return <AgentSettingPage custid={custid} />;
       case CustomerLevels.Member:
         return <MemberSettingPage custid={custid} />;
+      default:
+        return <></>;
     }
   }
 

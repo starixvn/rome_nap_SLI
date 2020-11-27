@@ -10,6 +10,10 @@ const TableComponent = () => {
   const { roleId } = customer;
   const removedColumnTotal = roleId === CustomerLevels.Master ? 1 : roleId === CustomerLevels.Agent ? 2 : 0;
 
+  const handleUsernameClicked = (record) => {
+    console.log(record);
+  }
+
   return (
     <Table hover bordered striped>
       <thead>
@@ -37,7 +41,7 @@ const TableComponent = () => {
           records.map(record =>
             <tr key={`Row_${record.custId}`}>
               <td>
-                <span className="text-link" onClick={() => dispatch(handleUsernameClicked({ record }))}>{record.username}</span>
+                <span className="text-link" onClick={() => handleUsernameClicked(record)}>{record.username}</span>
               </td>
               <td className="text-right">
                 {formatInteger(record.betCount)}

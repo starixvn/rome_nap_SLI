@@ -13,10 +13,6 @@ const CustomerPage = () => {
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
   const [isOpenReports, setIsOpenReports] = useState(true);
 
-  if (!customer) {
-    return <></>;
-  }
-
   const { generalInformation, headline } = customer;
   const { roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
   const { superId, superName, masterId, masterName, agentId, agentName } = headline;

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import storage from './storage';
 import { createSlice } from '@reduxjs/toolkit';
-const CryptoJS = require('../../../common/libs/CryptoJS');
 import { installAxiosIntercepts } from './axios';
+
+const CryptoJS = require('../../../common/libs/CryptoJS');
 
 installAxiosIntercepts();
 

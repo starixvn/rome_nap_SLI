@@ -16,6 +16,8 @@ export const getLevelName = (levelId) => {
       return "Master";
     case CustomerLevels.Super:
       return "Super";
+    default:
+      return '';
   }
 };
 
@@ -27,6 +29,8 @@ export const getDownlineLevel = (levelId) => {
       return CustomerLevels.Agent;
     case CustomerLevels.Agent:
       return CustomerLevels.Member;
+    default:
+      return null;
   }
 }
 

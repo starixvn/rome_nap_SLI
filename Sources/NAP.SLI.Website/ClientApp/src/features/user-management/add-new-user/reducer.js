@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
-const CryptoJS = require('../../../common/libs/CryptoJS');
 import { success, error } from '../../../common/components/toast/reducer';
 import { query } from '../reducer';
+
+const CryptoJS = require('../../../common/libs/CryptoJS');
 
 const slice = createSlice({
   name: 'add-new-user',

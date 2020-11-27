@@ -12,6 +12,8 @@ export const getGroupName = (groupId) => {
       return "User";
     case UserGroup.Admin:
       return "Admin";
+    default:
+      return '';
   }
 };
 

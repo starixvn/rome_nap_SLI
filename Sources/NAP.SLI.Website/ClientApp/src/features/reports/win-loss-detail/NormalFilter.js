@@ -3,12 +3,9 @@ import { Label, Form, Button, FormGroup, Container, Spinner, Dropdown, DropdownT
 import { Formik } from 'formik';
 import PropTypes from 'prop-types';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
-import { formatDate, getToday, getYesterday, ReportDateRanges } from '../../../common/utils/DateUtils';
+import { getToday, ReportDateRanges } from '../../../common/utils/DateUtils';
 import { query, toggleMode } from './reducer';
 import { useDispatch } from 'react-redux';
-
-const today = getToday();
-const yesterday = getYesterday();
 
 const propTypes = {
   custId: PropTypes.number.isRequired,
