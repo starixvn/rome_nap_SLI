@@ -11,9 +11,10 @@ const slice = createSlice({
   name: 'win-loss-detail',
   initialState: {
     mode: Modes.Normal,
-    data: undefined,
-    pageSize: 25,
-    pageIndex: 0
+    fromDate: undefined,
+    toDate: undefined,
+    customer: undefined,
+    data: undefined
   },
   reducers: {
     toggleMode: (state) => {
@@ -24,8 +25,10 @@ const slice = createSlice({
       }
     },
     queryRequest: (state, action) => {
-      state.fromDate = action.payload.fromDate;
-      state.toDate = action.payload.toDate;
+      const { fromDate, toDate, customer } = action.payload;
+      state.fromDate = fromDate;
+      state.toDate = toDate;
+      state.customer = customer;
       state.data = undefined;
     },
     querySuccess: (state, action) => {
@@ -44,7 +47,11 @@ export const query = (data, callback) => async (dispatch) => {
   try {
     dispatch(queryRequest({
       fromDate: formatDate(data.fromDate),
-      toDate: formatDate(data.toDate)
+      toDate: formatDate(data.toDate),
+      customer: {
+        custId: data.custId,
+        roleId: data.roleId
+      }
     }));
     Object.assign(data, {
       pageSize: 25,

@@ -2,8 +2,15 @@
 @import '../../../app/variables.scss';
 
 .month-picker {
-    input {
-        text-align: center;
-        background-color: $input-bg !important;
+  input {
+    text-align: center;
+
+    &:read-only {
+      background-color: $input-bg;
     }
+
+    &:disabled {
+      background-color: inherit;
+    }
+  }
 }

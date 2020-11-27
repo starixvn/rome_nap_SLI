@@ -29,8 +29,8 @@ const DatePicker = (props) => {
 
   const renderInput = (props, openCalendar) => {
     return (
-      <InputGroup className="date-picker" onClick={openCalendar}>
-        <Input {...props} />
+      <InputGroup className="date-picker" {...(!props.disabled && { onClick: openCalendar })}>
+        <Input readOnly {...props} />
         <InputGroupAddon addonType="append">
           <InputGroupText>
             <Icon path={mdiCalendar} />
@@ -41,7 +41,7 @@ const DatePicker = (props) => {
   };
 
   const inputProps = {
-    disabled: true
+    disabled: props.disabled
   };
 
   const handleOnChange = (value) => {

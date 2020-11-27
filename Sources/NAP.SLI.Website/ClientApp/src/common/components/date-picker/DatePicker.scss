@@ -2,7 +2,13 @@
 @import '../../../app/variables.scss';
 
 .date-picker {
-    input {
-        background-color: $input-bg !important;
+  input {
+    &:read-only {
+      background-color: $input-bg;
     }
+
+    &:disabled {
+      background-color: inherit;
+    }
+  }
 }

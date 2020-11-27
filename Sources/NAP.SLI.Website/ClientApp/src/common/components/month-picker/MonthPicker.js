@@ -31,13 +31,15 @@ const MonthPicker = (props) => {
   const renderInput = (props, openCalendar) => {
     return (
       <InputGroup className="month-picker">
-        <InputGroupAddon addonType="prepend" onClick={() => handleOnChange(moment(value).subtract(1, 'months'))}>
+        <InputGroupAddon addonType="prepend" {...(!props.disabled && { onClick: () => handleOnChange(moment(value).subtract(1, 'months')) })}>
           <InputGroupText>
             <Icon path={mdiArrowLeftBold} />
           </InputGroupText>
         </InputGroupAddon>
-        <div onClick={openCalendar}><Input {...props} /></div>
-        <InputGroupAddon addonType="append" onClick={() => handleOnChange(moment(value).add(1, 'months'))}>
+        <div {...(!props.disabled && { onClick: openCalendar })}>
+          <Input readOnly {...props} />
+        </div>
+        <InputGroupAddon addonType="append" {...(!props.disabled && { onClick: () => handleOnChange(moment(value).add(1, 'months')) })}>
           <InputGroupText>
             <Icon path={mdiArrowRightBold} />
           </InputGroupText>
@@ -47,7 +49,7 @@ const MonthPicker = (props) => {
   };
 
   const inputProps = {
-    disabled: true
+    disabled: props.disabled
   };
 
   const handleOnChange = (value) => {

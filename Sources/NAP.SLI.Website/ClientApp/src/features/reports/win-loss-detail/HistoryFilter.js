@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner } from 'reactstrap';
 import { Formik } from 'formik';
 import FormikMonthPicker from '../../../common/components/month-picker/FormikMonthPicker';
-import { formatDate, getToday, getYesterday } from '../../../common/utils/DateUtils';
+import { getToday, getYesterday } from '../../../common/utils/DateUtils';
 import PropTypes from 'prop-types';
 import { generateRangeSelectOptions } from '../../../common/utils/SelectUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
@@ -10,8 +10,6 @@ import { useDispatch } from 'react-redux';
 import { query, toggleMode } from './reducer';
 import * as moment from 'moment';
 
-const today = getToday();
-const yesterday = getYesterday();
 const generateDateOptions = (date) => {
   return generateRangeSelectOptions(1, date.daysInMonth());
 }
@@ -30,10 +28,17 @@ const HistoryFilter = (props) => {
   const month = getToday();
   const dateOptions = generateDateOptions(month);
   const fromDateOption = dateOptions[0].value;
-  const toDateOption = dateOptions[0].value;
+  const toDateOption = dateOptions[month.date() - 1].value;
 
   const handleMonthChange = (value, setFieldValue) => {
-    setFieldValue('dateOptions', generateDateOptions(value));
+    const dateOptions = generateDateOptions(value);
+    setFieldValue('dateOptions', dateOptions);
+    setFieldValue('fromDateOption', dateOptions[0].value);
+    if (value.isSame(getToday())) {
+      setFieldValue('toDateOption', dateOptions[value.date() - 1].value);
+    } else {
+      setFieldValue('toDateOption', dateOptions[dateOptions.length - 1].value);
+    }
   }
 
   return (
@@ -67,7 +72,7 @@ const HistoryFilter = (props) => {
               <fieldset disabled={isSubmitting} className="form-inline">
                 <FormGroup className="mr-5">
                   <Label className="mr-2">View data in month</Label>
-                  <FormikMonthPicker name="month" minValue={minDate} maxValue={maxDate} onChange={(value) => handleMonthChange(value, setFieldValue)} />
+                  <FormikMonthPicker disabled={isSubmitting} name="month" minValue={minDate} maxValue={maxDate} onChange={(value) => handleMonthChange(value, setFieldValue)} />
                 </FormGroup>
                 <FormGroup className="mr-5">
                   <Label className="mr-2">From</Label>

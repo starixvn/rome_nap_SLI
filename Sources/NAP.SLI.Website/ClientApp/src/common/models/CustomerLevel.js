@@ -19,13 +19,17 @@ export const getLevelName = (levelId) => {
   }
 };
 
-export const getWinLossDetailTitle = (roleId) => {
-  switch (roleId) {
+export const getDownlineLevel = (levelId) => {
+  switch (levelId) {
     case CustomerLevels.Super:
-      return 'Master Win Loss Detail';
+      return CustomerLevels.Master;
     case CustomerLevels.Master:
-      return 'Agent Win Loss Detail';
+      return CustomerLevels.Agent;
     case CustomerLevels.Agent:
-      return 'Member Win Loss Detail';
+      return CustomerLevels.Member;
   }
+}
+
+export const isUplineOrSameLevel = (levelId, targetLevelId) => {
+  return levelId >= targetLevelId;
 }

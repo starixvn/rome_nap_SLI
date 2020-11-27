@@ -62,11 +62,11 @@ const NormalFilter = (props) => {
               <fieldset disabled={isSubmitting} className="form-inline">
                 <FormGroup className="mr-5">
                   <Label className="mr-2">From</Label>
-                  <FormikDatePicker name="fromDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
+                  <FormikDatePicker disabled={isSubmitting} name="fromDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
                 </FormGroup>
                 <FormGroup className="mr-5">
                   <Label className="mr-2">To</Label>
-                  <FormikDatePicker name="toDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
+                  <FormikDatePicker disabled={isSubmitting} name="toDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
                 </FormGroup>
                 <FormGroup className="mr-5">
                   <Button type="submit" color="primary">

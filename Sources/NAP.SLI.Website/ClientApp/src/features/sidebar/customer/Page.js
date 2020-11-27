@@ -6,7 +6,7 @@ import { NavLink as RRNavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { RouteLinks } from '../../../common/models/Constants';
-import { CustomerLevels, getWinLossDetailTitle } from '../../../common/models/CustomerLevel';
+import { CustomerLevels, getDownlineLevel, getLevelName } from '../../../common/models/CustomerLevel';
 
 const CustomerPage = () => {
   const { customer } = useSelector(state => state.sidebar);
@@ -101,7 +101,7 @@ const CustomerPage = () => {
                       ...generalInformation
                     }
                   }}>
-                    {getWinLossDetailTitle(roleId)}
+                    {getLevelName(getDownlineLevel(roleId)) + ' Win Loss Detail'}
                   </NavLink>
                 </NavItem>
                 <NavItem>

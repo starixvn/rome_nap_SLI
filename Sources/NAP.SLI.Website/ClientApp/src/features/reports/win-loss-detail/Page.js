@@ -4,7 +4,7 @@ import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
 import { minDate, maxDate } from '../../../common/utils/DateUtils';
 import { useSelector } from 'react-redux';
-import { getWinLossDetailTitle, CustomerLevels } from '../../../common/models/CustomerLevel';
+import { getDownlineLevel, getLevelName } from '../../../common/models/CustomerLevel';
 import Table from './Table';
 
 const propTypes = {
@@ -23,7 +23,7 @@ const MasterWinLossDetailPage = ({ location }) => {
 
   return (
     <div className="win-loss-detail-page">
-      <div className="page-title">{getWinLossDetailTitle(roleId)} ({username})</div>
+      <div className="page-title">{getLevelName(getDownlineLevel(roleId)) + ' Win Loss Detail'} ({username})</div>
       {mode === Modes.Normal
         ? <NormalFilter minDate={minDate} maxDate={maxDate} {...state} />
         : <HistoryFilter minDate={minDate} maxDate={maxDate} {...state} />}
