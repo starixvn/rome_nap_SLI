@@ -34,6 +34,10 @@ export const getDownlineLevel = (levelId) => {
   }
 }
 
+export const isDownlineLevel = (levelId, targetLevelId) => {
+  return levelId < targetLevelId;
+}
+
 export const isUplineOrSameLevel = (levelId, targetLevelId) => {
   return levelId >= targetLevelId;
 }

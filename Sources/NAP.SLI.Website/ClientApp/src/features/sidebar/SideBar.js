@@ -1,26 +1,55 @@
 import './SideBar.scss';
-import React, { useState } from 'react';
-import { Button, Form, Navbar, Spinner } from 'reactstrap';
+import React, { useState, createRef, useEffect } from 'react';
+import { Button, Form, Navbar, Spinner, FormFeedback } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import CustomerPage from './customer/Page';
 import { queryUsernameSuggestion, getCustomerInformation } from './reducer';
 
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .required('Required')
+    .min(2, 'At least 2 characters')
+});
+
 const SideBar = () => {
+  const typeaheadRef = createRef();
+  const formikRef = createRef();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
-  const { customer, message } = useSelector(state => state.sidebar);
+  const { customer, message, username } = useSelector(state => state.sidebar);
 
-  const handleSearch = (value, setFieldValue) => {
+  useEffect(() => {
+    if (!username) {
+      return;
+    }
+
+    const { clear } = typeaheadRef.current;
+    clear();
+
+    const { isSubmitting, handleSubmit } = formikRef.current;
+    if (!isSubmitting) {
+      handleSubmit();
+    }
+  }, [username]);
+
+  const handleSearch = (value) => {
     setIsLoading(true);
-    setFieldValue('username', value);
     queryUsernameSuggestion(value)
       .then((items) => {
         setOptions(items);
         setIsLoading(false);
       });
+  };
+
+  const handleInputChange = (value, setFieldValue) => {
+    setFieldValue('username', value);
+    if (value.length >= 2) {
+      handleSearch(value);
+    }
   };
 
   const handleChange = (option, setFieldValue) => {
@@ -31,14 +60,19 @@ const SideBar = () => {
     <div className="sidebar border-right">
       <Navbar className="navbar-expand border-bottom box-shadow">
         <Formik
+          innerRef={formikRef}
+          enableReinitialize
           initialValues={{
-            username: ''
+            username
           }}
+          validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             dispatch(getCustomerInformation(values.username, () => setSubmitting(false)));
           }}
         >
           {({
+            errors,
+            touched,
             handleSubmit,
             isSubmitting,
             setFieldValue
@@ -46,17 +80,20 @@ const SideBar = () => {
               <Form inline className="form-search" onSubmit={handleSubmit}>
                 <div className="username mr-3">
                   <AsyncTypeahead
+                    ref={typeaheadRef}
                     id='username-suggestion'
+                    className={errors.username && touched.username ? 'is-invalid' : ''}
                     filterBy={() => true}
                     isLoading={isLoading}
                     labelKey="username"
-                    minLength={2}
                     options={options}
                     placeholder="Input an username"
-                    onSearch={(value) => handleSearch(value, setFieldValue)}
+                    onInputChange={(value) => handleInputChange(value, setFieldValue)}
                     onChange={(option) => handleChange(option, setFieldValue)}
+                    onSearch={(value) => handleSearch(value)}
                     renderMenuItemChildren={option => <span>{option.username}</span>}
                   />
+                  {<FormFeedback tooltip>{errors.username}</FormFeedback>}
                 </div>
                 <Button type="submit" color="primary">
                   {isSubmitting && <Spinner className='mr-3' />}

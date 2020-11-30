@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const slice = createSlice({
   name: 'sidebar',
   initialState: {
+    username: '',
     customer: undefined,
     message: undefined,
     isOpen: false
@@ -12,9 +13,10 @@ const slice = createSlice({
     toggle: (state) => {
       state.isOpen = !state.isOpen;
     },
-    getCustomerInformationRequest: (state) => {
+    getCustomerInformationRequest: (state, action) => {
       state.message = undefined;
       state.customer = undefined;
+      state.username = action.payload.username;
     },
     getCustomerInformationSuccess: (state, action) => {
       state.customer = action.payload.customer;
@@ -22,10 +24,15 @@ const slice = createSlice({
     getCustomerInformationFailure: (state, action) => {
       state.message = action.payload.message;
     },
+    selectUsername: (state, action) => {
+      state.customer = undefined;
+      state.message = undefined;
+      state.username = action.payload.username;
+    }
   }
 });
 
-export const { toggle, getCustomerInformationRequest, getCustomerInformationFailure, getCustomerInformationSuccess } = slice.actions;
+export const { toggle, getCustomerInformationRequest, getCustomerInformationFailure, getCustomerInformationSuccess, selectUsername } = slice.actions;
 
 export const queryUsernameSuggestion = async (value) => {
   const payload = {
@@ -41,10 +48,10 @@ export const queryUsernameSuggestion = async (value) => {
 
 export const getCustomerInformation = (username, callback) => async (dispatch) => {
   try {
+    dispatch(getCustomerInformationRequest({ username }));
     const payload = {
       username
     };
-    dispatch(getCustomerInformationRequest());
     const response = await axios.post("/api/customer/information", payload);
     const { isSuccess, errMsg, generalInformation, headline } = response.data;
     if (isSuccess) {

@@ -1,36 +1,42 @@
 import './Page.scss';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container, Row, Col, Collapse, Nav, NavLink, NavItem } from 'reactstrap';
 import { NavLink as RRNavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { RouteLinks } from '../../../common/utils/RouteUtils';
-import { CustomerLevels, getDownlineLevel, getLevelName } from '../../../common/utils/CustomerLevelUtils';
+import { CustomerLevels, getDownlineLevel, getLevelName, isDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
+import { selectUsername } from '../reducer';
 
 const CustomerPage = () => {
+  const dispatch = useDispatch();
   const { customer } = useSelector(state => state.sidebar);
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
   const [isOpenReports, setIsOpenReports] = useState(true);
 
   const { generalInformation, headline } = customer;
   const { roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
-  const { superId, superName, masterId, masterName, agentId, agentName } = headline;
+  const { superName, masterName, agentName } = headline;
+
+  const handleUsernameClicked = (username) => {
+    dispatch(selectUsername({ username }));
+  }
 
   return (
     <div className="customer-page">
       <Container className="my-3">
-        {superId > 0 && <Row>
+        {isDownlineLevel(roleId, CustomerLevels.Super) && <Row>
           <Col xs="5">Super</Col>
-          <Col xs="7"><span className="text-link">{superName}</span></Col>
+          <Col xs="7"><span className="text-link" onClick={() => handleUsernameClicked(superName)}>{superName}</span></Col>
         </Row>}
-        {masterId > 0 && <Row>
+        {isDownlineLevel(roleId, CustomerLevels.Master) && <Row>
           <Col xs="5">Master</Col>
-          <Col xs="7"><span className="text-link">{masterName}</span></Col>
+          <Col xs="7"><span className="text-link" onClick={() => handleUsernameClicked(masterName)}>{masterName}</span></Col>
         </Row>}
-        {agentId > 0 && <Row>
+        {isDownlineLevel(roleId, CustomerLevels.Agent) && <Row>
           <Col xs="5">Agent</Col>
-          <Col xs="7"><span className="text-link">{agentName}</span></Col>
+          <Col xs="7"><span className="text-link" onClick={() => handleUsernameClicked(agentName)}>{agentName}</span></Col>
         </Row>}
       </Container>
       <div className="mb-3">
