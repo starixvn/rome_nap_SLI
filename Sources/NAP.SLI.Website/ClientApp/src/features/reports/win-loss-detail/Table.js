@@ -1,12 +1,14 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
-import { CustomerLevels, isUplineOrSameLevel } from '../../../common/utils/CustomerLevelUtils';
+import { CustomerLevels, isUplineOrSameLevel, getDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
+import { selectCustomer } from './reducer';
 
 const TableComponent = () => {
+  const dispatch = useDispatch();
   const { data, customer } = useSelector(state => state.winLossDetail);
   const history = useHistory();
   const { records, total } = data;
@@ -14,15 +16,17 @@ const TableComponent = () => {
   const removedColumnTotal = roleId === CustomerLevels.Master ? 1 : roleId === CustomerLevels.Agent ? 2 : 0;
 
   const handleUsernameClicked = (record) => {
+    const customer = {
+      custId: record.custId,
+      roleId: getDownlineLevel(roleId),
+      username: record.username
+    };
     if (roleId === CustomerLevels.Agent) {
-      history.push(RouteLinks.BET_LIST, {
-        custId: record.custId,
-        username: record.username
-      });
+      history.push(RouteLinks.BET_LIST, customer);
       return;
     }
 
-    console.log(record);
+    dispatch(selectCustomer({ customer }));
   }
 
   return (

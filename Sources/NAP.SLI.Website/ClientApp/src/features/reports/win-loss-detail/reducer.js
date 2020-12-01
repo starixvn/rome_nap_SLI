@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 import { formatDate } from '../../../common/utils/DateUtils';
+import { DefaultPageSize } from '../../../common/utils/ReportUtils';
 
 export const Modes = {
   Normal: 1,
@@ -14,7 +15,10 @@ const slice = createSlice({
     fromDate: undefined,
     toDate: undefined,
     customer: undefined,
-    data: undefined
+    data: undefined,
+    uplineCustomers: [],
+    pageIndex: 1,
+    pageSize: DefaultPageSize
   },
   reducers: {
     toggleMode: (state) => {
@@ -25,14 +29,41 @@ const slice = createSlice({
       }
     },
     queryRequest: (state, action) => {
-      const { fromDate, toDate, customer } = action.payload;
+      const { fromDate, toDate } = action.payload;
       state.fromDate = fromDate;
       state.toDate = toDate;
-      state.customer = customer;
       state.data = undefined;
     },
     querySuccess: (state, action) => {
       state.data = action.payload.data;
+    },
+    selectCustomer: (state, action) => {
+      const { customer, isReset } = action.payload;
+      const currentState = current(state);
+      if (isReset || !currentState.customer) {
+        state.customer = customer;
+        state.uplineCustomers = [];
+      }
+      else {
+        const uplineCustomers = [];
+        let isDrillDown = true;
+        for (let i = 0; i < currentState.uplineCustomers.length; i++) {
+          const uplineCustomer = currentState.uplineCustomers[i];
+          if (uplineCustomer.custId === customer.custId) {
+            isDrillDown = false;
+            break;
+          }
+
+          uplineCustomers.push(uplineCustomer);
+        }
+
+        if (isDrillDown) {
+          uplineCustomers.push(currentState.customer);
+        }
+
+        state.customer = customer;
+        state.uplineCustomers = uplineCustomers;
+      }
     }
   }
 });
@@ -41,22 +72,14 @@ const calculateCompanyWinLoss = (record) => {
   record.companyWinLoss = record.memberWinLoss + record.agentWinLoss + record.masterWinLoss || 0 + record.superWinLoss || 0;
 };
 
-export const { toggleMode, queryRequest, querySuccess } = slice.actions;
+export const { toggleMode, queryRequest, querySuccess, selectCustomer } = slice.actions;
 
 export const query = (data, callback) => async (dispatch) => {
   try {
     dispatch(queryRequest({
       fromDate: formatDate(data.fromDate),
-      toDate: formatDate(data.toDate),
-      customer: {
-        custId: data.custId,
-        roleId: data.roleId
-      }
+      toDate: formatDate(data.toDate)
     }));
-    Object.assign(data, {
-      pageSize: 25,
-      pageIndex: 1
-    });
     const response = await axios.post('/api/winlossdetail/query', data);
     const { records, total } = response.data;
     records.forEach((record) => calculateCompanyWinLoss(record));

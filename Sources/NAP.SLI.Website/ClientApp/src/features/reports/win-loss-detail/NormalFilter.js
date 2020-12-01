@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Formik } from 'formik';
 import PropTypes from 'prop-types';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
 import { getToday, ReportDateRanges } from '../../../common/utils/DateUtils';
 import { query, toggleMode } from './reducer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const propTypes = {
-  custId: PropTypes.number.isRequired,
-  roleId: PropTypes.number.isRequired,
   minDate: PropTypes.object.isRequired,
   maxDate: PropTypes.object.isRequired
 };
 
-const NormalFilter = (props) => {
+const NormalFilter = ({ minDate, maxDate }) => {
+  const formikRef = createRef();
   const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
-  const { custId, roleId, minDate, maxDate } = props;
+  const { customer, pageIndex, pageSize } = useSelector(state => state.winLossDetail);
+  const { custId, roleId } = customer;
+
+  useEffect(() => {
+    const { isSubmitting, handleSubmit } = formikRef.current;
+    if (!isSubmitting) {
+      handleSubmit();
+    }
+  }, [custId]);
 
   const handleDropdownItemClick = (index, setFieldValue, handleSubmit) => {
     setDropdownIndex(index);
@@ -37,6 +44,7 @@ const NormalFilter = (props) => {
 
   return (
     <Formik
+      innerRef={formikRef}
       initialValues={{
         fromDate: getToday(),
         toDate: getToday()
@@ -45,6 +53,8 @@ const NormalFilter = (props) => {
         dispatch(query({
           custId,
           roleId,
+          pageIndex,
+          pageSize,
           ...values
         }, () => setSubmitting(false)));
       }}

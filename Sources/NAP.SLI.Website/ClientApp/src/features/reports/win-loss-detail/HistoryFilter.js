@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef, useEffect } from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner } from 'reactstrap';
 import { Formik } from 'formik';
 import FormikMonthPicker from '../../../common/components/month-picker/FormikMonthPicker';
@@ -6,7 +6,7 @@ import { getToday } from '../../../common/utils/DateUtils';
 import PropTypes from 'prop-types';
 import { generateRangeSelectOptions } from '../../../common/utils/SelectUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { query, toggleMode } from './reducer';
 import * as moment from 'moment';
 
@@ -15,20 +15,27 @@ const generateDateOptions = (date) => {
 }
 
 const propTypes = {
-  custId: PropTypes.number.isRequired,
-  roleId: PropTypes.number.isRequired,
   minDate: PropTypes.object.isRequired,
   maxDate: PropTypes.object.isRequired
 };
 
-const HistoryFilter = (props) => {
+const HistoryFilter = ({ minDate, maxDate }) => {
+  const formikRef = createRef();
   const dispatch = useDispatch();
-  const { custId, roleId, minDate, maxDate } = props;
+  const { customer, pageIndex, pageSize } = useSelector(state => state.winLossDetail);
+  const { custId, roleId } = customer;
 
   const month = getToday();
   const dateOptions = generateDateOptions(month);
   const fromDateOption = dateOptions[0].value;
   const toDateOption = dateOptions[month.date() - 1].value;
+
+  useEffect(() => {
+    const { isSubmitting, handleSubmit } = formikRef.current;
+    if (!isSubmitting) {
+      handleSubmit();
+    }
+  }, [custId]);
 
   const handleMonthChange = (value, setFieldValue) => {
     const dateOptions = generateDateOptions(value);
@@ -43,6 +50,7 @@ const HistoryFilter = (props) => {
 
   return (
     <Formik
+      innerRef={formikRef}
       initialValues={{
         month,
         dateOptions,
@@ -57,7 +65,9 @@ const HistoryFilter = (props) => {
           custId,
           roleId,
           fromDate,
-          toDate
+          toDate,
+          pageIndex,
+          pageSize
         }, () => setSubmitting(false)));
       }}
     >
