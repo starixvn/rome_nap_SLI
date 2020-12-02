@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import CustomerPage from './customer/Page';
 import { queryUsernameSuggestion, getCustomerInformation } from './reducer';
+import {useHistory} from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -22,6 +23,7 @@ const SideBar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const { customer, message, username } = useSelector(state => state.sidebar);
+  const history = useHistory();
 
   useEffect(() => {
     if (!username) {
@@ -68,7 +70,7 @@ const SideBar = () => {
           }}
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
-            dispatch(getCustomerInformation(values.username, () => setSubmitting(false)));
+            dispatch(getCustomerInformation(values.username, history, () => setSubmitting(false)));
           }}
         >
           {({

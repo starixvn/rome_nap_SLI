@@ -1,4 +1,5 @@
 export const RouteLinks = {
+  INDEX: '',
   USER_MANAGEMENT: '/administration/user-management',
   CUSTOMER_SETTING: '/customer-setting',
   WIN_LOSS_DETAIL: '/report/win-loss-detail',
