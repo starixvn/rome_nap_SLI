@@ -6,7 +6,7 @@
     [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
-    public class CommonController: Controller
+    public class CommonController: ControllerBase
     {
         [HttpGet("[action]")]
         public void Exception()

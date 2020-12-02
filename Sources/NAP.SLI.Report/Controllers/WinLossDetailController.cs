@@ -7,7 +7,7 @@
 
     [ApiController]
     [Route("api/[controller]")]
-    public class WinLossDetailController : Controller
+    public class WinLossDetailController : ControllerBase
     {
         private readonly IMediator mediator;
 

@@ -1,4 +1,4 @@
-namespace NAP.SLI
+namespace NAP.SLI.Website
 {
     using System;
     using System.IO;
@@ -12,11 +12,10 @@ namespace NAP.SLI
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.IdentityModel.Tokens;
     using NAP.SimpleApi;
     using NAP.SLI.Account;
@@ -40,14 +39,11 @@ namespace NAP.SLI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options =>
-                {
-                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                });
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             var authenticationSection = Configuration.GetSection("Authentication");
             services.Configure<AuthenticationSettings>(authenticationSection);
@@ -58,31 +54,52 @@ namespace NAP.SLI
 
             ConfigureModules(services);
 
+            // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
         }
 
-        private void ConfigureModules(IServiceCollection services)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IDynamicRepository, DynamicRepository>();
-            services.RegisterCommonModule();
+            AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(env.ContentRootPath, "App_Data"));
+            ConfigureFanexData();
 
-            services.RegisterAccountModule();
-            services.AddMediatR(typeof(Account.SimpleApiProfile));
-            services.AddSimpleApi(typeof(Account.SimpleApiProfile));
-            services.AddAutoMapper(typeof(Account.AutoMapperProfile));
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-            services.RegisterCustomerModule();
-            services.AddMediatR(typeof(Customer.SimpleApiProfile));
-            services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+            app.UseAuthentication();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
+            });
 
-            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-            services.RegisterReportModule();
-            services.AddMediatR(typeof(WinLossDetailController));
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer(npmScript: "start");
+                }
+            });
         }
 
         private void ConfigureAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
@@ -106,42 +123,26 @@ namespace NAP.SLI
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        private void ConfigureModules(IServiceCollection services)
         {
-            AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(env.ContentRootPath, "App_Data"));
-            ConfigureFanexData();
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IDynamicRepository, DynamicRepository>();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            services.RegisterCommonModule();
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
-            app.UseAuthentication();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
+            services.RegisterAccountModule();
+            services.AddMediatR(typeof(Account.SimpleApiProfile));
+            services.AddSimpleApi(typeof(Account.SimpleApiProfile));
+            services.AddAutoMapper(typeof(Account.AutoMapperProfile));
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            services.RegisterCustomerModule();
+            services.AddMediatR(typeof(Customer.SimpleApiProfile));
+            services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
+
+            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
+
+            services.RegisterReportModule();
+            services.AddMediatR(typeof(WinLossDetailController));
         }
 
         private void ConfigureFanexData()

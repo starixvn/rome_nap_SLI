@@ -1,29 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
- <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <ApplicationIcon />
-    <OutputType>Library</OutputType>
-    <StartupObject />
-    <AssemblyName>NAP.SLI.Customer</AssemblyName>
-    <LangVersion>7.1</LangVersion>
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.2.2" />
-    <PackageReference Include="MediatR" Version="8.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.12.0.21095">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NAP.SimpleApi\NAP.SimpleApi.csproj" />
     <ProjectReference Include="..\NAP.SLI.Common\NAP.SLI.Common.csproj" />
   </ItemGroup>
-
 </Project>

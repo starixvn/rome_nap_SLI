@@ -3,16 +3,14 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SimpleApi.Helpers;
     using NAP.SimpleApi.Models;
     using NAP.SimpleApi.Requests;
 
-    [Authorize]
     [ApiController]
     [Route("simple-api")]
-    public class SimpleApiController : Controller
+    public class SimpleApiController : ControllerBase
     {
         private readonly IRequestOptionContext requestOptionContext;
         private readonly IDynamicRepository dynamicRepository;
@@ -33,7 +31,7 @@
         {
             var criteria = requestOptionContext.CreateCriteria(request, ActionTypes.Query);
             var data = await dynamicRepository.FetchMultipleAsync(criteria).ConfigureAwait(false);
-            if(data.Count() == 1)
+            if (data.Count() == 1)
             {
                 return Ok(data.First());
             }

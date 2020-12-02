@@ -8,7 +8,7 @@
 
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticationController : Controller
+    public class AuthenticationController : ControllerBase
     {
         private readonly IMediator mediator;
 
