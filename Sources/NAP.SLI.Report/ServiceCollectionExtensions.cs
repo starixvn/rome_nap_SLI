@@ -9,6 +9,7 @@
         {
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<IWinLossDetailService, WinLossDetailService>();
+            services.AddScoped<IWinLossAnalysisService, WinLossAnalysisService>();
         }
     }
 }

@@ -3,7 +3,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using MediatR;
-    using NAP.SLI.Report.Models.WinLossDetail;
+    using NAP.SLI.Report.Models;
     using NAP.SLI.Report.Requests;
     using NAP.SLI.Report.Services;
 

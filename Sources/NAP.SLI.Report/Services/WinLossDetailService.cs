@@ -7,6 +7,7 @@
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Report.Criteria;
+    using NAP.SLI.Report.Models;
     using NAP.SLI.Report.Models.WinLossDetail;
     using NAP.SLI.Report.Requests;
 

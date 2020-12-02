@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.Report.Models.WinLossDetail
+﻿namespace NAP.SLI.Report.Models
 {
     using System.Collections.Generic;
 

@@ -2,7 +2,7 @@
 {
     using System;
     using MediatR;
-    using NAP.SLI.Report.Models.WinLossDetail;
+    using NAP.SLI.Report.Models;
 
     public class WinLossDetailQueryRequest : IRequest<QueryModel>
     {
