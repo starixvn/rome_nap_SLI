@@ -19,8 +19,7 @@ export const installAxiosIntercepts = () => {
     response => response,
     e => {
       if (e.response && e.response.status === 401) {
-        //store.dispatch(logout());
-        store.dispatch(error(e.message));
+        store.dispatch(logout());
       } else {
         store.dispatch(error(e.message));
       }

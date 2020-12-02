@@ -3,6 +3,7 @@ import axios from 'axios';
 import storage from './storage';
 import { createSlice } from '@reduxjs/toolkit';
 import { installAxiosIntercepts } from './axios';
+import store from '../../../store';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
@@ -83,9 +84,14 @@ const refreshToken = async () => {
         token: account.token
       };
       const response = await axios.post('/api/authentication/refresh', payload);
-      Object.assign(account, { token: response.data.token });
-      storage.save(account);
-      startRefreshTimer();
+      const { isSuccess } = response.data;
+      if (isSuccess) {
+        Object.assign(account, { token: response.data.token });
+        storage.save(account);
+        startRefreshTimer();
+      } else {
+        store.dispatch(logout());
+      }
     }
   }
   catch (e) {

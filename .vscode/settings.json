@@ -1,4 +1,5 @@
 {
+    "typescript.tsdk": "Sources\\NAP.SLI.Website\\ClientApp\\node_modules\\typescript\\lib",
     "search.exclude": {
         "**/bin": true,
         "**/obj": true

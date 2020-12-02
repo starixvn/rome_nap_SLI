@@ -27,6 +27,12 @@
     <ProjectReference Include="..\NAP.SLI.UserManagement\NAP.SLI.UserManagement.csproj" />
     <ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
   </ItemGroup>
+  <ItemGroup> 
+    <Content Include="App_Data\**"> 
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content> 
+  </ItemGroup>
+
   <ItemGroup>
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
@@ -39,6 +45,9 @@
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+  </Target>
+  <Target Name="CreateAppDataFolder" AfterTargets="AfterPublish">
+    <MakeDir Directories="$(PublishDir)App_Data" Condition="!Exists('$(PublishDir)App_Data')" /> 
   </Target>
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
