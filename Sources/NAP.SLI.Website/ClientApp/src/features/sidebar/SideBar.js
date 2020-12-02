@@ -2,6 +2,7 @@ import './SideBar.scss';
 import React, { useState, createRef, useEffect } from 'react';
 import { Button, Form, Navbar, Spinner, FormFeedback } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import {useHistory} from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
@@ -21,6 +22,7 @@ const SideBar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const { customer, message, username } = useSelector(state => state.sidebar);
+  const history = useHistory();
 
   useEffect(() => {
     if (!username) {
@@ -67,7 +69,7 @@ const SideBar = () => {
           }}
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
-            dispatch(getCustomerInformation(values.username, () => setSubmitting(false)));
+            dispatch(getCustomerInformation(values.username, history, () => setSubmitting(false)));
           }}
         >
           {({

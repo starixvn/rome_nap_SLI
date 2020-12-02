@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
+import { RouteLinks } from '../../common/utils/RouteUtils';
 
 const slice = createSlice({
   name: 'sidebar',
@@ -46,7 +47,7 @@ export const queryUsernameSuggestion = async (value) => {
   return response.data;
 }
 
-export const getCustomerInformation = (username, callback) => async (dispatch) => {
+export const getCustomerInformation = (username, history, callback) => async (dispatch) => {
   try {
     dispatch(getCustomerInformationRequest({ username }));
     const payload = {
@@ -61,6 +62,7 @@ export const getCustomerInformation = (username, callback) => async (dispatch) =
           headline
         }
       }));
+      history.push(RouteLinks.INDEX);
     } else {
       dispatch(getCustomerInformationFailure({ message: errMsg }));
     }
