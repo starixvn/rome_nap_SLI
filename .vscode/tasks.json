@@ -78,7 +78,7 @@
                 "docker-build: debug"
             ],
             "dockerRun": {
-                "os": "Windows"
+                "os": "Linux"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/Sources/NAP.SLI.Website/NAP.SLI.Website.csproj",
@@ -92,7 +92,7 @@
                 "docker-build: release"
             ],
             "dockerRun": {
-                "os": "Windows"
+                "os": "Linux"
             },
             "netCore": {
                 "appProject": "${workspaceFolder}/Sources/NAP.SLI.Website/NAP.SLI.Website.csproj"
