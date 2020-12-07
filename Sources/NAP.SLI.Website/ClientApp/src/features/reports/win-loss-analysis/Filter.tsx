@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner, Input, Row, Col, ButtonGroup } from 'reactstrap';
 import { Formik } from 'formik';
