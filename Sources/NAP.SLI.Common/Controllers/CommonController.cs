@@ -2,8 +2,11 @@
 {
     using System;
     using System.Diagnostics;
+    using System.Net;
+    using System.Net.NetworkInformation;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [AllowAnonymous]
@@ -11,6 +14,11 @@
     [Route("api/[controller]")]
     public class CommonController : ControllerBase
     {
+        private readonly HttpContext context;
+
+        public CommonController(IHttpContextAccessor httpContextAccessor)
+            => (context) = (httpContextAccessor.HttpContext);
+
         [HttpGet("[action]")]
         public void Exception()
         {
@@ -26,7 +34,8 @@
                 WorkingSet = Environment.WorkingSet,
                 OSVersion = Environment.OSVersion,
                 Is64BitOperatingSystem = Environment.Is64BitOperatingSystem,
-                MachineName = Environment.MachineName
+                MachineName = Environment.MachineName,
+                RemoteIpAddress = context.Connection.RemoteIpAddress.ToString()
             });
         }
 

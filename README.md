@@ -25,3 +25,6 @@ docker run --rm -it -p 8000:80 -p 8001:443 -e ASPNETCORE_URLS="https://+;http://
 ```
 
 ### Debug image:
+```console
+dotnet NAP.SLI.Website.dll
+```
