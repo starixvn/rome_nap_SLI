@@ -28,7 +28,13 @@
 
         public string GetIP()
         {
-            return context.Connection.RemoteIpAddress.ToString();
+            var remoteIpAddress = context.Connection.RemoteIpAddress;
+            if (remoteIpAddress != null && remoteIpAddress.IsIPv4MappedToIPv6)
+            {
+                remoteIpAddress = remoteIpAddress.MapToIPv4();
+            }
+
+            return remoteIpAddress?.ToString();
         }
 
         public string GetDomainName()
