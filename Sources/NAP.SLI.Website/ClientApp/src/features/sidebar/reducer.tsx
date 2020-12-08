@@ -1,33 +1,37 @@
-// @ts-nocheck
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { RouteLinks } from '../../common/utils/RouteUtils';
+import { History } from 'history';
+import { SidebarState } from './SideBar';
+import { Customer } from './customer/CustomerModel';
+
+type Callback = () => void;
 
 const slice = createSlice({
   name: 'sidebar',
   initialState: {
     username: '',
-    customer: undefined,
+    customer: new Customer(),
     message: undefined,
     isOpen: false
   },
   reducers: {
-    toggle: (state) => {
+    toggle: (state: SidebarState) => {
       state.isOpen = !state.isOpen;
     },
-    getCustomerInformationRequest: (state, action) => {
+    getCustomerInformationRequest: (state: SidebarState, action) => {
       state.message = undefined;
-      state.customer = undefined;
+      state.customer = new Customer();
       state.username = action.payload.username;
     },
-    getCustomerInformationSuccess: (state, action) => {
-      state.customer = action.payload.customer;
+    getCustomerInformationSuccess: (state: SidebarState, action) => {
+      state.customer = action.payload.customer || new Customer();
     },
-    getCustomerInformationFailure: (state, action) => {
+    getCustomerInformationFailure: (state: SidebarState, action) => {
       state.message = action.payload.message;
     },
-    selectUsername: (state, action) => {
-      state.customer = undefined;
+    selectUsername: (state: SidebarState, action) => {
+      state.customer = new Customer();
       state.message = undefined;
       state.username = action.payload.username;
     }
@@ -36,7 +40,7 @@ const slice = createSlice({
 
 export const { toggle, getCustomerInformationRequest, getCustomerInformationFailure, getCustomerInformationSuccess, selectUsername } = slice.actions;
 
-export const queryUsernameSuggestion = async (value) => {
+export const queryUsernameSuggestion = async (value: string) => {
   const payload = {
     apiKey: 'customer:query-username-suggestion',
     data: {
@@ -48,7 +52,7 @@ export const queryUsernameSuggestion = async (value) => {
   return response.data;
 }
 
-export const getCustomerInformation = (username, history, callback) => async (dispatch) => {
+export const getCustomerInformation = (username: string, history: History, callback: Callback) => async (dispatch: any) => {
   try {
     dispatch(getCustomerInformationRequest({ username }));
     const payload = {

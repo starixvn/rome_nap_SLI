@@ -1,17 +1,18 @@
+import { Customer } from "../../sidebar/customer/CustomerModel";
 import { ReportType } from "./reducer";
 
 export class WinLossAnalysisState {
     constructor() {
         this.fromDate = new Date();
         this.toDate = new Date();
-        this.customer = null;
+        this.customer = new Customer();
         this.reportType = ReportType.Daily;
         this.data = new WinLossAnalysisQueryResponse();
     }
 
     fromDate: Date;
     toDate: Date;
-    customer: object;
+    customer: Customer;
     reportType: number;
     data: WinLossAnalysisQueryResponse;
 }

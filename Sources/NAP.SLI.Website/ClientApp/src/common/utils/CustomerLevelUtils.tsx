@@ -30,7 +30,7 @@ export const getDownlineLevel = (levelId: number) => {
     case CustomerLevels.Agent:
       return CustomerLevels.Member;
     default:
-      return null;
+      return -1;
   }
 }
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import './Page.scss';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,10 +8,15 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import { CustomerLevels, getDownlineLevel, getLevelName, isDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
+import { SidebarState } from '../SideBar';
+
+interface RootState {
+  sidebar: SidebarState
+}
 
 const CustomerPage = () => {
   const dispatch = useDispatch();
-  const { customer } = useSelector(state => state.sidebar);
+  const { customer } = useSelector((state: RootState) => state.sidebar );
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
   const [isOpenReports, setIsOpenReports] = useState(true);
 
@@ -20,7 +24,7 @@ const CustomerPage = () => {
   const { roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
   const { superName, masterName, agentName } = headline;
 
-  const handleUsernameClicked = (username) => {
+  const handleUsernameClicked = (username : string) => {
     dispatch(selectUsername({ username }));
   }
 
@@ -44,7 +48,7 @@ const CustomerPage = () => {
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
           <Container onClick={() => setIsOpenCustomerInfo(!isOpenCustomerInfo)} className="d-flex">
             <span className="width-inherit">{username}</span>
-            <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenCustomerInfo ? 0 : 180}></FontAwesomeIcon>
+            <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenCustomerInfo ? undefined : 180}></FontAwesomeIcon>
           </Container>
         </div>
         <Collapse isOpen={isOpenCustomerInfo}>
@@ -90,7 +94,7 @@ const CustomerPage = () => {
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
           <Container onClick={() => setIsOpenReports(!isOpenReports)} className="d-flex">
             <span className="width-inherit">REPORTS</span>
-            <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenReports ? 0 : 180}></FontAwesomeIcon>
+            <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenReports ? undefined : 180}></FontAwesomeIcon>
           </Container>
         </div>
         <Collapse isOpen={isOpenReports}>
