@@ -30,8 +30,6 @@ namespace NAP.SLI.Report.Criteria
 
         public DateTime MoveBetsDay => balanceUpDayModel.MoveBetsDay;
 
-        public string ProductIds => ((int)Common.Models.ProductIds.NumberGame).ToString();
-
         public override string GetSettingKey()
         {
             switch (RoleId)

@@ -1,6 +1,7 @@
 namespace NAP.SLI.Website
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -8,6 +9,11 @@ namespace NAP.SLI.Website
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.AspNetCore;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.Logging.Sentry;
     using MediatR;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
@@ -26,6 +32,7 @@ namespace NAP.SLI.Website
     using NAP.SLI.Report.Controllers;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using Sentry;
 
     public class Startup
     {
@@ -39,6 +46,28 @@ namespace NAP.SLI.Website
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            LogManager
+                .SetDefaultLogCategory("Fanex-Logging-Test-Web-new")
+                .Use(new List<ILogEngine>
+                {
+                    new SentryLogging(new SentryEngineOptions
+                    {
+                        Dsn = new Dsn(Configuration.GetValue<string>("Sentry:Dns"))
+                    })
+                });
+
+            ExceptionHandler
+                .UseConfig(new LoggingConfiguration()
+                .HideSensitiveInfo(
+                    new List<string>
+                    {
+                            "(?:password=)(?<paramValue>[^&|^\\s]+)",
+                            "(\"password\":)(?<paramValue>[^,|^\r]+)"
+                    })
+                .GetHttpHeaderInfo()
+                .GetHttpSessionInfo())
+                .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
+
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -73,7 +102,7 @@ namespace NAP.SLI.Website
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -94,7 +123,6 @@ namespace NAP.SLI.Website
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");

@@ -2,6 +2,6 @@
 {
     public enum ProductIds
     {
-        NumberGame = 1 // TODO: expected value = 23
+        NumberGame = 3
     }
 }
