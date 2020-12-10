@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 
 namespace NAP.SLI.Common.Services
@@ -5,6 +6,10 @@ namespace NAP.SLI.Common.Services
     public interface IAppSettings
     {
         string Environment { get; }
+
+        string SentryDsn { get; }
+
+        string AppDataPath { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -17,5 +22,9 @@ namespace NAP.SLI.Common.Services
         }
 
         public string Environment => configuration.GetValue<string>("Environment");
+
+        public string SentryDsn => configuration.GetValue<string>("Sentry:Dsn");
+
+        public string AppDataPath => AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
     }
 }

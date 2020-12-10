@@ -22,6 +22,7 @@ namespace NAP.SLI.Website
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
     using NAP.SimpleApi;
     using NAP.SLI.Account;
@@ -56,17 +57,16 @@ namespace NAP.SLI.Website
                 {
                     new SentryLogging(new SentryEngineOptions
                     {
-                        Dsn = new Dsn(Configuration.GetValue<string>("Sentry:Dns"))
+                        Dsn = new Dsn(AppSettings.SentryDsn)
                     })
                 });
 
             ExceptionHandler
-                .UseConfig(new LoggingConfiguration()
-                .HideSensitiveInfo(
+                .UseConfig(new LoggingConfiguration().HideSensitiveInfo(
                     new List<string>
                     {
-                            "(?:password=)(?<paramValue>[^&|^\\s]+)",
-                            "(\"password\":)(?<paramValue>[^,|^\r]+)"
+                        "(?:password=)(?<paramValue>[^&|^\\s]+)",
+                        "(\"password\":)(?<paramValue>[^,|^\r]+)"
                     })
                 .GetHttpHeaderInfo()
                 .GetHttpSessionInfo())
@@ -95,8 +95,9 @@ namespace NAP.SLI.Website
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            logger.LogInformation("Application started");
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(env.ContentRootPath, "App_Data"));
             ConfigureFanexData();
 
@@ -185,10 +186,9 @@ namespace NAP.SLI.Website
                  .GetChildren()
                  .ToDictionary(connection => connection.Key,
                                connection => new ConnectionConfiguration(connection.Key, connection.Value));
-            var appDataPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             DbSettingProviderManager
               .StartNewSession()
-              .WithSqlServer(resourcePath: Path.Combine(appDataPath, "SPNames", AppSettings.Environment))
+              .WithSqlServer(resourcePath: Path.Combine(AppSettings.AppDataPath, "SPNames", AppSettings.Environment))
               .Use(connectionStrings)
               .Run();
         }

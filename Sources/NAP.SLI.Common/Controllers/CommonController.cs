@@ -2,12 +2,12 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Net;
-    using System.Net.NetworkInformation;
+    using System.IO;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Services;
 
     [AllowAnonymous]
     [ApiController]
@@ -15,14 +15,23 @@
     public class CommonController : ControllerBase
     {
         private readonly HttpContext context;
+        private readonly IAppSettings appSettings;
 
-        public CommonController(IHttpContextAccessor httpContextAccessor)
-            => (context) = (httpContextAccessor.HttpContext);
+        public CommonController(IHttpContextAccessor httpContextAccessor, IAppSettings appSettings)
+            => (context, this.appSettings) = (httpContextAccessor.HttpContext, appSettings);
 
         [HttpGet("[action]")]
         public void Exception()
         {
             throw new NotSupportedException("Test");
+        }
+
+        [HttpGet("[action]")]
+        public ActionResult Configuration()
+        {
+            var content = System.IO.File.ReadAllText(Path.Combine(appSettings.AppDataPath, "Configuration.js"));
+            content = content.Replace("{{SentryDsn}}", appSettings.SentryDsn);
+            return Content(content);
         }
 
         [HttpGet("[action]")]
