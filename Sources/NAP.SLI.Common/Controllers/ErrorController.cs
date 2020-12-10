@@ -1,6 +1,5 @@
 namespace NAP.SLI.Common.Controllers
 {
-    using System.Net;
     using System.Threading.Tasks;
     using Fanex.Logging.Extensions.AspNetCore;
     using Microsoft.AspNetCore.Authorization;
@@ -12,16 +11,14 @@ namespace NAP.SLI.Common.Controllers
     [ApiController]
     public class ErrorController : ControllerBase
     {
-        [Route("/error")]
+        [Route("[action]")]
         public async Task<IActionResult> Error()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            var error = context.Error;
-            await ExceptionHandler.HandleAsync(error, HttpContext);
+            await ExceptionHandler.HandleAsync(context.Error, HttpContext).ConfigureAwait(false);
             return Problem(
-                statusCode: (int)HttpStatusCode.InternalServerError,
-                detail: error.Message,
-                title: "System Error");
+                statusCode: StatusCodes.Status500InternalServerError,
+                title: "Internal Server Error");
         }
     }
 }

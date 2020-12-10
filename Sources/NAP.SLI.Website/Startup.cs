@@ -27,6 +27,7 @@ namespace NAP.SLI.Website
     using NAP.SLI.Account;
     using NAP.SLI.Account.Models;
     using NAP.SLI.Common;
+    using NAP.SLI.Common.Services;
     using NAP.SLI.Customer;
     using NAP.SLI.Report;
     using NAP.SLI.Report.Controllers;
@@ -36,18 +37,21 @@ namespace NAP.SLI.Website
 
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public IAppSettings AppSettings { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            AppSettings = new AppSettings(configuration);
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             LogManager
-                .SetDefaultLogCategory("Fanex-Logging-Test-Web-new")
+                .SetDefaultLogCategory("NAP.SLI")
                 .Use(new List<ILogEngine>
                 {
                     new SentryLogging(new SentryEngineOptions
@@ -154,6 +158,7 @@ namespace NAP.SLI.Website
         private void ConfigureModules(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
+            services.AddSingleton<IAppSettings>(AppSettings);
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
 
             services.RegisterCommonModule();
@@ -183,7 +188,7 @@ namespace NAP.SLI.Website
             var appDataPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             DbSettingProviderManager
               .StartNewSession()
-              .WithSqlServer(resourcePath: Path.Combine(appDataPath, "SPNames"))
+              .WithSqlServer(resourcePath: Path.Combine(appDataPath, "SPNames", AppSettings.Environment))
               .Use(connectionStrings)
               .Run();
         }
