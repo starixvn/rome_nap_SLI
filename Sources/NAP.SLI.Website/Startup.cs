@@ -6,6 +6,7 @@ namespace NAP.SLI.Website
     using System.Linq;
     using System.Text;
     using AutoMapper;
+    using Fanex.Caching.Redis;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
@@ -72,6 +73,8 @@ namespace NAP.SLI.Website
                 .GetHttpSessionInfo())
                 .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
+            Fanex.Caching.Memory.MemoryCacheServiceCollectionExtensions.AddMemoryCache(services, Configuration.GetSection("Fanex.Caching"));
+            services.AddRedisCache(Configuration.GetSection("Fanex.Caching.Redis"));
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;

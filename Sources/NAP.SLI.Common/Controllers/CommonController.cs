@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Threading.Tasks;
+    using Fanex.Caching;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,10 @@
     {
         private readonly HttpContext context;
         private readonly IAppSettings appSettings;
+        private readonly ICacheService memoryCacheService;
 
-        public CommonController(IHttpContextAccessor httpContextAccessor, IAppSettings appSettings)
-            => (context, this.appSettings) = (httpContextAccessor.HttpContext, appSettings);
+        public CommonController(IHttpContextAccessor httpContextAccessor, IAppSettings appSettings, ICacheContainer cacheContainer)
+            => (context, this.appSettings, memoryCacheService) = (httpContextAccessor.HttpContext, appSettings, cacheContainer.MemoryCacheService);
 
         [HttpGet("[action]")]
         public void Exception()
@@ -27,10 +29,13 @@
         }
 
         [HttpGet("[action]")]
-        public ActionResult Configuration()
+        public async Task<ActionResult> Configuration()
         {
-            var content = System.IO.File.ReadAllText(Path.Combine(appSettings.AppDataPath, "Configuration.js"));
-            content = content.Replace("{{SentryDsn}}", appSettings.SentryDsn);
+            var content = await memoryCacheService.GetOrSetAsync<string>("configuration", async () =>
+            {
+                var content = await System.IO.File.ReadAllTextAsync(Path.Combine(appSettings.AppDataPath, "configuration.js")).ConfigureAwait(false);
+                return content.Replace("{{SentryDsn}}", appSettings.SentryDsn);
+            }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
             return Content(content);
         }
 
