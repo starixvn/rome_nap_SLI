@@ -1,4 +1,4 @@
-﻿namespace NAP.SimpleApi
+﻿namespace NAP.SimpleApi.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
     using NAP.SimpleApi.Models;

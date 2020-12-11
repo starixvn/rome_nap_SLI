@@ -7,6 +7,7 @@
     using NAP.SimpleApi.Requests;
     using System;
     using System.Linq;
+    using NAP.SimpleApi.Extensions;
 
     public interface IRequestOptionContext
     {

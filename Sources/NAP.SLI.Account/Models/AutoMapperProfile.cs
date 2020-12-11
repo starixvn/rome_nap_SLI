@@ -1,8 +1,7 @@
-﻿namespace NAP.SLI.Account
+﻿namespace NAP.SLI.Account.Models
 {
     using AutoMapper;
     using NAP.SLI.Account.Criteria;
-    using NAP.SLI.Account.Models;
 
     public class AutoMapperProfile : Profile
     {

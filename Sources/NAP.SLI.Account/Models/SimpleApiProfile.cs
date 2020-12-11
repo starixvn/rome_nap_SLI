@@ -1,6 +1,6 @@
-﻿namespace NAP.SLI.Account
+﻿namespace NAP.SLI.Account.Models
 {
-    using NAP.SimpleApi;
+    using NAP.SimpleApi.Models;
     using NAP.SLI.Account.Criteria;
 
     public class SimpleApiProfile : Profile

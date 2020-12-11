@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.Account
+﻿namespace NAP.SLI.Account.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
     using NAP.SLI.Account.Services;
@@ -6,7 +6,7 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static void RegisterAccountModule(this IServiceCollection services)
+        public static void AddAccountModule(this IServiceCollection services)
         {
             services.AddScoped<JwtSecurityTokenHandler, JwtSecurityTokenHandler>();
             services.AddScoped<ITokenService, TokenService>();

@@ -25,16 +25,21 @@ namespace NAP.SLI.Website
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
-    using NAP.SimpleApi;
-    using NAP.SLI.Account;
+    using NAP.SimpleApi.Extensions;
+    using NAP.SLI.Account.Extensions;
     using NAP.SLI.Account.Models;
-    using NAP.SLI.Common;
+    using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Services;
-    using NAP.SLI.Customer;
-    using NAP.SLI.Report;
+    using NAP.SLI.Customer.Extensions;
+    using NAP.SLI.Report.Extensions;
     using NAP.SLI.Report.Controllers;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using ONEbook.UM.AspNetCore;
+    using ONEbook.UM.Configurations;
+    using ONEbook.UM.Helpers;
+    using ONEbook.UM.Services;
+    using ONEbook.UM.Transport;
     using Sentry;
 
     public class Startup
@@ -49,7 +54,6 @@ namespace NAP.SLI.Website
             AppSettings = new AppSettings(configuration);
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             LogManager
@@ -75,6 +79,7 @@ namespace NAP.SLI.Website
 
             Fanex.Caching.Memory.MemoryCacheServiceCollectionExtensions.AddMemoryCache(services, Configuration.GetSection("Fanex.Caching"));
             services.AddRedisCache(Configuration.GetSection("Fanex.Caching.Redis"));
+
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -84,11 +89,14 @@ namespace NAP.SLI.Website
             var authenticationSection = Configuration.GetSection("Authentication");
             services.Configure<AuthenticationSettings>(authenticationSection);
             var authenticationSettings = authenticationSection.Get<AuthenticationSettings>();
-            ConfigureAuthentication(services, authenticationSettings);
+            AddJwtAuthentication(services, authenticationSettings);
 
             services.AddOptions();
 
-            ConfigureModules(services);
+            AddModules(services);
+            AddAutoMapper(services);
+            AddSimpleApi(services);
+            AddMediatR(services);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -97,12 +105,11 @@ namespace NAP.SLI.Website
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             logger.LogInformation("Application started");
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(env.ContentRootPath, "App_Data"));
-            ConfigureFanexData();
+            UseFanexDataWithSqlServer();
 
             if (env.IsDevelopment())
             {
@@ -138,7 +145,7 @@ namespace NAP.SLI.Website
             });
         }
 
-        private void ConfigureAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
+        private void AddJwtAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
         {
             var secretKey = Encoding.ASCII.GetBytes(authenticationSettings.SecretKey);
             services.AddAuthentication(x =>
@@ -159,41 +166,52 @@ namespace NAP.SLI.Website
             });
         }
 
-        private void ConfigureModules(IServiceCollection services)
+        private void AddModules(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddSingleton<IAppSettings>(AppSettings);
+            services.AddSingleton(new UMClientConfiguration().Initialize(Configuration));
+            services.AddSingleton<IUMCacheService, UMCacheService>();
+            services.AddSingleton<IUMRestClient, UMRestClient>();
+            services.AddSingleton<IMaintenanceService, MaintenanceService>();
+            services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
+            services.AddCommonModule(AppSettings);
+            services.AddAccountModule();
+            services.AddCustomerModule();
+            services.AddReportModule();
+        }
 
-            services.RegisterCommonModule();
+        private void AddAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(Account.Models.AutoMapperProfile));
+        }
 
-            services.RegisterAccountModule();
-            services.AddMediatR(typeof(Account.SimpleApiProfile));
-            services.AddSimpleApi(typeof(Account.SimpleApiProfile));
-            services.AddAutoMapper(typeof(Account.AutoMapperProfile));
+        private void AddSimpleApi(IServiceCollection services)
+        {
+            services.AddSimpleApi(typeof(Account.Models.SimpleApiProfile));
+            services.AddSimpleApi(typeof(Customer.Models.SimpleApiProfile));
+            services.AddSimpleApi(typeof(UserManagement.Models.SimpleApiProfile));
+        }
 
-            services.RegisterCustomerModule();
-            services.AddMediatR(typeof(Customer.SimpleApiProfile));
-            services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
-
-            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
-
-            services.RegisterReportModule();
+        private void AddMediatR(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(Account.Models.SimpleApiProfile));
+            services.AddMediatR(typeof(Customer.Models.SimpleApiProfile));
             services.AddMediatR(typeof(WinLossDetailController));
         }
 
-        private void ConfigureFanexData()
+        private void UseFanexDataWithSqlServer()
         {
             var connectionStrings = Configuration
-                 .GetSection("ConnectionStrings")
-                 .GetChildren()
-                 .ToDictionary(connection => connection.Key,
-                               connection => new ConnectionConfiguration(connection.Key, connection.Value));
+                .GetSection("ConnectionStrings")
+                .GetChildren()
+                .ToDictionary(connection => connection.Key,
+                            connection => new ConnectionConfiguration(connection.Key, connection.Value));
             DbSettingProviderManager
-              .StartNewSession()
-              .WithSqlServer(resourcePath: Path.Combine(AppSettings.AppDataPath, "SPNames", AppSettings.Environment))
-              .Use(connectionStrings)
-              .Run();
+                .StartNewSession()
+                .WithSqlServer(resourcePath: Path.Combine(AppSettings.AppDataPath, "SPNames", AppSettings.Environment))
+                .Use(connectionStrings)
+                .Run();
         }
     }
 }

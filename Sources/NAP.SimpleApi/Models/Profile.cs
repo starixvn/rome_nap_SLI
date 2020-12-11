@@ -1,9 +1,8 @@
-﻿namespace NAP.SimpleApi
+﻿namespace NAP.SimpleApi.Models
 {
     using System;
     using System.Collections.Generic;
     using Fanex.Data.Repository;
-    using NAP.SimpleApi.Models;
 
     public abstract class Profile
     {
@@ -12,7 +11,7 @@
         public IList<RequestOption> RequestOptions { get; private set; }
 
         protected Profile()
-            :this(null)
+            : this(null)
         {
         }
 

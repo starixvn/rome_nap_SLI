@@ -1,6 +1,6 @@
-namespace NAP.SLI.Customer
+namespace NAP.SLI.Customer.Models
 {
-    using NAP.SimpleApi;
+    using NAP.SimpleApi.Models;
     using NAP.SLI.Customer.Criteria;
 
     public class SimpleApiProfile : Profile
