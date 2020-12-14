@@ -17,15 +17,14 @@
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody]LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
         }
 
         [HttpPost("[action]")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Refresh([FromBody]RefreshRequest request)
+        public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);

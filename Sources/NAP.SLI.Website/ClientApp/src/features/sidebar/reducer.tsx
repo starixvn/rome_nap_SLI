@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RouteLinks } from '../../common/utils/RouteUtils';
 import { History } from 'history';
 import { SidebarState } from './SideBar';
-import { Customer } from './customer/CustomerModel';
 
 type Callback = () => void;
 
@@ -11,7 +10,7 @@ const slice = createSlice({
   name: 'sidebar',
   initialState: {
     username: '',
-    customer: new Customer(),
+    customer: undefined,
     message: undefined,
     isOpen: false
   },
@@ -21,17 +20,17 @@ const slice = createSlice({
     },
     getCustomerInformationRequest: (state: SidebarState, action) => {
       state.message = undefined;
-      state.customer = new Customer();
+      state.customer = undefined;
       state.username = action.payload.username;
     },
     getCustomerInformationSuccess: (state: SidebarState, action) => {
-      state.customer = action.payload.customer || new Customer();
+      state.customer = action.payload.customer || undefined;
     },
     getCustomerInformationFailure: (state: SidebarState, action) => {
       state.message = action.payload.message;
     },
     selectUsername: (state: SidebarState, action) => {
-      state.customer = new Customer();
+      state.customer = undefined;
       state.message = undefined;
       state.username = action.payload.username;
     }

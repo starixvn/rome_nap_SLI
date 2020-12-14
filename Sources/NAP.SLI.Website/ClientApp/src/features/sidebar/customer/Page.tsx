@@ -9,6 +9,7 @@ import { RouteLinks } from '../../../common/utils/RouteUtils';
 import { CustomerLevels, getDownlineLevel, getLevelName, isDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
 import { SidebarState } from '../SideBar';
+import { Customer } from './Model';
 
 interface RootState {
   sidebar: SidebarState
@@ -16,15 +17,14 @@ interface RootState {
 
 const CustomerPage = () => {
   const dispatch = useDispatch();
-  const { customer } = useSelector((state: RootState) => state.sidebar );
+  const { customer } = useSelector((state: RootState) => state.sidebar);
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
   const [isOpenReports, setIsOpenReports] = useState(true);
-
-  const { generalInformation, headline } = customer;
+  const { generalInformation, headline } = customer as Customer;
   const { roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
   const { superName, masterName, agentName } = headline;
 
-  const handleUsernameClicked = (username : string) => {
+  const handleUsernameClicked = (username: string) => {
     dispatch(selectUsername({ username }));
   }
 

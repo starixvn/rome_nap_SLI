@@ -1,11 +1,12 @@
 /// <reference types="react-scripts" />
 
-export {};
+export { };
 
 declare global {
   interface Window {
     configuration: {
       sentryDsn: string;
+      umToken: string | null;
     };
   }
 }

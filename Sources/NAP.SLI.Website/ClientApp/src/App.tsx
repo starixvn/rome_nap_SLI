@@ -1,13 +1,14 @@
 import './App.scss';
 import React from 'react';
-import { Route } from 'react-router';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { Route, Switch, Router } from 'react-router';
 import { useSelector } from 'react-redux';
+import { createBrowserHistory } from 'history';
 import { RouteLinks } from './common/utils/RouteUtils';
 import NavMenu from './features/nav/NavMenu';
 import SideBar from './features/sidebar/SideBar';
 import PrivateRoute from './PrivateRoute';
 import NotFoundPage from './features/error/NotFoundPage';
+import UMPage from './features/error/UMPage';
 import UserManagementPage from './features/user-management/Page';
 import LoginPage from './features/account/authentication/LoginPage';
 import HomePage from './features/home/Page';
@@ -23,13 +24,15 @@ import BetListPage from './features/reports/bet-list/Page';
 import ResultsPage from './features/reports/results/Page';
 import { RootState } from './store';
 
+export const history = createBrowserHistory();
+
 const App = () => {
   const { account } = useSelector((state: RootState) => state.authentication);
   const { isOpen } = useSelector((state: RootState) => state.sidebar);
   const isLoggedIn = account !== undefined;
 
   return (
-    <BrowserRouter>
+    <Router history={history}>
       <div className={`wrapper ${isOpen && isLoggedIn ? 'open' : ''}`}>
         {isLoggedIn && <SideBar />}
         <div className="content">
@@ -39,6 +42,7 @@ const App = () => {
             <Switch>
               <Route path="/login" component={LoginPage} />
               <PrivateRoute exact path="/" component={HomePage} />
+              <PrivateRoute path={RouteLinks.ERROR_UM} component={UMPage} />
               <PrivateRoute path={RouteLinks.USER_MANAGEMENT} component={UserManagementPage} />
               <PrivateRoute path={RouteLinks.CUSTOMER_SETTING} component={CustomerSettingPage} />
               <PrivateRoute path={RouteLinks.WIN_LOSS_DETAIL} component={WinLossDetailPage} />
@@ -54,7 +58,7 @@ const App = () => {
       </div>
       <Confirmation />
       <ToastContainer />
-    </BrowserRouter>
+    </Router>
   );
 };
 

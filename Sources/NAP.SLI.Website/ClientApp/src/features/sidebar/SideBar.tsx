@@ -9,7 +9,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import CustomerPage from './customer/Page';
 import { queryUsernameSuggestion, getCustomerInformation } from './reducer';
 import { useHistory } from 'react-router-dom';
-import { Customer } from './customer/CustomerModel';
+import { Customer } from './customer/Model';
 import { RootState } from '../../store';
 
 const validationSchema = Yup.object().shape({
@@ -19,9 +19,9 @@ const validationSchema = Yup.object().shape({
 });
 
 export interface SidebarState {
-  customer: Customer,
-  message: string | undefined,
-  username: string | undefined,
+  customer?: Customer,
+  message?: string,
+  username?: string,
   isOpen: boolean
 };
 

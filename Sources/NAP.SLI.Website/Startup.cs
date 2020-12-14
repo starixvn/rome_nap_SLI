@@ -35,12 +35,9 @@ namespace NAP.SLI.Website
     using NAP.SLI.Report.Controllers;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using ONEbook.UM.AspNetCore;
-    using ONEbook.UM.Configurations;
-    using ONEbook.UM.Helpers;
-    using ONEbook.UM.Services;
-    using ONEbook.UM.Transport;
     using Sentry;
+    using NAP.UM.Extensions;
+    using NAP.UM.Models;
 
     public class Startup
     {
@@ -57,7 +54,7 @@ namespace NAP.SLI.Website
         public void ConfigureServices(IServiceCollection services)
         {
             LogManager
-                .SetDefaultLogCategory("NAP.SLI")
+                .SetDefaultLogCategory(AppSettings.SentryDefaultCategory)
                 .Use(new List<ILogEngine>
                 {
                     new SentryLogging(new SentryEngineOptions
@@ -90,6 +87,11 @@ namespace NAP.SLI.Website
             services.Configure<AuthenticationSettings>(authenticationSection);
             var authenticationSettings = authenticationSection.Get<AuthenticationSettings>();
             AddJwtAuthentication(services, authenticationSettings);
+
+            var umConfigOption = Configuration.GetSection("UM");
+            services.Configure<UMConfig>(umConfigOption);
+            var umConfig = umConfigOption.Get<UMConfig>();
+            services.AddUM(umConfig);
 
             services.AddOptions();
 
@@ -128,6 +130,8 @@ namespace NAP.SLI.Website
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
+            app.UseUM();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -169,11 +173,6 @@ namespace NAP.SLI.Website
         private void AddModules(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddSingleton(new UMClientConfiguration().Initialize(Configuration));
-            services.AddSingleton<IUMCacheService, UMCacheService>();
-            services.AddSingleton<IUMRestClient, UMRestClient>();
-            services.AddSingleton<IMaintenanceService, MaintenanceService>();
-            services.AddSingleton<IHttpContextHelper, HttpContextHelper>();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
             services.AddCommonModule(AppSettings);
             services.AddAccountModule();

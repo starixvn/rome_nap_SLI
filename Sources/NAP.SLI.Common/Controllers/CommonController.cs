@@ -9,8 +9,10 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.Common.Services;
+    using NAP.UM.Web;
 
     [AllowAnonymous]
+    [UncheckUMFilter]
     [ApiController]
     [Route("api/[controller]")]
     public class CommonController : ControllerBase

@@ -2,12 +2,9 @@
 import axios from 'axios';
 import storage from './storage';
 import { createSlice } from '@reduxjs/toolkit';
-import { installAxiosIntercepts } from './axios';
 import store from '../../../store';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
-
-installAxiosIntercepts();
 
 const account = storage.get();
 const slice = createSlice({
@@ -94,13 +91,13 @@ const refreshToken = async () => {
       }
     }
   }
-  catch (e) {
-    console.error(e);
+  catch {
+    console.error('Unable to refresh token');
   }
 }
 
 if (account) {
-  refreshToken();
+  setTimeout(() => refreshToken(), 1);
 }
 
 export default slice.reducer;

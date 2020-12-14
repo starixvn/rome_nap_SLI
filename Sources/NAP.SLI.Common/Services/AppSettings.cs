@@ -9,6 +9,8 @@ namespace NAP.SLI.Common.Services
 
         string SentryDsn { get; }
 
+        string SentryDefaultCategory { get; }
+
         string AppDataPath { get; }
     }
 
@@ -24,6 +26,8 @@ namespace NAP.SLI.Common.Services
         public string Environment => configuration.GetValue<string>("Environment");
 
         public string SentryDsn => configuration.GetValue<string>("Sentry:Dsn");
+
+        public string SentryDefaultCategory => configuration.GetValue<string>("Sentry:DefaultCategory");
 
         public string AppDataPath => AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
     }

@@ -25,8 +25,6 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
-    <PackageReference Include="ONEbook.UM.AspNetCore" Version="3.0.0-beta2" />
-    <PackageReference Include="ONEbook.UM.Transport" Version="3.0.0-beta3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAP.SimpleApi\NAP.SimpleApi.csproj" />
@@ -35,6 +33,7 @@
     <ProjectReference Include="..\NAP.SLI.Report\NAP.SLI.Report.csproj" />
     <ProjectReference Include="..\NAP.SLI.UserManagement\NAP.SLI.UserManagement.csproj" />
     <ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
+    <ProjectReference Include="..\NAP.UM\NAP.UM.csproj" />
   </ItemGroup>
   <ItemGroup> 
     <Content Include="App_Data\**"> 
