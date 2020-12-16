@@ -45,45 +45,45 @@ const LoginPage = () => {
         handleSubmit,
         isSubmitting
       }) => (
-          <Form className="login-page" onSubmit={handleSubmit}>
-            <fieldset disabled={isSubmitting}>
-              {message && <Alert color="danger" className="text-center" role="alert">
-                {message}
-              </Alert>}
-              <FormGroup className="mb-5">
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <Icon path={mdiAccount} />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName && touched.userName} />
-                  <FormFeedback tooltip>{errors.userName}</FormFeedback>
-                </InputGroup>
-              </FormGroup>
-              <FormGroup className="mb-5">
-                <InputGroup>
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <Icon path={mdiLock} />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
-                  <FormFeedback tooltip>{errors.password}</FormFeedback>
-                </InputGroup>
-              </FormGroup>
-              <FormGroup>
-                <Button type="submit" color="primary" className="btn-block">
-                  {isSubmitting && <Spinner className='mr-3' />}
+        <Form className="login-page" onSubmit={handleSubmit}>
+          <fieldset disabled={isSubmitting}>
+            {message && <Alert color="danger" className="text-center" role="alert">
+              {message}
+            </Alert>}
+            <FormGroup className="mb-5">
+              <InputGroup>
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <Icon path={mdiAccount} />
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName && touched.userName} />
+                <FormFeedback tooltip>{errors.userName}</FormFeedback>
+              </InputGroup>
+            </FormGroup>
+            <FormGroup className="mb-5">
+              <InputGroup>
+                <InputGroupAddon addonType="prepend">
+                  <InputGroupText>
+                    <Icon path={mdiLock} />
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
+                <FormFeedback tooltip>{errors.password}</FormFeedback>
+              </InputGroup>
+            </FormGroup>
+            <FormGroup>
+              <Button type="submit" color="primary" className="btn-block">
+                {isSubmitting && <Spinner className='mr-3' />}
                   Login
                 </Button>
-              </FormGroup>
-              <div>
-                Best view in <Firefox className="browser-icon" /> Firefox 60+  <Chrome className="browser-icon" /> Chrome 67+
+            </FormGroup>
+            <div>
+              Best view in <Firefox className="browser-icon" /> Firefox 60+  <Chrome className="browser-icon" /> Chrome 67+
               </div>
-            </fieldset>
-          </Form>
-        )}
+          </fieldset>
+        </Form>
+      )}
     </Formik>
   );
 };

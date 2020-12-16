@@ -30,10 +30,10 @@ export const installAxiosIntercepts = () => {
         switch (e.response.status) {
           case 401:
             store.dispatch(logout());
-            break;
+            return Promise.reject(new Error('Handled'));
           case 503:
             history.push(RouteLinks.ERROR_UM);
-            break;
+            return Promise.reject(new Error('Handled'));
           default:
             store.dispatch(error(e.message));
         }

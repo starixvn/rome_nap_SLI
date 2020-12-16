@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.Common.Services;
+    using NAP.UM.Models;
     using NAP.UM.Web;
 
     [AllowAnonymous]
@@ -20,14 +21,26 @@
         private readonly HttpContext context;
         private readonly IAppSettings appSettings;
         private readonly ICacheService memoryCacheService;
+        private readonly UMConfig umConfig;
 
-        public CommonController(IHttpContextAccessor httpContextAccessor, IAppSettings appSettings, ICacheContainer cacheContainer)
-            => (context, this.appSettings, memoryCacheService) = (httpContextAccessor.HttpContext, appSettings, cacheContainer.MemoryCacheService);
+        public CommonController(IHttpContextAccessor httpContextAccessor, IAppSettings appSettings, ICacheContainer cacheContainer, UMConfig umConfig)
+        {
+            context = httpContextAccessor.HttpContext;
+            this.appSettings = appSettings;
+            memoryCacheService = cacheContainer.MemoryCacheService;
+            this.umConfig = umConfig;
+        }
 
         [HttpGet("[action]")]
         public void Exception()
         {
             throw new NotSupportedException("Test");
+        }
+
+        [HttpGet("[action]")]
+        public void ToggleUM()
+        {
+            umConfig.UnscheduleEnabled = !umConfig.UnscheduleEnabled;
         }
 
         [HttpGet("[action]")]
