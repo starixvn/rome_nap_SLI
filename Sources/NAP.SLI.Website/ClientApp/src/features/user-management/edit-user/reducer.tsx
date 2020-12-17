@@ -50,6 +50,7 @@ export const update = (values, callback) => async (dispatch) => {
   }
   finally {
     callback();
+    dispatch(toggleModal());
   }
 }
 

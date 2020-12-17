@@ -47,6 +47,7 @@ export const resetPassword = (values, callback) => async (dispatch) => {
   }
   finally {
     callback();
+    dispatch(toggleModal());
   }
 }
 
