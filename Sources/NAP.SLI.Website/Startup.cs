@@ -38,6 +38,7 @@ namespace NAP.SLI.Website
     using Sentry;
     using NAP.UM.Extensions;
     using NAP.UM.Models;
+    using Microsoft.AspNetCore.StaticFiles;
 
     public class Startup
     {
@@ -126,7 +127,18 @@ namespace NAP.SLI.Website
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+
+            var contentTypeProvider = new FileExtensionContentTypeProvider();
+            if (AppSettings.Environment == Environments.Production)
+            {
+                contentTypeProvider.Mappings.Remove(".map");
+            }
+
+            app.UseSpaStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = contentTypeProvider
+            });
+
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
@@ -182,6 +194,7 @@ namespace NAP.SLI.Website
 
         private void AddAutoMapper(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Common.Models.AutoMapperProfile));
             services.AddAutoMapper(typeof(Account.Models.AutoMapperProfile));
         }
 

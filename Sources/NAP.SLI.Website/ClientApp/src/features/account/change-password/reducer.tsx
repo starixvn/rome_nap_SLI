@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { success, error } from '../../../common/components/toast/reducer';
-import { handleException } from '../../../common/ExceptionUtils';
+import { handleException } from '../../../common/utils/ExceptionUtils';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 

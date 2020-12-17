@@ -5,6 +5,11 @@ export const handleException = (e: Error) => {
     return;
   }
 
-  captureException(e);
-  showReportDialog();
+  if (window.configuration.env === 'PROD') {
+    captureException(e);
+    showReportDialog();
+  }
+  else {
+    throw e;
+  }
 };

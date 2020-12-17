@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RouteLinks } from '../../common/utils/RouteUtils';
 import { History } from 'history';
 import { SidebarState } from './SideBar';
-import { handleException } from '../../common/ExceptionUtils';
+import { handleException } from '../../common/utils/ExceptionUtils';
 
 type Callback = () => void;
 

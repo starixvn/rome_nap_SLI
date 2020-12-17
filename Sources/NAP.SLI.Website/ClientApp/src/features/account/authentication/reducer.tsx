@@ -1,9 +1,10 @@
 // @ts-nocheck
 import axios from 'axios';
-import storage from './storage';
+import storage from './services/storage';
 import { createSlice } from '@reduxjs/toolkit';
-import store from '../../../store';
-import { handleException } from '../../../common/ExceptionUtils';
+import { handleException } from '../../../common/utils/ExceptionUtils';
+import { startRefreshToken, clearRefreshToken, refreshToken } from './services/token';
+import { startCheckin, clearCheckin, checkin } from './services/connection';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
@@ -35,16 +36,19 @@ export const login = (values, callback) => async (dispatch) => {
     };
 
     const response = await axios.post('/api/authentication/login', payload);
-    const { userId, groupId, token, isSuccess, errMsg } = response.data;
+    const { userId, groupId, token, isSuccess, errMsg, connectionId } = response.data;
     if (isSuccess) {
       const account = {
         username: payload.username,
         userId,
         groupId,
-        token
+        token,
+        connectionId
       }
       storage.save(account);
       dispatch(loginSuccess({ account }));
+      startRefreshToken();
+      startCheckin();
     } else {
       dispatch(loginFailure({ message: errMsg }));
     }
@@ -58,50 +62,17 @@ export const login = (values, callback) => async (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
+  clearCheckin();
+  clearRefreshToken();
   storage.remove();
   dispatch(logoutSuccess());
 }
 
-let refreshTimer = undefined;
-const refreshTimeout = 10 * 60 * 1000;
-
-const clearRefreshTimer = () => {
-  if (refreshTimer) {
-    clearTimeout(refreshTimer);
-    refreshTimer = undefined;
-  }
-}
-
-const startRefreshTimer = () => {
-  clearRefreshTimer();
-  refreshTimer = setTimeout(async () => await refreshToken(), refreshTimeout);
-}
-
-const refreshToken = async () => {
-  try {
-    const account = storage.get();
-    if (account) {
-      const payload = {
-        token: account.token
-      };
-      const response = await axios.post('/api/authentication/refresh', payload);
-      const { isSuccess } = response.data;
-      if (isSuccess) {
-        Object.assign(account, { token: response.data.token });
-        storage.save(account);
-        startRefreshTimer();
-      } else {
-        store.dispatch(logout());
-      }
-    }
-  }
-  catch (e) {
-    handleException(e);
-  }
-}
-
 if (account) {
-  setTimeout(() => refreshToken(), 1);
+  setTimeout(async () => {
+    await refreshToken();
+    await checkin();
+  }, 1);
 }
 
 export default slice.reducer;

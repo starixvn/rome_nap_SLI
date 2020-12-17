@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { formatDate } from '../../../common/utils/DateUtils';
 import axios from 'axios';
-import { handleException } from '../../../common/ExceptionUtils';
+import { handleException } from '../../../common/utils/ExceptionUtils';
 
 export const ReportType = {
   Daily: 1,

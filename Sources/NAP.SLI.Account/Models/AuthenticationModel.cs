@@ -9,5 +9,7 @@
         public int GroupId { get; set; }
 
         public string Token { get; set; }
+
+        public string ConnectionId { get; set; }
     }
 }

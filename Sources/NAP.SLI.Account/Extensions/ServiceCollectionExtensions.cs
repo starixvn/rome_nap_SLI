@@ -10,6 +10,7 @@
         {
             services.AddScoped<JwtSecurityTokenHandler, JwtSecurityTokenHandler>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
     }
 }

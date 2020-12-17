@@ -7,5 +7,7 @@
         public string ErrMsg { get; set; }
 
         public bool IsSuccess => ErrCode == ErrorCodes.OK;
+
+        public static ResultModel Success => new ResultModel { ErrCode = 0 };
     }
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from './store';
-import storage from './features/account/authentication/storage';
+import storage from './features/account/authentication/services/storage';
 import { logout } from './features/account/authentication/reducer';
 import { error, hide } from './common/components/toast/reducer';
 import { history } from './App';

@@ -4,10 +4,12 @@
     using System.Diagnostics;
     using System.IO;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Fanex.Caching;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using NAP.UM.Models;
     using NAP.UM.Web;
@@ -22,13 +24,20 @@
         private readonly IAppSettings appSettings;
         private readonly ICacheService memoryCacheService;
         private readonly UMConfig umConfig;
+        private readonly IMapper mapper;
 
-        public CommonController(IHttpContextAccessor httpContextAccessor, IAppSettings appSettings, ICacheContainer cacheContainer, UMConfig umConfig)
+        public CommonController(
+            IHttpContextAccessor httpContextAccessor,
+            IAppSettings appSettings,
+            ICacheContainer cacheContainer,
+            UMConfig umConfig,
+            IMapper mapper)
         {
             context = httpContextAccessor.HttpContext;
             this.appSettings = appSettings;
             memoryCacheService = cacheContainer.MemoryCacheService;
             this.umConfig = umConfig;
+            this.mapper = mapper;
         }
 
         [HttpGet("[action]")]
@@ -49,7 +58,15 @@
             var content = await memoryCacheService.GetOrSetAsync<string>("configuration", async () =>
             {
                 var content = await System.IO.File.ReadAllTextAsync(Path.Combine(appSettings.AppDataPath, "configuration.js")).ConfigureAwait(false);
-                return content.Replace("{{SentryDsn}}", appSettings.SentryDsn);
+                var configurationModel = mapper.Map<ConfigurationModel>(appSettings);
+                var properties = configurationModel.GetType().GetProperties();
+                foreach (var property in properties)
+                {
+                    var value = property.GetValue(configurationModel).ToString();
+                    content = content.Replace("{{" + property.Name + "}}", value);
+                }
+
+                return content;
             }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
             return Content(content);
         }
@@ -73,7 +90,7 @@
             var startTime = DateTime.UtcNow;
             var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
             // Wait 1 second
-            await Task.Delay(1000);
+            await Task.Delay(1000).ConfigureAwait(false);
 
             var endTime = DateTime.UtcNow;
             var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;

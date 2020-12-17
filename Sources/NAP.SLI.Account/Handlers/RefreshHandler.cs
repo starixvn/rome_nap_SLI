@@ -11,10 +11,10 @@
     {
         private readonly ITokenService tokenService;
 
-        public RefreshHandler(
-            ITokenService tokenService
-            )
-            => (this.tokenService) = (tokenService);
+        public RefreshHandler(ITokenService tokenService)
+        {
+            this.tokenService = tokenService;
+        }
 
         public Task<AuthenticationModel> Handle(RefreshRequest request, CancellationToken cancellationToken)
         {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { createSlice, current } from '@reduxjs/toolkit';
 import { formatDate } from '../../../common/utils/DateUtils';
 import { DefaultPageSize } from '../../../common/utils/ReportUtils';
-import { handleException } from '../../../common/ExceptionUtils';
+import { handleException } from '../../../common/utils/ExceptionUtils';
 
 export const Modes = {
   Normal: 1,

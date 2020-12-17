@@ -29,5 +29,12 @@
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Recheckin(ReCheckinRequest request)
+        {
+            var result = await mediator.Send(request).ConfigureAwait(false);
+            return Ok(result);
+        }
     }
 }
