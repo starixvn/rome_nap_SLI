@@ -3,6 +3,7 @@ import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { success, error } from '../../../common/components/toast/reducer';
 import { query } from '../reducer';
+import { handleException } from '../../../common/ExceptionUtils';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
@@ -42,6 +43,9 @@ export const add = (values, callback) => async (dispatch) => {
     } else {
       dispatch(error(errMsg));
     }
+  }
+  catch (e) {
+    handleException(e);
   }
   finally {
     callback();

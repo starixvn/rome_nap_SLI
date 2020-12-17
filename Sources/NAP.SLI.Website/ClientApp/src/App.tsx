@@ -40,9 +40,9 @@ const App = () => {
           {isLoggedIn && <ChangePasswordModal />}
           <div className="main">
             <Switch>
-              <Route path="/login" component={LoginPage} />
+              <Route path={RouteLinks.LOGIN} component={LoginPage} />
+              <Route path={RouteLinks.ERROR_UM} component={UMPage} />
               <PrivateRoute exact path="/" component={HomePage} />
-              <PrivateRoute path={RouteLinks.ERROR_UM} component={UMPage} />
               <PrivateRoute path={RouteLinks.USER_MANAGEMENT} component={UserManagementPage} />
               <PrivateRoute path={RouteLinks.CUSTOMER_SETTING} component={CustomerSettingPage} />
               <PrivateRoute path={RouteLinks.WIN_LOSS_DETAIL} component={WinLossDetailPage} />

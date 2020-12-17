@@ -3,6 +3,7 @@ import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { AllGroupsId } from '../../common/utils/UserGroupUtils';
 import { success, error } from '../../common/components/toast/reducer';
+import { handleException } from '../../common/ExceptionUtils';
 
 const slice = createSlice({
   name: 'user-management',
@@ -46,6 +47,9 @@ export const query = (values, callback) => async (dispatch) => {
     dispatch(queryRequest());
     const response = await axios.post('/simple-api/query', payload);
     dispatch(querySuccess({ users: response.data }));
+  }
+  catch (e) {
+    handleException(e);
   }
   finally {
     callback();

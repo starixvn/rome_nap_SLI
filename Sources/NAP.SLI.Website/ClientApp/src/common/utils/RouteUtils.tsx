@@ -1,5 +1,6 @@
 export const RouteLinks = {
-  INDEX: '',
+  HOME: '/',
+  LOGIN: '/login',
   ERROR_UM: '/error/um',
   USER_MANAGEMENT: '/administration/user-management',
   CUSTOMER_SETTING: '/customer-setting',

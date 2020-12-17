@@ -3,6 +3,7 @@ import axios from 'axios';
 import storage from './storage';
 import { createSlice } from '@reduxjs/toolkit';
 import store from '../../../store';
+import { handleException } from '../../../common/ExceptionUtils';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
@@ -48,6 +49,9 @@ export const login = (values, callback) => async (dispatch) => {
       dispatch(loginFailure({ message: errMsg }));
     }
   }
+  catch (e) {
+    handleException(e);
+  }
   finally {
     callback();
   }
@@ -91,8 +95,8 @@ const refreshToken = async () => {
       }
     }
   }
-  catch {
-    console.error('Unable to refresh token');
+  catch (e) {
+    handleException(e);
   }
 }
 

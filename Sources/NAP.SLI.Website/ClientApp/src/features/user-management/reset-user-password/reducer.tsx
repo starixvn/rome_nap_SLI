@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { success, error } from '../../../common/components/toast/reducer';
+import { handleException } from '../../../common/ExceptionUtils';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
@@ -40,6 +41,9 @@ export const resetPassword = (values, callback) => async (dispatch) => {
     } else {
       dispatch(error(errMsg));
     }
+  }
+  catch (e) {
+    handleException(e);
   }
   finally {
     callback();

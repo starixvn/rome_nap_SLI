@@ -1,16 +1,17 @@
 // @ts-nocheck
 import './LoginPage.scss';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Alert, Spinner, FormFeedback } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from "react-router";
 import { Formik, Field } from 'formik';
+import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import Icon from '@mdi/react';
 import { mdiAccount, mdiLock } from '@mdi/js';
 import { login } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
+import { RouteLinks } from '../../../common/utils/RouteUtils';
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string()
@@ -21,12 +22,15 @@ const validationSchema = Yup.object().shape({
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { message, account } = useSelector(state => state.authentication);
   const isLoggedIn = account !== undefined;
 
-  if (isLoggedIn) {
-    return <Redirect to='/' />;
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push(RouteLinks.HOME);
+    }
+  });
 
   return (
     <Formik

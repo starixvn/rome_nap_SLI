@@ -3,6 +3,7 @@ import axios from 'axios';
 import { createSlice, current } from '@reduxjs/toolkit';
 import { formatDate } from '../../../common/utils/DateUtils';
 import { DefaultPageSize } from '../../../common/utils/ReportUtils';
+import { handleException } from '../../../common/ExceptionUtils';
 
 export const Modes = {
   Normal: 1,
@@ -86,6 +87,9 @@ export const query = (data, callback) => async (dispatch) => {
     records.forEach((record) => calculateCompanyWinLoss(record));
     calculateCompanyWinLoss(total);
     dispatch(querySuccess({ data: response.data }));
+  }
+  catch (e) {
+    handleException(e);
   }
   finally {
     callback();

@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RouteLinks } from '../../common/utils/RouteUtils';
 import { History } from 'history';
 import { SidebarState } from './SideBar';
+import { handleException } from '../../common/ExceptionUtils';
 
 type Callback = () => void;
 
@@ -66,10 +67,12 @@ export const getCustomerInformation = (username: string, history: History, callb
           headline
         }
       }));
-      history.push(RouteLinks.INDEX);
     } else {
       dispatch(getCustomerInformationFailure({ message: errMsg }));
     }
+  }
+  catch (e) {
+    handleException(e);
   }
   finally {
     callback();

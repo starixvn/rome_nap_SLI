@@ -12,8 +12,7 @@ import SentryFallback from './common/components/error/SentryFallback';
 const urlParams = new URLSearchParams(window.location.search);
 window.configuration.umToken = urlParams.get('umToken');
 init({
-  dsn: window.configuration.sentryDsn,
-  ignoreErrors: ['Handled']
+  dsn: window.configuration.sentryDsn
 });
 installAxiosIntercepts();
 
