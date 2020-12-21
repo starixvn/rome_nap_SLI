@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
+import { RouteLinks } from './common/utils/RouteUtils';
 
 const propTypes = {
   component: PropTypes.any.isRequired,
@@ -18,7 +19,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
     <Route {...rest} render={props => (
       isLoggined
         ? <Component {...props} />
-        : <Redirect to={{ pathname: '/login' }} />
+        : <Redirect to={{ pathname: RouteLinks.LOGIN }} />
     )} />
   )
 };

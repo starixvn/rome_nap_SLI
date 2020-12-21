@@ -5,19 +5,20 @@ import storage from './storage';
 import { logout } from '../reducer';
 import store from '../../../../store';
 
-let timer = undefined;
-const timeout = 30 * 1000;
+let timeout = undefined;
+const timeoutInterval = 30 * 1000;
 
-export const clearCheckin = () => {
-  if (timer) {
-    clearTimeout(timer);
-    timer = undefined;
+export const stopCheckin = () => {
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = undefined;
   }
 }
 
 export const startCheckin = () => {
-  clearCheckin();
-  timer = setTimeout(async () => await checkin(), timeout);
+  if (!timeout) {
+    timeout = setTimeout(async () => await checkin(), timeoutInterval);
+  }
 }
 
 export const checkin = async () => {
@@ -33,6 +34,7 @@ export const checkin = async () => {
     const response = await axios.post('/api/authentication/recheckin', payload);
     const { isSuccess } = response.data;
     if (isSuccess) {
+      stopCheckin();
       startCheckin();
     } else {
       alert("You have been logged out because your account has logged into another session. Don't recognize this activity? Please contact your upline for assistance.")

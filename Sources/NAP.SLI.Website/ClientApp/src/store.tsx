@@ -10,7 +10,8 @@ import addExistingUserReducer from './features/user-management/add-existing-user
 import editUserReducer from './features/user-management/edit-user/reducer';
 import resetUserPasswordReducer from './features/user-management/reset-user-password/reducer';
 import winLossDetailReducer from './features/reports/win-loss-detail/reducer';
-import winLossAnalysis from './features/reports/win-loss-analysis/reducer';
+import winLossAnalysisReducer from './features/reports/win-loss-analysis/reducer';
+import umReducer from './features/error/UM/reducer';
 
 const middleware = [
   ...getDefaultMiddleware(),
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
   editUser: editUserReducer,
   resetUserPassword: resetUserPasswordReducer,
   winLossDetail: winLossDetailReducer,
-  winLossAnalysis: winLossAnalysis
+  winLossAnalysis: winLossAnalysisReducer,
+  um: umReducer
 });
 
 const store = configureStore({

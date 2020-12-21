@@ -5,19 +5,20 @@ import store from '../../../../store';
 import { logout } from '../reducer';
 import storage from './storage';
 
-let timer = undefined;
-const timeout = 10 * 60 * 1000;
+let timeout = undefined;
+const timeoutInterval = 10 * 60 * 1000;
 
-export const clearRefreshToken = () => {
-  if (timer) {
-    clearTimeout(timer);
-    timer = undefined;
+export const stopRefreshToken = () => {
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = undefined;
   }
 }
 
 export const startRefreshToken = () => {
-  clearRefreshToken();
-  timer = setTimeout(async () => await refreshToken(), timeout);
+  if (!timeout) {
+    timeout = setTimeout(async () => await refreshToken(), timeoutInterval);
+  }
 }
 
 export const refreshToken = async () => {
@@ -32,6 +33,7 @@ export const refreshToken = async () => {
       if (isSuccess) {
         Object.assign(account, { token: response.data.token });
         storage.save(account);
+        stopRefreshToken();
         startRefreshToken();
       } else {
         store.dispatch(logout());

@@ -5,6 +5,7 @@ import { logout } from './features/account/authentication/reducer';
 import { error, hide } from './common/components/toast/reducer';
 import { history } from './App';
 import { RouteLinks } from './common/utils/RouteUtils';
+import { checkSuccess } from './features/error/UM/reducer';
 
 export const installAxiosIntercepts = () => {
   axios.interceptors.request.use(
@@ -32,6 +33,8 @@ export const installAxiosIntercepts = () => {
             store.dispatch(logout());
             return Promise.reject(new Error('Handled'));
           case 503:
+            const umTime = e.response.data;
+            store.dispatch(checkSuccess({ umTime }));
             history.push(RouteLinks.ERROR_UM);
             return Promise.reject(new Error('Handled'));
           default:

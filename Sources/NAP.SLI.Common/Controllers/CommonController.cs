@@ -12,6 +12,7 @@
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using NAP.UM.Models;
+    using NAP.UM.Services;
     using NAP.UM.Web;
 
     [AllowAnonymous]
@@ -24,6 +25,7 @@
         private readonly IAppSettings appSettings;
         private readonly ICacheService memoryCacheService;
         private readonly UMConfig umConfig;
+        private readonly IMaintenanceService maintenanceService;
         private readonly IMapper mapper;
 
         public CommonController(
@@ -31,12 +33,14 @@
             IAppSettings appSettings,
             ICacheContainer cacheContainer,
             UMConfig umConfig,
+            IMaintenanceService maintenanceService,
             IMapper mapper)
         {
             context = httpContextAccessor.HttpContext;
             this.appSettings = appSettings;
             memoryCacheService = cacheContainer.MemoryCacheService;
             this.umConfig = umConfig;
+            this.maintenanceService = maintenanceService;
             this.mapper = mapper;
         }
 
@@ -69,6 +73,12 @@
                 return content;
             }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
             return Content(content);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UMTime()
+        {
+            return Ok(await maintenanceService.GetUMTimeAsync().ConfigureAwait(false));
         }
 
         [HttpGet("[action]")]

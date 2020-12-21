@@ -3,8 +3,8 @@ import axios from 'axios';
 import storage from './services/storage';
 import { createSlice } from '@reduxjs/toolkit';
 import { handleException } from '../../../common/utils/ExceptionUtils';
-import { startRefreshToken, clearRefreshToken, refreshToken } from './services/token';
-import { startCheckin, clearCheckin, checkin } from './services/connection';
+import { startRefreshToken, stopRefreshToken, refreshToken } from './services/token';
+import { startCheckin, stopCheckin, checkin } from './services/connection';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
@@ -23,7 +23,7 @@ const slice = createSlice({
     logoutSuccess: (state) => {
       state.account = undefined;
     }
-  },
+  }
 });
 
 export const { loginFailure, loginSuccess, logoutSuccess } = slice.actions;
@@ -47,8 +47,6 @@ export const login = (values, callback) => async (dispatch) => {
       }
       storage.save(account);
       dispatch(loginSuccess({ account }));
-      startRefreshToken();
-      startCheckin();
     } else {
       dispatch(loginFailure({ message: errMsg }));
     }
@@ -62,8 +60,8 @@ export const login = (values, callback) => async (dispatch) => {
 }
 
 export const logout = () => (dispatch) => {
-  clearCheckin();
-  clearRefreshToken();
+  stopCheckin();
+  stopRefreshToken();
   storage.remove();
   dispatch(logoutSuccess());
 }

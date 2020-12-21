@@ -21,7 +21,9 @@ namespace NAP.UM.Web
                 var umTime = await maintenanceService.GetUMTimeAsync().ConfigureAwait(false);
                 if (umTime.IsUnderMaintenanceTime)
                 {
+                    httpContext.Response.Clear();
                     httpContext.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                    await httpContext.Response.WriteAsJsonAsync(umTime);
                     return;
                 }
             }

@@ -1,14 +1,15 @@
 import './App.scss';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Router } from 'react-router';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createBrowserHistory } from 'history';
+import { useHistory } from 'react-router-dom';
 import { RouteLinks } from './common/utils/RouteUtils';
 import NavMenu from './features/nav/NavMenu';
 import SideBar from './features/sidebar/SideBar';
 import PrivateRoute from './PrivateRoute';
-import NotFoundPage from './features/error/NotFoundPage';
-import UMPage from './features/error/UMPage';
+import NotFoundPage from './features/error/not-found/Page';
+import UMPage from './features/error/UM/Page';
 import UserManagementPage from './features/user-management/Page';
 import LoginPage from './features/account/authentication/LoginPage';
 import HomePage from './features/home/Page';
@@ -23,26 +24,41 @@ import WinLossAnalysisPage from './features/reports/win-loss-analysis/Page';
 import BetListPage from './features/reports/bet-list/Page';
 import ResultsPage from './features/reports/results/Page';
 import { RootState } from './store';
+import { startRefreshToken, stopRefreshToken } from './features/account/authentication/services/token';
+import { startCheckin, stopCheckin } from './features/account/authentication/services/connection';
 
 export const history = createBrowserHistory();
 
 const App = () => {
   const { account } = useSelector((state: RootState) => state.authentication);
   const { isOpen } = useSelector((state: RootState) => state.sidebar);
+  const { umTime } = useSelector((state: RootState) => state.um);
+  const { isUnderMaintenanceTime } = umTime;
   const isLoggedIn = account !== undefined;
+  const isLayout = isLoggedIn && !isUnderMaintenanceTime;
+
+  useEffect(() => {
+    if (account) {
+      startCheckin();
+      startRefreshToken();
+    } else {
+      stopCheckin();
+      stopRefreshToken();
+    }
+  });
 
   return (
     <Router history={history}>
-      <div className={`wrapper ${isOpen && isLoggedIn ? 'open' : ''}`}>
-        {isLoggedIn && <SideBar />}
+      <div className={`wrapper ${isOpen && isLayout ? 'open' : ''}`}>
+        {isLayout && <SideBar />}
         <div className="content">
-          {isLoggedIn && <NavMenu />}
-          {isLoggedIn && <ChangePasswordModal />}
+          {isLayout && <NavMenu />}
+          {isLayout && <ChangePasswordModal />}
           <div className="main">
             <Switch>
-              <Route path={RouteLinks.LOGIN} component={LoginPage} />
               <Route path={RouteLinks.ERROR_UM} component={UMPage} />
-              <PrivateRoute exact path="/" component={HomePage} />
+              <Route path={RouteLinks.LOGIN} component={LoginPage} />
+              <PrivateRoute exact path={RouteLinks.HOME} component={HomePage} />
               <PrivateRoute path={RouteLinks.USER_MANAGEMENT} component={UserManagementPage} />
               <PrivateRoute path={RouteLinks.CUSTOMER_SETTING} component={CustomerSettingPage} />
               <PrivateRoute path={RouteLinks.WIN_LOSS_DETAIL} component={WinLossDetailPage} />
