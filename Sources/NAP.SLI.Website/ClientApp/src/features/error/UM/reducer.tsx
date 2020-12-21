@@ -29,12 +29,8 @@ const slice = createSlice({
       const { umTime } = action.payload;
       state.umTime = umTime;
       if (umTime.isUnderMaintenanceTime) {
-        stopCheckin();
-        stopRefreshToken();
         startCheckUM(umTime);
       } else {
-        startCheckin();
-        startRefreshToken();
         stopCheckUM();
       }
     }

@@ -44,13 +44,13 @@
             this.mapper = mapper;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public void Exception()
         {
             throw new NotSupportedException("Test");
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public void ToggleUM()
         {
             umConfig.UnscheduleEnabled = !umConfig.UnscheduleEnabled;

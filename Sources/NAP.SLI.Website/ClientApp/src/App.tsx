@@ -38,12 +38,17 @@ const App = () => {
   const isLayout = isLoggedIn && !isUnderMaintenanceTime;
 
   useEffect(() => {
-    if (account) {
-      startCheckin();
-      startRefreshToken();
-    } else {
+    if (isUnderMaintenanceTime) {
       stopCheckin();
       stopRefreshToken();
+    } else {
+      if (account) {
+        startCheckin();
+        startRefreshToken();
+      } else {
+        stopCheckin();
+        stopRefreshToken();
+      }
     }
   });
 
