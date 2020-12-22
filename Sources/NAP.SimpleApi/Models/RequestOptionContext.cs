@@ -11,27 +11,39 @@
 
     public interface IRequestOptionContext
     {
-        ICriteria CreateCriteria(SimpleApiRequest request, ActionTypes actionType);
+        RequestOption GetRequestOption(SimpleApiRequest request, ActionTypes actionType);
 
-        ICriteria CreateCriteria(IQueryCollection queryCollection, ActionTypes actionType);
+        RequestOption GetRequestOption(IQueryCollection queryCollection, ActionTypes actionType);
+
+        ICriteria CreateCriteria(SimpleApiRequest request, RequestOption requestOption);
+
+        ICriteria CreateCriteria(IQueryCollection queryCollection, RequestOption requestOption);
     }
 
-    public class RequestOptionContext: IRequestOptionContext
+    public class RequestOptionContext : IRequestOptionContext
     {
         private readonly IServiceProvider serviceProvider;
 
         public RequestOptionContext(IServiceProvider serviceProvider)
-            => (this.serviceProvider) = (serviceProvider);
+        {
+            this.serviceProvider = serviceProvider;
+        }
 
-        public virtual ICriteria CreateCriteria(SimpleApiRequest request, ActionTypes actionType)
+        public RequestOption GetRequestOption(SimpleApiRequest request, ActionTypes actionType)
         {
             var requestOptions = ServiceCollectionExtensions.RequestOptions;
-            var requestOption = requestOptions.FirstOrDefault(x => x.ApiKey == request.ApiKey && x.ActionType == actionType);
-            if (requestOption == null)
-            {
-                throw new InvalidOperationException("ApiKey not found");
-            }
+            return requestOptions.FirstOrDefault(x => x.ApiKey == request.ApiKey && x.ActionType == actionType);
+        }
 
+        public RequestOption GetRequestOption(IQueryCollection queryCollection, ActionTypes actionType)
+        {
+            var requestOptions = ServiceCollectionExtensions.RequestOptions;
+            queryCollection.TryGetValue("apiKey", out var apiKey);
+            return requestOptions.FirstOrDefault(x => x.ApiKey == apiKey && x.ActionType == actionType);
+        }
+
+        public virtual ICriteria CreateCriteria(SimpleApiRequest request, RequestOption requestOption)
+        {
             var criteria = ActivatorUtilities.CreateInstance(serviceProvider, requestOption.CriteriaType) as ICriteria;
             ObjectHelper.CopyProperties(request.Data, criteria);
             if (!criteria.IsValid())
@@ -42,16 +54,8 @@
             return criteria;
         }
 
-        public virtual ICriteria CreateCriteria(IQueryCollection queryCollection, ActionTypes actionType)
+        public virtual ICriteria CreateCriteria(IQueryCollection queryCollection, RequestOption requestOption)
         {
-            var requestOptions = ServiceCollectionExtensions.RequestOptions;
-            queryCollection.TryGetValue("apiKey", out var apiKey);
-            var requestOption = requestOptions.FirstOrDefault(x => x.ApiKey == apiKey && x.ActionType == actionType);
-            if (requestOption == null)
-            {
-                throw new InvalidOperationException("ApiKey not found");
-            }
-
             var criteria = ActivatorUtilities.CreateInstance(serviceProvider, requestOption.CriteriaType) as ICriteria;
             ObjectHelper.CopyProperties(queryCollection, criteria);
             if (!criteria.IsValid())

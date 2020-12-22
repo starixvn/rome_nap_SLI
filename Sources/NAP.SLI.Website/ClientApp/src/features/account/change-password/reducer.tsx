@@ -43,7 +43,6 @@ export const changePassword = (values, callback) => async (dispatch) => {
   }
   finally {
     callback();
-    dispatch(toggleModal());
   }
 }
 

@@ -18,7 +18,7 @@
             var requestOptions = profile.RequestOptions.Select(x =>
             {
                 string apiKey = string.IsNullOrEmpty(profile.Prefix) ? x.ApiKey : $"{profile.Prefix}:{x.ApiKey}";
-                return new RequestOption(apiKey, x.CriteriaType, x.ActionType);
+                return new RequestOption(apiKey, x.CriteriaType, x.ActionType, x.Policy);
             });
             RequestOptions = RequestOptions.Concat(requestOptions);
             ValidateDuplicateKeys();

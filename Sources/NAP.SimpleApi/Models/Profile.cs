@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Fanex.Data.Repository;
+    using Microsoft.AspNetCore.Authorization;
 
     public abstract class Profile
     {
@@ -23,17 +24,27 @@
 
         public void AddQuery<T>(string apiKey) where T : ICriteria
         {
-            Add(apiKey, typeof(T), ActionTypes.Query);
+            AddQuery<T>(apiKey, null);
+        }
+
+        public void AddQuery<T>(string apiKey, AuthorizationPolicy policy) where T : ICriteria
+        {
+            Add(apiKey, typeof(T), ActionTypes.Query, policy);
         }
 
         public void AddCommand<T>(string apiKey) where T : ICriteria
         {
-            Add(apiKey, typeof(T), ActionTypes.Command);
+            AddCommand<T>(apiKey, null);
         }
 
-        private void Add(string apiKey, Type criteriaType, ActionTypes actionType)
+        public void AddCommand<T>(string apiKey, AuthorizationPolicy policy) where T : ICriteria
         {
-            RequestOptions.Add(new RequestOption(apiKey, criteriaType, actionType));
+            Add(apiKey, typeof(T), ActionTypes.Command, policy);
+        }
+
+        private void Add(string apiKey, Type criteriaType, ActionTypes actionType, AuthorizationPolicy policy)
+        {
+            RequestOptions.Add(new RequestOption(apiKey, criteriaType, actionType, policy));
         }
     }
 }

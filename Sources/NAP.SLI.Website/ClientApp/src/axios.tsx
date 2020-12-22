@@ -32,6 +32,9 @@ export const installAxiosIntercepts = () => {
           case 401:
             store.dispatch(logout());
             return Promise.reject(new Error('Handled'));
+          case 403:
+            store.dispatch(error('You are not authorized to use this function'));
+            return Promise.reject(new Error('Handled'));
           case 503:
             const umTime = e.response.data;
             store.dispatch(checkSuccess({ umTime }));

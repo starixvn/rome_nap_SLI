@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Text;
     using System.Threading.Tasks;
     using AutoMapper;
     using Fanex.Caching;
@@ -72,7 +73,7 @@
 
                 return content;
             }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
-            return Content(content);
+            return Content(content, "application/javascript", Encoding.UTF8);
         }
 
         [HttpPost("[action]")]

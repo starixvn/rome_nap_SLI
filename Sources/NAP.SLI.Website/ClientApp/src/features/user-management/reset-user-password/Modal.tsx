@@ -28,7 +28,7 @@ const ResetUserPasswordModal = () => {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          dispatch(resetPassword(values), () => setSubmitting(false));
+          dispatch(resetPassword(values, () => setSubmitting(false)));
         }}
       >
         {({
@@ -37,40 +37,40 @@ const ResetUserPasswordModal = () => {
           handleSubmit,
           isSubmitting
         }) => (
-            <Form onSubmit={handleSubmit}>
-              <fieldset disabled={isSubmitting}>
-                <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal()) })}>
-                  Reset Password
+          <Form onSubmit={handleSubmit}>
+            <fieldset disabled={isSubmitting}>
+              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal()) })}>
+                Reset Password
               </ModalHeader>
-                <ModalBody>
-                  <FormGroup row>
-                    <Label sm={4}>User Name</Label>
-                    <Label sm={8}>{user.userName}</Label>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Label sm={4}>Password</Label>
-                    <Col sm={8}>
-                      <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
-                      <FormFeedback>{errors.password}</FormFeedback>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Label sm={4}>Confirm Password</Label>
-                    <Col sm={8}>
-                      <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword && touched.confirmPassword} />
-                      <FormFeedback>{errors.confirmPassword}</FormFeedback>
-                    </Col>
-                  </FormGroup>
-                </ModalBody>
-                <ModalFooter>
-                  <Button type="submit" color="primary">
-                    {isSubmitting && <Spinner className='mr-3' />}
+              <ModalBody>
+                <FormGroup row>
+                  <Label sm={4}>User Name</Label>
+                  <Label sm={8}>{user.userName}</Label>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={4}>Password</Label>
+                  <Col sm={8}>
+                    <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
+                    <FormFeedback>{errors.password}</FormFeedback>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={4}>Confirm Password</Label>
+                  <Col sm={8}>
+                    <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword && touched.confirmPassword} />
+                    <FormFeedback>{errors.confirmPassword}</FormFeedback>
+                  </Col>
+                </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <Button type="submit" color="primary">
+                  {isSubmitting && <Spinner className='mr-3' />}
                     Submit
                   </Button>
-                </ModalFooter>
-              </fieldset>
-            </Form>
-          )}
+              </ModalFooter>
+            </fieldset>
+          </Form>
+        )}
       </Formik>
     </Modal>
   );

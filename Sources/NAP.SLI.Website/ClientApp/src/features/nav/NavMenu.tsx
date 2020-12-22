@@ -10,10 +10,11 @@ import { logout } from '../account/authentication/reducer';
 import { toggleModal } from '../account/change-password/reducer';
 import { toggle } from '../sidebar/reducer';
 import { RouteLinks } from '../../common/utils/RouteUtils';
+import { UserGroup } from '../../common/utils/UserGroupUtils';
 
 const NavMenu = () => {
   const dispatch = useDispatch();
-  const { username } = useSelector(state => state.authentication.account);
+  const { username, groupId } = useSelector(state => state.authentication.account);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = useCallback(() => {
@@ -28,11 +29,11 @@ const NavMenu = () => {
       <NavbarToggler onClick={handleToggle} className="mr-2" />
       <Collapse className="d-sm-inline-flex" isOpen={isOpen} navbar>
         <Nav className="mr-auto">
-          <NavItem>
+          {groupId === UserGroup.Admin && <NavItem>
             <NavLink tag={RRNavLink} className="nav-link" to={RouteLinks.USER_MANAGEMENT}>
               User Management
             </NavLink>
-          </NavItem>
+          </NavItem>}
         </Nav>
         <UncontrolledDropdown>
           <DropdownToggle caret color="outline-light">

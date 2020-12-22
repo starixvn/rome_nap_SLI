@@ -49,7 +49,6 @@ export const add = (values, callback) => async (dispatch) => {
   }
   finally {
     callback();
-    dispatch(toggleModal());
   }
 }
 

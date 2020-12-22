@@ -41,6 +41,7 @@ namespace NAP.SLI.Website
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.Authorization;
+    using NAP.SLI.Common.Models;
 
     public class Startup
     {
@@ -97,6 +98,11 @@ namespace NAP.SLI.Website
             var authenticationSettings = authenticationSection.Get<AuthenticationSettings>();
             AddJwtAuthentication(services, authenticationSettings);
 
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy(AuthorizationPolicies.Administration, AuthorizationPolicies.AdministrationPolicy);
+            });
+
             var umConfigOption = Configuration.GetSection("UM");
             services.Configure<UMConfig>(umConfigOption);
             var umConfig = umConfigOption.Get<UMConfig>();
@@ -137,7 +143,7 @@ namespace NAP.SLI.Website
             app.UseStaticFiles();
 
             var contentTypeProvider = new FileExtensionContentTypeProvider();
-            if (AppSettings.Environment == Environments.Production)
+            if (AppSettings.Environment == Common.Models.Environments.PROD)
             {
                 contentTypeProvider.Mappings.Remove(".map");
             }
