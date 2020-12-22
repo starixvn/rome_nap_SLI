@@ -9,14 +9,16 @@
     using NAP.SLI.Account.Models;
     using NAP.SLI.Common.Models;
 
-    public interface ITokenService
+    public interface ITokenManager
     {
         string Generate(TokenModel model);
+
+        TokenModel Validate(string token);
 
         AuthenticationModel Refresh(string token);
     }
 
-    public class TokenService : ITokenService
+    public class TokenManager : ITokenManager
     {
         private readonly AuthenticationSettings authenticationSettings;
         private readonly JwtSecurityTokenHandler tokenHandler;
@@ -36,11 +38,11 @@
             }
         }
 
-        public TokenService(
-            IOptions<AuthenticationSettings> authenticationSettingsOptions,
-            JwtSecurityTokenHandler tokenHandler
-            )
-            => (authenticationSettings, this.tokenHandler) = (authenticationSettingsOptions.Value, tokenHandler);
+        public TokenManager(IOptions<AuthenticationSettings> authenticationSettingsOptions, JwtSecurityTokenHandler tokenHandler)
+        {
+            authenticationSettings = authenticationSettingsOptions.Value;
+            this.tokenHandler = tokenHandler;
+        }
 
         public string Generate(TokenModel model)
         {
@@ -60,7 +62,7 @@
             return tokenHandler.WriteToken(token);
         }
 
-        public AuthenticationModel Refresh(string token)
+        public TokenModel Validate(string token)
         {
             try
             {
@@ -68,23 +70,32 @@
                 var username = claims.FindFirst(x => x.Type == ClaimTypes.Name).Value;
                 var userId = int.Parse(claims.FindFirst(x => x.Type == NapClaimTypes.UserId).Value);
                 var groupId = int.Parse(claims.FindFirst(x => x.Type == NapClaimTypes.GroupId).Value);
-                var tokenModel = new TokenModel(username, userId, groupId);
-                var newToken = Generate(tokenModel);
-                return new AuthenticationModel
-                {
-                    UserId = userId,
-                    GroupId = groupId,
-                    Token = newToken
-                };
+                return new TokenModel(username, userId, groupId);
             }
-            catch (Exception ex)
+            catch
+            {
+                return null;
+            }
+        }
+
+        public AuthenticationModel Refresh(string token)
+        {
+            var tokenModel = Validate(token);
+            if (tokenModel == null)
             {
                 return new AuthenticationModel
                 {
-                    ErrCode = ErrorCodes.GenericError,
-                    ErrMsg = ex.Message
+                    ErrCode = ErrorCodes.GenericError
                 };
             }
+
+            var newToken = Generate(tokenModel);
+            return new AuthenticationModel
+            {
+                UserId = tokenModel.UserId,
+                GroupId = tokenModel.GroupId,
+                Token = newToken
+            };
         }
     }
 }

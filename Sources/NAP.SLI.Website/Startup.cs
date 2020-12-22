@@ -39,6 +39,8 @@ namespace NAP.SLI.Website
     using NAP.UM.Extensions;
     using NAP.UM.Models;
     using Microsoft.AspNetCore.StaticFiles;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc.Authorization;
 
     public class Startup
     {
@@ -78,11 +80,17 @@ namespace NAP.SLI.Website
             Fanex.Caching.Memory.MemoryCacheServiceCollectionExtensions.AddMemoryCache(services, Configuration.GetSection("Fanex.Caching"));
             services.AddRedisCache(Configuration.GetSection("Fanex.Caching.Redis"));
 
-            services.AddControllersWithViews().AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+            services
+                .AddControllersWithViews(config =>
+                {
+                    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    config.Filters.Add(new AuthorizeFilter(policy));
+                })
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
 
             var authenticationSection = Configuration.GetSection("Authentication");
             services.Configure<AuthenticationSettings>(authenticationSection);
@@ -164,15 +172,11 @@ namespace NAP.SLI.Website
         private void AddJwtAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
         {
             var secretKey = Encoding.ASCII.GetBytes(authenticationSettings.SecretKey);
-            services.AddAuthentication(x =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(secretKey),

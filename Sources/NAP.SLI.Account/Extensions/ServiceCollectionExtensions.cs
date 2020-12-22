@@ -9,7 +9,7 @@
         public static void AddAccountModule(this IServiceCollection services)
         {
             services.AddScoped<JwtSecurityTokenHandler, JwtSecurityTokenHandler>();
-            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITokenManager, TokenManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
     }

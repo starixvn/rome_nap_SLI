@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
@@ -9,18 +10,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getDownlineLevel, getLevelName } from '../../../common/utils/CustomerLevelUtils';
 import Table from './Table';
 import { Modes, selectCustomer } from './reducer';
+import { RouteLinks } from '../../../common/utils/RouteUtils';
 
 const propTypes = {
   location: PropTypes.object.isRequired
 };
 
 const MasterWinLossDetailPage = ({ location }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const state = location.state || {};
   const { custId, roleId, username } = state;
   const { mode, data, customer, uplineCustomers } = useSelector(state => state.winLossDetail);
 
   useEffect(() => {
+    if (!custId) {
+      history.push(RouteLinks.HOME);
+      return;
+    }
+
     dispatch(selectCustomer({
       customer: {
         custId,

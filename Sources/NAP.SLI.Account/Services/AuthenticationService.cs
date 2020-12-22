@@ -22,7 +22,7 @@ namespace NAP.SLI.Account.Services
     public class AuthenticationService : IAuthenticationService
     {
         private const int ConnectionCacheTimeInDays = 1;
-        private readonly ITokenService tokenService;
+        private readonly ITokenManager tokenService;
         private readonly IDynamicRepository dynamicRepository;
         private readonly ICurrentContextService currentContextService;
         private readonly ICurrentUserService currentUserService;
@@ -30,7 +30,7 @@ namespace NAP.SLI.Account.Services
         private readonly ICacheService cacheService;
 
         public AuthenticationService(
-            ITokenService tokenService,
+            ITokenManager tokenService,
             IDynamicRepository dynamicRepository,
             ICurrentContextService currentContextService,
             ICurrentUserService currentUserService,

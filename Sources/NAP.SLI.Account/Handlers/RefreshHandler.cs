@@ -9,9 +9,9 @@
 
     public class RefreshHandler : IRequestHandler<RefreshRequest, AuthenticationModel>
     {
-        private readonly ITokenService tokenService;
+        private readonly ITokenManager tokenService;
 
-        public RefreshHandler(ITokenService tokenService)
+        public RefreshHandler(ITokenManager tokenService)
         {
             this.tokenService = tokenService;
         }

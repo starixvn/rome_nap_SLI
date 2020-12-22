@@ -12,10 +12,12 @@
         private readonly IMediator mediator;
 
         public WinLossDetailController(IMediator mediator)
-            => (this.mediator) = (mediator);
+        {
+            this.mediator = mediator;
+        }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Query([FromBody]WinLossDetailQueryRequest request)
+        public async Task<IActionResult> Query([FromBody] WinLossDetailQueryRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
