@@ -9,15 +9,14 @@ interface PrivateRouteProps extends RouteProps {
   component: any;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
-
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...rest }) => {
   const { account } = useSelector((state: RootState) => state.authentication);
   const isLoggined = account !== undefined;
 
   return (
-    <Route {...props} render={props => (
+    <Route {...rest} render={props => (
       isLoggined
-        ? <React.Component {...props} />
+        ? <Component {...props} />
         : <Redirect to={{ pathname: RouteLinks.LOGIN }} />
     )} />
   )
