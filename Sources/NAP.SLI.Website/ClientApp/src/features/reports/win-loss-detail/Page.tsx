@@ -11,6 +11,8 @@ import { getDownlineLevel, getLevelName } from '../../../common/utils/CustomerLe
 import Table from './Table';
 import { Modes, selectCustomer } from './reducer';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
+import Pagination from '../../../common/components/pagination/Component';
+import { query } from './reducer';
 
 const propTypes = {
   location: PropTypes.object.isRequired
@@ -21,7 +23,7 @@ const MasterWinLossDetailPage = ({ location }) => {
   const dispatch = useDispatch();
   const state = location.state || {};
   const { custId, roleId, username } = state;
-  const { mode, data, customer, uplineCustomers } = useSelector(state => state.winLossDetail);
+  const { mode, data, customer, uplineCustomers, pageIndex, pageSize, fromDate, toDate } = useSelector(state => state.winLossDetail);
 
   useEffect(() => {
     if (!custId) {
@@ -38,6 +40,15 @@ const MasterWinLossDetailPage = ({ location }) => {
       isReset: true
     }));
   }, [location]);
+
+  const handlePageChange = (pageIndex, pageSize) => {
+    dispatch(query({
+      fromDate,
+      toDate,
+      pageIndex,
+      pageSize
+    }));
+  };
 
   if (!customer) {
     return <></>;
@@ -60,7 +71,15 @@ const MasterWinLossDetailPage = ({ location }) => {
       {mode === Modes.Normal
         ? <NormalFilter minDate={minDate} maxDate={maxDate} />
         : <HistoryFilter minDate={minDate} maxDate={maxDate} />}
-      {data && <Table />}
+      {data && <>
+        <Table />
+        {data.totalRecords > 0 && <Pagination
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          total={data.totalRecords}
+          pageChange={handlePageChange}
+        />}
+      </>}
     </div>
   );
 }

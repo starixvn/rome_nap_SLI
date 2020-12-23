@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
 import confirmationReducer from './common/components/confirmation/reducer';
 import toastReducer from './common/components/toast/reducer';
@@ -12,13 +13,14 @@ import resetUserPasswordReducer from './features/user-management/reset-user-pass
 import winLossDetailReducer from './features/reports/win-loss-detail/reducer';
 import winLossAnalysisReducer from './features/reports/win-loss-analysis/reducer';
 import umReducer from './features/error/UM/reducer';
+import { logoutSuccess } from './features/account/authentication/reducer';
 
 const middleware = [
   ...getDefaultMiddleware(),
   /*YOUR CUSTOM MIDDLEWARES HERE*/
 ];
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   confirmation: confirmationReducer,
   toast: toastReducer,
   sidebar: sidebarReducer,
@@ -33,6 +35,14 @@ const rootReducer = combineReducers({
   winLossAnalysis: winLossAnalysisReducer,
   um: umReducer
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === logoutSuccess.type) {
+    return appReducer(undefined, { type: undefined });
+  }
+
+  return appReducer(state, action)
+};
 
 const store = configureStore({
   reducer: rootReducer,

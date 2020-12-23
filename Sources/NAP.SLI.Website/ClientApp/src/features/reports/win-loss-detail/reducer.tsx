@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { createSlice, current } from '@reduxjs/toolkit';
 import { formatDate } from '../../../common/utils/DateUtils';
-import { DefaultPageSize } from '../../../common/utils/ReportUtils';
+import { PageSize } from '../../../common/utils/ReportUtils';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 
 export const Modes = {
@@ -20,7 +20,7 @@ const slice = createSlice({
     data: undefined,
     uplineCustomers: [],
     pageIndex: 1,
-    pageSize: DefaultPageSize
+    pageSize: PageSize
   },
   reducers: {
     toggleMode: (state) => {
