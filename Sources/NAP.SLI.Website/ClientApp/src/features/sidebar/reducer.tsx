@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
-import { RouteLinks } from '../../common/utils/RouteUtils';
 import { History } from 'history';
 import { SidebarState } from './SideBar';
 import { handleException } from '../../common/utils/ExceptionUtils';
+import { Customer } from './customer/Model';
 
 type Callback = () => void;
 
@@ -11,7 +11,7 @@ const slice = createSlice({
   name: 'sidebar',
   initialState: {
     username: '',
-    customer: undefined,
+    customer: {} as Customer,
     message: undefined,
     isOpen: false
   },

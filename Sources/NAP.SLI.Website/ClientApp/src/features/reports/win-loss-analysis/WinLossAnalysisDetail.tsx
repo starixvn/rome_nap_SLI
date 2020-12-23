@@ -1,13 +1,13 @@
-// @ts-nocheck
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from '../../../common/utils/CustomerLevelUtils';
-import { ReportType } from './reducer';
+import { ReportType, RootState } from './reducer';
 import { formatDate } from '../../../common/utils/DateUtils';
+import { Moment } from 'moment';
 
-const GetReportHeader = (reportType, fromDate, toDate) => {
+const GetReportHeader = (reportType: number, fromDate: Moment, toDate: Moment) => {
     var headerTile = "";
     if (reportType == ReportType.Daily) {
         headerTile += "Daily Winloss Analysis";
@@ -22,8 +22,8 @@ const GetReportHeader = (reportType, fromDate, toDate) => {
     headerTile += ` ${formatDate(fromDate)} ---> ${formatDate(toDate)}`;
 }
 
-const WinLossAnalysisDetail = () => {
-    const { data, customer, reportType, fromDate, toDate } = useSelector(state => state.winLossAnalysis);
+const WinLossAnalysisDetail: React.FC = () => {
+    const { data, customer, reportType, fromDate, toDate } = useSelector((state: RootState) => state.winLossAnalysis);
     const { roleId } = customer;
     const { records, total } = data;
     const removedColumnTotal = roleId === CustomerLevels.Master ? 2 : roleId === CustomerLevels.Agent ? 3 : 0;
@@ -36,9 +36,9 @@ const WinLossAnalysisDetail = () => {
             <Table hover bordered striped>
                 <thead>
                     <tr>
-                        <th className="text-center align-middle" rowSpan='2'>{reportHeaderColumn}</th>
-                        <th className="text-center align-middle" rowSpan='2'>Bet Count</th>
-                        <th className="text-center align-middle" rowSpan='2'>Turnover</th>
+                        <th className="text-center align-middle" rowSpan={2}>{reportHeaderColumn}</th>
+                        <th className="text-center align-middle" rowSpan={2}>Bet Count</th>
+                        <th className="text-center align-middle" rowSpan={2}>Turnover</th>
                         <th className="text-center" colSpan={5 - removedColumnTotal}>Win/Loss</th>
                     </tr>
                     <tr>

@@ -1,28 +1,25 @@
-// @ts-nocheck
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import { RouteLinks } from './common/utils/RouteUtils';
 
-const propTypes = {
-  component: PropTypes.any.isRequired,
-  location: PropTypes.object
-};
+interface PrivateRouteProps extends RouteProps {
+  // tslint:disable-next-line:no-any
+  component: any;
+}
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = (props) => {
+
   const { account } = useSelector((state: RootState) => state.authentication);
   const isLoggined = account !== undefined;
 
   return (
-    <Route {...rest} render={props => (
+    <Route {...props} render={props => (
       isLoggined
-        ? <Component {...props} />
+        ? <React.Component {...props} />
         : <Redirect to={{ pathname: RouteLinks.LOGIN }} />
     )} />
   )
 };
-
-PrivateRoute.propTypes = propTypes;
 export default PrivateRoute;

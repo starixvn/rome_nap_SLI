@@ -1,11 +1,10 @@
-// @ts-nocheck
 import './SideBar.scss';
 import React, { useState, createRef, useEffect, RefObject } from 'react';
 import { Button, Form, Navbar, Spinner, FormFeedback } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead, TypeaheadResult } from 'react-bootstrap-typeahead';
 import CustomerPage from './customer/Page';
 import { queryUsernameSuggestion, getCustomerInformation } from './reducer';
 import { useHistory } from 'react-router-dom';
@@ -33,11 +32,11 @@ interface UsernameOption {
   username: string
 }
 
-interface CustomAsyncTypeAdead extends AsyncTypeahead<never> {
+interface CustomAsyncTypeAdead extends AsyncTypeahead<{ username: string }> {
   clear: DefaultFuntion,
 }
 
-const SideBar = () => {
+const SideBar: React.FC = () => {
   const typeaheadRef: RefObject<CustomAsyncTypeAdead> = createRef();
   const formikRef: RefObject<FormikProps<{ username: string; }>> = createRef();
   const dispatch = useDispatch();
@@ -106,6 +105,7 @@ const SideBar = () => {
                 <AsyncTypeahead
                   ref={typeaheadRef}
                   id='username-suggestion'
+                  // @ts-ignore
                   className={errors.username && touched.username ? 'is-invalid' : ''}
                   filterBy={() => true}
                   isLoading={isLoading}
@@ -115,7 +115,7 @@ const SideBar = () => {
                   onInputChange={(value) => handleInputChange(value, setFieldValue)}
                   onChange={(option) => handleChange(option, setFieldValue)}
                   onSearch={(value) => handleSearch(value)}
-                  renderMenuItemChildren={(option: UsernameOption) => <span>{option.username}</span>}
+                  renderMenuItemChildren={(option: TypeaheadResult<{ username: string }>) => <span>{option.username}</span>}
                 />
                 {<FormFeedback tooltip>{errors.username}</FormFeedback>}
               </div>
@@ -128,7 +128,7 @@ const SideBar = () => {
         </Formik>
       </Navbar>
       {message && <div>{message}</div>}
-      {0 < customer?.generalInformation?.custId  && <CustomerPage></CustomerPage>}
+      {0 < customer?.generalInformation?.custId && <CustomerPage></CustomerPage>}
     </div>
   );
 }

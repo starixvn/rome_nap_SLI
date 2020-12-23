@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { createSlice } from '@reduxjs/toolkit';
 import { formatDate } from '../../../common/utils/DateUtils';
 import axios from 'axios';
@@ -9,6 +8,43 @@ export const ReportType = {
   Monthly: 2,
   Sport: 3
 };
+
+export type RootState = {
+  winLossAnalysis: WinLossAnalysisState,
+  username: string,
+  custId: number,
+  roleId: number
+}
+
+type WinLossAnalysisData = {
+  sportType: string;
+  betCount: number;
+  turnover: number;
+  rollupKey: string,
+  memberWinLoss: number,
+  agentWinLoss: number,
+  masterWinLoss: number,
+  superWinLoss: number,
+  companyWinLoss: number,
+};
+
+type WinLossAnalysisDataResponse = {
+  records: WinLossAnalysisData[],
+  total: WinLossAnalysisData
+}
+
+export type WinLossAnalysisState = {
+  fromDate: any,
+  toDate: any,
+  customer: any,
+  custId: number,
+  roleId: number,
+  productIds: number,
+  reportType: number,
+  data: WinLossAnalysisDataResponse
+};
+
+type DefaultFunction = () => void;
 
 const slice = createSlice({
   name: "win-loss-analysis",
@@ -38,11 +74,11 @@ const slice = createSlice({
 
 export const { queryRequest, querySuccess } = slice.actions;
 
-const calculateCompanyWinLoss = (winLoss) => {
+const calculateCompanyWinLoss = (winLoss: WinLossAnalysisData) => {
   winLoss.companyWinLoss = winLoss.memberWinLoss + winLoss.agentWinLoss + winLoss.masterWinLoss || 0 + winLoss.superWinLoss || 0;
 };
 
-export const query = (data, callback) => async (dispatch) => {
+export const query = (data: WinLossAnalysisState, callback: DefaultFunction) => async (dispatch: any) => {
   try {
     dispatch(queryRequest({
       fromDate: formatDate(data.fromDate),
@@ -57,7 +93,7 @@ export const query = (data, callback) => async (dispatch) => {
 
     const response = await axios.post('/api/winlossanalysis/query', data);
     const { records, total } = response.data;
-    records.forEach((record) => calculateCompanyWinLoss(record));
+    records.forEach((record: WinLossAnalysisData) => calculateCompanyWinLoss(record));
     calculateCompanyWinLoss(total);
     dispatch(querySuccess({ data: response.data }));
   }
