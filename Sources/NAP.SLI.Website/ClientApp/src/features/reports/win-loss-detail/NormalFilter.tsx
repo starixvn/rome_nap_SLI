@@ -4,7 +4,7 @@ import { Label, Form, Button, FormGroup, Container, Spinner, Dropdown, DropdownT
 import { Formik } from 'formik';
 import PropTypes from 'prop-types';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
-import { getToday, ReportDateRanges } from '../../../common/utils/DateUtils';
+import { formatDate, getToday, ReportDateRanges } from '../../../common/utils/DateUtils';
 import { query, toggleMode } from './reducer';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -56,7 +56,8 @@ const NormalFilter = ({ minDate, maxDate }) => {
           roleId,
           pageIndex,
           pageSize,
-          ...values
+          fromDate: formatDate(values['fromDate']),
+          toDate: formatDate(values['toDate'])
         }, () => setSubmitting(false)));
       }}
     >
@@ -65,44 +66,44 @@ const NormalFilter = ({ minDate, maxDate }) => {
         isSubmitting,
         setFieldValue
       }) => (
-          <Container fluid className="filter">
-            <Form inline className="mb-3" onSubmit={handleSubmit}>
-              <fieldset disabled={isSubmitting} className="form-inline">
-                <FormGroup className="mr-5">
-                  <Label className="mr-2">From</Label>
-                  <FormikDatePicker disabled={isSubmitting} name="fromDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
-                </FormGroup>
-                <FormGroup className="mr-5">
-                  <Label className="mr-2">To</Label>
-                  <FormikDatePicker disabled={isSubmitting} name="toDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
-                </FormGroup>
-                <FormGroup className="mr-5">
-                  <Button type="submit" color="primary">
-                    {isSubmitting && <Spinner className='mr-3' />}
+        <Container fluid className="filter">
+          <Form inline className="mb-3" onSubmit={handleSubmit}>
+            <fieldset disabled={isSubmitting} className="form-inline">
+              <FormGroup className="mr-5">
+                <Label className="mr-2">From</Label>
+                <FormikDatePicker disabled={isSubmitting} name="fromDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
+              </FormGroup>
+              <FormGroup className="mr-5">
+                <Label className="mr-2">To</Label>
+                <FormikDatePicker disabled={isSubmitting} name="toDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
+              </FormGroup>
+              <FormGroup className="mr-5">
+                <Button type="submit" color="primary">
+                  {isSubmitting && <Spinner className='mr-3' />}
                     Submit
                   </Button>
-                </FormGroup>
-                <FormGroup>
-                  <Dropdown isOpen={dropdownOpen} toggle={() => setDropdownOpen(!dropdownOpen)}>
-                    <DropdownToggle color="primary" caret>
-                      {ReportDateRanges[dropdownIndex].label}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      {ReportDateRanges.map((option, index) =>
-                        <DropdownItem key={index} onClick={() => handleDropdownItemClick(index, setFieldValue, handleSubmit)}>
-                          {option.label}
-                        </DropdownItem>
-                      )}
-                    </DropdownMenu>
-                  </Dropdown>
-                </FormGroup>
-              </fieldset>
-            </Form>
-            <div>
-              You can view the report data from 09/01/2019. For more historic data, please click to <span className="text-link" onClick={() => dispatch(toggleMode())}>View History Report</span>
-            </div>
-          </Container>
-        )}
+              </FormGroup>
+              <FormGroup>
+                <Dropdown isOpen={dropdownOpen} toggle={() => setDropdownOpen(!dropdownOpen)}>
+                  <DropdownToggle color="primary" caret>
+                    {ReportDateRanges[dropdownIndex].label}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    {ReportDateRanges.map((option, index) =>
+                      <DropdownItem key={index} onClick={() => handleDropdownItemClick(index, setFieldValue, handleSubmit)}>
+                        {option.label}
+                      </DropdownItem>
+                    )}
+                  </DropdownMenu>
+                </Dropdown>
+              </FormGroup>
+            </fieldset>
+          </Form>
+          <div>
+            You can view the report data from 09/01/2019. For more historic data, please click to <span className="text-link" onClick={() => dispatch(toggleMode())}>View History Report</span>
+          </div>
+        </Container>
+      )}
     </Formik>
   );
 }

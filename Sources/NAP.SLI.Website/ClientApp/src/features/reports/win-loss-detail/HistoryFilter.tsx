@@ -3,13 +3,13 @@ import React, { createRef, useEffect } from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner } from 'reactstrap';
 import { Formik } from 'formik';
 import FormikMonthPicker from '../../../common/components/month-picker/FormikMonthPicker';
-import { getToday } from '../../../common/utils/DateUtils';
+import { formatDate, getToday } from '../../../common/utils/DateUtils';
 import PropTypes from 'prop-types';
 import { generateRangeSelectOptions } from '../../../common/utils/SelectUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
 import { query, toggleMode } from './reducer';
-import * as moment from 'moment';
+import moment from 'moment';
 
 const generateDateOptions = (date) => {
   return generateRangeSelectOptions(1, date.daysInMonth());
@@ -65,8 +65,8 @@ const HistoryFilter = ({ minDate, maxDate }) => {
         dispatch(query({
           custId,
           roleId,
-          fromDate,
-          toDate,
+          fromDate: formatDate(fromDate),
+          toDate: formatDate(toDate),
           pageIndex,
           pageSize
         }, () => setSubmitting(false)));
@@ -78,34 +78,34 @@ const HistoryFilter = ({ minDate, maxDate }) => {
         handleSubmit,
         isSubmitting
       }) => (
-          <Container fluid className="filter">
-            <Form inline className="mb-3" onSubmit={handleSubmit}>
-              <fieldset disabled={isSubmitting} className="form-inline">
-                <FormGroup className="mr-5">
-                  <Label className="mr-2">View data in month</Label>
-                  <FormikMonthPicker disabled={isSubmitting} name="month" minValue={minDate} maxValue={maxDate} onChange={(value) => handleMonthChange(value, setFieldValue)} />
-                </FormGroup>
-                <FormGroup className="mr-5">
-                  <Label className="mr-2">From</Label>
-                  <FormikSelect name="fromDateOption" options={values['dateOptions']} />
-                </FormGroup>
-                <FormGroup className="mr-5">
-                  <Label className="mr-2">To</Label>
-                  <FormikSelect name="toDateOption" options={values['dateOptions']} />
-                </FormGroup>
-                <FormGroup className="mr-2">
-                  <Button type="submit" color="primary">
-                    {isSubmitting && <Spinner className='mr-3' />}
+        <Container fluid className="filter">
+          <Form inline className="mb-3" onSubmit={handleSubmit}>
+            <fieldset disabled={isSubmitting} className="form-inline">
+              <FormGroup className="mr-5">
+                <Label className="mr-2">View data in month</Label>
+                <FormikMonthPicker disabled={isSubmitting} name="month" minValue={minDate} maxValue={maxDate} onChange={(value) => handleMonthChange(value, setFieldValue)} />
+              </FormGroup>
+              <FormGroup className="mr-5">
+                <Label className="mr-2">From</Label>
+                <FormikSelect name="fromDateOption" options={values['dateOptions']} />
+              </FormGroup>
+              <FormGroup className="mr-5">
+                <Label className="mr-2">To</Label>
+                <FormikSelect name="toDateOption" options={values['dateOptions']} />
+              </FormGroup>
+              <FormGroup className="mr-2">
+                <Button type="submit" color="primary">
+                  {isSubmitting && <Spinner className='mr-3' />}
                     Submit
                   </Button>
-                </FormGroup>
-              </fieldset>
-            </Form>
-            <div>
-              You can view the report data from 09/01/2019. <span className="text-link" onClick={() => dispatch(toggleMode())}>Back To Current Report</span>
-            </div>
-          </Container>
-        )}
+              </FormGroup>
+            </fieldset>
+          </Form>
+          <div>
+            You can view the report data from 09/01/2019. <span className="text-link" onClick={() => dispatch(toggleMode())}>Back To Current Report</span>
+          </div>
+        </Container>
+      )}
     </Formik>
   );
 }

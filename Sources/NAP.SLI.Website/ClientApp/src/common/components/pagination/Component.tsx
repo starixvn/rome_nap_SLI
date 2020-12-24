@@ -27,17 +27,20 @@ const defaultProps = {
 const PaginationComponent = (props) => {
   const { pageSize, pageSizes, pageIndex, pageChange, total } = props;
   const pageSizeOptions = generateSelectOptions(pageSizes, x => x.toString());
-  const pageSizeOption = pageSizeOptions.filter(x => x.value === pageSize)[0];
   const pageTotal = Math.ceil(total / pageSize);
 
-  const handlePageSizeChange = (selectedOption) => {
-    pageChange && pageChange(selectedOption.value);
+  const getPageSizeOption = (pageSize) => pageSizeOptions.filter(x => x.value === pageSize)[0];
+
+  const handlePageSizeChange = (pageSize, setFieldValue, handleSubmit) => {
+    setFieldValue('pageSize', pageSize);
+    setFieldValue('pageSizeOption', getPageSizeOption(pageSize));
+    handleSubmit();
   };
 
-  const goToPage = (index, setFieldValue, handleSubmit) => {
-    setFieldValue('pageIndex', index);
+  const goToPage = (pageIndex, setFieldValue, handleSubmit) => {
+    setFieldValue('pageIndex', pageIndex);
     handleSubmit();
-  }
+  };
 
   const inputStyle = {
     minWidth: '50px',
@@ -47,13 +50,17 @@ const PaginationComponent = (props) => {
   return (
     <Formik
       initialValues={{
-        pageIndex
+        pageIndex,
+        pageSize,
+        pageSizeOption: getPageSizeOption(pageSize)
       }}
       onSubmit={(values, { setSubmitting, setFieldValue }) => {
+        let isCallPageChange = false;
         const newPageIndex = parseInt(values['pageIndex']);
+        const newPageSize = parseInt(values['pageSize']);
         if (pageIndex !== newPageIndex) {
-          if (newPageIndex >= pageIndex && newPageIndex <= pageTotal) {
-            pageChange && pageChange(newPageIndex);
+          if (newPageIndex >= 1 && newPageIndex <= pageTotal) {
+            isCallPageChange = !!pageChange;
           } else {
             setFieldValue('pageIndex', pageIndex);
           }
@@ -63,30 +70,40 @@ const PaginationComponent = (props) => {
           }
         }
 
-        setSubmitting(false);
+        if (pageSize !== newPageSize) {
+          isCallPageChange = true;
+        }
+
+        if (isCallPageChange) {
+          pageChange && pageChange(newPageIndex, newPageSize, () => setSubmitting(false));
+        } else {
+          setSubmitting(false);
+        }
+
       }}
     >
       {({
         handleSubmit,
         setFieldValue,
-        isSubmitting
+        isSubmitting,
+        values
       }) => (
         <Form className='pagination' onSubmit={handleSubmit}>
           <fieldset className='form-inline' disabled={isSubmitting}>
-            <Select title='Select page size' className='mr-5' options={pageSizeOptions} value={pageSizeOption} onChange={handlePageSizeChange} />
-            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to first page' onClick={goToPage(1, setFieldValue, handleSubmit)}>
+            <Select title='Select page size' className='mr-5' options={pageSizeOptions} value={values['pageSizeOption']} onChange={(selectedOption) => handlePageSizeChange(selectedOption.value, setFieldValue, handleSubmit)} />
+            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to first page' onClick={() => goToPage(1, setFieldValue, handleSubmit)}>
               <Icon path={mdiPageFirst} />
             </Button>
-            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to previous page' onClick={goToPage(pageIndex - 1, setFieldValue, handleSubmit)}>
+            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to previous page' onClick={() => goToPage(pageIndex - 1, setFieldValue, handleSubmit)}>
               <Icon path={mdiPagePreviousOutline} />
             </Button>
             <div className='mx-3'>
               Page <Input name='pageIndex' type="text" autoComplete="off" style={inputStyle} tag={Field} title='Go to page' /> of {pageTotal}
             </div>
-            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to next page' onClick={goToPage(pageIndex + 1, setFieldValue, handleSubmit)}>
+            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to next page' onClick={() => goToPage(pageIndex + 1, setFieldValue, handleSubmit)}>
               <Icon path={mdiPageNextOutline} />
             </Button>
-            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to last page' onClick={goToPage(pageTotal, setFieldValue, handleSubmit)}>
+            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to last page' onClick={() => goToPage(pageTotal, setFieldValue, handleSubmit)}>
               <Icon path={mdiPageLast} />
             </Button>
           </fieldset>

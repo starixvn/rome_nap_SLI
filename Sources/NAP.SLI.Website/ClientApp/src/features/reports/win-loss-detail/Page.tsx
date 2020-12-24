@@ -1,8 +1,8 @@
-// @ts-nocheck
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import moment from 'moment';
+import { useLocation } from 'react-router-dom';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
 import { minDate, maxDate } from '../../../common/utils/DateUtils';
@@ -12,25 +12,29 @@ import Table from './Table';
 import { Modes, selectCustomer } from './reducer';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import Pagination from '../../../common/components/pagination/Component';
-import { query } from './reducer';
+import { query, Customer } from './reducer';
+import { RootState } from '../../../store';
 
-const propTypes = {
-  location: PropTypes.object.isRequired
-};
+type ComponentLocation = {
+  custId: number;
+  roleId: number;
+  username: string;
+}
 
-const MasterWinLossDetailPage = ({ location }) => {
+const WinLossDetailPage = () => {
   const history = useHistory();
+  const location = useLocation<ComponentLocation>();
   const dispatch = useDispatch();
-  const state = location.state || {};
-  const { custId, roleId, username } = state;
-  const { mode, data, customer, uplineCustomers, pageIndex, pageSize, fromDate, toDate } = useSelector(state => state.winLossDetail);
+
+  const { mode, data, customer, uplineCustomers, pageIndex, pageSize, fromDate, toDate } = useSelector((state: RootState) => state.winLossDetail);
 
   useEffect(() => {
-    if (!custId) {
+    if (!location.state) {
       history.push(RouteLinks.HOME);
       return;
     }
 
+    const { custId, roleId, username } = location.state;
     dispatch(selectCustomer({
       customer: {
         custId,
@@ -41,13 +45,16 @@ const MasterWinLossDetailPage = ({ location }) => {
     }));
   }, [location]);
 
-  const handlePageChange = (pageIndex, pageSize) => {
+  const handlePageChange = (pageIndex: number, pageSize: number, callback: Func) => {
+    const { custId, roleId } = customer as Customer;
     dispatch(query({
+      custId,
+      roleId,
       fromDate,
       toDate,
       pageIndex,
       pageSize
-    }));
+    }, callback));
   };
 
   if (!customer) {
@@ -84,5 +91,4 @@ const MasterWinLossDetailPage = ({ location }) => {
   );
 }
 
-MasterWinLossDetailPage.propTypes = propTypes;
-export default MasterWinLossDetailPage;
+export default WinLossDetailPage;

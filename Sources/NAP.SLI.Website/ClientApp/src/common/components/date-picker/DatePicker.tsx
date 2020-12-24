@@ -1,13 +1,12 @@
 import './DatePicker.scss';
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
 import Icon from '@mdi/react';
 import { mdiCalendar } from '@mdi/js';
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
 import { minDate, maxDate } from '../../utils/DateUtils';
 
-interface Props {
+type Props = {
   value?: any,
   onChange?: any,
   disabled?: boolean,
@@ -57,4 +56,5 @@ const DatePicker = (props: Props) => {
   return <Datetime isValidDate={isValidDate} value={value} onChange={handleOnChange} closeOnSelect={true} timeFormat={false} inputProps={inputProps} renderInput={renderInput} />;
 };
 
+DatePicker.defaultProps = defaultProps;
 export default DatePicker;

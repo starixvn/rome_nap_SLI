@@ -10,4 +10,6 @@ declare global {
       umToken: string | null;
     };
   }
+
+  type Func = () => void;
 }

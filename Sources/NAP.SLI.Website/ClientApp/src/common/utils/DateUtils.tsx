@@ -5,6 +5,10 @@ export const FormatStrings = {
   DateTime: 'MM/DD/YYYY hh:mm:ss A'
 }
 
+export const stringDateToMoment = (date: string) => {
+  return moment(date, FormatStrings.Date);
+}
+
 export const formatDate = (date: Date | moment.Moment) => {
   return moment(date).format(FormatStrings.Date);
 }
