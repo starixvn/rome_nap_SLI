@@ -1,7 +1,5 @@
-// @ts-nocheck
 import './Component.scss';
 import React from 'react';
-import PropTypes from 'prop-types';
 import Icon from '@mdi/react';
 import { mdiPageFirst, mdiPageLast, mdiPagePreviousOutline, mdiPageNextOutline } from '@mdi/js';
 import { PageSizes, PageSize } from '../../utils/ReportUtils';
@@ -10,34 +8,35 @@ import { generateSelectOptions } from '../../utils/SelectUtils';
 import { Input, Button, Form } from 'reactstrap';
 import { Formik, Field } from 'formik';
 
-const propTypes = {
-  pageSizes: PropTypes.array,
-  pageSize: PropTypes.number,
-  pageIndex: PropTypes.number,
-  pageChange: PropTypes.func,
-  total: PropTypes.number.isRequired
-};
+type Props = {
+  pageSizes: number[];
+  pageSize: number;
+  pageIndex: number;
+  pageChange?: (pageIndex: number, pageSize: number, callback: () => void) => void;
+  total: number;
+}
 
-const defaultProps = {
+const defaultProps: Props = {
   pageSizes: PageSizes,
   pageSize: PageSize,
-  pageIndex: 1
+  pageIndex: 1,
+  total: 0
 };
 
-const PaginationComponent = (props) => {
+const PaginationComponent = (props: Props) => {
   const { pageSize, pageSizes, pageIndex, pageChange, total } = props;
   const pageSizeOptions = generateSelectOptions(pageSizes, x => x.toString());
   const pageTotal = Math.ceil(total / pageSize);
 
-  const getPageSizeOption = (pageSize) => pageSizeOptions.filter(x => x.value === pageSize)[0];
+  const getPageSizeOption = (pageSize: number) => pageSizeOptions.filter(x => x.value === pageSize)[0];
 
-  const handlePageSizeChange = (pageSize, setFieldValue, handleSubmit) => {
+  const handlePageSizeChange = (pageSize: number, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void, handleSubmit: Func) => {
     setFieldValue('pageSize', pageSize);
     setFieldValue('pageSizeOption', getPageSizeOption(pageSize));
     handleSubmit();
   };
 
-  const goToPage = (pageIndex, setFieldValue, handleSubmit) => {
+  const goToPage = (pageIndex: number, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void, handleSubmit: Func) => {
     setFieldValue('pageIndex', pageIndex);
     handleSubmit();
   };
@@ -56,8 +55,8 @@ const PaginationComponent = (props) => {
       }}
       onSubmit={(values, { setSubmitting, setFieldValue }) => {
         let isCallPageChange = false;
-        const newPageIndex = parseInt(values['pageIndex']);
-        const newPageSize = parseInt(values['pageSize']);
+        const newPageIndex = parseInt(values.pageIndex.toString());
+        const newPageSize = values.pageSize;
         if (pageIndex !== newPageIndex) {
           if (newPageIndex >= 1 && newPageIndex <= pageTotal) {
             isCallPageChange = !!pageChange;
@@ -90,7 +89,7 @@ const PaginationComponent = (props) => {
       }) => (
         <Form className='pagination' onSubmit={handleSubmit}>
           <fieldset className='form-inline' disabled={isSubmitting}>
-            <Select title='Select page size' className='mr-5' options={pageSizeOptions} value={values['pageSizeOption']} onChange={(selectedOption) => handlePageSizeChange(selectedOption.value, setFieldValue, handleSubmit)} />
+            <Select title='Select page size' className='mr-5' options={pageSizeOptions} value={values.pageSizeOption} onChange={(selectedOption) => handlePageSizeChange(selectedOption.value, setFieldValue, handleSubmit)} />
             <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to first page' onClick={() => goToPage(1, setFieldValue, handleSubmit)}>
               <Icon path={mdiPageFirst} />
             </Button>
@@ -113,6 +112,5 @@ const PaginationComponent = (props) => {
   );
 };
 
-PaginationComponent.propTypes = propTypes;
 PaginationComponent.defaultProps = defaultProps;
 export default PaginationComponent;

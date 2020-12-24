@@ -1,6 +1,4 @@
-// @ts-nocheck
-
-export const generateSelectOptions = (obj, getNameCallback) => {
+export const generateSelectOptions = (obj: any, getNameCallback: ((val: number) => string)) => {
   return Object.keys(obj).map(key => {
     const value = obj[key];
     return {
@@ -10,7 +8,7 @@ export const generateSelectOptions = (obj, getNameCallback) => {
   });
 };
 
-export const generateRangeSelectOptions = (from, to) => {
+export const generateRangeSelectOptions = (from: number, to: number) => {
   const options = [];
   for (let value = from; value <= to; value++) {
     options.push({
