@@ -6,6 +6,8 @@ namespace NAP.UM.Models
 
         public string ServiceUri { get; set; }
 
+        public string HeaderKey { get; set; }
+
         public int SiteId { get; set; }
 
         public bool Enabled { get; set; }

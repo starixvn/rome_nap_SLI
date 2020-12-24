@@ -1,9 +1,10 @@
 // @ts-nocheck
 import axios from 'axios';
 import { createSlice, current } from '@reduxjs/toolkit';
-import { formatDate } from '../../../common/utils/DateUtils';
 import { PageSize } from '../../../common/utils/ReportUtils';
 import { handleException } from '../../../common/utils/ExceptionUtils';
+import { formatDate } from '../../../common/utils/DateUtils';
+import { paramsSerializer } from '../../../axios';
 
 export const Modes = {
   Normal: 1,
@@ -82,7 +83,11 @@ export const query = (data, callback) => async (dispatch) => {
       fromDate: formatDate(data.fromDate),
       toDate: formatDate(data.toDate)
     }));
-    const response = await axios.post('/api/winlossdetail/query', data);
+    const response = await axios.post('/api/winlossdetail/query', {
+      ...data,
+      fromDate: formatDate(data.fromDate),
+      toDate: formatDate(data.toDate)
+    });
     const { records, total } = response.data;
     records.forEach((record) => calculateCompanyWinLoss(record));
     calculateCompanyWinLoss(total);

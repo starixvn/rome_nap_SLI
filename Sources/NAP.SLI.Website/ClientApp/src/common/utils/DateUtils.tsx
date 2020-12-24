@@ -1,4 +1,3 @@
-// @ts-nocheck
 import moment from 'moment';
 
 export const FormatStrings = {
@@ -6,11 +5,11 @@ export const FormatStrings = {
   DateTime: 'MM/DD/YYYY hh:mm:ss A'
 }
 
-export const formatDate = (date) => {
+export const formatDate = (date: Date | moment.Moment) => {
   return moment(date).format(FormatStrings.Date);
 }
 
-export const formatDateTime = (date) => {
+export const formatDateTime = (date: Date | moment.Moment) => {
   return moment(date).format(FormatStrings.DateTime);
 }
 

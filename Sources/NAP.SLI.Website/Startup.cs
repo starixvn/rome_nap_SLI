@@ -42,6 +42,7 @@ namespace NAP.SLI.Website
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.Authorization;
     using NAP.SLI.Common.Models;
+    using NAP.UM.Web;
 
     public class Startup
     {
@@ -84,6 +85,7 @@ namespace NAP.SLI.Website
             services
                 .AddControllersWithViews(config =>
                 {
+                    config.Filters.Add(new UMFilterAttribute());
                     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                     config.Filters.Add(new AuthorizeFilter(policy));
                 })
@@ -156,7 +158,6 @@ namespace NAP.SLI.Website
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseUM();
 
             app.UseEndpoints(endpoints =>
             {

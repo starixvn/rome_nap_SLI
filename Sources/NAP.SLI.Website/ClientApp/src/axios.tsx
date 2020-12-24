@@ -8,22 +8,22 @@ import { RouteLinks } from './common/utils/RouteUtils';
 import { checkSuccess } from './features/error/UM/reducer';
 
 export const installAxiosIntercepts = () => {
-  axios.interceptors.request.use(
-    config => {
-      store.dispatch(hide());
-      const token = storage.getToken();
-      if (token) {
-        config.headers['Authorization'] = 'bearer ' + token;
-      }
 
-      const umToken = window.configuration.umToken;
-      if (umToken) {
-        config.headers['UMToken'] = umToken;
-      }
-
-      return config;
+  axios.interceptors.request.use(config => {
+    store.dispatch(hide());
+    const token = storage.getToken();
+    if (token) {
+      config.headers['Authorization'] = 'bearer ' + token;
     }
-  );
+
+    const umToken = window.configuration.umToken;
+    if (umToken) {
+      config.headers['UMToken'] = umToken;
+    }
+
+    return config;
+  });
+
   axios.interceptors.response.use(
     response => response,
     e => {

@@ -3,8 +3,8 @@ import axios from 'axios';
 import storage from './services/storage';
 import { createSlice } from '@reduxjs/toolkit';
 import { handleException } from '../../../common/utils/ExceptionUtils';
-import { startRefreshToken, stopRefreshToken, refreshToken } from './services/token';
-import { startCheckin, stopCheckin, checkin } from './services/connection';
+import { stopRefreshToken, refreshToken } from './services/token';
+import { stopCheckin, checkin } from './services/connection';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
