@@ -17,4 +17,12 @@ declare global {
     type SetFieldValueFunc = (field: string, value: any, shouldValidate?: boolean) => void;
   }
 
+
+
+  type Customer = {
+    username: string;
+    custId: number;
+    roleId: number;
+  };
+
 }

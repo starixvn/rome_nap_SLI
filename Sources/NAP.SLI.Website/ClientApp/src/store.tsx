@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { configureStore, getDefaultMiddleware, combineReducers } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware, combineReducers, Reducer, CombinedState, Action } from '@reduxjs/toolkit';
 import confirmationReducer from './common/components/confirmation/reducer';
 import toastReducer from './common/components/toast/reducer';
 import sidebarReducer from './features/sidebar/reducer';
@@ -36,7 +35,7 @@ const appReducer = combineReducers({
   um: umReducer
 });
 
-const rootReducer = (state, action) => {
+const rootReducer: Reducer<CombinedState<any>, Action> = (state, action) => {
   if (action.type === logoutSuccess.type) {
     return appReducer(undefined, action);
   }
@@ -49,7 +48,7 @@ const store = configureStore({
   middleware
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof appReducer> & { custId: number, roleId: number, username: string };
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

@@ -1,27 +1,18 @@
-// @ts-nocheck
 import './MonthPicker.scss';
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import Datetime from 'react-datetime';
+import Datetime, { DatetimepickerProps } from 'react-datetime';
 import Icon from '@mdi/react';
 import { mdiArrowLeftBold, mdiArrowRightBold } from '@mdi/js';
-import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
-import { minDate, maxDate } from '../../utils/DateUtils';
-import moment from 'moment';
+import { Input, InputGroup, InputGroupAddon, InputGroupText, InputProps } from 'reactstrap';
+import moment, { Moment } from 'moment';
 
-const propTypes = {
-  value: PropTypes.object,
-  onChange: PropTypes.func,
-  minValue: PropTypes.object,
-  maxValue: PropTypes.object
-};
+type CustomeMonthpickerProps = DatetimepickerProps & {
+  minValue: Moment,
+  maxValue: Moment,
+  disabled: boolean
+}
 
-const defaultProps = {
-  minValue: minDate,
-  maxValue: maxDate
-};
-
-const MonthPicker = (props) => {
+const MonthPicker = (props : CustomeMonthpickerProps) => {
   const { minValue, maxValue } = props;
   const [value, setValue] = useState(props.value);
 
@@ -29,7 +20,7 @@ const MonthPicker = (props) => {
     setValue(props.value);
   }, [props.value]);
 
-  const renderInput = (props, openCalendar) => {
+  const renderInput = (props: InputProps, openCalendar: any) => {
     return (
       <InputGroup className="month-picker">
         <InputGroupAddon addonType="prepend" {...(!props.disabled && { onClick: () => handleOnChange(moment(value).subtract(1, 'months')) })}>
@@ -53,18 +44,15 @@ const MonthPicker = (props) => {
     disabled: props.disabled
   };
 
-  const handleOnChange = (value) => {
+  const handleOnChange = (value: any) => {
     setValue(value);
     props.onChange && props.onChange(value);
   };
 
-  const isValidDate = (current) => {
+  const isValidDate = (current: Moment) => {
     return current.isSameOrAfter(minValue) && current.isSameOrBefore(maxValue);
   };
 
   return <Datetime isValidDate={isValidDate} value={value} dateFormat="MMM - YYYY" onChange={handleOnChange} closeOnSelect={true} timeFormat={false} inputProps={inputProps} renderInput={renderInput} />;
 };
-
-MonthPicker.propTypes = propTypes;
-MonthPicker.defaultProps = defaultProps;
 export default MonthPicker;

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { formatDate } from '../../../common/utils/DateUtils';
+import { formatDate, getToday } from '../../../common/utils/DateUtils';
 import axios from 'axios';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 
@@ -8,13 +8,6 @@ export const ReportType = {
   Monthly: 2,
   Sport: 3
 };
-
-export type RootState = {
-  winLossAnalysis: WinLossAnalysisState,
-  username: string,
-  custId: number,
-  roleId: number
-}
 
 type WinLossAnalysisData = {
   sportType: string;
@@ -28,7 +21,7 @@ type WinLossAnalysisData = {
   companyWinLoss: number,
 };
 
-type WinLossAnalysisDataResponse = {
+export type WinLossAnalysisDataResponse = {
   records: WinLossAnalysisData[],
   total: WinLossAnalysisData
 }
@@ -36,26 +29,31 @@ type WinLossAnalysisDataResponse = {
 export type WinLossAnalysisState = {
   fromDate: any,
   toDate: any,
-  customer: any,
+  customer: Customer | undefined,
   custId: number,
   roleId: number,
   productIds: number,
   reportType: number,
-  data: WinLossAnalysisDataResponse
+  data: WinLossAnalysisDataResponse | undefined
 };
 
 type DefaultFunction = () => void;
 
+const today = getToday();
+const initialState: WinLossAnalysisState = {
+  fromDate: formatDate(today),
+  toDate: formatDate(today),
+  customer: undefined,
+  custId: -1,
+  roleId: 1,
+  productIds: 1,
+  reportType: ReportType.Daily,
+  data: undefined
+}
+
 const slice = createSlice({
   name: "win-loss-analysis",
-  initialState: {
-    fromDate: undefined,
-    toDate: undefined,
-    customer: undefined,
-    productIds: undefined,
-    reportType: ReportType.Daily,
-    data: undefined
-  },
+  initialState,
   reducers: {
     queryRequest: (state, action) => {
       const { fromDate, toDate, customer, productIds, reportType } = action.payload;

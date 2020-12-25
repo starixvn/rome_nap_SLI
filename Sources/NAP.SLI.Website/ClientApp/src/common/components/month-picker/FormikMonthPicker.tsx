@@ -1,14 +1,8 @@
-// @ts-nocheck
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useField, useFormikContext } from 'formik';
 import MonthPicker from './MonthPicker';
 
-const propTypes = {
-  onChange: PropTypes.func
-};
-
-const FormikMonthPicker = ({ ...props }) => {
+const FormikMonthPicker = (props: any) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props);
   const { onChange } = props;
@@ -26,5 +20,4 @@ const FormikMonthPicker = ({ ...props }) => {
   );
 }
 
-FormikMonthPicker.propTypes = propTypes;
 export default FormikMonthPicker;

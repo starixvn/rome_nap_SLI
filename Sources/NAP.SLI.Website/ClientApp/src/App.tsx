@@ -1,9 +1,8 @@
 import './App.scss';
 import React, { useEffect } from 'react';
 import { Route, Switch, Router } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createBrowserHistory } from 'history';
-import { useHistory } from 'react-router-dom';
 import { RouteLinks } from './common/utils/RouteUtils';
 import NavMenu from './features/nav/NavMenu';
 import SideBar from './features/sidebar/SideBar';

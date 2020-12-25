@@ -3,9 +3,10 @@ import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from '../../../common/utils/CustomerLevelUtils';
-import { ReportType, RootState } from './reducer';
+import { ReportType, WinLossAnalysisDataResponse } from './reducer';
 import { formatDate } from '../../../common/utils/DateUtils';
 import { Moment } from 'moment';
+import { RootState } from '../../../store';
 
 const GetReportHeader = (reportType: number, fromDate: Moment, toDate: Moment) => {
     var headerTile = "";
@@ -24,8 +25,8 @@ const GetReportHeader = (reportType: number, fromDate: Moment, toDate: Moment) =
 
 const WinLossAnalysisDetail: React.FC = () => {
     const { data, customer, reportType, fromDate, toDate } = useSelector((state: RootState) => state.winLossAnalysis);
-    const { roleId } = customer;
-    const { records, total } = data;
+    const { roleId } = customer as Customer;
+    const { records, total } = data as WinLossAnalysisDataResponse;
     const removedColumnTotal = roleId === CustomerLevels.Master ? 2 : roleId === CustomerLevels.Agent ? 3 : 0;
 
     const reportHeaderColumn = reportType == ReportType.Sport ? "Sport" : reportType == ReportType.Monthly ? "Monthly" : "Daily";
@@ -57,7 +58,7 @@ const WinLossAnalysisDetail: React.FC = () => {
                             </td>
                         </tr> :
                         records.map(winloss =>
-                            <tr>
+                            <tr key={winloss.rollupKey}>
                                 <td>
                                     <span className="text-right">{winloss.rollupKey}</span>
                                 </td>

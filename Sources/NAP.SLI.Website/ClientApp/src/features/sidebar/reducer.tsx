@@ -5,8 +5,6 @@ import { SidebarState } from './SideBar';
 import { handleException } from '../../common/utils/ExceptionUtils';
 import { Customer } from './customer/Model';
 
-type Callback = () => void;
-
 const slice = createSlice({
   name: 'sidebar',
   initialState: {
@@ -52,7 +50,7 @@ export const queryUsernameSuggestion = async (value: string) => {
   return response.data;
 }
 
-export const getCustomerInformation = (username: string, history: History, callback: Callback) => async (dispatch: any) => {
+export const getCustomerInformation = (username: string, history: History, callback: Func) => async (dispatch: any) => {
   try {
     dispatch(getCustomerInformationRequest({ username }));
     const payload = {

@@ -17,12 +17,6 @@ export type Record = {
   memberWinLoss: number;
 };
 
-export type Customer = {
-  username: string;
-  custId: number;
-  roleId: number;
-};
-
 type State = {
   mode: number;
   fromDate: string;

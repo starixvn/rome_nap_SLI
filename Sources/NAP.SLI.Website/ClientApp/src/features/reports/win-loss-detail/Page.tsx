@@ -11,7 +11,7 @@ import Table from './Table';
 import { Modes, selectCustomer } from './reducer';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import Pagination from '../../../common/components/pagination/Component';
-import { query, Customer } from './reducer';
+import { query } from './reducer';
 import { RootState } from '../../../store';
 
 type ComponentLocation = {

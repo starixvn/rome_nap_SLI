@@ -1,33 +1,31 @@
 import './DatePicker.scss';
 import React, { useState, useEffect } from 'react';
-import Datetime from 'react-datetime';
+import Datetime, { DatetimepickerProps } from 'react-datetime';
 import Icon from '@mdi/react';
 import { mdiCalendar } from '@mdi/js';
-import { Input, InputGroup, InputGroupAddon, InputGroupText } from 'reactstrap';
-import { minDate, maxDate } from '../../utils/DateUtils';
+import { Input, InputGroup, InputGroupAddon, InputGroupText, InputProps } from 'reactstrap';
+import { Moment } from 'moment';
+import { maxDate, minDate } from '../../utils/DateUtils';
 
-type Props = {
-  value?: any,
-  onChange?: any,
-  disabled?: boolean,
-  minValue: any,
-  maxValue: any
-};
+type Props = DatetimepickerProps & {
+  minDate: Moment,
+  maxDate: Moment,
+  disabled: boolean
+}
 
-const defaultProps: Props = {
-  minValue: minDate,
-  maxValue: maxDate
-};
+const defaultProps = {
+  minDate,
+  maxDate
+}
 
-const DatePicker = (props: Props) => {
-  const { minValue, maxValue } = props;
+const DatePicker: React.FC<Props> = (props) => {
   const [value, setValue] = useState(props.value);
-
+  const {minDate, maxDate} = props
   useEffect(() => {
     setValue(props.value);
   }, [props.value]);
 
-  const renderInput = (props: Props, openCalendar: any) => {
+  const renderInput = (props: InputProps, openCalendar: any) => {
     return (
       <InputGroup className="date-picker" {...(!props.disabled && { onClick: openCalendar })}>
         <Input readOnly {...props} />
@@ -40,21 +38,22 @@ const DatePicker = (props: Props) => {
     );
   };
 
-  const inputProps = {
-    disabled: props.disabled
-  };
-
   const handleOnChange = (value: any) => {
     setValue(value);
     props.onChange && props.onChange(value);
   };
 
   const isValidDate = (current: any) => {
-    return current.isSameOrAfter(minValue) && current.isSameOrBefore(maxValue);
+    return current.isSameOrAfter(minDate) && current.isSameOrBefore(maxDate);
   };
 
-  return <Datetime isValidDate={isValidDate} value={value} onChange={handleOnChange} closeOnSelect={true} timeFormat={false} inputProps={inputProps} renderInput={renderInput} />;
+  const inputProps = {
+    disabled: props.disabled
+  };
+
+  return (<Datetime isValidDate={isValidDate} value={value} onChange={handleOnChange} closeOnSelect={true} timeFormat={false} inputProps={inputProps} renderInput={renderInput} />);
 };
 
 DatePicker.defaultProps = defaultProps;
+
 export default DatePicker;

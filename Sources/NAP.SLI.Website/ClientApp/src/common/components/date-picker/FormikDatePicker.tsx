@@ -1,30 +1,24 @@
-// @ts-nocheck
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useField, useFormikContext } from 'formik';
 import DatePicker from './DatePicker';
 
-const propTypes = {
-  onChange: PropTypes.func
-};
-
-const FormikDatePicker = ({ ...props }) => {
+const FormikDatePicker = (props: any) => {
   const { setFieldValue } = useFormikContext();
-  const [field] = useField(props);
+  const [fields] = useField(props);
   const { onChange } = props;
 
   return (
     <DatePicker
-      {...field}
       {...props}
-      selected={field.value}
+      {...fields}
+      selected={props.value}
+      name={props.name}
       onChange={(value: any) => {
-        setFieldValue(field.name, value);
+        setFieldValue(props.name, value);
         onChange && onChange(value);
       }}
     />
   );
 }
 
-FormikDatePicker.propTypes = propTypes;
 export default FormikDatePicker;

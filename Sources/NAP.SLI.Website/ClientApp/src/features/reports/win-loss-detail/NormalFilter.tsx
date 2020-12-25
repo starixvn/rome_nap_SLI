@@ -3,7 +3,7 @@ import { Label, Form, Button, FormGroup, Container, Spinner, Dropdown, DropdownT
 import { Formik, FormikProps } from 'formik';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
 import { formatDate, getToday, ReportDateRanges } from '../../../common/utils/DateUtils';
-import { Customer, query, toggleMode } from './reducer';
+import { query, toggleMode } from './reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 

@@ -6,7 +6,7 @@ import { formatDate, getToday } from '../../../common/utils/DateUtils';
 import { generateRangeSelectOptions } from '../../../common/utils/SelectUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { query, toggleMode, Customer } from './reducer';
+import { query, toggleMode } from './reducer';
 import moment from 'moment';
 import { RootState } from '../../../store';
 
