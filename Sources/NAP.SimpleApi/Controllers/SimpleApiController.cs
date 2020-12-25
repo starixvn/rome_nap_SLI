@@ -74,7 +74,7 @@
         [HttpPost("[action]")]
         public async Task<IActionResult> Command([FromBody] SimpleApiRequest request)
         {
-            var requestOption = requestOptionContext.GetRequestOption(request, ActionTypes.Query);
+            var requestOption = requestOptionContext.GetRequestOption(request, ActionTypes.Command);
             if (requestOption == null)
             {
                 return BadRequest();

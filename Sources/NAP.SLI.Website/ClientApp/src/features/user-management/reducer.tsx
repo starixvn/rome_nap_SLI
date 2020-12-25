@@ -58,7 +58,7 @@ export const query = (values, callback) => async (dispatch) => {
 
 export const updateUserStatus = (data) => async (dispatch) => {
   const payload = {
-    apiKey: 'user-management:update-user',
+    apiKey: 'user-management:update-user-status',
     data
   };
 
