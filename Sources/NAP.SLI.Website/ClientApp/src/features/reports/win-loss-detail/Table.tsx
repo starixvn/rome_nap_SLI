@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -6,17 +5,18 @@ import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel, getDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
-import { selectCustomer } from './reducer';
+import { selectCustomer, Record, Customer, QueryData } from './reducer';
+import { RootState } from '../../../store';
 
-const TableComponent = () => {
+const TableComponent: React.FC = () => {
   const dispatch = useDispatch();
-  const { data, customer } = useSelector(state => state.winLossDetail);
   const history = useHistory();
-  const { records, total } = data;
-  const { roleId } = customer;
+  const { data, customer } = useSelector((state: RootState) => state.winLossDetail);
+  const { records, total } = data as QueryData;
+  const { roleId } = customer as Customer;
   const removedColumnTotal = roleId === CustomerLevels.Master ? 1 : roleId === CustomerLevels.Agent ? 2 : 0;
 
-  const handleUsernameClicked = (record) => {
+  const handleUsernameClicked = (record: Record) => {
     const customer = {
       custId: record.custId,
       roleId: getDownlineLevel(roleId),
@@ -34,9 +34,9 @@ const TableComponent = () => {
     <Table hover bordered striped>
       <thead>
         <tr>
-          <th className="text-center align-middle" rowSpan='2'>Username</th>
-          <th className="text-center align-middle" rowSpan='2'>Bet Count</th>
-          <th className="text-center align-middle" rowSpan='2'>Turnover</th>
+          <th className="text-center align-middle" rowSpan={2}>Username</th>
+          <th className="text-center align-middle" rowSpan={2}>Bet Count</th>
+          <th className="text-center align-middle" rowSpan={2}>Turnover</th>
           <th className="text-center" colSpan={5 - removedColumnTotal}>Win/Loss</th>
         </tr>
         <tr>

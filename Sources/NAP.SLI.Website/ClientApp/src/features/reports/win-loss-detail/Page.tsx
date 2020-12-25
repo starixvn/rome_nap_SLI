@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import moment from 'moment';
 import { useLocation } from 'react-router-dom';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
@@ -21,7 +20,7 @@ type ComponentLocation = {
   username: string;
 }
 
-const WinLossDetailPage = () => {
+const WinLossDetailPage: React.FC = () => {
   const history = useHistory();
   const location = useLocation<ComponentLocation>();
   const dispatch = useDispatch();

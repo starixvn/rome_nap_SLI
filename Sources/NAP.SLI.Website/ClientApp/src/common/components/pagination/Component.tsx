@@ -30,13 +30,13 @@ const PaginationComponent = (props: Props) => {
 
   const getPageSizeOption = (pageSize: number) => pageSizeOptions.filter(x => x.value === pageSize)[0];
 
-  const handlePageSizeChange = (pageSize: number, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void, handleSubmit: Func) => {
+  const handlePageSizeChange = (pageSize: number, setFieldValue: Formik.SetFieldValueFunc, handleSubmit: Func) => {
     setFieldValue('pageSize', pageSize);
     setFieldValue('pageSizeOption', getPageSizeOption(pageSize));
     handleSubmit();
   };
 
-  const goToPage = (pageIndex: number, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void, handleSubmit: Func) => {
+  const goToPage = (pageIndex: number, setFieldValue: Formik.SetFieldValueFunc, handleSubmit: Func) => {
     setFieldValue('pageIndex', pageIndex);
     handleSubmit();
   };

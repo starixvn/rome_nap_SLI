@@ -1,14 +1,16 @@
 import axios from 'axios';
-import { createSlice, current, Dispatch } from '@reduxjs/toolkit';
+import { createSlice, current } from '@reduxjs/toolkit';
 import { PageSize } from '../../../common/utils/ReportUtils';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import { formatDate, getToday } from '../../../common/utils/DateUtils';
+import { AppDispatch } from '../../../store';
 
-type Record = {
+export type Record = {
   custId: number;
+  username: string;
   betCount: number;
   turnover: number;
-  companyWinLoss?: number;
+  companyWinLoss: number;
   superWinLoss: number;
   masterWinLoss: number;
   agentWinLoss: number;
@@ -41,7 +43,7 @@ type QueryPayload = {
   pageSize: number;
 };
 
-type QueryData = {
+export type QueryData = {
   records: Record[];
   total: Record;
   totalRecords: number;
@@ -123,7 +125,7 @@ const calculateCompanyWinLoss = (record: Record) => {
 
 export const { toggleMode, queryRequest, querySuccess, selectCustomer } = slice.actions;
 
-export const query = (payload: QueryPayload, callback: Func) => async (dispatch: Dispatch) => {
+export const query = (payload: QueryPayload, callback: Func) => async (dispatch: AppDispatch) => {
   try {
     dispatch(queryRequest(payload));
     const response = await axios.post('/api/winlossdetail/query', payload);

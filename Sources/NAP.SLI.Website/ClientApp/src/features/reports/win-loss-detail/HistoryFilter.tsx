@@ -1,30 +1,29 @@
-// @ts-nocheck
 import React, { createRef, useEffect } from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner } from 'reactstrap';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import FormikMonthPicker from '../../../common/components/month-picker/FormikMonthPicker';
 import { formatDate, getToday } from '../../../common/utils/DateUtils';
-import PropTypes from 'prop-types';
 import { generateRangeSelectOptions } from '../../../common/utils/SelectUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { query, toggleMode } from './reducer';
+import { query, toggleMode, Customer } from './reducer';
 import moment from 'moment';
+import { RootState } from '../../../store';
 
-const generateDateOptions = (date) => {
+const generateDateOptions = (date: moment.Moment) => {
   return generateRangeSelectOptions(1, date.daysInMonth());
 }
 
-const propTypes = {
-  minDate: PropTypes.object.isRequired,
-  maxDate: PropTypes.object.isRequired
-};
+type Props = {
+  minDate: moment.Moment;
+  maxDate: moment.Moment;
+}
 
-const HistoryFilter = ({ minDate, maxDate }) => {
-  const formikRef = createRef();
+const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }) => {
+  let formikRef = createRef<FormikProps<any>>();
   const dispatch = useDispatch();
-  const { customer, pageIndex, pageSize } = useSelector(state => state.winLossDetail);
-  const { custId, roleId } = customer;
+  const { customer, pageIndex, pageSize } = useSelector((state: RootState) => state.winLossDetail);
+  const { custId, roleId } = customer as Customer;
 
   const month = getToday();
   const dateOptions = generateDateOptions(month);
@@ -32,13 +31,13 @@ const HistoryFilter = ({ minDate, maxDate }) => {
   const toDateOption = dateOptions[month.date() - 1].value;
 
   useEffect(() => {
-    const { isSubmitting, handleSubmit } = formikRef.current;
+    const { isSubmitting, handleSubmit } = formikRef.current as FormikProps<any>;
     if (!isSubmitting) {
       handleSubmit();
     }
   }, [custId]);
 
-  const handleMonthChange = (value, setFieldValue) => {
+  const handleMonthChange = (value: moment.Moment, setFieldValue: Formik.SetFieldValueFunc) => {
     const dateOptions = generateDateOptions(value);
     setFieldValue('dateOptions', dateOptions);
     setFieldValue('fromDateOption', dateOptions[0].value);
@@ -83,7 +82,7 @@ const HistoryFilter = ({ minDate, maxDate }) => {
             <fieldset disabled={isSubmitting} className="form-inline">
               <FormGroup className="mr-5">
                 <Label className="mr-2">View data in month</Label>
-                <FormikMonthPicker disabled={isSubmitting} name="month" minValue={minDate} maxValue={maxDate} onChange={(value) => handleMonthChange(value, setFieldValue)} />
+                <FormikMonthPicker disabled={isSubmitting} name="month" minValue={minDate} maxValue={maxDate} onChange={(value: moment.Moment) => handleMonthChange(value, setFieldValue)} />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Label className="mr-2">From</Label>
@@ -110,5 +109,4 @@ const HistoryFilter = ({ minDate, maxDate }) => {
   );
 }
 
-HistoryFilter.propTypes = propTypes;
 export default HistoryFilter;

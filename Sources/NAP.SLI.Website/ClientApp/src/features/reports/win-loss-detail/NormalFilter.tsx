@@ -1,34 +1,33 @@
-// @ts-nocheck
 import React, { useState, createRef, useEffect } from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { Formik } from 'formik';
-import PropTypes from 'prop-types';
+import { Formik, FormikProps } from 'formik';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
 import { formatDate, getToday, ReportDateRanges } from '../../../common/utils/DateUtils';
-import { query, toggleMode } from './reducer';
+import { Customer, query, toggleMode } from './reducer';
 import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
-const propTypes = {
-  minDate: PropTypes.object.isRequired,
-  maxDate: PropTypes.object.isRequired
-};
+type Props = {
+  minDate: moment.Moment;
+  maxDate: moment.Moment;
+}
 
-const NormalFilter = ({ minDate, maxDate }) => {
-  const formikRef = createRef();
+const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
+  const formikRef = createRef<FormikProps<any>>();
   const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
-  const { customer, pageIndex, pageSize } = useSelector(state => state.winLossDetail);
-  const { custId, roleId } = customer;
+  const { customer, pageIndex, pageSize } = useSelector((state: RootState) => state.winLossDetail);
+  const { custId, roleId } = customer as Customer;
 
   useEffect(() => {
-    const { isSubmitting, handleSubmit } = formikRef.current;
+    const { isSubmitting, handleSubmit } = formikRef.current as FormikProps<any>;
     if (!isSubmitting) {
       handleSubmit();
     }
   }, [custId]);
 
-  const handleDropdownItemClick = (index, setFieldValue, handleSubmit) => {
+  const handleDropdownItemClick = (index: number, setFieldValue: Formik.SetFieldValueFunc, handleSubmit: Func) => {
     setDropdownIndex(index);
     const range = ReportDateRanges[index].getRange();
     if (range) {
@@ -108,5 +107,4 @@ const NormalFilter = ({ minDate, maxDate }) => {
   );
 }
 
-NormalFilter.propTypes = propTypes;
 export default NormalFilter;
