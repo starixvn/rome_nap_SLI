@@ -1,4 +1,3 @@
-// @ts-nocheck
 import './LoginPage.scss';
 import React, { useEffect } from 'react';
 import { Form, Input, Button, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Alert, Spinner, FormFeedback } from 'reactstrap';
@@ -12,6 +11,7 @@ import { login } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
+import { RootState } from '../../../store';
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string()
@@ -23,7 +23,7 @@ const validationSchema = Yup.object().shape({
 const LoginPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { message, account } = useSelector(state => state.authentication);
+  const { message, account } = useSelector((state: RootState) => state.authentication);
   const isLoggedIn = account !== undefined;
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const LoginPage = () => {
                     <Icon path={mdiAccount} />
                   </InputGroupText>
                 </InputGroupAddon>
-                <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName && touched.userName} />
+                <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName != undefined && touched.userName != undefined} />
                 <FormFeedback tooltip>{errors.userName}</FormFeedback>
               </InputGroup>
             </FormGroup>
@@ -72,7 +72,7 @@ const LoginPage = () => {
                     <Icon path={mdiLock} />
                   </InputGroupText>
                 </InputGroupAddon>
-                <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
+                <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password != undefined && touched.password != undefined} />
                 <FormFeedback tooltip>{errors.password}</FormFeedback>
               </InputGroup>
             </FormGroup>

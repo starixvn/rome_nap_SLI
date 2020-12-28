@@ -1,4 +1,3 @@
-// @ts-nocheck
 import axios from 'axios';
 import storage from './services/storage';
 import { createSlice } from '@reduxjs/toolkit';
@@ -7,11 +6,18 @@ import { stopRefreshToken, refreshToken } from './services/token';
 import { stopCheckin, checkin } from './services/connection';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
+import { Dispatch } from 'react';
+
+type Props = {
+  account: any,
+  message: string,
+  isLoading: boolean
+}
 
 const account = storage.get();
 const slice = createSlice({
   name: 'authentication',
-  initialState: account ? { isLoading: false, account } : { isLoading: false },
+  initialState: (account ? { isLoading: false, account, message: "" } : { isLoading: false }) as Props,
   reducers: {
     loginFailure: (state, action) => {
       state.message = action.payload.message;
@@ -28,7 +34,7 @@ const slice = createSlice({
 
 export const { loginFailure, loginSuccess, logoutSuccess } = slice.actions;
 
-export const login = (values, callback) => async (dispatch) => {
+export const login = (values: any, callback: Func) => async (dispatch : Dispatch<any>) => {
   try {
     const payload = {
       username: values.userName.trim(),
@@ -59,7 +65,7 @@ export const login = (values, callback) => async (dispatch) => {
   }
 }
 
-export const logout = () => (dispatch) => {
+export const logout = () => (dispatch: Dispatch<any>) => {
   stopCheckin();
   stopRefreshToken();
   storage.remove();

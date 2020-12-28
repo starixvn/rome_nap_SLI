@@ -1,17 +1,15 @@
-// @ts-nocheck
 import axios from 'axios';
 import { handleException } from '../../../../common/utils/ExceptionUtils';
 import store from '../../../../store';
 import { logout } from '../reducer';
 import storage from './storage';
 
-let timeout = undefined;
+var timeout : NodeJS.Timeout;
 const timeoutInterval = 10 * 60 * 1000;
 
 export const stopRefreshToken = () => {
   if (timeout) {
     clearTimeout(timeout);
-    timeout = undefined;
   }
 }
 

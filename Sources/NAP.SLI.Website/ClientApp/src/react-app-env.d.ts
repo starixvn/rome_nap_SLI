@@ -13,6 +13,8 @@ declare global {
 
   type Func = () => void;
 
+  type SingleFunc = (T: any) => void;
+
   namespace Formik {
     type SetFieldValueFunc = (field: string, value: any, shouldValidate?: boolean) => void;
   }

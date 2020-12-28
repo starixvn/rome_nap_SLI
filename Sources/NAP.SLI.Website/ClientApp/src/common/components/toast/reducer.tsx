@@ -1,5 +1,6 @@
-// @ts-nocheck
 import { createSlice } from '@reduxjs/toolkit';
+import { number } from 'prop-types';
+import { Dispatch } from 'react';
 
 const slice = createSlice({
   name: 'toast',
@@ -20,23 +21,23 @@ const slice = createSlice({
 
 export const { show, hide } = slice.actions;
 
-let timeout;
-const autoHide = () => (dispatch) => {
+var timeout: NodeJS.Timeout;
+const autoHide = () => (dispatch: Dispatch<any>) => {
   clearTimeout(timeout);
   timeout = setTimeout(() => dispatch(hide()), 3000);
 }
 
-export const success = (message) => (dispatch) => {
+export const success = (message: string) => (dispatch: Dispatch<any>) => {
   dispatch(show({ message, color: 'success' }));
   dispatch(autoHide());
 }
 
-export const info = (message) => (dispatch) => {
+export const info = (message: string) => (dispatch: Dispatch<any>) => {
   dispatch(show({ message, color: 'info' }));
   dispatch(autoHide());
 }
 
-export const error = (message) => (dispatch) => {
+export const error = (message: string) => (dispatch: Dispatch<any>) => {
   dispatch(show({ message, color: 'danger' }));
   dispatch(autoHide());
 }

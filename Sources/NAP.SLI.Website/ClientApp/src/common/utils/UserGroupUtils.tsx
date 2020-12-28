@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { generateSelectOptions } from "./SelectUtils";
 
 export const AllGroupsId = -1;
@@ -7,7 +6,7 @@ export const UserGroup = {
   Admin: 1
 };
 
-export const getGroupName = (groupId) => {
+export const getGroupName = (groupId: number) => {
   switch (groupId) {
     case UserGroup.User:
       return "User";

@@ -1,5 +1,4 @@
-// @ts-nocheck
-import * as numeral from 'numeral';
+import numeral from 'numeral';
 
 export const formatInteger = (value: number) => {
   return numeral(value).format('0,0');

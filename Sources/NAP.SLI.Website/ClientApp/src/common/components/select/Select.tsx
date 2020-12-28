@@ -1,17 +1,15 @@
-// @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 
-const propTypes = {
-  value: PropTypes.object,
-  options: PropTypes.array.isRequired,
-  className: PropTypes.string,
-  title: PropTypes.string,
-  onChange: PropTypes.func
+type Props = {
+  value: any,
+  options: any[],
+  className?: string,
+  title?: string,
+  onChange: SingleFunc
 };
 
-const Select = (props) => {
+const Select = (props: Props) => {
   const { options, onChange, className, title } = props;
   const [value, setValue] = useState(props.value);
 
@@ -19,10 +17,10 @@ const Select = (props) => {
     setValue(props.value);
   }, [props.value, options]);
 
-  const handleSelectChange = event => {
+  const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedValue = options.filter(option => option.value == event.target.value)[0];
     setValue(selectedValue);
-    onChange & onChange(selectedValue);
+    onChange(selectedValue);
   };
 
   return (
@@ -34,5 +32,4 @@ const Select = (props) => {
   );
 };
 
-Select.propTypes = propTypes;
 export default Select;

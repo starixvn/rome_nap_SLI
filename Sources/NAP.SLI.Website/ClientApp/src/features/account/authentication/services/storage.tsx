@@ -1,12 +1,11 @@
-// @ts-nocheck
 const storageKey = 'account';
 
-function save(account) {
+function save(account: any) {
   localStorage.setItem(storageKey, JSON.stringify(account));
 }
 
 function get() {
-  return JSON.parse(localStorage.getItem(storageKey));
+  return JSON.parse(localStorage.getItem(storageKey) as string);
 }
 
 function remove() {
