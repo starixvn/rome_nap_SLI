@@ -1,4 +1,3 @@
-// @ts-nocheck
 import './NavMenu.scss';
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,10 +10,11 @@ import { toggleModal } from '../account/change-password/reducer';
 import { toggle } from '../sidebar/reducer';
 import { RouteLinks } from '../../common/utils/RouteUtils';
 import { UserGroup } from '../../common/utils/UserGroupUtils';
+import { RootState } from '../../store';
 
-const NavMenu = () => {
+const NavMenu: React.FC = () => {
   const dispatch = useDispatch();
-  const { username, groupId } = useSelector(state => state.authentication.account);
+  const { username, groupId } = useSelector((state: RootState) => state.authentication.account);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = useCallback(() => {

@@ -3,13 +3,14 @@ import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { success, error } from '../../../common/components/toast/reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
+import { UserModel } from '../reducer';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
 const slice = createSlice({
   name: 'reset-user-password',
   initialState: {
-    user: {},
+    user: {} as UserModel,
     isOpen: false
   },
   reducers: {

@@ -15,7 +15,7 @@ interface RootState {
   sidebar: SidebarState
 }
 
-const CustomerPage = () => {
+const CustomerPage: React.FC = () => {
   const dispatch = useDispatch();
   const { customer } = useSelector((state: RootState) => state.sidebar);
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);

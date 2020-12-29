@@ -1,12 +1,7 @@
-// @ts-nocheck
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import store from '../../../store';
-import { history } from '../../../App';
-import { RouteLinks } from '../../../common/utils/RouteUtils';
-import { stopCheckin, startCheckin } from '../../account/authentication/services/connection';
-import { stopRefreshToken, startRefreshToken } from '../../account/authentication/services/token';
 
 export type UMTIme = {
   from: string;
@@ -37,24 +32,23 @@ const slice = createSlice({
   }
 });
 
-export const { checkStopped, checkSuccess } = slice.actions;
+export const { checkSuccess } = slice.actions;
 
-let timeout: Timeout;
+let timeout: NodeJS.Timeout;
 const timeoutInterval = 10000;
 
 export const stopCheckUM = () => {
   if (timeout) {
     clearTimeout(timeout);
-    timeout = undefined;
   }
 };
 
-export const startCheckUM = async (currentUMTime) => {
+export const startCheckUM = async (currentUMTime: UMTIme) => {
   stopCheckUM();
   timeout = setTimeout(async () => await checkUM(currentUMTime), timeoutInterval);
 }
 
-const checkUM = async (currentUMTime) => {
+const checkUM = async (currentUMTime: UMTIme) => {
   try {
     const response = await axios.post('/api/common/umtime');
     const umTime: UMTIme = response.data;

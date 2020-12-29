@@ -1,11 +1,19 @@
-// @ts-nocheck
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { success, error } from '../../../common/components/toast/reducer';
 import { query } from '../reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
+import { Dispatch } from 'react';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
+
+export type AddNewUserProps = {
+  userName: string,
+  password: string,
+  firstName: string,
+  lastName: string,
+  groupId: number
+}
 
 const slice = createSlice({
   name: 'add-new-user',
@@ -21,7 +29,7 @@ const slice = createSlice({
 
 export const { toggleModal } = slice.actions;
 
-export const add = (values, callback) => async (dispatch) => {
+export const add = (values: AddNewUserProps, callback: Func) => async (dispatch: Dispatch<any>) => {
   try {
     const payload = {
       apiKey: 'user-management:add-new-user',

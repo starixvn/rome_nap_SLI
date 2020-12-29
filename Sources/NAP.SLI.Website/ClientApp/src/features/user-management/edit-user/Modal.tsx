@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { update, toggleModal } from './reducer';
 import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
+import { RootState } from '../../../store';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -17,12 +18,12 @@ const validationSchema = Yup.object().shape({
 
 const EditUserModal = () => {
   const dispatch = useDispatch();
-  const { isOpen, user } = useSelector(state => state.editUser);
+  const { isOpen, user } = useSelector((state: RootState) => state.editUser);
 
   return (
     <Modal isOpen={isOpen} unmountOnClose>
       <Formik
-        initialValues={{ ...user }}
+        initialValues={user}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           dispatch(update(values, () => setSubmitting(false)));
@@ -34,46 +35,46 @@ const EditUserModal = () => {
           handleSubmit,
           isSubmitting
         }) => (
-            <Form onSubmit={handleSubmit}>
-              <fieldset disabled={isSubmitting}>
-                <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal()) })}>
-                  Edit User Information
+          <Form onSubmit={handleSubmit}>
+            <fieldset disabled={isSubmitting}>
+              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal()) })}>
+                Edit User Information
               </ModalHeader>
-                <ModalBody>
-                  <FormGroup row>
-                    <Label sm={4}>User Name</Label>
-                    <Label sm={8}>{user.userName}</Label>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Label sm={4}>First Name</Label>
-                    <Col sm={8}>
-                      <Input name="firstName" type="text" autoComplete="off" tag={Field} invalid={errors.firstName && touched.firstName} />
-                      <FormFeedback>{errors.firstName}</FormFeedback>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Label sm={4}>Last Name</Label>
-                    <Col sm={8}>
-                      <Input name="lastName" type="text" autoComplete="off" tag={Field} invalid={errors.lastName && touched.lastName} />
-                      <FormFeedback>{errors.lastName}</FormFeedback>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Label sm={4}>Group</Label>
-                    <Col sm={8}>
-                      <FormikSelect name="groupId" options={UserGroupSelectOptions} />
-                    </Col>
-                  </FormGroup>
-                </ModalBody>
-                <ModalFooter>
-                  <Button type="submit" color="primary">
-                    {isSubmitting && <Spinner className='mr-3' />}
+              <ModalBody>
+                <FormGroup row>
+                  <Label sm={4}>User Name</Label>
+                  <Label sm={8}>{user.userName}</Label>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={4}>First Name</Label>
+                  <Col sm={8}>
+                    <Input name="firstName" type="text" autoComplete="off" tag={Field} invalid={errors.firstName && touched.firstName} />
+                    <FormFeedback>{errors.firstName}</FormFeedback>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={4}>Last Name</Label>
+                  <Col sm={8}>
+                    <Input name="lastName" type="text" autoComplete="off" tag={Field} invalid={errors.lastName && touched.lastName} />
+                    <FormFeedback>{errors.lastName}</FormFeedback>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label sm={4}>Group</Label>
+                  <Col sm={8}>
+                    <FormikSelect name="groupId" options={UserGroupSelectOptions} />
+                  </Col>
+                </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <Button type="submit" color="primary">
+                  {isSubmitting && <Spinner className='mr-3' />}
                     Submit
                   </Button>
-                </ModalFooter>
-              </fieldset>
-            </Form>
-          )}
+              </ModalFooter>
+            </fieldset>
+          </Form>
+        )}
       </Formik>
     </Modal>
   );

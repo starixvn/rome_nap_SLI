@@ -1,18 +1,33 @@
-// @ts-nocheck
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import { AllGroupsId } from '../../common/utils/UserGroupUtils';
 import { success, error } from '../../common/components/toast/reducer';
 import { handleException } from '../../common/utils/ExceptionUtils';
+import { Dispatch } from 'react';
+
+export type UserModel = {
+  custId: number,
+  userName: string,
+  firstName: string,
+  lastName: string,
+  groupId: number
+}
+
+type Props = {
+  users: UserModel[]
+}
+
+type QueryFields = {
+  userName: string,
+  groupId: number | undefined
+}
 
 const slice = createSlice({
   name: 'user-management',
-  initialState: {
-    users: undefined
-  },
+  initialState: {} as Props,
   reducers: {
     queryRequest: (state) => {
-      state.users = undefined;
+      state.users = [];
     },
     querySuccess: (state, action) => {
       state.users = action.payload.users;
@@ -25,14 +40,14 @@ const slice = createSlice({
   }
 });
 
-export const { queryRequest, querySuccess, updateStatusRequest, updateStatusSuccess, patchUser } = slice.actions;
+export const { queryRequest, querySuccess, patchUser } = slice.actions;
 
-let queryData;
-export const query = (values, callback) => async (dispatch) => {
+var queryData = {} as QueryFields;
+export const query = (values?: UserModel, callback?: Func) => async (dispatch: Dispatch<any>) => {
   try {
     let data = queryData;
     if (values) {
-      const groupId = parseInt(values.groupId);
+      const groupId = values.groupId;
       data = {
         userName: values.userName,
         groupId: groupId === AllGroupsId ? undefined : groupId
@@ -52,11 +67,11 @@ export const query = (values, callback) => async (dispatch) => {
     handleException(e);
   }
   finally {
-    callback();
+    callback && callback();
   }
 };
 
-export const updateUserStatus = (data) => async (dispatch) => {
+export const updateUserStatus = (data: UserModel) => async (dispatch: Dispatch<any>) => {
   const payload = {
     apiKey: 'user-management:update-user-status',
     data

@@ -1,10 +1,10 @@
-// @ts-nocheck
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Col, Button, FormFeedback, Spinner, ModalFooter } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { resetPassword, toggleModal } from './reducer';
+import { RootState } from '../../../store';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -14,9 +14,9 @@ const validationSchema = Yup.object().shape({
     .required('Confirm Password is required')
 });
 
-const ResetUserPasswordModal = () => {
+const ResetUserPasswordModal: React.FC = () => {
   const dispatch = useDispatch();
-  const { isOpen, user } = useSelector(state => state.resetUserPassword);
+  const { isOpen, user } = useSelector((state: RootState) => state.resetUserPassword);
 
   return (
     <Modal isOpen={isOpen} unmountOnClose>
@@ -39,7 +39,7 @@ const ResetUserPasswordModal = () => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <fieldset disabled={isSubmitting}>
-              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal()) })}>
+              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal(undefined)) })}>
                 Reset Password
               </ModalHeader>
               <ModalBody>
@@ -50,14 +50,14 @@ const ResetUserPasswordModal = () => {
                 <FormGroup row>
                   <Label sm={4}>Password</Label>
                   <Col sm={8}>
-                    <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password && touched.password} />
+                    <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password != undefined && touched.password != undefined} />
                     <FormFeedback>{errors.password}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>Confirm Password</Label>
                   <Col sm={8}>
-                    <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword && touched.confirmPassword} />
+                    <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword != undefined && touched.confirmPassword != undefined} />
                     <FormFeedback>{errors.confirmPassword}</FormFeedback>
                   </Col>
                 </FormGroup>

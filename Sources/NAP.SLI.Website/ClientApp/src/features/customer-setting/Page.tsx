@@ -1,13 +1,19 @@
-// @ts-nocheck
 import React from 'react';
 import PropTypes from 'prop-types';
+import { RootState } from '../../store';
 
 const propTypes = {
   location: PropTypes.object.isRequired
 };
 
-const CustomerSettingPage = ({ location }) => {
-  const { custid, roleid } = location.state;
+type Props = {
+  location: Location & {
+    state: RootState
+  }
+}
+
+const CustomerSettingPage = (props: Props) => {
+  const { custId, roleId } = props.location.state;
 
   return (
     <div className="customer-setting-page">
@@ -16,5 +22,4 @@ const CustomerSettingPage = ({ location }) => {
   );
 }
 
-CustomerSettingPage.propTypes = propTypes;
 export default CustomerSettingPage;
