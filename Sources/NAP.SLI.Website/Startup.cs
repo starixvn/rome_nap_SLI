@@ -43,6 +43,8 @@ namespace NAP.SLI.Website
     using Microsoft.AspNetCore.Mvc.Authorization;
     using NAP.SLI.Common.Models;
     using NAP.UM.Web;
+    using NAP.SLI.Localization.Extensions;
+    using Microsoft.AspNetCore.Localization;
 
     public class Startup
     {
@@ -111,6 +113,7 @@ namespace NAP.SLI.Website
             services.AddUM(umConfig);
 
             services.AddOptions();
+            services.AddLocalization();
 
             AddModules(services);
             AddAutoMapper(services);
@@ -140,6 +143,11 @@ namespace NAP.SLI.Website
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseRequestLocalization(option =>
+            {
+                option.DefaultRequestCulture = new RequestCulture("en-US");
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -197,6 +205,7 @@ namespace NAP.SLI.Website
         {
             services.AddHttpContextAccessor();
             services.AddSingleton<IDynamicRepository, DynamicRepository>();
+            services.AddLocalizationModule();
             services.AddCommonModule(AppSettings);
             services.AddAccountModule();
             services.AddCustomerModule();

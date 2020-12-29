@@ -12,6 +12,7 @@
     using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
+    using NAP.SLI.Localization.Services;
     using NAP.UM.Models;
     using NAP.UM.Services;
     using NAP.UM.Web;
@@ -28,6 +29,7 @@
         private readonly UMConfig umConfig;
         private readonly IMaintenanceService maintenanceService;
         private readonly IMapper mapper;
+        private readonly ISharedLocalizer sharedLocalizer;
 
         public CommonController(
             IHttpContextAccessor httpContextAccessor,
@@ -35,7 +37,8 @@
             ICacheContainer cacheContainer,
             UMConfig umConfig,
             IMaintenanceService maintenanceService,
-            IMapper mapper)
+            IMapper mapper,
+            ISharedLocalizer sharedLocalizer)
         {
             context = httpContextAccessor.HttpContext;
             this.appSettings = appSettings;
@@ -43,12 +46,14 @@
             this.umConfig = umConfig;
             this.maintenanceService = maintenanceService;
             this.mapper = mapper;
+            this.sharedLocalizer = sharedLocalizer;
         }
 
         [HttpPost("[action]")]
         public void Exception()
         {
-            throw new NotSupportedException("Test");
+            var title = sharedLocalizer["Title"];
+            throw new NotSupportedException(title);
         }
 
         [HttpPost("[action]")]

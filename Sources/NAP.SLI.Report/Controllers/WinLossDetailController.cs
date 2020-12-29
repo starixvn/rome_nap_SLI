@@ -22,5 +22,12 @@
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Excel([FromBody] WinLossDetailExcelRequest request)
+        {
+            var result = await mediator.Send(request).ConfigureAwait(false);
+            return Ok(result);
+        }
     }
 }

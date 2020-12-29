@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Report.Criteria;
@@ -13,6 +14,8 @@
     public interface IWinLossDetailService
     {
         Task<QueryModel> Query(WinLossDetailQueryRequest request);
+
+        Task<IActionResult> Excel(WinLossDetailExcelRequest request);
     }
 
     public class WinLossDetailService : IWinLossDetailService
@@ -40,6 +43,29 @@
                 PageSize = request.PageSize
             };
             return await Query(criteria).ConfigureAwait(false);
+        }
+
+        public async Task<IActionResult> Excel(WinLossDetailExcelRequest request)
+        {
+            var balanceUpDayModel = await reportService.GetBalanceUpDay().ConfigureAwait(false);
+            var criteria = new QueryWinLossDetailCriteria(balanceUpDayModel)
+            {
+                CustId = request.CustId,
+                RoleId = request.RoleId,
+                IsHistory = request.IsHistory,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                PageIndex = 0,
+                PageSize = 0
+            };
+
+            var queryModel = await Query(criteria).ConfigureAwait(false);
+            return await Excel(queryModel).ConfigureAwait(false);
+        }
+
+        private Task<IActionResult> Excel(QueryModel queryModel)
+        {
+            return null;
         }
 
         private async Task<QueryModel> Query(QueryWinLossDetailCriteria criteria)

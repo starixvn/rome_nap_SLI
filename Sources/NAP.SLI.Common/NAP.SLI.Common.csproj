@@ -16,6 +16,7 @@
     <PackageReference Include="UAParser" Version="3.1.44" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NAP.SLI.Localization\NAP.SLI.Localization.csproj" />
     <ProjectReference Include="..\NAP.UM\NAP.UM.csproj" />
   </ItemGroup>
 
