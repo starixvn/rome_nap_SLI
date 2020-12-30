@@ -6,9 +6,10 @@ import { formatDate, getToday } from '../../../common/utils/DateUtils';
 import { generateRangeSelectOptions } from '../../../common/utils/SelectUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { query, toggleMode } from './reducer';
+import Icon from '@mdi/react';
+import { mdiFileExcelOutline } from '@mdi/js';
+import { query, toggleMode, excel } from './reducer';
 import moment from 'moment';
-import { RootState } from '../../../store';
 
 const generateDateOptions = (date: moment.Moment) => {
   return generateRangeSelectOptions(1, date.daysInMonth());
@@ -22,7 +23,7 @@ type Props = {
 const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }) => {
   let formikRef = createRef<FormikProps<any>>();
   const dispatch = useDispatch();
-  const { customer, pageIndex, pageSize } = useSelector((state: RootState) => state.winLossDetail);
+  const { customer, pageIndex, pageSize, isHistory } = useSelector((state: RootState) => state.winLossDetail);
   const { custId, roleId } = customer as Customer;
 
   const month = getToday();
@@ -62,6 +63,7 @@ const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }) => {
         const fromDate = moment(month).date(values.fromDateOption);
         const toDate = moment(month).date(values.toDateOption);
         dispatch(query({
+          isHistory,
           custId,
           roleId,
           fromDate: formatDate(fromDate),
@@ -92,11 +94,16 @@ const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }) => {
                 <Label className="mr-2">To</Label>
                 <FormikSelect name="toDateOption" options={values['dateOptions']} />
               </FormGroup>
-              <FormGroup className="mr-2">
+              <FormGroup className="mr-5">
                 <Button type="submit" color="primary">
                   {isSubmitting && <Spinner className='mr-3' />}
                     Submit
                   </Button>
+              </FormGroup>
+              <FormGroup>
+                <Button type='button' color='success' className='btn-excel' title='Export to Excel' onClick={() => dispatch(excel())}>
+                  <Icon path={mdiFileExcelOutline} />
+                </Button>
               </FormGroup>
             </fieldset>
           </Form>

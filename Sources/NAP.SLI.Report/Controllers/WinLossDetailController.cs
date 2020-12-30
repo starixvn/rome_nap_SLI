@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Models;
     using NAP.SLI.Report.Requests;
 
     [ApiController]
@@ -26,8 +27,8 @@
         [HttpPost("[action]")]
         public async Task<IActionResult> Excel([FromBody] WinLossDetailExcelRequest request)
         {
-            var result = await mediator.Send(request).ConfigureAwait(false);
-            return Ok(result);
+            var fileContents = await mediator.Send(request).ConfigureAwait(false);
+            return File(fileContents, ContentTypes.Excel);
         }
     }
 }

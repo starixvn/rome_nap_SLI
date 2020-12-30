@@ -1,5 +1,5 @@
 /// <reference types="react-scripts" />
-
+import { AppDispatch as _AppDispatch, RootState as _RootState } from './store';
 export { };
 
 declare global {
@@ -19,12 +19,12 @@ declare global {
     type SetFieldValueFunc = (field: string, value: any, shouldValidate?: boolean) => void;
   }
 
-
-
   type Customer = {
     username: string;
     custId: number;
     roleId: number;
   };
 
+  type AppDispatch = _AppDispatch;
+  type RootState = _RootState;
 }

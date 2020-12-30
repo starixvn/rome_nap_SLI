@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RootState } from '../../store';
 
 const propTypes = {
   location: PropTypes.object.isRequired

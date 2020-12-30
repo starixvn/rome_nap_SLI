@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { RootState } from '../../../store';
 import { confirmed } from './reducer';
 
 const Confirmation = () => {

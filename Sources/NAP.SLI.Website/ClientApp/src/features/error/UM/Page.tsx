@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
-import { RootState } from '../../../store';
 
 const UMPage: React.FC = () => {
   const history = useHistory();

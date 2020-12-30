@@ -6,7 +6,6 @@ import { CustomerLevels, isUplineOrSameLevel } from '../../../common/utils/Custo
 import { ReportType, WinLossAnalysisDataResponse } from './reducer';
 import { formatDate } from '../../../common/utils/DateUtils';
 import { Moment } from 'moment';
-import { RootState } from '../../../store';
 
 const GetReportHeader = (reportType: number, fromDate: Moment, toDate: Moment) => {
     var headerTile = "";

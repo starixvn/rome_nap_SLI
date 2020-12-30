@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { toggleModal, changePassword, ChangePasswordProps } from './reducer';
-import { RootState } from '../../../store';
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string()

@@ -11,7 +11,6 @@ import { login } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
-import { RootState } from '../../../store';
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string()

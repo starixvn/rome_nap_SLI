@@ -9,7 +9,6 @@ import CustomerPage from './customer/Page';
 import { queryUsernameSuggestion, getCustomerInformation } from './reducer';
 import { useHistory } from 'react-router-dom';
 import { Customer } from './customer/Model';
-import { RootState } from '../../store';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()

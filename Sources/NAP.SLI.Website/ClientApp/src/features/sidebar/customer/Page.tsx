@@ -8,12 +8,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import { CustomerLevels, getDownlineLevel, getLevelName, isDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
-import { SidebarState } from '../SideBar';
 import { Customer } from './Model';
-
-interface RootState {
-  sidebar: SidebarState
-}
 
 const CustomerPage: React.FC = () => {
   const dispatch = useDispatch();

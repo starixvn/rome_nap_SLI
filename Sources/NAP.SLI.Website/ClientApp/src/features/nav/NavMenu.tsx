@@ -10,7 +10,6 @@ import { toggleModal } from '../account/change-password/reducer';
 import { toggle } from '../sidebar/reducer';
 import { RouteLinks } from '../../common/utils/RouteUtils';
 import { UserGroup } from '../../common/utils/UserGroupUtils';
-import { RootState } from '../../store';
 
 const NavMenu: React.FC = () => {
   const dispatch = useDispatch();

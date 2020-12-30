@@ -2,9 +2,8 @@
 {
     using System;
     using MediatR;
-    using Microsoft.AspNetCore.Mvc;
 
-    public class WinLossDetailExcelRequest : IRequest<IActionResult>
+    public class WinLossDetailExcelRequest : IRequest<byte[]>
     {
         public int CustId { get; set; }
 

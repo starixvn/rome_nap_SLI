@@ -8,19 +8,15 @@ namespace NAP.UM.Extensions
     {
         public static byte[] ComputeSha256Hash(this HttpContent content)
         {
-            using (var stream = new MemoryStream())
+            using var stream = new MemoryStream();
+            if (content != null)
             {
-                if (content != null)
-                {
-                    content.CopyToAsync(stream).Wait();
-                    stream.Seek(0, SeekOrigin.Begin);
-                }
-
-                using (var alg = SHA256.Create())
-                {
-                    return alg.ComputeHash(stream.ToArray());
-                }
+                content.CopyToAsync(stream).Wait();
+                stream.Seek(0, SeekOrigin.Begin);
             }
+
+            using var alg = SHA256.Create();
+            return alg.ComputeHash(stream.ToArray());
         }
     }
 }

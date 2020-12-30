@@ -28,15 +28,13 @@ namespace NAP.UM.Extensions
             var secretKeyByteArray = Convert.FromBase64String(secretKey);
             byte[] signature = Encoding.UTF8.GetBytes(signatureRawData);
 
-            using (var hmac = new HMACSHA256(secretKeyByteArray))
-            {
-                byte[] signatureBytes = hmac.ComputeHash(signature);
-                string requestSignatureBase64String = Convert.ToBase64String(signatureBytes);
+            using var hmac = new HMACSHA256(secretKeyByteArray);
+            byte[] signatureBytes = hmac.ComputeHash(signature);
+            string requestSignatureBase64String = Convert.ToBase64String(signatureBytes);
 
-                // Setting the values in the Authorization header using custom scheme (amx)
-                string authHeader = string.Format("amx {0}", string.Format("{0}:{1}:{2}:{3}", machineIP, requestSignatureBase64String, nonce, requestTimeStamp));
-                request.Headers.Add("Authorization", authHeader);
-            }
+            // Setting the values in the Authorization header using custom scheme (amx)
+            string authHeader = string.Format("amx {0}", string.Format("{0}:{1}:{2}:{3}", machineIP, requestSignatureBase64String, nonce, requestTimeStamp));
+            request.Headers.Add("Authorization", authHeader);
 
             return request;
         }

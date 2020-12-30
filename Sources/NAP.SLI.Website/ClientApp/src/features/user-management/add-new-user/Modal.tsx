@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import { toggleModal, add, AddNewUserProps } from './reducer';
 import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
-import { RootState } from '../../../store';
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string()

@@ -22,7 +22,6 @@ import WinLossByBetTypePage from './features/reports/win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from './features/reports/win-loss-analysis/Page';
 import BetListPage from './features/reports/bet-list/Page';
 import ResultsPage from './features/reports/results/Page';
-import { RootState } from './store';
 import { startRefreshToken, stopRefreshToken } from './features/account/authentication/services/token';
 import { startCheckin, stopCheckin } from './features/account/authentication/services/connection';
 

@@ -33,16 +33,12 @@
             }
 
             var list = new List<IEnumerable<object>>();
-            using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            using var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            using var multiResultReader = await objectDb.QueryMultipleAsync(criteria, cancellationToken: cancellationToken).ConfigureAwait(false);
+            while (!multiResultReader.IsEmptyOrClosed)
             {
-                using (var multiResultReader = await objectDb.QueryMultipleAsync(criteria, cancellationToken: cancellationToken).ConfigureAwait(false))
-                {
-                    while (!multiResultReader.IsEmptyOrClosed)
-                    {
-                        var result = await multiResultReader.ReadAsync<object>().ConfigureAwait(false);
-                        list.Add(result);
-                    }
-                }
+                var result = await multiResultReader.ReadAsync<object>().ConfigureAwait(false);
+                list.Add(result);
             }
 
             return list;

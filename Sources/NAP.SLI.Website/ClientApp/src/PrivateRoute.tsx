@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from './store';
 import { RouteLinks } from './common/utils/RouteUtils';
 
 interface PrivateRouteProps extends RouteProps {

@@ -3,9 +3,10 @@ import { Label, Form, Button, FormGroup, Container, Spinner, Dropdown, DropdownT
 import { Formik, FormikProps } from 'formik';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
 import { formatDate, getToday, ReportDateRanges } from '../../../common/utils/DateUtils';
-import { query, toggleMode } from './reducer';
+import { query, toggleMode, excel } from './reducer';
+import Icon from '@mdi/react';
+import { mdiFileExcelOutline } from '@mdi/js';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../store';
 
 type Props = {
   minDate: moment.Moment;
@@ -17,7 +18,7 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
   const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
-  const { customer, pageIndex, pageSize } = useSelector((state: RootState) => state.winLossDetail);
+  const { customer, pageIndex, pageSize, isHistory } = useSelector((state: RootState) => state.winLossDetail);
   const { custId, roleId } = customer as Customer;
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
       }}
       onSubmit={(values, { setSubmitting }) => {
         dispatch(query({
+          isHistory,
           custId,
           roleId,
           pageIndex,
@@ -82,7 +84,7 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
                     Submit
                   </Button>
               </FormGroup>
-              <FormGroup>
+              <FormGroup className="mr-5">
                 <Dropdown isOpen={dropdownOpen} toggle={() => setDropdownOpen(!dropdownOpen)}>
                   <DropdownToggle color="primary" caret>
                     {ReportDateRanges[dropdownIndex].label}
@@ -95,6 +97,11 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
                     )}
                   </DropdownMenu>
                 </Dropdown>
+              </FormGroup>
+              <FormGroup>
+                <Button type='button' color='success' className='btn-excel' title='Export to Excel' onClick={() => {console.log(customer); dispatch(excel())}}>
+                  <Icon path={mdiFileExcelOutline} />
+                </Button>
               </FormGroup>
             </fieldset>
           </Form>

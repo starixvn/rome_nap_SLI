@@ -54,6 +54,6 @@
             }
         }
 
-        public override bool IsValid() => CustId > 0 && PageIndex > 0 && PageSize > 0;
+        public override bool IsValid() => CustId > 0 && RoleId > 0;
     }
 }

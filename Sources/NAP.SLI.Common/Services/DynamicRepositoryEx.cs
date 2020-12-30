@@ -25,12 +25,10 @@
         public async Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria, CancellationToken cancellationToken)
         {
             criteria.ThrowExceptionIfInvalid();
-            using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var result = await objectDb.QueryAsync<T>(criteria, cancellationToken: cancellationToken).ConfigureAwait(false);
-                UpdateCriteria(criteria, objectDb.GetOutputParams());
-                return result;
-            }
+            using var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            var result = await objectDb.QueryAsync<T>(criteria, cancellationToken: cancellationToken).ConfigureAwait(false);
+            UpdateCriteria(criteria, objectDb.GetOutputParams());
+            return result;
         }
 
         public Task<(IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet)> FetchMultipleAsync<TFirst, TSecond>(ICriteria criteria)
@@ -55,27 +53,23 @@
             criteria.ThrowExceptionIfInvalid();
             var result = InitializeFetchMultipleResultSet(mappingTypes);
 
-            using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            using var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            using var multiResultReader = await objectDb.QueryMultipleAsync(criteria, cancellationToken: cancellationToken).ConfigureAwait(false);
+            UpdateCriteria(criteria, objectDb.GetOutputParams());
+            var index = 0;
+            if (criteria is ResultCriteriaBase resultCriteria && !resultCriteria.IsSuccess)
             {
-                using (var multiResultReader = await objectDb.QueryMultipleAsync(criteria, cancellationToken: cancellationToken).ConfigureAwait(false))
+                while (index < mappingTypes.Length)
                 {
-                    UpdateCriteria(criteria, objectDb.GetOutputParams());
-                    var index = 0;
-                    if (criteria is ResultCriteriaBase resultCriteria && !resultCriteria.IsSuccess)
-                    {
-                        while (index < mappingTypes.Length)
-                        {
-                            result[index] = Enumerable.Empty<object>();
-                            index++;
-                        }
-                    }
-
-                    while (!multiResultReader.IsEmptyOrClosed && index < mappingTypes.Length)
-                    {
-                        result[index] = await multiResultReader.ReadAsync(mappingTypes[index]).ConfigureAwait(false);
-                        index++;
-                    }
+                    result[index] = Enumerable.Empty<object>();
+                    index++;
                 }
+            }
+
+            while (!multiResultReader.IsEmptyOrClosed && index < mappingTypes.Length)
+            {
+                result[index] = await multiResultReader.ReadAsync(mappingTypes[index]).ConfigureAwait(false);
+                index++;
             }
 
             return result;

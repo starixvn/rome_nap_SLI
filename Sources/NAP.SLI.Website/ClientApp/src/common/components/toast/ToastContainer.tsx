@@ -3,7 +3,6 @@ import React from 'react';
 import { Toast, ToastBody } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { hide } from './reducer';
-import { RootState } from '../../../store';
 
 const ToastContainer = () => {
   const dispatch = useDispatch();

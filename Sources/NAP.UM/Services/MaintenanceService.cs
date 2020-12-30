@@ -81,18 +81,16 @@ namespace NAP.UM.Services
         {
             try
             {
-                using (var client = new HttpClient())
+                using var client = new HttpClient();
+                var request = new HttpRequestMessage
                 {
-                    var request = new HttpRequestMessage
-                    {
-                        RequestUri = new Uri($"{umConfig.ServiceUri}{endPoint}"),
-                        Method = httpMethod
-                    };
-                    request.AddHMAC(umConfig.SecretKey);
-                    var response = await client.SendAsync(request).ConfigureAwait(false);
-                    response.EnsureSuccessStatusCode();
-                    return await response.Content.ReadFromJsonAsync<T>().ConfigureAwait(false);
-                }
+                    RequestUri = new Uri($"{umConfig.ServiceUri}{endPoint}"),
+                    Method = httpMethod
+                };
+                request.AddHMAC(umConfig.SecretKey);
+                var response = await client.SendAsync(request).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadFromJsonAsync<T>().ConfigureAwait(false);
             }
             catch (Exception ex)
             {

@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AppDispatch } from '../../../store';
 
 const defaultProps = {
   title: '',

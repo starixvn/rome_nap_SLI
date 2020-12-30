@@ -8,11 +8,10 @@ import { minDate, maxDate } from '../../../common/utils/DateUtils';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDownlineLevel, getLevelName } from '../../../common/utils/CustomerLevelUtils';
 import Table from './Table';
-import { Modes, selectCustomer } from './reducer';
+import { selectCustomer } from './reducer';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import Pagination from '../../../common/components/pagination/Component';
 import { query } from './reducer';
-import { RootState } from '../../../store';
 
 type ComponentLocation = {
   custId: number;
@@ -25,7 +24,7 @@ const WinLossDetailPage: React.FC = () => {
   const location = useLocation<ComponentLocation>();
   const dispatch = useDispatch();
 
-  const { mode, data, customer, uplineCustomers, pageIndex, pageSize, fromDate, toDate } = useSelector((state: RootState) => state.winLossDetail);
+  const { isHistory, data, customer, uplineCustomers, pageIndex, pageSize, fromDate, toDate } = useSelector((state: RootState) => state.winLossDetail);
 
   useEffect(() => {
     if (!location.state) {
@@ -47,6 +46,7 @@ const WinLossDetailPage: React.FC = () => {
   const handlePageChange = (pageIndex: number, pageSize: number, callback: Func) => {
     const { custId, roleId } = customer as Customer;
     dispatch(query({
+      isHistory,
       custId,
       roleId,
       fromDate,
@@ -74,7 +74,7 @@ const WinLossDetailPage: React.FC = () => {
         </Breadcrumb>
         <span>)</span>
       </div>
-      {mode === Modes.Normal
+      {!isHistory
         ? <NormalFilter minDate={minDate} maxDate={maxDate} />
         : <HistoryFilter minDate={minDate} maxDate={maxDate} />}
       {data && <>

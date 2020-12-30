@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { minDate, maxDate } from '../../../common/utils/DateUtils';
-import { RootState } from '../../../store';
 import Filter from './Filter';
 import { ReportType } from './reducer';
 import WinLossAnalysisDetails from './WinLossAnalysisDetail';

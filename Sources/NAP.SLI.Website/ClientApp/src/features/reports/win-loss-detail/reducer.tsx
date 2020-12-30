@@ -3,7 +3,7 @@ import { createSlice, current } from '@reduxjs/toolkit';
 import { PageSize } from '../../../common/utils/ReportUtils';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import { formatDate, getToday } from '../../../common/utils/DateUtils';
-import { AppDispatch } from '../../../store';
+import store from '../../../store';
 
 export type Record = {
   custId: number;
@@ -18,7 +18,7 @@ export type Record = {
 };
 
 type State = {
-  mode: number;
+  isHistory: boolean;
   fromDate: string;
   toDate: string;
   customer: Customer | undefined;
@@ -29,6 +29,7 @@ type State = {
 };
 
 type QueryPayload = {
+  isHistory: boolean;
   custId: number;
   roleId: number;
   fromDate: string;
@@ -43,14 +44,9 @@ export type QueryData = {
   totalRecords: number;
 };
 
-export const Modes = {
-  Normal: 1,
-  History: 2
-};
-
 const today = getToday();
 const initialState: State = {
-  mode: Modes.Normal,
+  isHistory: false,
   fromDate: formatDate(today),
   toDate: formatDate(today),
   customer: undefined,
@@ -65,14 +61,11 @@ const slice = createSlice({
   initialState,
   reducers: {
     toggleMode: (state) => {
-      if (state.mode === Modes.Normal) {
-        state.mode = Modes.History;
-      } else {
-        state.mode = Modes.Normal;
-      }
+      state.isHistory = !state.isHistory;
     },
     queryRequest: (state, action) => {
-      const { fromDate, toDate, pageIndex, pageSize } = action.payload as QueryPayload;
+      const { fromDate, toDate, pageIndex, pageSize, isHistory } = action.payload as QueryPayload;
+      state.isHistory = isHistory;
       state.fromDate = fromDate;
       state.toDate = toDate;
       state.pageIndex = pageIndex;
@@ -133,6 +126,25 @@ export const query = (payload: QueryPayload, callback: Func) => async (dispatch:
   }
   finally {
     callback();
+  }
+}
+
+export const excel = () => async () => {
+  try {
+    const rootState: RootState = store.getState();
+    const { fromDate, toDate, customer } = rootState.winLossDetail;
+    const { custId, roleId } = customer as Customer;
+    const payload = {
+      custId,
+      roleId,
+      fromDate,
+      toDate
+    };
+    const response = await axios.post('/api/winlossdetail/excel', payload);
+    console.log(response.data);
+  }
+  catch (e) {
+    handleException(e);
   }
 }
 
