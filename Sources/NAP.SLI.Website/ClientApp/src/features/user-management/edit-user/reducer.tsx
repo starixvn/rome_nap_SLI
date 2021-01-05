@@ -1,44 +1,53 @@
-import axios from 'axios';
-import { createSlice } from '@reduxjs/toolkit';
-import { success, error } from '../../../common/components/toast/reducer';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { patchUser, UserModel } from '../reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
-import { Dispatch } from 'react';
+import { success, error } from '../../../common/components/toast/reducer';
+import { post } from '../../../common/services/http';
 
+type State = {
+  user?: UserModel;
+};
 
+const initialState: State = {};
 const slice = createSlice({
   name: 'edit-user',
-  initialState: {
-    user: {} as UserModel,
-    isOpen: false
-  },
+  initialState,
   reducers: {
-    toggleModal: (state?, action?) => {
-      state.isOpen = !state.isOpen;
-      state.user = action.payload.data as UserModel
+    openModal: (state, action: PayloadAction<{ user: UserModel }>) => {
+      state.user = action.payload.user;
+    },
+    closeModel: (state) => {
+      state.user = undefined;
     }
   }
 });
 
-export const { toggleModal } = slice.actions;
+export const { openModal, closeModel } = slice.actions;
 
-export const update = (values: UserModel, callback: Func) => async (dispatch: Dispatch<any>) => {
+type UpdateProps = {
+  custId: number;
+  firstName: string;
+  lastName: string;
+  groupId: number;
+};
+
+type UpdateData = ResultData & {
+  custId: number;
+  groupId: number;
+};
+
+export const update = (values: UpdateProps, callback: Func) => async (dispatch: AppDispatch) => {
   try {
-    const data = {
-      custId: values.custId,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      groupId: values.groupId
-    } as UserModel;
+    const data = values;
     const payload = {
       apiKey: 'user-management:update-user',
       data
     };
-    const response = await axios.post('/simple-api/command', payload);
+    const response = await post<UpdateData>('/simple-api/command', payload);
     const { isSuccess, errMsg } = response.data;
     if (isSuccess) {
       dispatch(success('Updated successfully'));
-      dispatch(toggleModal(payload));
+      dispatch(closeModel());
       dispatch(patchUser({ data }));
     } else {
       dispatch(error(errMsg));

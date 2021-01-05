@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MatchWinLossDetailPage = () => {
+const MatchWinLossDetailPage: React.FC = () => {
   return (
     <div className="match-win-loss-detail-page">
       <div className="page-title">Match Win Loss Detail</div>

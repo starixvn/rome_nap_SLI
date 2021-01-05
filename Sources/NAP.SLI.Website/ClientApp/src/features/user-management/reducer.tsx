@@ -1,38 +1,58 @@
-import axios from 'axios';
-import { createSlice } from '@reduxjs/toolkit';
-import { AllGroupsId } from '../../common/utils/UserGroupUtils';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { success, error } from '../../common/components/toast/reducer';
 import { handleException } from '../../common/utils/ExceptionUtils';
-import { Dispatch } from 'react';
+import { post } from '../../common/services/http';
+import store from '../../store';
 
 export type UserModel = {
-  custId: number,
-  userName: string,
-  firstName: string,
-  lastName: string,
-  groupId: number
-}
+  custId: number;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  groupId: number;
+  creator: string;
+  createdDate: string;
+  closed: boolean;
+};
 
-type Props = {
-  users: UserModel[]
-}
+type State = {
+  username: string;
+  groupId?: number;
+  users: Array<UserModel>;
+};
 
-type QueryFields = {
-  userName: string,
-  groupId: number | undefined
+export type QueryProps = {
+  username: string;
+  groupId?: number;
+};
+
+const initialState: State = {
+  username: '',
+  groupId: undefined,
+  users: []
+};
+
+type PatchUserAction = {
+  data: {
+    custId: number;
+  };
 }
 
 const slice = createSlice({
   name: 'user-management',
-  initialState: {} as Props,
+  initialState,
   reducers: {
-    queryRequest: (state) => {
+    queryRequest: (state, action: PayloadAction<QueryProps>) => {
+      const { username, groupId } = action.payload;
+      state.username = username;
+      state.groupId = groupId;
       state.users = [];
     },
-    querySuccess: (state, action) => {
-      state.users = action.payload.users;
+    querySuccess: (state, action: PayloadAction<{ users: Array<UserModel> }>) => {
+      const { users } = action.payload;
+      state.users = users;
     },
-    patchUser: (state, action) => {
+    patchUser: (state, action: PayloadAction<PatchUserAction>) => {
       const { data } = action.payload;
       const user = state.users.filter(u => u.custId === data.custId)[0];
       Object.assign(user, data);
@@ -42,42 +62,47 @@ const slice = createSlice({
 
 export const { queryRequest, querySuccess, patchUser } = slice.actions;
 
-var queryData = {} as QueryFields;
-export const query = (values?: UserModel, callback?: Func) => async (dispatch: Dispatch<any>) => {
+export const query = (values?: QueryProps, callback: Func = () => { }) => async (dispatch: AppDispatch) => {
   try {
-    let data = queryData;
-    if (values) {
-      const groupId = values.groupId;
+    let data = values;
+    if (!data) {
+      const rootState: RootState = store.getState();
+      const { username, groupId } = rootState.userManagement;
       data = {
-        userName: values.userName,
-        groupId: groupId === AllGroupsId ? undefined : groupId
+        username,
+        groupId
       };
-      queryData = data;
     }
 
     const payload = {
       apiKey: 'user-management:query-user',
       data
     };
-    dispatch(queryRequest());
-    const response = await axios.post('/simple-api/query', payload);
-    dispatch(querySuccess({ users: response.data }));
+    dispatch(queryRequest({ ...data }));
+    const response = await post<Array<UserModel>>('/simple-api/query', payload);
+    const users = response.data;
+    dispatch(querySuccess({ users }));
   }
   catch (e) {
     handleException(e);
   }
   finally {
-    callback && callback();
+    callback();
   }
 };
 
-export const updateUserStatus = (data: UserModel) => async (dispatch: Dispatch<any>) => {
+type UpdateUserStatusRequest = {
+  custId: number;
+  closed: boolean;
+};
+
+export const updateUserStatus = (data: UpdateUserStatusRequest) => async (dispatch: AppDispatch) => {
   const payload = {
     apiKey: 'user-management:update-user-status',
     data
   };
 
-  const response = await axios.post('/simple-api/command', payload);
+  const response = await post<ResultData>('/simple-api/command', payload);
   const { isSuccess, errMsg } = response.data;
   if (isSuccess) {
     dispatch(success('Updated successfully'));

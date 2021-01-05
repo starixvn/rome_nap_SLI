@@ -1,6 +1,5 @@
 import { generateSelectOptions } from "./SelectUtils";
 
-export const AllGroupsId = -1;
 export const UserGroup = {
   User: 0,
   Admin: 1
@@ -19,4 +18,4 @@ export const getGroupName = (groupId: number) => {
 
 export const UserGroupSelectOptions = generateSelectOptions(UserGroup, getGroupName);
 
-export const UserGroupSelectOptionsWithAll = [{ label: 'All Groups', value: AllGroupsId }].concat(UserGroupSelectOptions);
+export const UserGroupSelectOptionsWithAll: Array<SelectOption<number | undefined>> = [{ label: 'All Groups', value: undefined }].concat(UserGroupSelectOptions);

@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Form, Label, Input, Button,
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { toggleModal, changePassword, ChangePasswordProps } from './reducer';
+import { toggleModal, changePassword } from './reducer';
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string()
@@ -15,21 +15,26 @@ const validationSchema = Yup.object().shape({
     .required('Confirm Password is required')
 });
 
-const ChangePasswordModal = () => {
+const ChangePasswordModal: React.FC = () => {
   const dispatch = useDispatch();
-  const { username } = useSelector((state: RootState) => state.authentication.account);
+  const { account } = useSelector((state: RootState) => state.authentication);
   const { isOpen } = useSelector((state: RootState) => state.changePassword);
 
-  const initValue: ChangePasswordProps = {
+  if (!account) {
+    return <></>;
+  }
+
+  const { username } = account;
+  const initialValues = {
     oldPassword: '',
     newPassword: '',
     confirmPassword: ''
-  }
+  };
 
   return (
     <Modal isOpen={isOpen} unmountOnClose>
       <Formik
-        initialValues={initValue}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           dispatch(changePassword(values, () => setSubmitting(false)));
@@ -50,21 +55,21 @@ const ChangePasswordModal = () => {
                 <FormGroup row>
                   <Label sm={4}>Old Password</Label>
                   <Col sm={8}>
-                    <Input name="oldPassword" type="password" autoComplete="off" tag={Field} invalid={errors.oldPassword != undefined && touched.oldPassword != undefined} />
+                    <Input name="oldPassword" type="password" autoComplete="off" tag={Field} invalid={!!errors.oldPassword && !!touched.oldPassword} />
                     <FormFeedback>{errors.oldPassword}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>New Password</Label>
                   <Col sm={8}>
-                    <Input name="newPassword" type="password" autoComplete="off" tag={Field} invalid={errors.newPassword != undefined && touched.newPassword != undefined} />
+                    <Input name="newPassword" type="password" autoComplete="off" tag={Field} invalid={!!errors.newPassword && !!touched.newPassword} />
                     <FormFeedback>{errors.newPassword}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>Confirm Password</Label>
                   <Col sm={8}>
-                    <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={errors.confirmPassword != undefined && touched.confirmPassword != undefined} />
+                    <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={!!errors.confirmPassword && !!touched.confirmPassword} />
                     <FormFeedback>{errors.confirmPassword}</FormFeedback>
                   </Col>
                 </FormGroup>
@@ -82,6 +87,5 @@ const ChangePasswordModal = () => {
     </Modal>
   );
 };
-
 
 export default ChangePasswordModal;

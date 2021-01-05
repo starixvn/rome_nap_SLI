@@ -3,29 +3,27 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Col, Inpu
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { toggleModal, add, AddExistProps } from './reducer';
+import { toggleModal, add, AddExistingUserProps } from './reducer';
 import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 
 const validationSchema = Yup.object().shape({
-  userName: Yup.string()
+  username: Yup.string()
     .required('User Name is required')
 });
 
-const AddExistingUserModal: React.FunctionComponent = () => {
+const AddExistingUserModal: React.FC = () => {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state: RootState) => state.addExistingUser);
 
-  var initValues: AddExistProps = {
-    userName: '',
-    groupId: UserGroupSelectOptions[0].value,
-    isAddNew: false
-  }
-
+  const initialValues: AddExistingUserProps = {
+    username: '',
+    groupId: UserGroupSelectOptions[0].value
+  };
   return (
     <Modal isOpen={isOpen} unmountOnClose>
       <Formik
-        initialValues={initValues}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           dispatch(add(values, () => setSubmitting(false)));
@@ -46,8 +44,8 @@ const AddExistingUserModal: React.FunctionComponent = () => {
                 <FormGroup row>
                   <Label sm={4}>User Name</Label>
                   <Col sm={8}>
-                    <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName != undefined && touched.userName != undefined} />
-                    <FormFeedback>{errors.userName}</FormFeedback>
+                    <Input name="username" type="text" autoComplete="off" tag={Field} invalid={!!errors.username && !!touched.username} />
+                    <FormFeedback>{errors.username}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>

@@ -4,7 +4,7 @@ import { Toast, ToastBody } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { hide } from './reducer';
 
-const ToastContainer = () => {
+const ToastContainer: React.FC = () => {
   const dispatch = useDispatch();
   const { message, color } = useSelector((state: RootState) => state.toast);
   const isOpen = message !== undefined;

@@ -1,34 +1,70 @@
-import axios from 'axios';
-import { createSlice } from '@reduxjs/toolkit';
-import { History } from 'history';
-import { SidebarState } from './SideBar';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleException } from '../../common/utils/ExceptionUtils';
-import { Customer } from './customer/Model';
+import { post } from '../../common/services/http';
 
+export type Customer = {
+  generalInformation: GeneralInformation;
+  headline: Headline;
+}
+
+type GeneralInformation = {
+  custId: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  username2: string;
+  roleId: number;
+  enabled: boolean;
+  phone: string;
+  mobilePhone: string;
+  fax: string;
+  site: string;
+}
+
+type Headline = {
+  memberId: number;
+  memberName: string;
+  agentId: number;
+  agentName: string;
+  agentEnabled: boolean;
+  masterId: number;
+  masterName: string;
+  masterEnabled: boolean;
+  superId: number;
+  superName: string;
+  superEnabled: boolean;
+}
+
+type State = {
+  isOpen: boolean;
+  username: string;
+  customer?: Customer;
+  message?: string;
+};
+
+const initialState: State = {
+  isOpen: false,
+  username: ''
+};
 const slice = createSlice({
   name: 'sidebar',
-  initialState: {
-    username: '',
-    customer: {} as Customer,
-    message: undefined,
-    isOpen: false
-  },
+  initialState,
   reducers: {
-    toggle: (state: SidebarState) => {
+    toggle: (state) => {
       state.isOpen = !state.isOpen;
     },
-    getCustomerInformationRequest: (state: SidebarState, action) => {
+    getCustomerInformationRequest: (state, action: PayloadAction<{ username: string }>) => {
       state.message = undefined;
       state.customer = undefined;
       state.username = action.payload.username;
     },
-    getCustomerInformationSuccess: (state: SidebarState, action) => {
-      state.customer = action.payload.customer || undefined;
+    getCustomerInformationSuccess: (state, action: PayloadAction<{ customer: Customer }>) => {
+      state.customer = action.payload.customer;
     },
-    getCustomerInformationFailure: (state: SidebarState, action) => {
+    getCustomerInformationFailure: (state, action: PayloadAction<{ message: string }>) => {
       state.message = action.payload.message;
     },
-    selectUsername: (state: SidebarState, action) => {
+    selectUsername: (state, action) => {
       state.customer = undefined;
       state.message = undefined;
       state.username = action.payload.username;
@@ -38,33 +74,39 @@ const slice = createSlice({
 
 export const { toggle, getCustomerInformationRequest, getCustomerInformationFailure, getCustomerInformationSuccess, selectUsername } = slice.actions;
 
+export type QueryUsernameSuggestionRecord = {
+  username: string
+};
 export const queryUsernameSuggestion = async (value: string) => {
   const payload = {
     apiKey: 'customer:query-username-suggestion',
     data: {
-      userName: value
+      username: value
     }
   };
 
-  const response = await axios.post('/simple-api/query', payload);
+  const response = await post<Array<QueryUsernameSuggestionRecord>>('/simple-api/query', payload);
   return response.data;
 }
 
-export const getCustomerInformation = (username: string, history: History, callback: Func) => async (dispatch: any) => {
+type GetCustomerInformationData = ResultData & {
+  generalInformation: GeneralInformation;
+  headline: Headline;
+};
+export const getCustomerInformation = (username: string, callback: Func) => async (dispatch: any) => {
   try {
     dispatch(getCustomerInformationRequest({ username }));
     const payload = {
       username
     };
-    const response = await axios.post("/api/customer/information", payload);
+    const response = await post<GetCustomerInformationData>("/api/customer/information", payload);
     const { isSuccess, errMsg, generalInformation, headline } = response.data;
     if (isSuccess) {
-      dispatch(getCustomerInformationSuccess({
-        customer: {
-          generalInformation,
-          headline
-        }
-      }));
+      const customer = {
+        generalInformation,
+        headline
+      };
+      dispatch(getCustomerInformationSuccess({ customer }));
     } else {
       dispatch(getCustomerInformationFailure({ message: errMsg }));
     }

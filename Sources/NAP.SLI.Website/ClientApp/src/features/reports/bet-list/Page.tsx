@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BetListPage = () => {
+const BetListPage: React.FC = () => {
   return (
     <div className="bet-list-page">
       <div className="page-title">Bet List</div>

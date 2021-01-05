@@ -7,11 +7,12 @@ import { query, toggleMode, excel } from './reducer';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
 import { useDispatch, useSelector } from 'react-redux';
+import { Moment } from 'moment';
 
 type Props = {
-  minDate: moment.Moment;
-  maxDate: moment.Moment;
-}
+  minDate: Moment;
+  maxDate: Moment;
+};
 
 const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
   const formikRef = createRef<FormikProps<any>>();
@@ -19,10 +20,18 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
   const { customer, pageIndex, pageSize, isHistory } = useSelector((state: RootState) => state.winLossDetail);
-  const { custId, roleId } = customer as Customer;
 
+  if (!customer) {
+    return <></>;
+  }
+
+  const { custId, roleId } = customer;
   useEffect(() => {
-    const { isSubmitting, handleSubmit } = formikRef.current as FormikProps<any>;
+    if (!formikRef.current) {
+      return;
+    }
+
+    const { isSubmitting, handleSubmit } = formikRef.current;
     if (!isSubmitting) {
       handleSubmit();
     }
@@ -39,7 +48,7 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
     }
   }
 
-  const onDateChange = () => {
+  const handleDateChange = () => {
     setDropdownIndex(ReportDateRanges.length - 1);
   }
 
@@ -57,8 +66,8 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
           roleId,
           pageIndex,
           pageSize,
-          fromDate: formatDate(values['fromDate']),
-          toDate: formatDate(values['toDate'])
+          fromDate: formatDate(values.fromDate),
+          toDate: formatDate(values.toDate)
         }, () => setSubmitting(false)));
       }}
     >
@@ -72,11 +81,11 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
             <fieldset disabled={isSubmitting} className="form-inline">
               <FormGroup className="mr-5">
                 <Label className="mr-2">From</Label>
-                <FormikDatePicker disabled={isSubmitting} name="fromDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
+                <FormikDatePicker disabled={isSubmitting} name="fromDate" minDate={minDate} maxDate={maxDate} onChange={handleDateChange} />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Label className="mr-2">To</Label>
-                <FormikDatePicker disabled={isSubmitting} name="toDate" minValue={minDate} maxValue={maxDate} onChange={onDateChange} />
+                <FormikDatePicker disabled={isSubmitting} name="toDate" minDate={minDate} maxDate={maxDate} onChange={handleDateChange} />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Button type="submit" color="primary">
@@ -99,7 +108,7 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }) => {
                 </Dropdown>
               </FormGroup>
               <FormGroup>
-                <Button type='button' color='success' className='btn-excel' title='Export to Excel' onClick={() => {console.log(customer); dispatch(excel())}}>
+                <Button type='button' color='success' className='btn-excel' title='Export to Excel' onClick={() => dispatch(excel())}>
                   <Icon path={mdiFileExcelOutline} />
                 </Button>
               </FormGroup>

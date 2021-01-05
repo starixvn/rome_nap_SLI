@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { formatDate, getToday } from '../../../common/utils/DateUtils';
-import axios from 'axios';
 import { handleException } from '../../../common/utils/ExceptionUtils';
+import { post } from '../../../common/services/http';
 
 export const ReportType = {
   Daily: 1,
@@ -9,7 +9,7 @@ export const ReportType = {
   Sport: 3
 };
 
-type WinLossAnalysisData = {
+type WinLossAnalysisRecord = {
   sportType: string;
   betCount: number;
   turnover: number;
@@ -21,20 +21,20 @@ type WinLossAnalysisData = {
   companyWinLoss: number,
 };
 
-export type WinLossAnalysisDataResponse = {
-  records: WinLossAnalysisData[],
-  total: WinLossAnalysisData
+export type WinLossAnalysisData = {
+  records: Array<WinLossAnalysisRecord>,
+  total: WinLossAnalysisRecord
 }
 
 export type WinLossAnalysisState = {
   fromDate: any,
   toDate: any,
-  customer: Customer | undefined,
+  customer?: Customer,
   custId: number,
   roleId: number,
   productIds: number,
   reportType: number,
-  data: WinLossAnalysisDataResponse | undefined
+  data?: WinLossAnalysisData
 };
 
 type DefaultFunction = () => void;
@@ -72,10 +72,14 @@ const slice = createSlice({
 
 export const { queryRequest, querySuccess } = slice.actions;
 
-const calculateCompanyWinLoss = (winLoss: WinLossAnalysisData) => {
+const calculateCompanyWinLoss = (winLoss: WinLossAnalysisRecord) => {
   winLoss.companyWinLoss = winLoss.memberWinLoss + winLoss.agentWinLoss + winLoss.masterWinLoss || 0 + winLoss.superWinLoss || 0;
 };
 
+type QueryData = {
+  records: Array<WinLossAnalysisRecord>;
+  total: WinLossAnalysisRecord;
+};
 export const query = (data: WinLossAnalysisState, callback: DefaultFunction) => async (dispatch: any) => {
   try {
     dispatch(queryRequest({
@@ -89,9 +93,9 @@ export const query = (data: WinLossAnalysisState, callback: DefaultFunction) => 
       reportType: data.reportType
     }));
 
-    const response = await axios.post('/api/winlossanalysis/query', data);
+    const response = await post<QueryData>('/api/winlossanalysis/query', data);
     const { records, total } = response.data;
-    records.forEach((record: WinLossAnalysisData) => calculateCompanyWinLoss(record));
+    records.forEach(record => calculateCompanyWinLoss(record));
     calculateCompanyWinLoss(total);
     dispatch(querySuccess({ data: response.data }));
   }

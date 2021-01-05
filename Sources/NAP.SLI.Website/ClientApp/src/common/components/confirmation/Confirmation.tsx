@@ -1,12 +1,10 @@
-import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { confirmed } from './reducer';
 
-const Confirmation = () => {
+const Confirmation: React.FC = () => {
   const dispatch = useDispatch();
-  const { isOpen, props } = useSelector((state: RootState) => state.confirmation);
-  const { title, message } = props;
+  const { isOpen, title, message } = useSelector((state: RootState) => state.confirmation);
 
   const handleConfirm = (isOk: boolean) => {
     dispatch(confirmed(isOk));

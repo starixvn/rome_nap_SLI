@@ -8,7 +8,7 @@ import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 
 const validationSchema = Yup.object().shape({
-  userName: Yup.string()
+  username: Yup.string()
     .required('User Name is required'),
   password: Yup.string()
     .required('Password is required'),
@@ -18,21 +18,21 @@ const validationSchema = Yup.object().shape({
     .required('Last Name is required')
 });
 
-const AddNewUserModal = () => {
+const AddNewUserModal: React.FC = () => {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state: RootState) => state.addNewUser);
 
-  const initValue: AddNewUserProps = {
-    userName: '',
+  const initialValues: AddNewUserProps = {
+    username: '',
     password: '',
     firstName: '',
     lastName: '',
     groupId: UserGroupSelectOptions[0].value
-  }
+  };
   return (
     <Modal isOpen={isOpen} unmountOnClose>
       <Formik
-        initialValues={initValue}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           dispatch(add(values, () => setSubmitting(false)));
@@ -53,28 +53,28 @@ const AddNewUserModal = () => {
                 <FormGroup row>
                   <Label sm={4}>User Name</Label>
                   <Col sm={8}>
-                    <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName != undefined && touched.userName != undefined} />
-                    <FormFeedback>{errors.userName}</FormFeedback>
+                    <Input name="username" type="text" autoComplete="off" tag={Field} invalid={!!errors.username && !!touched.username} />
+                    <FormFeedback>{errors.username}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>Password</Label>
                   <Col sm={8}>
-                    <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password != undefined && touched.password != undefined} />
+                    <Input name="password" type="password" autoComplete="off" tag={Field} invalid={!!errors.password && !!touched.password} />
                     <FormFeedback>{errors.password}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>First Name</Label>
                   <Col sm={8}>
-                    <Input name="firstName" type="text" autoComplete="off" tag={Field} invalid={errors.firstName != undefined && touched.firstName != undefined} />
+                    <Input name="firstName" type="text" autoComplete="off" tag={Field} invalid={!!errors.firstName && !!touched.firstName} />
                     <FormFeedback>{errors.firstName}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>Last Name</Label>
                   <Col sm={8}>
-                    <Input name="lastName" type="text" autoComplete="off" tag={Field} invalid={errors.lastName != undefined && touched.lastName != undefined} />
+                    <Input name="lastName" type="text" autoComplete="off" tag={Field} invalid={!!errors.lastName && !!touched.lastName} />
                     <FormFeedback>{errors.lastName}</FormFeedback>
                   </Col>
                 </FormGroup>

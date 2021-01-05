@@ -9,22 +9,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
 import { query, toggleMode, excel } from './reducer';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
-const generateDateOptions = (date: moment.Moment) => {
+const generateDateOptions = (date: Moment) => {
   return generateRangeSelectOptions(1, date.daysInMonth());
 }
 
 type Props = {
-  minDate: moment.Moment;
-  maxDate: moment.Moment;
+  minDate: Moment;
+  maxDate: Moment;
 }
 
 const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }) => {
   let formikRef = createRef<FormikProps<any>>();
   const dispatch = useDispatch();
   const { customer, pageIndex, pageSize, isHistory } = useSelector((state: RootState) => state.winLossDetail);
-  const { custId, roleId } = customer as Customer;
+
+  if (!customer) {
+    return <></>;
+  }
+
+  const { custId, roleId } = customer;
 
   const month = getToday();
   const dateOptions = generateDateOptions(month);
@@ -32,13 +37,17 @@ const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }) => {
   const toDateOption = dateOptions[month.date() - 1].value;
 
   useEffect(() => {
-    const { isSubmitting, handleSubmit } = formikRef.current as FormikProps<any>;
+    if (!formikRef.current) {
+      return;
+    }
+
+    const { isSubmitting, handleSubmit } = formikRef.current;
     if (!isSubmitting) {
       handleSubmit();
     }
   }, [custId]);
 
-  const handleMonthChange = (value: moment.Moment, setFieldValue: Formik.SetFieldValueFunc) => {
+  const handleMonthChange = (value: Moment, setFieldValue: Formik.SetFieldValueFunc) => {
     const dateOptions = generateDateOptions(value);
     setFieldValue('dateOptions', dateOptions);
     setFieldValue('fromDateOption', dateOptions[0].value);
@@ -84,15 +93,15 @@ const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }) => {
             <fieldset disabled={isSubmitting} className="form-inline">
               <FormGroup className="mr-5">
                 <Label className="mr-2">View data in month</Label>
-                <FormikMonthPicker disabled={isSubmitting} name="month" minValue={minDate} maxValue={maxDate} onChange={(value: moment.Moment) => handleMonthChange(value, setFieldValue)} />
+                <FormikMonthPicker disabled={isSubmitting} name="month" minDate={minDate} maxDate={maxDate} onChange={value => handleMonthChange(moment(value), setFieldValue)} />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Label className="mr-2">From</Label>
-                <FormikSelect name="fromDateOption" options={values['dateOptions']} />
+                <FormikSelect name="fromDateOption" options={values.dateOptions} />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Label className="mr-2">To</Label>
-                <FormikSelect name="toDateOption" options={values['dateOptions']} />
+                <FormikSelect name="toDateOption" options={values.dateOptions} />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Button type="submit" color="primary">

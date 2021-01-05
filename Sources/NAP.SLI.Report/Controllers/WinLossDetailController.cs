@@ -28,7 +28,11 @@
         public async Task<IActionResult> Excel([FromBody] WinLossDetailExcelRequest request)
         {
             var fileContents = await mediator.Send(request).ConfigureAwait(false);
-            return File(fileContents, ContentTypes.Excel);
+            return File(
+                fileContents: fileContents,
+                contentType: ContentTypes.Excel,
+                fileDownloadName: request.GetDownloadFileName()
+            );
         }
     }
 }

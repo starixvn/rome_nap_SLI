@@ -1,22 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const defaultProps = {
+type State = {
+  isOpen: boolean;
+  title: string;
+  message: string;
+};
+
+type ConfirmProps = {
+  title: string;
+  message: string;
+};
+
+const initialState: State = {
+  isOpen: false,
   title: '',
-  message: '',
-  okText: 'OK',
-  cancelText: 'Cancel'
+  message: ''
 };
 
 const slice = createSlice({
   name: 'confirmation',
-  initialState: {
-    isOpen: false,
-    props: defaultProps
-  },
+  initialState,
   reducers: {
-    show: (state, action) => {
+    show: (state, action: PayloadAction<ConfirmProps>) => {
+      const { title, message } = action.payload;
       state.isOpen = true;
-      state.props = action.payload.props;
+      state.title = title;
+      state.message = message;
     },
     hide: (state) => {
       state.isOpen = false;
@@ -25,19 +34,21 @@ const slice = createSlice({
 });
 
 export const { show, hide } = slice.actions;
-const defaultOnConfirm = () => { };
-const defaultOnCancel = () => { };
+
+const defaultOnConfirm: Func = () => { };
+const defaultOnCancel: Func = () => { };
 let _onConfirm = defaultOnConfirm;
 let _onCancel = defaultOnCancel;
-export const confirm = (props: any, onConfirm: any, onCancel: any) => (dispatch: AppDispatch) => {
+
+export const confirm = (data: ConfirmProps, onConfirm?: Func, onCancel?: Func) => (dispatch: AppDispatch) => {
   _onConfirm = onConfirm || defaultOnConfirm;
   _onCancel = onCancel || defaultOnCancel;
-  dispatch(show({ props }));
+  dispatch(show({ ...data }));
 };
 
 export const confirmed = (isOk: boolean) => (dispatch: AppDispatch) => {
   dispatch(hide());
   isOk ? _onConfirm() : _onCancel();
-}
+};
 
 export default slice.reducer;

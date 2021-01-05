@@ -22,16 +22,15 @@ import WinLossByBetTypePage from './features/reports/win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from './features/reports/win-loss-analysis/Page';
 import BetListPage from './features/reports/bet-list/Page';
 import ResultsPage from './features/reports/results/Page';
-import { startRefreshToken, stopRefreshToken } from './features/account/authentication/services/token';
-import { startCheckin, stopCheckin } from './features/account/authentication/services/connection';
+import { startRefreshToken, stopRefreshToken } from './common/services/token';
+import { startCheckin, stopCheckin } from './common/services/connection';
 
 export const history = createBrowserHistory();
 
-const App = () => {
+const App: React.FC = () => {
   const { account } = useSelector((state: RootState) => state.authentication);
   const { isOpen } = useSelector((state: RootState) => state.sidebar);
-  const { umTime } = useSelector((state: RootState) => state.um);
-  const { isUnderMaintenanceTime } = umTime;
+  const { isUnderMaintenanceTime } = useSelector((state: RootState) => state.um);
   const isLoggedIn = account !== undefined;
   const isLayout = isLoggedIn && !isUnderMaintenanceTime;
 

@@ -1,10 +1,9 @@
-// @ts-nocheck
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Col, Button, FormFeedback, Spinner, ModalFooter } from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { update, toggleModal } from './reducer';
+import { update, closeModel } from './reducer';
 import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 
@@ -15,14 +14,24 @@ const validationSchema = Yup.object().shape({
     .required('Last Name is required')
 });
 
-const EditUserModal = () => {
+const EditUserModal: React.FC = () => {
   const dispatch = useDispatch();
-  const { isOpen, user } = useSelector((state: RootState) => state.editUser);
+  const { user } = useSelector((state: RootState) => state.editUser);
 
+  if (!user) {
+    return <></>;
+  }
+
+  const initialValues = {
+    custId: user.custId,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    groupId: user.groupId
+  };
   return (
-    <Modal isOpen={isOpen} unmountOnClose>
+    <Modal isOpen unmountOnClose>
       <Formik
-        initialValues={user}
+        initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           dispatch(update(values, () => setSubmitting(false)));
@@ -36,7 +45,7 @@ const EditUserModal = () => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <fieldset disabled={isSubmitting}>
-              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(toggleModal()) })}>
+              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(closeModel()) })}>
                 Edit User Information
               </ModalHeader>
               <ModalBody>
@@ -47,14 +56,14 @@ const EditUserModal = () => {
                 <FormGroup row>
                   <Label sm={4}>First Name</Label>
                   <Col sm={8}>
-                    <Input name="firstName" type="text" autoComplete="off" tag={Field} invalid={errors.firstName && touched.firstName} />
+                    <Input name="firstName" type="text" autoComplete="off" tag={Field} invalid={!!errors.firstName && !!touched.firstName} />
                     <FormFeedback>{errors.firstName}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>Last Name</Label>
                   <Col sm={8}>
-                    <Input name="lastName" type="text" autoComplete="off" tag={Field} invalid={errors.lastName && touched.lastName} />
+                    <Input name="lastName" type="text" autoComplete="off" tag={Field} invalid={!!errors.lastName && !!touched.lastName} />
                     <FormFeedback>{errors.lastName}</FormFeedback>
                   </Col>
                 </FormGroup>
@@ -68,8 +77,8 @@ const EditUserModal = () => {
               <ModalFooter>
                 <Button type="submit" color="primary">
                   {isSubmitting && <Spinner className='mr-3' />}
-                    Submit
-                  </Button>
+                  Submit
+                </Button>
               </ModalFooter>
             </fieldset>
           </Form>

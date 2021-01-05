@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 export const FormatStrings = {
   Date: 'MM/DD/YYYY',
@@ -9,11 +9,11 @@ export const stringDateToMoment = (date: string) => {
   return moment(date, FormatStrings.Date);
 }
 
-export const formatDate = (date: Date | moment.Moment) => {
+export const formatDate = (date: Date | Moment) => {
   return moment(date).format(FormatStrings.Date);
 }
 
-export const formatDateTime = (date: Date | moment.Moment) => {
+export const formatDateTime = (date: Date | Moment | string) => {
   return moment(date).format(FormatStrings.DateTime);
 }
 

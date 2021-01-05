@@ -1,30 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Input } from 'reactstrap';
+import { Input, InputProps } from 'reactstrap';
 
-type Props = {
-  value: any,
-  options: any[],
-  className?: string,
-  title?: string,
-  onChange: SingleFunc
+type Props<T> = {
+  options: Array<SelectOption<T>>;
+  value?: T;
+  onChange: (selectedOption: SelectOption<T>) => void;
+  inputProps?: InputProps;
 };
 
-const Select = (props: Props) => {
-  const { options, onChange, className, title } = props;
-  const [value, setValue] = useState(props.value);
+const Select: React.FC<Props<any>> = props => {
+  const { options, onChange, value, inputProps } = props;
+  const [_value, setValue] = useState(value);
 
   useEffect(() => {
     setValue(props.value);
   }, [props.value, options]);
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedValue = options.filter(option => option.value == event.target.value)[0];
-    setValue(selectedValue);
-    onChange(selectedValue);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let selectedOptions = options.filter(option => option.value?.toString() === event.target.value);
+    if (selectedOptions.length === 0) {
+      selectedOptions = options.filter(option => option.value === undefined);
+    }
+
+    const selectedOption = selectedOptions[0];
+    setValue(selectedOption.value);
+    onChange(selectedOption);
   };
 
   return (
-    <Input type="select" title={title} className={className} value={value && value.value} onChange={(event) => handleSelectChange(event)}>
+    <Input type="select" {...inputProps} value={_value} onChange={(event) => handleChange(event)}>
       {options.map((option, index) =>
         <option key={index} value={option.value}>{option.label}</option>
       )}

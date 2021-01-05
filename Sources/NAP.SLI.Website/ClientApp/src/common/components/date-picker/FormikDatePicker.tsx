@@ -1,21 +1,27 @@
 import React from 'react';
 import { useField, useFormikContext } from 'formik';
 import DatePicker from './DatePicker';
+import { DatetimepickerProps } from 'react-datetime';
+import { Moment } from 'moment';
 
-const FormikDatePicker = (props: any) => {
+type Props = DatetimepickerProps & {
+  name: string;
+  minDate: Moment;
+  maxDate: Moment;
+  disabled: boolean;
+};
+
+const FormikDatePicker: React.FC<Props> = (props) => {
   const { setFieldValue } = useFormikContext();
-  const [fields] = useField(props);
-  const { onChange } = props;
+  const [fields] = useField(props.name);
 
   return (
     <DatePicker
       {...props}
       {...fields}
-      selected={props.value}
-      name={props.name}
-      onChange={(value: any) => {
+      onChange={value => {
         setFieldValue(props.name, value);
-        onChange && onChange(value);
+        props.onChange && props.onChange(value);
       }}
     />
   );

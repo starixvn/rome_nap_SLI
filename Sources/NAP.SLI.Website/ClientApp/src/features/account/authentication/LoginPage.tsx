@@ -13,13 +13,13 @@ import { ReactComponent as Chrome } from './images/chrome.svg';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 
 const validationSchema = Yup.object().shape({
-  userName: Yup.string()
+  username: Yup.string()
     .required('Username is required'),
   password: Yup.string()
     .required('Password is required')
 });
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { message, account } = useSelector((state: RootState) => state.authentication);
@@ -31,12 +31,13 @@ const LoginPage = () => {
     }
   });
 
+  const initialValues = {
+    username: '',
+    password: ''
+  };
   return (
     <Formik
-      initialValues={{
-        userName: '',
-        password: ''
-      }}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         dispatch(login(values, () => setSubmitting(false)));
@@ -60,8 +61,8 @@ const LoginPage = () => {
                     <Icon path={mdiAccount} />
                   </InputGroupText>
                 </InputGroupAddon>
-                <Input name="userName" type="text" autoComplete="off" tag={Field} invalid={errors.userName != undefined && touched.userName != undefined} />
-                <FormFeedback tooltip>{errors.userName}</FormFeedback>
+                <Input name="username" type="text" autoComplete="off" tag={Field} invalid={!!errors.username && !!touched.username} />
+                <FormFeedback tooltip>{errors.username}</FormFeedback>
               </InputGroup>
             </FormGroup>
             <FormGroup className="mb-5">
@@ -71,7 +72,7 @@ const LoginPage = () => {
                     <Icon path={mdiLock} />
                   </InputGroupText>
                 </InputGroupAddon>
-                <Input name="password" type="password" autoComplete="off" tag={Field} invalid={errors.password != undefined && touched.password != undefined} />
+                <Input name="password" type="password" autoComplete="off" tag={Field} invalid={!!errors.password && !!touched.password} />
                 <FormFeedback tooltip>{errors.password}</FormFeedback>
               </InputGroup>
             </FormGroup>
@@ -83,7 +84,7 @@ const LoginPage = () => {
             </FormGroup>
             <div>
               Best view in <Firefox className="browser-icon" /> Firefox 60+  <Chrome className="browser-icon" /> Chrome 67+
-              </div>
+            </div>
           </fieldset>
         </Form>
       )}

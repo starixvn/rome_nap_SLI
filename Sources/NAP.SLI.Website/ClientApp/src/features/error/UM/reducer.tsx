@@ -1,29 +1,30 @@
-import axios from 'axios';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleException } from '../../../common/utils/ExceptionUtils';
+import { post } from '../../../common/services/http';
 import store from '../../../store';
 
-export type UMTIme = {
+export type UMTime = {
   from: string;
   to: string;
   isUnderMaintenanceTime: boolean;
 };
 
-const umTime: UMTIme = {
+const initialState: UMTime = {
   from: '',
   to: '',
   isUnderMaintenanceTime: false
 };
 const slice = createSlice({
   name: 'um',
-  initialState: {
-    umTime
-  },
+  initialState,
   reducers: {
-    checkSuccess: (state, action) => {
-      const { umTime } = action.payload;
-      state.umTime = umTime;
-      if (umTime.isUnderMaintenanceTime) {
+    checkSuccess: (state, action: PayloadAction<UMTime>) => {
+      const umTime = action.payload;
+      const { from, to, isUnderMaintenanceTime } = umTime;
+      state.from = from;
+      state.to = to;
+      state.isUnderMaintenanceTime = isUnderMaintenanceTime;
+      if (isUnderMaintenanceTime) {
         startCheckUM(umTime);
       } else {
         stopCheckUM();
@@ -34,26 +35,27 @@ const slice = createSlice({
 
 export const { checkSuccess } = slice.actions;
 
-let timeout: NodeJS.Timeout;
+let timeout: NodeJS.Timeout | undefined;
 const timeoutInterval = 10000;
 
 export const stopCheckUM = () => {
   if (timeout) {
     clearTimeout(timeout);
+    timeout = undefined;
   }
 };
 
-export const startCheckUM = async (currentUMTime: UMTIme) => {
+export const startCheckUM = async (currentUMTime: UMTime) => {
   stopCheckUM();
   timeout = setTimeout(async () => await checkUM(currentUMTime), timeoutInterval);
 }
 
-const checkUM = async (currentUMTime: UMTIme) => {
+const checkUM = async (currentUMTime: UMTime) => {
   try {
-    const response = await axios.post('/api/common/umtime');
-    const umTime: UMTIme = response.data;
+    const response = await post<UMTime>('/api/common/umtime');
+    const umTime = response.data;
     if (JSON.stringify(currentUMTime) !== JSON.stringify(umTime)) {
-      store.dispatch(checkSuccess({ umTime }));
+      store.dispatch(checkSuccess({ ...umTime }));
     } else {
       timeout = setTimeout(async () => await checkUM(currentUMTime), timeoutInterval);
     }

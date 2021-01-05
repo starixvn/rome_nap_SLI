@@ -6,21 +6,21 @@ import { mdiArrowLeftBold, mdiArrowRightBold } from '@mdi/js';
 import { Input, InputGroup, InputGroupAddon, InputGroupText, InputProps } from 'reactstrap';
 import moment, { Moment } from 'moment';
 
-type CustomeMonthpickerProps = DatetimepickerProps & {
-  minValue: Moment,
-  maxValue: Moment,
-  disabled: boolean
-}
+type Props = DatetimepickerProps & {
+  minDate: Moment;
+  maxDate: Moment;
+  disabled: boolean;
+};
 
-const MonthPicker = (props : CustomeMonthpickerProps) => {
-  const { minValue, maxValue } = props;
+const MonthPicker: React.FC<Props> = props => {
+  const { minDate, maxDate, disabled } = props;
   const [value, setValue] = useState(props.value);
 
   useEffect(() => {
     setValue(props.value);
   }, [props.value]);
 
-  const renderInput = (props: InputProps, openCalendar: any) => {
+  const renderInput = (props: InputProps, openCalendar: Function) => {
     return (
       <InputGroup className="month-picker">
         <InputGroupAddon addonType="prepend" {...(!props.disabled && { onClick: () => handleOnChange(moment(value).subtract(1, 'months')) })}>
@@ -28,7 +28,7 @@ const MonthPicker = (props : CustomeMonthpickerProps) => {
             <Icon path={mdiArrowLeftBold} />
           </InputGroupText>
         </InputGroupAddon>
-        <div {...(!props.disabled && { onClick: openCalendar })}>
+        <div {...(!props.disabled && { onClick: () => openCalendar() })}>
           <Input readOnly {...props} />
         </div>
         <InputGroupAddon addonType="append" {...(!props.disabled && { onClick: () => handleOnChange(moment(value).add(1, 'months')) })}>
@@ -41,18 +41,27 @@ const MonthPicker = (props : CustomeMonthpickerProps) => {
   };
 
   const inputProps = {
-    disabled: props.disabled
+    disabled
   };
 
-  const handleOnChange = (value: any) => {
+  const handleOnChange = (value: Moment | string) => {
     setValue(value);
     props.onChange && props.onChange(value);
   };
 
   const isValidDate = (current: Moment) => {
-    return current.isSameOrAfter(minValue) && current.isSameOrBefore(maxValue);
+    return current.isSameOrAfter(minDate) && current.isSameOrBefore(maxDate);
   };
 
-  return <Datetime isValidDate={isValidDate} value={value} dateFormat="MMM - YYYY" onChange={handleOnChange} closeOnSelect={true} timeFormat={false} inputProps={inputProps} renderInput={renderInput} />;
+  return <Datetime
+    isValidDate={isValidDate}
+    value={value}
+    dateFormat="MMM - YYYY"
+    onChange={handleOnChange}
+    closeOnSelect={true}
+    timeFormat={false}
+    inputProps={inputProps}
+    renderInput={renderInput} />;
 };
+
 export default MonthPicker;

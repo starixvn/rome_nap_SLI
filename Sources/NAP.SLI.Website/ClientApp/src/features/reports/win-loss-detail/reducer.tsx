@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { PageSize } from '../../../common/utils/ReportUtils';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import { formatDate, getToday } from '../../../common/utils/DateUtils';
 import store from '../../../store';
+import { download, post } from '../../../common/services/http';
 
 export type Record = {
   custId: number;
@@ -21,14 +21,14 @@ type State = {
   isHistory: boolean;
   fromDate: string;
   toDate: string;
-  customer: Customer | undefined;
-  data: QueryData | undefined;
-  uplineCustomers: Customer[];
+  customer?: Customer;
+  data?: QueryData;
+  uplineCustomers: Array<Customer>;
   pageIndex: number;
   pageSize: number;
 };
 
-type QueryPayload = {
+type QueryProps = {
   isHistory: boolean;
   custId: number;
   roleId: number;
@@ -63,8 +63,8 @@ const slice = createSlice({
     toggleMode: (state) => {
       state.isHistory = !state.isHistory;
     },
-    queryRequest: (state, action) => {
-      const { fromDate, toDate, pageIndex, pageSize, isHistory } = action.payload as QueryPayload;
+    queryRequest: (state, action: PayloadAction<QueryProps>) => {
+      const { fromDate, toDate, pageIndex, pageSize, isHistory } = action.payload;
       state.isHistory = isHistory;
       state.fromDate = fromDate;
       state.toDate = toDate;
@@ -72,10 +72,10 @@ const slice = createSlice({
       state.pageSize = pageSize;
       state.data = undefined;
     },
-    querySuccess: (state, action) => {
+    querySuccess: (state, action: PayloadAction<{ data: QueryData }>) => {
       state.data = action.payload.data;
     },
-    selectCustomer: (state, action) => {
+    selectCustomer: (state, action: PayloadAction<{ customer: Customer; isReset: boolean; }>) => {
       const { customer, isReset } = action.payload;
       const currentState = current(state);
       if (isReset || !currentState.customer) {
@@ -112,11 +112,11 @@ const calculateCompanyWinLoss = (record: Record) => {
 
 export const { toggleMode, queryRequest, querySuccess, selectCustomer } = slice.actions;
 
-export const query = (payload: QueryPayload, callback: Func) => async (dispatch: AppDispatch) => {
+export const query = (payload: QueryProps, callback: Func) => async (dispatch: AppDispatch) => {
   try {
     dispatch(queryRequest(payload));
-    const response = await axios.post('/api/winlossdetail/query', payload);
-    const { records, total } = response.data as QueryData;
+    const response = await post<QueryData>('/api/winlossdetail/query', payload);
+    const { records, total } = response.data;
     records.forEach((record) => calculateCompanyWinLoss(record));
     calculateCompanyWinLoss(total);
     dispatch(querySuccess({ data: response.data }));
@@ -133,15 +133,17 @@ export const excel = () => async () => {
   try {
     const rootState: RootState = store.getState();
     const { fromDate, toDate, customer } = rootState.winLossDetail;
-    const { custId, roleId } = customer as Customer;
-    const payload = {
-      custId,
-      roleId,
-      fromDate,
-      toDate
-    };
-    const response = await axios.post('/api/winlossdetail/excel', payload);
-    console.log(response.data);
+    if (customer) {
+      const { custId, roleId, username } = customer;
+      const payload = {
+        custId,
+        username,
+        roleId,
+        fromDate,
+        toDate
+      };
+      await download('/api/winlossdetail/excel', payload);
+    }
   }
   catch (e) {
     handleException(e);

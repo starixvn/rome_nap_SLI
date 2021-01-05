@@ -13,9 +13,14 @@ import { UserGroup } from '../../common/utils/UserGroupUtils';
 
 const NavMenu: React.FC = () => {
   const dispatch = useDispatch();
-  const { username, groupId } = useSelector((state: RootState) => state.authentication.account);
+  const { account } = useSelector((state: RootState) => state.authentication);
   const [isOpen, setIsOpen] = useState(false);
 
+  if (!account) {
+    return <></>;
+  }
+
+  const { username, groupId } = account;
   const handleToggle = useCallback(() => {
     setIsOpen(isOpen => !isOpen);
   }, []);

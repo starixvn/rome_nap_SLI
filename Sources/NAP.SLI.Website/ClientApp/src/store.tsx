@@ -40,7 +40,7 @@ const rootReducer: Reducer<CombinedState<any>, Action> = (state, action) => {
     return appReducer(undefined, action);
   }
 
-  return appReducer(state, action)
+  return appReducer(state, action);
 };
 
 const store = configureStore({

@@ -1,21 +1,27 @@
 import React from 'react';
-import { Field } from 'formik';
+import { useField, useFormikContext } from 'formik';
+import Select from './Select';
 
-type Props = {
-  name: string,
-  options: any[],
-  invalid?: boolean
-}
+type Props<T> = {
+  name: string;
+  options: Array<SelectOption<T>>;
+  invalid?: boolean;
+};
 
-const FormikSelect = (props: Props) => {
+const FormikSelect: React.FC<Props<any>> = props => {
+  const { invalid, options } = props;
+  const { setFieldValue } = useFormikContext();
+  const [fields] = useField(props.name);
 
-  return (
-    <Field as="select" name={props.name} className={'form-control' + (props.invalid ? ' is-invalid' : '')}>
-      {props.options.map((option, index) =>
-        <option key={index} value={option.value}>{option.label}</option>
-      )}
-    </Field>
-  );
+  return <Select
+    {...fields}
+    options={options}
+    onChange={selectedOption => {
+      setFieldValue(fields.name, selectedOption.value);
+    }}
+    inputProps={{
+      className: 'form-control' + (invalid ? ' is-invalid' : '')
+    }} />;
 };
 
 export default FormikSelect;

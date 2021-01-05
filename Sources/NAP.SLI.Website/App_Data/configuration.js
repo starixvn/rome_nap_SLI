@@ -1,4 +1,4 @@
-var configuration = {
+window.configuration = {
     env: '{{Environment}}',
     sentryDsn: '{{SentryDsn}}'
-}
+};

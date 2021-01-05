@@ -1,31 +1,38 @@
-// @ts-nocheck
-import axios from 'axios';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { success, error } from '../../../common/components/toast/reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
+import { post } from '../../../common/services/http';
 import { UserModel } from '../reducer';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
 
+type ResetPasswordProps = {
+  custId: number;
+  password: string;
+  confirmPassword: string;
+};
+
+type State = {
+  user?: UserModel;
+};
+
+const initialState: State = {};
 const slice = createSlice({
   name: 'reset-user-password',
-  initialState: {
-    user: {} as UserModel,
-    isOpen: false
-  },
+  initialState,
   reducers: {
-    toggleModal: (state, action) => {
-      state.isOpen = !state.isOpen;
-      if (action.payload) {
-        state.user = action.payload.user;
-      }
+    openModal: (state, action: PayloadAction<{ user: UserModel }>) => {
+      state.user = action.payload.user;
+    },
+    closeModel: (state) => {
+      state.user = undefined;
     }
   }
 });
 
-export const { toggleModal, resetPasswordRequest, resetPasswordSuccess, resetPasswordFailure } = slice.actions;
+export const { openModal, closeModel } = slice.actions;
 
-export const resetPassword = (values, callback) => async (dispatch) => {
+export const resetPassword = (values: ResetPasswordProps, callback: Func) => async (dispatch: AppDispatch) => {
   try {
     const payload = {
       apiKey: 'user-management:update-user',
@@ -34,11 +41,11 @@ export const resetPassword = (values, callback) => async (dispatch) => {
         userPwd: CryptoJS.CfsEnCode(values.password)
       }
     };
-    const response = await axios.post('/simple-api/command', payload);
+    const response = await post<ResultData>('/simple-api/command', payload);
     const { isSuccess, errMsg } = response.data;
     if (isSuccess) {
       dispatch(success('Updated successfully'));
-      dispatch(toggleModal());
+      dispatch(closeModel());
     } else {
       dispatch(error(errMsg));
     }

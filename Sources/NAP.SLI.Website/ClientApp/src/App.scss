@@ -28,7 +28,7 @@
     .main {
       height: calc(100% - #{$navbar-height});
       margin-top: $navbar-height;
-      padding: 0 $grid-gutter-width / 2;
+      padding: $grid-gutter-width / 2;
     }
   }
 
@@ -64,7 +64,7 @@ button {
   border-bottom: 1px solid $border-color;
   font-weight: bold;
   margin-bottom: 1rem;
-  padding: 0.5rem 0;
+  padding-bottom: 10px;
   text-transform: uppercase;
 
   nav {

@@ -3,19 +3,23 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Row, Col, Collapse, Nav, NavLink, NavItem } from 'reactstrap';
 import { NavLink as RRNavLink, Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import Icon from '@mdi/react';
+import { mdiChevronDown, mdiChevronUp } from '@mdi/js';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import { CustomerLevels, getDownlineLevel, getLevelName, isDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
-import { Customer } from './Model';
 
 const CustomerPage: React.FC = () => {
   const dispatch = useDispatch();
   const { customer } = useSelector((state: RootState) => state.sidebar);
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
   const [isOpenReports, setIsOpenReports] = useState(true);
-  const { generalInformation, headline } = customer as Customer;
+
+  if (!customer) {
+    return <></>;
+  }
+
+  const { generalInformation, headline } = customer;
   const { roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
   const { superName, masterName, agentName } = headline;
 
@@ -43,7 +47,7 @@ const CustomerPage: React.FC = () => {
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
           <Container onClick={() => setIsOpenCustomerInfo(!isOpenCustomerInfo)} className="d-flex">
             <span className="width-inherit">{username}</span>
-            <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenCustomerInfo ? undefined : 180}></FontAwesomeIcon>
+            <Icon path={isOpenCustomerInfo ? mdiChevronDown : mdiChevronUp} />
           </Container>
         </div>
         <Collapse isOpen={isOpenCustomerInfo}>
@@ -89,7 +93,7 @@ const CustomerPage: React.FC = () => {
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
           <Container onClick={() => setIsOpenReports(!isOpenReports)} className="d-flex">
             <span className="width-inherit">REPORTS</span>
-            <FontAwesomeIcon className="float-right m-auto" icon={faChevronDown} rotation={isOpenReports ? undefined : 180}></FontAwesomeIcon>
+            <Icon path={isOpenReports ? mdiChevronDown : mdiChevronUp} />
           </Container>
         </div>
         <Collapse isOpen={isOpenReports}>

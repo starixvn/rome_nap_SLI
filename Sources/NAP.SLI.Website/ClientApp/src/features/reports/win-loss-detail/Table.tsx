@@ -11,8 +11,13 @@ const TableComponent: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { data, customer } = useSelector((state: RootState) => state.winLossDetail);
-  const { records, total } = data as QueryData;
-  const { roleId } = customer as Customer;
+
+  if (!data || !customer) {
+    return <></>;
+  }
+
+  const { records, total } = data;
+  const { roleId } = customer;
   const removedColumnTotal = roleId === CustomerLevels.Master ? 1 : roleId === CustomerLevels.Agent ? 2 : 0;
 
   const handleUsernameClicked = (record: Record) => {
@@ -26,7 +31,7 @@ const TableComponent: React.FC = () => {
       return;
     }
 
-    dispatch(selectCustomer({ customer }));
+    dispatch(selectCustomer({ customer, isReset: false }));
   }
 
   return (

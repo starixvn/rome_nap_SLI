@@ -1,15 +1,16 @@
-import axios from 'axios';
-import { handleException } from "../../../../common/utils/ExceptionUtils";
+import { handleException } from "../utils/ExceptionUtils";
 import storage from './storage';
-import { logout } from '../reducer';
-import store from '../../../../store';
+import { logout } from '../../features/account/authentication/reducer';
+import store from '../../store';
+import { post } from './http';
 
-var timeout: NodeJS.Timeout;
+let timeout: NodeJS.Timeout | undefined;
 const timeoutInterval = 30 * 1000;
 
 export const stopCheckin = () => {
   if (timeout) {
     clearTimeout(timeout);
+    timeout = undefined;
   }
 }
 
@@ -29,7 +30,7 @@ export const checkin = async () => {
     const payload = {
       connectionId: account.connectionId
     };
-    const response = await axios.post('/api/authentication/recheckin', payload);
+    const response = await post<ResultData>('/api/authentication/recheckin', payload);
     const { isSuccess } = response.data;
     if (isSuccess) {
       stopCheckin();

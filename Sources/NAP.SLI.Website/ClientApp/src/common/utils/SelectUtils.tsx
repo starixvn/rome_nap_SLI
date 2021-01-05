@@ -1,4 +1,4 @@
-export const generateSelectOptions = (obj: any, getNameCallback: ((val: number) => string)) => {
+export const generateSelectOptions = (obj: any, getNameCallback: ((val: number) => string)): Array<SelectOption<any>> => {
   return Object.keys(obj).map(key => {
     const value = obj[key];
     return {
@@ -8,7 +8,7 @@ export const generateSelectOptions = (obj: any, getNameCallback: ((val: number) 
   });
 };
 
-export const generateRangeSelectOptions = (from: number, to: number) => {
+export const generateRangeSelectOptions = (from: number, to: number): Array<SelectOption<number>> => {
   const options = [];
   for (let value = from; value <= to; value++) {
     options.push({

@@ -1,28 +1,30 @@
-import axios from 'axios';
-import storage from './services/storage';
-import { createSlice } from '@reduxjs/toolkit';
+import storage from '../../../common/services/storage';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleException } from '../../../common/utils/ExceptionUtils';
-import { stopRefreshToken, refreshToken } from './services/token';
-import { stopCheckin, checkin } from './services/connection';
+import { stopRefreshToken, refreshToken } from '../../../common/services/token';
+import { stopCheckin, checkin } from '../../../common/services/connection';
+import { post } from '../../../common/services/http';
+import { Account } from '../../../common/services/storage';
 
 const CryptoJS = require('../../../common/libs/CryptoJS');
-import { Dispatch } from 'react';
 
-type Props = {
-  account: any,
-  message: string,
-  isLoading: boolean
-}
+type State = {
+  account?: Account;
+  message: string;
+  isLoading: boolean;
+};
 
 const account = storage.get();
+const initialState: State = account ? { isLoading: false, account, message: '' } : { isLoading: false, message: '' };
+
 const slice = createSlice({
   name: 'authentication',
-  initialState: (account ? { isLoading: false, account, message: "" } : { isLoading: false }) as Props,
+  initialState,
   reducers: {
-    loginFailure: (state, action) => {
+    loginFailure: (state, action: PayloadAction<{ message: string }>) => {
       state.message = action.payload.message;
     },
-    loginSuccess: (state, action) => {
+    loginSuccess: (state, action: PayloadAction<{ account: Account }>) => {
       state.account = action.payload.account;
       state.message = '';
     },
@@ -34,14 +36,25 @@ const slice = createSlice({
 
 export const { loginFailure, loginSuccess, logoutSuccess } = slice.actions;
 
-export const login = (values: any, callback: Func) => async (dispatch : Dispatch<any>) => {
+type LoginRequest = {
+  username: string;
+  password: string;
+};
+
+type LoginData = ResultData & {
+  userId: number;
+  groupId: number;
+  token: string;
+  connectionId: string;
+};
+
+export const login = (values: LoginRequest, callback: Func) => async (dispatch: AppDispatch) => {
   try {
     const payload = {
-      username: values.userName.trim(),
+      username: values.username.trim(),
       password: CryptoJS.CfsEnCode(values.password)
     };
-
-    const response = await axios.post('/api/authentication/login', payload);
+    const response = await post<LoginData>('/api/authentication/login', payload);
     const { userId, groupId, token, isSuccess, errMsg, connectionId } = response.data;
     if (isSuccess) {
       const account = {
@@ -65,7 +78,7 @@ export const login = (values: any, callback: Func) => async (dispatch : Dispatch
   }
 }
 
-export const logout = () => (dispatch: Dispatch<any>) => {
+export const logout = () => (dispatch: AppDispatch) => {
   stopCheckin();
   stopRefreshToken();
   storage.remove();

@@ -1,13 +1,15 @@
 .toast-container {
   position: relative;
-  margin-top: 20px;
 
   .toast {
     z-index: 1052;
+    position: fixed;
+    top: 20px;
     cursor: pointer;
 
     .toast-body {
       text-align: center;
+      padding: 0.5rem 1rem;
       color: #fff;
     }
   }

@@ -12,18 +12,12 @@ import { selectCustomer } from './reducer';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import Pagination from '../../../common/components/pagination/Component';
 import { query } from './reducer';
-
-type ComponentLocation = {
-  custId: number;
-  roleId: number;
-  username: string;
-}
+import { PageSizes } from '../../../common/utils/ReportUtils';
 
 const WinLossDetailPage: React.FC = () => {
   const history = useHistory();
-  const location = useLocation<ComponentLocation>();
+  const location = useLocation<Customer>();
   const dispatch = useDispatch();
-
   const { isHistory, data, customer, uplineCustomers, pageIndex, pageSize, fromDate, toDate } = useSelector((state: RootState) => state.winLossDetail);
 
   useEffect(() => {
@@ -43,8 +37,12 @@ const WinLossDetailPage: React.FC = () => {
     }));
   }, [location]);
 
+  if (!customer) {
+    return <></>;
+  }
+
   const handlePageChange = (pageIndex: number, pageSize: number, callback: Func) => {
-    const { custId, roleId } = customer as Customer;
+    const { custId, roleId } = customer;
     dispatch(query({
       isHistory,
       custId,
@@ -56,10 +54,6 @@ const WinLossDetailPage: React.FC = () => {
     }, callback));
   };
 
-  if (!customer) {
-    return <></>;
-  }
-
   return (
     <div className="win-loss-detail-page">
       <div className="page-title">
@@ -67,7 +61,7 @@ const WinLossDetailPage: React.FC = () => {
         <Breadcrumb>
           {uplineCustomers && uplineCustomers.map((c, index) =>
             <BreadcrumbItem key={index}>
-              <span className="text-link" onClick={() => dispatch(selectCustomer({ customer: c }))}>{c.username}</span>
+              <span className="text-link" onClick={() => dispatch(selectCustomer({ customer: c, isReset: false }))}>{c.username}</span>
             </BreadcrumbItem>
           )}
           <BreadcrumbItem active>{customer.username}</BreadcrumbItem>
@@ -82,6 +76,7 @@ const WinLossDetailPage: React.FC = () => {
         {data.totalRecords > 0 && <Pagination
           pageIndex={pageIndex}
           pageSize={pageSize}
+          pageSizes={PageSizes}
           total={data.totalRecords}
           pageChange={handlePageChange}
         />}

@@ -1,6 +1,5 @@
 /// <reference types="react-scripts" />
 import { AppDispatch as _AppDispatch, RootState as _RootState } from './store';
-export { };
 
 declare global {
   interface Window {
@@ -11,9 +10,18 @@ declare global {
     };
   }
 
-  type Func = () => void;
+  type ResultData = {
+    isSuccess: boolean;
+    errCode: number;
+    errMsg: string;
+  };
 
-  type SingleFunc = (T: any) => void;
+  type SelectOption<T> = {
+    label: string;
+    value: T;
+  };
+
+  type Func = () => void;
 
   namespace Formik {
     type SetFieldValueFunc = (field: string, value: any, shouldValidate?: boolean) => void;
