@@ -1,3 +1,6 @@
+## References:
+Nuget package location: %userprofile%\.nuget\packages
+
 ## Docker:
 
 ### Build docker image:

@@ -31,8 +31,6 @@ namespace NAP.SLI.Website
     using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Customer.Extensions;
-    using NAP.SLI.Report.Extensions;
-    using NAP.SLI.Report.Controllers;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Sentry;
@@ -47,6 +45,10 @@ namespace NAP.SLI.Website
     using Microsoft.AspNetCore.Localization;
     using ONEbook.SpreadSheets;
     using ONEbook.SpreadSheets.NPOI;
+    using NAP.SLI.WinLossDetail.Controllers;
+    using NAP.SLI.WinLossAnalysis.Controllers;
+    using NAP.SLI.WinLossDetail.Extensions;
+    using NAP.SLI.WinLossAnalysis.Extensions;
 
     public class Startup
     {
@@ -211,7 +213,8 @@ namespace NAP.SLI.Website
             services.AddCommonModule(AppSettings);
             services.AddAccountModule();
             services.AddCustomerModule();
-            services.AddReportModule();
+            services.AddWinLossDetailModule();
+            services.AddWinLossAnalysisModule();
         }
 
         private void AddAutoMapper(IServiceCollection services)
@@ -232,6 +235,7 @@ namespace NAP.SLI.Website
             services.AddMediatR(typeof(Account.Models.SimpleApiProfile));
             services.AddMediatR(typeof(Customer.Models.SimpleApiProfile));
             services.AddMediatR(typeof(WinLossDetailController));
+            services.AddMediatR(typeof(WinLossAnalysisController));
         }
 
         private void UseFanexDataWithSqlServer()

@@ -78,7 +78,7 @@ const WinLossDetailPage: React.FC = () => {
           pageSize={pageSize}
           pageSizes={PageSizes}
           total={data.totalRecords}
-          pageChange={handlePageChange}
+          onPageChange={handlePageChange}
         />}
       </>}
     </div>

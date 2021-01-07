@@ -65,7 +65,7 @@ export const download = async (url: string, data?: any) => {
   try {
     store.dispatch(hide());
     const config = getConfig();
-    const blobResponse = await axios.post<Blob>(url, { ...config, responseType: 'blob' }, data);
+    const blobResponse = await axios.post<Blob>(url, data, { ...config, responseType: 'blob' });
     if (blobResponse == null || blobResponse.data == null) {
       return Promise.reject({ message: 'Error downloading the file' });
     }

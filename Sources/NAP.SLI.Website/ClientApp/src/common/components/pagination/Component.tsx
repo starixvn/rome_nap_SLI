@@ -11,12 +11,12 @@ type Props = {
   pageSizes: Array<number>;
   pageSize: number;
   pageIndex: number;
-  pageChange: (pageIndex: number, pageSize: number, callback: Func) => void;
+  onPageChange: (pageIndex: number, pageSize: number, callback: Func) => void;
   total: number;
 };
 
 const PaginationComponent: React.FC<Props> = props => {
-  const { pageSize, pageSizes, pageIndex, pageChange, total } = props;
+  const { pageSize, pageSizes, pageIndex, onPageChange, total } = props;
   const pageSizeOptions = generateSelectOptions(pageSizes, x => x.toString());
   const pageTotal = Math.ceil(total / pageSize);
 
@@ -26,7 +26,7 @@ const PaginationComponent: React.FC<Props> = props => {
     handleSubmit();
   };
 
-  const goToPage = (pageIndex: number, setFieldValue: Formik.SetFieldValueFunc, handleSubmit: Func) => {
+  const handlePageIndexChange = (pageIndex: number, setFieldValue: Formik.SetFieldValueFunc, handleSubmit: Func) => {
     setFieldValue('pageIndex', pageIndex);
     handleSubmit();
   };
@@ -49,7 +49,7 @@ const PaginationComponent: React.FC<Props> = props => {
         const newPageSize = values.pageSize;
         if (pageIndex !== newPageIndex) {
           if (newPageIndex >= 1 && newPageIndex <= pageTotal) {
-            isCallPageChange = !!pageChange;
+            isCallPageChange = true;
           } else {
             setFieldValue('pageIndex', pageIndex);
           }
@@ -64,7 +64,7 @@ const PaginationComponent: React.FC<Props> = props => {
         }
 
         if (isCallPageChange) {
-          pageChange(newPageIndex, newPageSize, () => setSubmitting(false));
+          onPageChange(newPageIndex, newPageSize, () => setSubmitting(false));
         } else {
           setSubmitting(false);
         }
@@ -83,19 +83,19 @@ const PaginationComponent: React.FC<Props> = props => {
               title: 'Select page size',
               className: 'mr-5'
             }} />
-            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to first page' onClick={() => goToPage(1, setFieldValue, handleSubmit)}>
+            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to first page' onClick={() => handlePageIndexChange(1, setFieldValue, handleSubmit)}>
               <Icon path={mdiPageFirst} />
             </Button>
-            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to previous page' onClick={() => goToPage(pageIndex - 1, setFieldValue, handleSubmit)}>
+            <Button type='button' disabled={pageIndex === 1} color='outline-secondary' title='Go to previous page' onClick={() => handlePageIndexChange(pageIndex - 1, setFieldValue, handleSubmit)}>
               <Icon path={mdiPagePreviousOutline} />
             </Button>
             <div className='mx-3'>
               Page <Input name='pageIndex' type="text" autoComplete="off" style={inputStyle} tag={Field} title='Go to page' /> of {pageTotal}
             </div>
-            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to next page' onClick={() => goToPage(pageIndex + 1, setFieldValue, handleSubmit)}>
+            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to next page' onClick={() => handlePageIndexChange(pageIndex + 1, setFieldValue, handleSubmit)}>
               <Icon path={mdiPageNextOutline} />
             </Button>
-            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to last page' onClick={() => goToPage(pageTotal, setFieldValue, handleSubmit)}>
+            <Button type='button' disabled={pageIndex >= pageTotal} color='outline-secondary' title='Go to last page' onClick={() => handlePageIndexChange(pageTotal, setFieldValue, handleSubmit)}>
               <Icon path={mdiPageLast} />
             </Button>
           </fieldset>

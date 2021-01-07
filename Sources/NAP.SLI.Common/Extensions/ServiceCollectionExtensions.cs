@@ -12,6 +12,7 @@
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IDynamicRepositoryEx, DynamicRepositoryEx>();
             services.AddSingleton<ICacheContainer, CacheContainer>();
+            services.AddSingleton<IReportService, ReportService>();
         }
     }
 }

@@ -15,6 +15,8 @@
     {
         Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria);
 
+        Task<IEnumerable<object>[]> FetchMultipleAsync(ICriteria criteria, Type[] mappingTypes);
+
         Task<(IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet)> FetchMultipleAsync<TFirst, TSecond>(ICriteria criteria);
     }
 
@@ -43,6 +45,11 @@
             var firstResultSet = fetchedData[0].Cast<TFirst>();
             var secondResultSet = fetchedData[1].Cast<TSecond>();
             return (firstResultSet, secondResultSet);
+        }
+
+        public Task<IEnumerable<object>[]> FetchMultipleAsync(ICriteria criteria, Type[] mappingTypes)
+        {
+            return FetchMultipleAsync(criteria, mappingTypes, default);
         }
 
         private async Task<IEnumerable<object>[]> FetchMultipleAsync(

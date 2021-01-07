@@ -4,6 +4,6 @@ namespace NAP.SLI.Common.Extensions
 {
     public static class DateTimeExtensions
     {
-        public static string ToDateString(this DateTime dateTime) => dateTime.ToString("MM/dd/yyyy");
+        public static string ToDateString(this DateTime value) => value.ToString("MM/dd/yyyy");
     }
 }
