@@ -1,11 +1,11 @@
 import './Page.scss';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Label, Form, Input, Button, FormGroup, Table, Container, Spinner } from 'reactstrap';
 import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
 import { useSelector, useDispatch } from 'react-redux';
-import { Formik, Field } from 'formik';
-import { query, updateUserStatus, UserModel } from './reducer';
+import { Formik, Field, FormikProps } from 'formik';
+import { query, updateUserStatus, UserModel, QueryProps } from './reducer';
 import AddNewUserModal from './add-new-user/Modal';
 import { toggleModal as toggleAddNewUserModel } from './add-new-user/reducer';
 import AddExistingUserModal from './add-existing-user/Modal';
@@ -21,7 +21,14 @@ import { formatDateTime } from '../../common/utils/DateUtils';
 
 const UserManagementPage: React.FC = () => {
   const dispatch = useDispatch();
+  const formikRef = useRef<FormikProps<QueryProps>>(null);
   const { users, username, groupId } = useSelector((state: RootState) => state.userManagement);
+
+  useEffect(() => {
+    if (formikRef.current && users === undefined) {
+      formikRef.current.handleSubmit();
+    }
+  }, [users]);
 
   const handleStatusClick = (user: UserModel) => {
     const newClosed = !user.closed;
@@ -39,6 +46,10 @@ const UserManagementPage: React.FC = () => {
   };
 
   const renderTableBody = () => {
+    if (!users) {
+      return <></>;
+    }
+
     if (users.length === 0) {
       return (
         <tr>
@@ -93,19 +104,8 @@ const UserManagementPage: React.FC = () => {
     <div className="user-management-page">
       <div className="page-title">User Management</div>
       <Container fluid className="filter">
-        <Form inline className="mb-3">
-          <FormGroup className="mr-2">
-            <Button type="button" className="btn-block" onClick={() => dispatch(toggleAddNewUserModel())}>
-              <Icon path={mdiAccountPlus} /> Add New User
-          </Button>
-          </FormGroup>
-          <FormGroup>
-            <Button type="button" className="btn-block" onClick={() => dispatch(toggleAddExistingUserModel())}>
-              <Icon path={mdiAccountPlus} /> Add Existing User
-          </Button>
-          </FormGroup>
-        </Form>
         <Formik
+          innerRef={formikRef}
           initialValues={initialValues}
           onSubmit={(values, { setSubmitting }) => {
             values.groupId = values.groupId === UserGroupSelectOptionsWithAll[0].value ? undefined : values.groupId;
@@ -116,21 +116,35 @@ const UserManagementPage: React.FC = () => {
             handleSubmit,
             isSubmitting
           }) => (
-            <Form className="mb-3" onSubmit={handleSubmit}>
-              <fieldset disabled={isSubmitting} className="form-inline">
-                <FormGroup className="mr-5">
-                  <Label for="username" className="mr-2">Username</Label>
-                  <Input name="username" type="text" autoComplete="off" tag={Field} />
-                </FormGroup>
-                <FormGroup className="mr-5">
-                  <FormikSelect name="groupId" options={UserGroupSelectOptionsWithAll} />
-                </FormGroup>
-                <FormGroup>
-                  <Button type="submit" color="primary">
-                    {isSubmitting && <Spinner className='mr-3' />}
+            <Form onSubmit={handleSubmit}>
+              <fieldset disabled={isSubmitting}>
+                <div className="form-inline mb-3">
+                  <FormGroup className="mr-2">
+                    <Button type="button" className="btn-block" onClick={() => dispatch(toggleAddNewUserModel())}>
+                      <Icon path={mdiAccountPlus} /> Add New User
+                    </Button>
+                  </FormGroup>
+                  <FormGroup>
+                    <Button type="button" className="btn-block" onClick={() => dispatch(toggleAddExistingUserModel())}>
+                      <Icon path={mdiAccountPlus} /> Add Existing User
+                    </Button>
+                  </FormGroup>
+                </div>
+                <div className="form-inline">
+                  <FormGroup className="mr-5">
+                    <Label for="username" className="mr-2">Username</Label>
+                    <Input name="username" type="text" autoComplete="off" tag={Field} />
+                  </FormGroup>
+                  <FormGroup className="mr-5">
+                    <FormikSelect name="groupId" options={UserGroupSelectOptionsWithAll} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Button type="submit" color="primary">
+                      {isSubmitting && <Spinner className='mr-3' />}
                       Search
                     </Button>
-                </FormGroup>
+                  </FormGroup>
+                </div>
               </fieldset>
             </Form>
           )}

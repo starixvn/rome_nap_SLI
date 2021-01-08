@@ -24,13 +24,13 @@ const slice = createSlice({
     openModal: (state, action: PayloadAction<{ user: UserModel }>) => {
       state.user = action.payload.user;
     },
-    closeModel: (state) => {
+    closeModal: (state) => {
       state.user = undefined;
     }
   }
 });
 
-export const { openModal, closeModel } = slice.actions;
+export const { openModal, closeModal } = slice.actions;
 
 export const resetPassword = (values: ResetPasswordProps, callback: Func) => async (dispatch: AppDispatch) => {
   try {
@@ -45,7 +45,7 @@ export const resetPassword = (values: ResetPasswordProps, callback: Func) => asy
     const { isSuccess, errMsg } = response.data;
     if (isSuccess) {
       dispatch(success('Updated successfully'));
-      dispatch(closeModel());
+      dispatch(closeModal());
     } else {
       dispatch(error(errMsg));
     }

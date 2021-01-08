@@ -16,13 +16,13 @@ const slice = createSlice({
     openModal: (state, action: PayloadAction<{ user: UserModel }>) => {
       state.user = action.payload.user;
     },
-    closeModel: (state) => {
+    closeModal: (state) => {
       state.user = undefined;
     }
   }
 });
 
-export const { openModal, closeModel } = slice.actions;
+export const { openModal, closeModal } = slice.actions;
 
 type UpdateProps = {
   custId: number;
@@ -47,8 +47,8 @@ export const update = (values: UpdateProps, callback: Func) => async (dispatch: 
     const { isSuccess, errMsg } = response.data;
     if (isSuccess) {
       dispatch(success('Updated successfully'));
-      dispatch(closeModel());
       dispatch(patchUser({ data }));
+      dispatch(closeModal());
     } else {
       dispatch(error(errMsg));
     }

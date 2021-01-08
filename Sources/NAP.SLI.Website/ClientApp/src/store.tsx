@@ -15,7 +15,7 @@ import umReducer from './features/error/UM/reducer';
 import { logoutSuccess } from './features/account/authentication/reducer';
 
 const middleware = [
-  ...getDefaultMiddleware(),
+  ...getDefaultMiddleware()
   /*YOUR CUSTOM MIDDLEWARES HERE*/
 ];
 

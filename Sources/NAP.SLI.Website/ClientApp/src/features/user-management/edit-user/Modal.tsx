@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Col, Butt
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { update, closeModel } from './reducer';
+import { update, closeModal } from './reducer';
 import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
 import FormikSelect from '../../../common/components/select/FormikSelect';
 
@@ -45,7 +45,7 @@ const EditUserModal: React.FC = () => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <fieldset disabled={isSubmitting}>
-              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(closeModel()) })}>
+              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(closeModal()) })}>
                 Edit User Information
               </ModalHeader>
               <ModalBody>

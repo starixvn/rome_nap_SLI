@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Col, Butt
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { resetPassword, closeModel } from './reducer';
+import { resetPassword, closeModal } from './reducer';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string()
@@ -43,7 +43,7 @@ const ResetUserPasswordModal: React.FC = () => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <fieldset disabled={isSubmitting}>
-              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(closeModel()) })}>
+              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(closeModal()) })}>
                 Reset Password
               </ModalHeader>
               <ModalBody>

@@ -13,14 +13,14 @@ type Props = DatetimepickerProps & {
 
 const FormikDatePicker: React.FC<Props> = (props) => {
   const { setFieldValue } = useFormikContext();
-  const [fields] = useField(props.name);
+  const [field] = useField(props.name);
 
   return (
     <DatePicker
+      {...field}
       {...props}
-      {...fields}
       onChange={value => {
-        setFieldValue(props.name, value);
+        setFieldValue(field.name, value);
         props.onChange && props.onChange(value);
       }}
     />

@@ -41,7 +41,7 @@
 
         public async Task<(IEnumerable<T> Records, T Total)> Query<T>(WinLossDetailQueryCriteria criteria)
         {
-            var result = await dynamicRepositoryEx.FetchMultipleAsync<T, T>(criteria);
+            var result = await dynamicRepositoryEx.FetchMultipleAsync<T, T>(criteria).ConfigureAwait(false);
             return (result.firstResultSet, result.secondResultSet.First());
         }
     }

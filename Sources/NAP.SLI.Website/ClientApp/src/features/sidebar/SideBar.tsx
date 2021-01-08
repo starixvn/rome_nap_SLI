@@ -83,7 +83,7 @@ const SideBar: React.FC = () => {
                   ref={typeaheadRef}
                   id='username-suggestion'
                   inputProps={{
-                    className: errors.username && touched.username ? 'is-invalid' : ''
+                    className: !!errors.username && !!touched.username ? 'is-invalid' : ''
                   }}
                   filterBy={() => true}
                   isLoading={isLoading}

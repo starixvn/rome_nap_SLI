@@ -18,7 +18,7 @@ export type UserModel = {
 type State = {
   username: string;
   groupId?: number;
-  users: Array<UserModel>;
+  users?: Array<UserModel>;
 };
 
 export type QueryProps = {
@@ -29,7 +29,7 @@ export type QueryProps = {
 const initialState: State = {
   username: '',
   groupId: undefined,
-  users: []
+  users: undefined
 };
 
 type PatchUserAction = {
@@ -54,8 +54,10 @@ const slice = createSlice({
     },
     patchUser: (state, action: PayloadAction<PatchUserAction>) => {
       const { data } = action.payload;
-      const user = state.users.filter(u => u.custId === data.custId)[0];
-      Object.assign(user, data);
+      if (state.users) {
+        const user = state.users.filter(u => u.custId === data.custId)[0];
+        Object.assign(user, data);
+      }
     }
   }
 });
