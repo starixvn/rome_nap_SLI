@@ -1,5 +1,5 @@
 import './Component.scss';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Icon from '@mdi/react';
 import { mdiPageFirst, mdiPageLast, mdiPagePreviousOutline, mdiPageNextOutline } from '@mdi/js';
 import Select from '../select/Select';
@@ -16,9 +16,17 @@ type Props = {
 };
 
 const PaginationComponent: React.FC<Props> = props => {
+  const isMounted = React.useRef(false);
   const { pageSize, pageSizes, pageIndex, onPageChange, total } = props;
   const pageSizeOptions = generateSelectOptions(pageSizes, x => x.toString());
   const pageTotal = Math.ceil(total / pageSize);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    }
+  })
 
   const handlePageSizeChange = (pageSize: number, setFieldValue: Formik.SetFieldValueFunc, handleSubmit: Func) => {
     setFieldValue('pageIndex', 1);
@@ -64,11 +72,10 @@ const PaginationComponent: React.FC<Props> = props => {
         }
 
         if (isCallPageChange) {
-          onPageChange(newPageIndex, newPageSize, () => setSubmitting(false));
+          onPageChange(newPageIndex, newPageSize, () => isMounted.current && setSubmitting(false));
         } else {
-          setSubmitting(false);
+          isMounted.current && setSubmitting(false);
         }
-
       }}
     >
       {({

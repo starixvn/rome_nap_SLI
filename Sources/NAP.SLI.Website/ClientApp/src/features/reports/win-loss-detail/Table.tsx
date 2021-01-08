@@ -5,7 +5,7 @@ import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel, getDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
-import { selectCustomer, Record, QueryData } from './reducer';
+import { selectCustomer, Record } from './reducer';
 
 const TableComponent: React.FC = () => {
   const dispatch = useDispatch();
