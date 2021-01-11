@@ -6,10 +6,11 @@ namespace NAP.UM.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddUM(this IServiceCollection services, UMConfig umConfig)
+        public static IServiceCollection AddUM(this IServiceCollection services, UMConfig umConfig)
         {
             services.AddSingleton<UMConfig>(umConfig);
             services.AddSingleton<IMaintenanceService, MaintenanceService>();
+            return services;
         }
     }
 }

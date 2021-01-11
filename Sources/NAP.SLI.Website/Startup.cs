@@ -207,14 +207,14 @@ namespace NAP.SLI.Website
 
         private void AddModules(IServiceCollection services)
         {
-            services.AddHttpContextAccessor();
-            services.AddSingleton<IDynamicRepository, DynamicRepository>();
-            services.AddLocalizationModule();
-            services.AddCommonModule(AppSettings);
-            services.AddAccountModule();
-            services.AddCustomerModule();
-            services.AddWinLossDetailModule();
-            services.AddWinLossAnalysisModule();
+            services.AddHttpContextAccessor()
+                .AddSingleton<IDynamicRepository, DynamicRepository>()
+                .AddLocalizationModule()
+                .AddCommonModule(AppSettings)
+                .AddAccountModule()
+                .AddCustomerModule()
+                .AddWinLossDetailModule()
+                .AddWinLossAnalysisModule();
         }
 
         private void AddAutoMapper(IServiceCollection services)

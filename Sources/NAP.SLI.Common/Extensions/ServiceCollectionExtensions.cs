@@ -5,7 +5,7 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static void AddCommonModule(this IServiceCollection services, IAppSettings appSettings)
+        public static IServiceCollection AddCommonModule(this IServiceCollection services, IAppSettings appSettings)
         {
             services.AddSingleton<IAppSettings>(appSettings);
             services.AddScoped<ICurrentContextService, CurrentContextService>();
@@ -13,6 +13,7 @@
             services.AddScoped<IDynamicRepositoryEx, DynamicRepositoryEx>();
             services.AddSingleton<ICacheContainer, CacheContainer>();
             services.AddSingleton<IReportService, ReportService>();
+            return services;
         }
     }
 }

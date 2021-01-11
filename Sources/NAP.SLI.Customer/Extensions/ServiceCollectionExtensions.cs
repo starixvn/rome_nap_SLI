@@ -5,9 +5,10 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static void AddCustomerModule(this IServiceCollection services)
+        public static IServiceCollection AddCustomerModule(this IServiceCollection services)
         {
             services.AddScoped<ICustomerService, CustomerService>();
+            return services;
         }
     }
 }

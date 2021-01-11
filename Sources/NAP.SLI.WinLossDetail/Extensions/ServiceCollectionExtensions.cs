@@ -5,10 +5,11 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static void AddWinLossDetailModule(this IServiceCollection services)
+        public static IServiceCollection AddWinLossDetailModule(this IServiceCollection services)
         {
             services.AddScoped<IWinLossDetailQueryService, WinLossDetailQueryService>();
             services.AddScoped<IWinLossDetailExcelService, WinLossDetailExcelService>();
+            return services;
         }
     }
 }

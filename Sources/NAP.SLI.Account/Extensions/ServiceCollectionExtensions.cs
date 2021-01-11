@@ -6,11 +6,12 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static void AddAccountModule(this IServiceCollection services)
+        public static IServiceCollection AddAccountModule(this IServiceCollection services)
         {
             services.AddScoped<JwtSecurityTokenHandler, JwtSecurityTokenHandler>();
             services.AddScoped<ITokenManager, TokenManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            return services;
         }
     }
 }

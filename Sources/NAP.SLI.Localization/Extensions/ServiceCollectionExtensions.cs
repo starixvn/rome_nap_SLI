@@ -5,9 +5,10 @@ namespace NAP.SLI.Localization.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddLocalizationModule(this IServiceCollection services)
+        public static IServiceCollection AddLocalizationModule(this IServiceCollection services)
         {
             services.AddSingleton<ISharedLocalizer, SharedLocalizer>();
+            return services;
         }
     }
 }
