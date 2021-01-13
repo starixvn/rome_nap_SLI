@@ -21,9 +21,9 @@
         {
             return request.RoleId switch
             {
-                (int)CustomerLevels.Super => await service.ExcelViewMaster(request).ConfigureAwait(false),
-                (int)CustomerLevels.Master => await service.ExcelViewAgent(request).ConfigureAwait(false),
-                (int)CustomerLevels.Agent => await service.ExcelViewMember(request).ConfigureAwait(false),
+                (int)CustomerLevels.Super => await service.ExcelSuper(request).ConfigureAwait(false),
+                (int)CustomerLevels.Master => await service.ExcelMaster(request).ConfigureAwait(false),
+                (int)CustomerLevels.Agent => await service.ExcelAgent(request).ConfigureAwait(false),
                 _ => throw new NotImplementedException()
             };
         }

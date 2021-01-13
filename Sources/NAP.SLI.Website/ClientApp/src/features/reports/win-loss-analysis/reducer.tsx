@@ -73,7 +73,7 @@ const slice = createSlice({
 export const { queryRequest, querySuccess } = slice.actions;
 
 const calculateCompanyWinLoss = (winLoss: WinLossAnalysisRecord) => {
-  winLoss.companyWinLoss = winLoss.memberWinLoss + winLoss.agentWinLoss + (winLoss.masterWinLoss || 0) + (winLoss.superWinLoss || 0);
+  winLoss.companyWinLoss = -winLoss.memberWinLoss + winLoss.agentWinLoss + (winLoss.masterWinLoss || 0) + (winLoss.superWinLoss || 0);
 };
 
 type QueryData = {

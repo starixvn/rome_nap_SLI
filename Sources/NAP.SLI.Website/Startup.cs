@@ -43,7 +43,6 @@ namespace NAP.SLI.Website
     using NAP.UM.Web;
     using NAP.SLI.Localization.Extensions;
     using Microsoft.AspNetCore.Localization;
-    using ONEbook.SpreadSheets;
     using ONEbook.SpreadSheets.NPOI;
     using NAP.SLI.WinLossDetail.Controllers;
     using NAP.SLI.WinLossAnalysis.Controllers;
@@ -209,6 +208,7 @@ namespace NAP.SLI.Website
         {
             services.AddHttpContextAccessor()
                 .AddSingleton<IDynamicRepository, DynamicRepository>()
+                .AddSingleton<INpoiWorkbookFactory, NpoiWorkbookFactory>()
                 .AddLocalizationModule()
                 .AddCommonModule(AppSettings)
                 .AddAccountModule()

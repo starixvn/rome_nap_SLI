@@ -107,7 +107,7 @@ const slice = createSlice({
 });
 
 const calculateCompanyWinLoss = (record: Record) => {
-  record.companyWinLoss = record.memberWinLoss + record.agentWinLoss + (record.masterWinLoss || 0) + (record.superWinLoss || 0);
+  record.companyWinLoss = -record.memberWinLoss + record.agentWinLoss + (record.masterWinLoss || 0) + (record.superWinLoss || 0);
 };
 
 export const { toggleMode, queryRequest, querySuccess, selectCustomer } = slice.actions;

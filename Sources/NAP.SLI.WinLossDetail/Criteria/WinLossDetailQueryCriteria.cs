@@ -38,20 +38,13 @@
 
         public int TotalRecords { get; set; }
 
-        public override string GetSettingKey()
+        public override string GetSettingKey() => RoleId switch
         {
-            switch (RoleId)
-            {
-                case (int)CustomerLevels.Super:
-                    return "SLI_Rpt_WinLossDetail_Master";
-                case (int)CustomerLevels.Master:
-                    return "SLI_Rpt_WinLossDetail_Agent";
-                case (int)CustomerLevels.Agent:
-                    return "SLI_Rpt_WinLossDetail_Member";
-                default:
-                    throw new NotImplementedException(nameof(RoleId));
-            }
-        }
+            (int)CustomerLevels.Super => "SLI_Rpt_WinLossDetail_Master",
+            (int)CustomerLevels.Master => "SLI_Rpt_WinLossDetail_Agent",
+            (int)CustomerLevels.Agent => "SLI_Rpt_WinLossDetail_Member",
+            _ => throw new NotImplementedException(nameof(RoleId))
+        };
 
         public override bool IsValid() => CustId > 0 && RoleId > 0;
     }

@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Models;
     using NAP.SLI.Tests;
     using NAP.SLI.WinLossDetail.Controllers;
     using NAP.SLI.WinLossDetail.Requests;
@@ -13,7 +14,7 @@
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod(IMediator mediator, WinLossDetailQueryRequest request, object sendResult)
+        public async Task TestMethod_Query(IMediator mediator, WinLossDetailQueryRequest request, object sendResult)
         {
             // Arrange
             var controller = new WinLossDetailController(mediator);
@@ -24,8 +25,27 @@
 
             // Assert
             await mediator.Received().Send(request);
-            Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(sendResult, ((OkObjectResult)result).Value);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(sendResult, okResult.Value);
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public async Task TestMethod_Excel(IMediator mediator, WinLossDetailExcelRequest request, byte[] sendResult)
+        {
+            // Arrange
+            var controller = new WinLossDetailController(mediator);
+            mediator.Send(request).Returns(sendResult);
+
+            // Act
+            var result = await controller.Excel(request);
+
+            // Assert
+            await mediator.Received().Send(request);
+            var fileContentResult = Assert.IsType<FileContentResult>(result);
+            Assert.Equal(sendResult, fileContentResult.FileContents);
+            Assert.Equal(ContentTypes.Excel, fileContentResult.ContentType);
+            Assert.Equal(request.GetDownloadFileName(), fileContentResult.FileDownloadName);
         }
     }
 }

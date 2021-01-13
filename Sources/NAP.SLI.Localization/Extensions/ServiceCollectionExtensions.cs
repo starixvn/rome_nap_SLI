@@ -8,6 +8,7 @@ namespace NAP.SLI.Localization.Extensions
         public static IServiceCollection AddLocalizationModule(this IServiceCollection services)
         {
             services.AddSingleton<ISharedLocalizer, SharedLocalizer>();
+            services.AddSingleton<INoLocalizer, NoLocalizer>();
             return services;
         }
     }

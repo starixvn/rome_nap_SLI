@@ -1,6 +1,6 @@
 ﻿namespace NAP.SLI.WinLossDetail.Models
 {
-    public class ViewAgentModel : ViewMemberModel
+    public class MasterRecord : AgentRecord
     {
         public decimal MasterWinLoss { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿namespace NAP.SLI.WinLossDetail.Models
 {
-    public class ViewMemberModel
+    public class AgentRecord
     {
         public int CustId { get; set; }
 

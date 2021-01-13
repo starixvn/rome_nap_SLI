@@ -10,7 +10,7 @@
     <PackageReference Include="Fanex.Data" Version="4.2.2" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.2.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="ONEbook.SpreadSheets.NPOI" Version="2.0.0-netstandard" />
+    <PackageReference Include="ONEbook.SpreadSheets.NPOI" Version="2.0.0-netstandard01" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAP.SLI.Common\NAP.SLI.Common.csproj" />

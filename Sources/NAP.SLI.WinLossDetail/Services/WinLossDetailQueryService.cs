@@ -1,17 +1,20 @@
-﻿namespace NAP.SLI.WinLossDetail.Services
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using NAP.SLI.Common.Services;
-    using NAP.SLI.WinLossDetail.Criteria;
-    using NAP.SLI.WinLossDetail.Requests;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using NAP.SLI.Common.Services;
+using NAP.SLI.WinLossDetail.Criteria;
+using NAP.SLI.WinLossDetail.Models;
+using NAP.SLI.WinLossDetail.Requests;
 
+namespace NAP.SLI.WinLossDetail.Services
+{
     public interface IWinLossDetailQueryService
     {
-        Task<(IEnumerable<T> Records, T Total, int TotalRecords)> Query<T>(WinLossDetailQueryRequest request);
+        Task<SuperData> QuerySuper(WinLossDetailQueryRequest request);
 
-        Task<(IEnumerable<T> Records, T Total)> Query<T>(WinLossDetailQueryCriteria criteria);
+        Task<MasterData> QueryMaster(WinLossDetailQueryRequest request);
+
+        Task<AgentData> QueryAgent(WinLossDetailQueryRequest request);
     }
 
     public class WinLossDetailQueryService : IWinLossDetailQueryService
@@ -22,7 +25,40 @@
         public WinLossDetailQueryService(IReportService reportService, IDynamicRepositoryEx dynamicRepositoryEx)
             => (this.reportService, this.dynamicRepositoryEx) = (reportService, dynamicRepositoryEx);
 
-        public async Task<(IEnumerable<T> Records, T Total, int TotalRecords)> Query<T>(WinLossDetailQueryRequest request)
+        public async Task<SuperData> QuerySuper(WinLossDetailQueryRequest request)
+        {
+            var result = await Query<SuperRecord>(request).ConfigureAwait(false);
+            return new SuperData
+            {
+                Records = result.Records,
+                Total = result.Total,
+                TotalRecords = result.TotalRecords
+            };
+        }
+
+        public async Task<MasterData> QueryMaster(WinLossDetailQueryRequest request)
+        {
+            var result = await Query<MasterRecord>(request).ConfigureAwait(false);
+            return new MasterData
+            {
+                Records = result.Records,
+                Total = result.Total,
+                TotalRecords = result.TotalRecords
+            };
+        }
+
+        public async Task<AgentData> QueryAgent(WinLossDetailQueryRequest request)
+        {
+            var result = await Query<AgentRecord>(request).ConfigureAwait(false);
+            return new AgentData
+            {
+                Records = result.Records,
+                Total = result.Total,
+                TotalRecords = result.TotalRecords
+            };
+        }
+
+        private async Task<(IEnumerable<T> Records, T Total, int TotalRecords)> Query<T>(WinLossDetailQueryRequest request)
         {
             var balanceUpDayModel = await reportService.GetBalanceUpDay().ConfigureAwait(false);
             var criteria = new WinLossDetailQueryCriteria(balanceUpDayModel)
@@ -35,14 +71,8 @@
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize
             };
-            var result = await Query<T>(criteria).ConfigureAwait(false);
-            return (result.Records, result.Total, criteria.TotalRecords);
-        }
-
-        public async Task<(IEnumerable<T> Records, T Total)> Query<T>(WinLossDetailQueryCriteria criteria)
-        {
             var result = await dynamicRepositoryEx.FetchMultipleAsync<T, T>(criteria).ConfigureAwait(false);
-            return (result.firstResultSet, result.secondResultSet.First());
+            return (result.firstResultSet, result.secondResultSet.First(), criteria.TotalRecords);
         }
     }
 }
