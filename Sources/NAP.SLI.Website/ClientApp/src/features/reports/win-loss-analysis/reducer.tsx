@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { formatDate, getToday } from '../../../common/utils/DateUtils';
 import { handleException } from '../../../common/utils/ExceptionUtils';
-import { post } from '../../../common/services/http';
+import { post, download } from '../../../common/services/http';
+import store from '../../../store';
 
 export const ReportType = {
   Daily: 1,
@@ -32,6 +33,7 @@ export type WinLossAnalysisState = {
   customer?: Customer,
   custId: number,
   roleId: number,
+  username: string,
   productIds: number,
   reportType: number,
   data?: WinLossAnalysisData
@@ -46,6 +48,7 @@ const initialState: WinLossAnalysisState = {
   customer: undefined,
   custId: -1,
   roleId: 1,
+  username: "",
   productIds: 1,
   reportType: ReportType.Daily,
   data: undefined
@@ -87,6 +90,7 @@ export const query = (data: WinLossAnalysisState, callback: DefaultFunction) => 
       toDate: formatDate(data.toDate),
       customer: {
         custId: data.custId,
+        username: data.username,
         roleId: data.roleId
       },
       productIds: data.productIds,
@@ -104,6 +108,28 @@ export const query = (data: WinLossAnalysisState, callback: DefaultFunction) => 
   }
   finally {
     callback();
+  }
+}
+
+export const excel = () => async () => {
+  try {
+    const rootState: RootState = store.getState();
+    const { fromDate, toDate, customer, reportType } = rootState.winLossAnalysis;
+    if (customer) {
+      const { custId, roleId, username } = customer;
+      const payload = {
+        custId,
+        username,
+        roleId,
+        fromDate,
+        toDate,
+        reportType
+      };
+      await download('/api/winlossanalysis/excel', payload);
+    }
+  }
+  catch (e) {
+    handleException(e);
   }
 }
 

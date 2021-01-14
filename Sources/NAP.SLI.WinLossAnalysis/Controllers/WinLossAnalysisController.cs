@@ -3,6 +3,7 @@ namespace NAP.SLI.WinLossAnalysis.Controllers
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Models;
     using NAP.SLI.WinLossAnalysis.Requests;
 
     [ApiController]
@@ -19,6 +20,17 @@ namespace NAP.SLI.WinLossAnalysis.Controllers
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Excel([FromBody] WinLossAnalysisExcelRequest request)
+        {
+            var fileContents = await mediator.Send(request).ConfigureAwait(false);
+            return File(
+                fileContents: fileContents,
+                contentType: ContentTypes.Excel,
+                fileDownloadName: request.GetDownloadFileName()
+            );
         }
     }
 }

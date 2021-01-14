@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from '../../../common/utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from '../../../common/utils/CustomerLevelUtils';
-import { ReportType, WinLossAnalysisData } from './reducer';
+import { ReportType } from './reducer';
 import { formatDate } from '../../../common/utils/DateUtils';
 import { Moment } from 'moment';
 

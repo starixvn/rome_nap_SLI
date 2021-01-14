@@ -4,8 +4,10 @@ import { Formik } from 'formik';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
 import { getToday, formatDate, ReportDateRanges } from '../../../common/utils/DateUtils';
 import { useDispatch } from 'react-redux';
-import { query, WinLossAnalysisState } from './reducer';
+import { query, excel, WinLossAnalysisState } from './reducer';
 import { Moment } from 'moment';
+import { Icon } from '@mdi/react';
+import { mdiFileExcelOutline } from '@mdi/js';
 
 type FilterProp = {
   custId: number,
@@ -18,7 +20,7 @@ type FilterProp = {
 
 const Filter: React.FC<FilterProp> = (props) => {
   const dispatch = useDispatch();
-  const { custId, roleId, minDate, maxDate } = props;
+  const { custId, roleId, username, minDate, maxDate } = props;
   const [reportType, setReportType] = useState(props.reportType);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
@@ -44,6 +46,7 @@ const Filter: React.FC<FilterProp> = (props) => {
         dispatch(query({
           custId,
           roleId,
+          username,
           reportType,
           ...values
         } as WinLossAnalysisState, () => setSubmitting(false)));
@@ -83,6 +86,11 @@ const Filter: React.FC<FilterProp> = (props) => {
                     )}
                   </DropdownMenu>
                 </Dropdown>
+              </FormGroup>
+              <FormGroup>
+                <Button type='button' color='success' className='btn-excel' title='Export to Excel' onClick={() => dispatch(excel())}>
+                  <Icon path={mdiFileExcelOutline} />
+                </Button>
               </FormGroup>
             </fieldset>
           </Form>
