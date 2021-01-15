@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import {
   Label,
   Form,
@@ -12,7 +12,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
 import {
   getToday,
@@ -22,6 +22,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { query, WinLossAnalysisState } from './reducer';
 import { Moment } from 'moment';
+import moment from 'moment';
 
 type Props = {
   custId: number;
@@ -33,11 +34,26 @@ type Props = {
 };
 
 const Filter: React.FC<Props> = (props: Props) => {
+  const formikRef = createRef<FormikProps<any>>();
   const dispatch = useDispatch();
   const { custId, roleId, minDate, maxDate } = props;
   const [reportType, setReportType] = useState(props.reportType);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
+  const today = getToday();
+  const [fromMinDate, setFromMinDate] = useState(today);
+  const [toMaxDate, setToMaxdate] = useState(today);
+
+  useEffect(() => {
+    if (!formikRef.current) {
+      return;
+    }
+
+    const { isSubmitting, handleSubmit } = formikRef.current;
+    if (!isSubmitting) {
+      handleSubmit();
+    }
+  }, [custId]);
 
   const handleDropdownItemClick = (
     index: number,
@@ -53,6 +69,20 @@ const Filter: React.FC<Props> = (props: Props) => {
       handleSubmit();
     }
   };
+
+  const handleFromDateChange = (fromDate: string | Moment) => {
+    var isValidDate = moment(fromDate).isValid();
+    if (isValidDate) {
+      setFromMinDate(moment(fromDate));
+    }
+  }
+
+  const handleToDateChange = (toDate: string | Moment) => {
+    var isValidDate = moment(toDate).isValid();
+    if (isValidDate) {
+      setToMaxdate(moment(toDate));
+    }
+  }
 
   return (
     <Formik
@@ -81,19 +111,25 @@ const Filter: React.FC<Props> = (props: Props) => {
               <FormGroup className="mr-5">
                 <Label className="mr-2">From</Label>
                 <FormikDatePicker
+                  initialValue={today}
                   disabled={isSubmitting}
                   name="fromDate"
                   minDate={minDate}
-                  maxDate={maxDate}
+                  maxDate={toMaxDate}
+                  isReport={true}
+                  onChange={handleFromDateChange}
                 />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Label className="mr-2">To</Label>
                 <FormikDatePicker
+                  initialValue={today}
                   disabled={isSubmitting}
                   name="toDate"
-                  minDate={minDate}
+                  minDate={fromMinDate}
                   maxDate={maxDate}
+                  isReport={true}
+                  onChange={handleToDateChange}
                 />
               </FormGroup>
               <FormGroup className="mr-5">

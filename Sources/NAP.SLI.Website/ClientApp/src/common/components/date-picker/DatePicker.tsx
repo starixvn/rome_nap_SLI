@@ -11,22 +11,30 @@ import {
   InputProps,
 } from 'reactstrap';
 import { Moment } from 'moment';
-import { maxDate, minDate } from '../../utils/DateUtils';
+import { maxDate, minDate, getToday } from '../../utils/DateUtils';
 
 type Props = DatetimepickerProps & {
   minDate: Moment;
   maxDate: Moment;
   disabled: boolean;
+  isReport: boolean;
 };
 
 const defaultProps = {
   minDate,
   maxDate,
+  isReport: false,
 };
 
 const DatePicker: React.FC<Props> = (props: Props) => {
   const [value, setValue] = useState(props.value);
-  const { minDate, maxDate, disabled } = props;
+  const { minDate, disabled, isReport } = props;
+
+  const today = getToday();
+  const maxDate =
+    isReport && today.isSameOrBefore(props.maxDate) ?
+      today :
+      props.maxDate;
 
   useEffect(() => {
     setValue(props.value);

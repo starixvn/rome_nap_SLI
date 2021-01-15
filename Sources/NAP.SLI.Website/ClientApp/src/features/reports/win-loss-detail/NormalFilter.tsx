@@ -23,6 +23,7 @@ import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Moment } from 'moment';
+import moment from 'moment';
 
 type Props = {
   minDate: Moment;
@@ -37,6 +38,9 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
   const { customer, pageIndex, pageSize, isHistory } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
+  const today = getToday();
+  const [fromMinDate, setFromMinDate] = useState(today);
+  const [toMaxDate, setToMaxdate] = useState(today);
 
   if (!customer) {
     return <></>;
@@ -69,7 +73,17 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
     }
   };
 
-  const handleDateChange = () => {
+  const handleFromDateChange = (fromDate: string | Moment) => {
+    if (moment(fromDate).isValid()) {
+      setFromMinDate(moment(fromDate));
+    }
+    setDropdownIndex(ReportDateRanges.length - 1);
+  };
+
+  const handleToDateChange = (toDate: string | Moment) => {
+    if (moment(toDate).isValid()) {
+      setToMaxdate(moment(toDate));
+    }
     setDropdownIndex(ReportDateRanges.length - 1);
   };
 
@@ -106,9 +120,11 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
                 <FormikDatePicker
                   disabled={isSubmitting}
                   name="fromDate"
+                  initialValue={today}
                   minDate={minDate}
-                  maxDate={maxDate}
-                  onChange={handleDateChange}
+                  maxDate={toMaxDate}
+                  isReport={true}
+                  onChange={handleFromDateChange}
                 />
               </FormGroup>
               <FormGroup className="mr-5">
@@ -116,9 +132,11 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
                 <FormikDatePicker
                   disabled={isSubmitting}
                   name="toDate"
-                  minDate={minDate}
+                  initialValue={today}
+                  minDate={fromMinDate}
                   maxDate={maxDate}
-                  onChange={handleDateChange}
+                  isReport={true}
+                  onChange={handleToDateChange}
                 />
               </FormGroup>
               <FormGroup className="mr-5">
