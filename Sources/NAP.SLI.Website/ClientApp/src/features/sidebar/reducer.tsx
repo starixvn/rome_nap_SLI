@@ -5,7 +5,7 @@ import { post } from '../../common/services/http';
 export type Customer = {
   generalInformation: GeneralInformation;
   headline: Headline;
-}
+};
 
 type GeneralInformation = {
   custId: number;
@@ -19,7 +19,7 @@ type GeneralInformation = {
   mobilePhone: string;
   fax: string;
   site: string;
-}
+};
 
 type Headline = {
   memberId: number;
@@ -33,7 +33,7 @@ type Headline = {
   superId: number;
   superName: string;
   superEnabled: boolean;
-}
+};
 
 type State = {
   isOpen: boolean;
@@ -44,7 +44,7 @@ type State = {
 
 const initialState: State = {
   isOpen: false,
-  username: ''
+  username: '',
 };
 const slice = createSlice({
   name: 'sidebar',
@@ -53,70 +53,92 @@ const slice = createSlice({
     toggle: (state) => {
       state.isOpen = !state.isOpen;
     },
-    getCustomerInformationRequest: (state, action: PayloadAction<{ username: string }>) => {
+    getCustomerInformationRequest: (
+      state,
+      action: PayloadAction<{ username: string }>,
+    ) => {
       state.message = undefined;
       state.customer = undefined;
       state.username = action.payload.username;
     },
-    getCustomerInformationSuccess: (state, action: PayloadAction<{ customer: Customer }>) => {
+    getCustomerInformationSuccess: (
+      state,
+      action: PayloadAction<{ customer: Customer }>,
+    ) => {
       state.customer = action.payload.customer;
     },
-    getCustomerInformationFailure: (state, action: PayloadAction<{ message: string }>) => {
+    getCustomerInformationFailure: (
+      state,
+      action: PayloadAction<{ message: string }>,
+    ) => {
       state.message = action.payload.message;
     },
     selectUsername: (state, action) => {
       state.customer = undefined;
       state.message = undefined;
       state.username = action.payload.username;
-    }
-  }
+    },
+  },
 });
 
-export const { toggle, getCustomerInformationRequest, getCustomerInformationFailure, getCustomerInformationSuccess, selectUsername } = slice.actions;
+export const {
+  toggle,
+  getCustomerInformationRequest,
+  getCustomerInformationFailure,
+  getCustomerInformationSuccess,
+  selectUsername,
+} = slice.actions;
 
 export type QueryUsernameSuggestionRecord = {
-  username: string
+  username: string;
 };
 export const queryUsernameSuggestion = async (value: string) => {
   const payload = {
     apiKey: 'customer:query-username-suggestion',
     data: {
-      username: value
-    }
+      username: value,
+    },
   };
 
-  const response = await post<Array<QueryUsernameSuggestionRecord>>('/simple-api/query', payload);
+  const response = await post<Array<QueryUsernameSuggestionRecord>>(
+    '/simple-api/query',
+    payload,
+  );
   return response.data;
-}
+};
 
 type GetCustomerInformationData = ResultData & {
   generalInformation: GeneralInformation;
   headline: Headline;
 };
-export const getCustomerInformation = (username: string, callback: Func) => async (dispatch: any) => {
+export const getCustomerInformation = (
+  username: string,
+  callback: Func,
+) => async (dispatch: AppDispatch) => {
   try {
     dispatch(getCustomerInformationRequest({ username }));
     const payload = {
-      username
+      username,
     };
-    const response = await post<GetCustomerInformationData>("/api/customer/information", payload);
+    const response = await post<GetCustomerInformationData>(
+      '/api/customer/information',
+      payload,
+    );
     const { isSuccess, errMsg, generalInformation, headline } = response.data;
     if (isSuccess) {
       const customer = {
         generalInformation,
-        headline
+        headline,
       };
       dispatch(getCustomerInformationSuccess({ customer }));
     } else {
       dispatch(getCustomerInformationFailure({ message: errMsg }));
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
+  } finally {
     callback();
   }
-}
+};
 
 export default slice.reducer;

@@ -1,4 +1,11 @@
-import { configureStore, getDefaultMiddleware, combineReducers, Reducer, CombinedState, Action } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  getDefaultMiddleware,
+  combineReducers,
+  Reducer,
+  CombinedState,
+  Action,
+} from '@reduxjs/toolkit';
 import confirmationReducer from './common/components/confirmation/reducer';
 import toastReducer from './common/components/toast/reducer';
 import sidebarReducer from './features/sidebar/reducer';
@@ -15,7 +22,7 @@ import umReducer from './features/error/UM/reducer';
 import { logoutSuccess } from './features/account/authentication/reducer';
 
 const middleware = [
-  ...getDefaultMiddleware()
+  ...getDefaultMiddleware(),
   /*YOUR CUSTOM MIDDLEWARES HERE*/
 ];
 
@@ -32,9 +39,10 @@ const appReducer = combineReducers({
   resetUserPassword: resetUserPasswordReducer,
   winLossDetail: winLossDetailReducer,
   winLossAnalysis: winLossAnalysisReducer,
-  um: umReducer
+  um: umReducer,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rootReducer: Reducer<CombinedState<any>, Action> = (state, action) => {
   if (action.type === logoutSuccess.type) {
     return appReducer(undefined, action);
@@ -45,10 +53,14 @@ const rootReducer: Reducer<CombinedState<any>, Action> = (state, action) => {
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware
+  middleware,
 });
 
-export type RootState = ReturnType<typeof appReducer> & { custId: number, roleId: number, username: string };
+export type AppState = ReturnType<typeof appReducer> & {
+  custId: number;
+  roleId: number;
+  username: string;
+};
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

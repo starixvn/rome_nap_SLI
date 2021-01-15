@@ -1,21 +1,20 @@
-export const CustomerLevels =
-{
+export const CustomerLevels = {
   Member: 1,
   Agent: 2,
   Master: 3,
-  Super: 4
+  Super: 4,
 };
 
 export const getLevelName = (levelId: number) => {
   switch (levelId) {
     case CustomerLevels.Member:
-      return "Member";
+      return 'Member';
     case CustomerLevels.Agent:
-      return "Agent";
+      return 'Agent';
     case CustomerLevels.Master:
-      return "Master";
+      return 'Master';
     case CustomerLevels.Super:
-      return "Super";
+      return 'Super';
     default:
       return '';
   }
@@ -32,12 +31,12 @@ export const getDownlineLevel = (levelId: number) => {
     default:
       return -1;
   }
-}
+};
 
 export const isDownlineLevel = (levelId: number, targetLevelId: number) => {
   return levelId < targetLevelId;
-}
+};
 
 export const isUplineOrSameLevel = (levelId: number, targetLevelId: number) => {
   return levelId >= targetLevelId;
-}
+};

@@ -6,6 +6,6 @@ const WinLossByBetTypePage: React.FC = () => {
       <div className="page-title">Win Loss By Bettype</div>
     </div>
   );
-}
+};
 
 export default WinLossByBetTypePage;

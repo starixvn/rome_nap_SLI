@@ -28,9 +28,9 @@ import { startCheckin, stopCheckin } from './common/services/connection';
 export const history = createBrowserHistory();
 
 const App: React.FC = () => {
-  const { account } = useSelector((state: RootState) => state.authentication);
-  const { isOpen } = useSelector((state: RootState) => state.sidebar);
-  const { isUnderMaintenanceTime } = useSelector((state: RootState) => state.um);
+  const { account } = useSelector((state: AppState) => state.authentication);
+  const { isOpen } = useSelector((state: AppState) => state.sidebar);
+  const { isUnderMaintenanceTime } = useSelector((state: AppState) => state.um);
   const isLoggedIn = account !== undefined;
   const isLayout = isLoggedIn && !isUnderMaintenanceTime;
 
@@ -61,13 +61,34 @@ const App: React.FC = () => {
               <Route path={RouteLinks.ERROR_UM} component={UMPage} />
               <Route path={RouteLinks.LOGIN} component={LoginPage} />
               <PrivateRoute exact path={RouteLinks.HOME} component={HomePage} />
-              <PrivateRoute path={RouteLinks.USER_MANAGEMENT} component={UserManagementPage} />
-              <PrivateRoute path={RouteLinks.CUSTOMER_SETTING} component={CustomerSettingPage} />
-              <PrivateRoute path={RouteLinks.WIN_LOSS_DETAIL} component={WinLossDetailPage} />
-              <PrivateRoute path={RouteLinks.MATCH_WIN_LOSS_DETAIL} component={MatchWinLossDetailPage} />
-              <PrivateRoute path={RouteLinks.WIN_LOSS_BY_BETTYPE} component={WinLossByBetTypePage} />
-              <PrivateRoute path={RouteLinks.WIN_LOSS_ANALYSIS} component={WinLossAnalysisPage} />
-              <PrivateRoute path={RouteLinks.BET_LIST} component={BetListPage} />
+              <PrivateRoute
+                path={RouteLinks.USER_MANAGEMENT}
+                component={UserManagementPage}
+              />
+              <PrivateRoute
+                path={RouteLinks.CUSTOMER_SETTING}
+                component={CustomerSettingPage}
+              />
+              <PrivateRoute
+                path={RouteLinks.WIN_LOSS_DETAIL}
+                component={WinLossDetailPage}
+              />
+              <PrivateRoute
+                path={RouteLinks.MATCH_WIN_LOSS_DETAIL}
+                component={MatchWinLossDetailPage}
+              />
+              <PrivateRoute
+                path={RouteLinks.WIN_LOSS_BY_BETTYPE}
+                component={WinLossByBetTypePage}
+              />
+              <PrivateRoute
+                path={RouteLinks.WIN_LOSS_ANALYSIS}
+                component={WinLossAnalysisPage}
+              />
+              <PrivateRoute
+                path={RouteLinks.BET_LIST}
+                component={BetListPage}
+              />
               <PrivateRoute path={RouteLinks.RESULTS} component={ResultsPage} />
               <PrivateRoute component={NotFoundPage} />
             </Switch>

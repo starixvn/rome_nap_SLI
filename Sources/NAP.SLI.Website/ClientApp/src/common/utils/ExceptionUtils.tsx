@@ -8,8 +8,7 @@ export const handleException = (e: Error) => {
   if (window.configuration.env === 'PROD') {
     captureException(e);
     showReportDialog();
-  }
-  else {
+  } else {
     throw e;
   }
 };

@@ -6,6 +6,6 @@ const ResultsPage: React.FC = () => {
       <div className="page-title">Results</div>
     </div>
   );
-}
+};
 
 export default ResultsPage;

@@ -53,8 +53,8 @@ const initialState: State = {
   data: undefined,
   uplineCustomers: [],
   pageIndex: 1,
-  pageSize: PageSize
-}
+  pageSize: PageSize,
+};
 
 const slice = createSlice({
   name: 'win-loss-detail',
@@ -64,7 +64,13 @@ const slice = createSlice({
       state.isHistory = !state.isHistory;
     },
     queryRequest: (state, action: PayloadAction<QueryProps>) => {
-      const { fromDate, toDate, pageIndex, pageSize, isHistory } = action.payload;
+      const {
+        fromDate,
+        toDate,
+        pageIndex,
+        pageSize,
+        isHistory,
+      } = action.payload;
       state.isHistory = isHistory;
       state.fromDate = fromDate;
       state.toDate = toDate;
@@ -75,14 +81,16 @@ const slice = createSlice({
     querySuccess: (state, action: PayloadAction<{ data: QueryData }>) => {
       state.data = action.payload.data;
     },
-    selectCustomer: (state, action: PayloadAction<{ customer: Customer; isReset: boolean; }>) => {
+    selectCustomer: (
+      state,
+      action: PayloadAction<{ customer: Customer; isReset: boolean }>,
+    ) => {
       const { customer, isReset } = action.payload;
       const currentState = current(state);
       if (isReset || !currentState.customer) {
         state.customer = customer;
         state.uplineCustomers = [];
-      }
-      else {
+      } else {
         const uplineCustomers = [];
         let isDrillDown = true;
         for (let i = 0; i < currentState.uplineCustomers.length; i++) {
@@ -102,17 +110,28 @@ const slice = createSlice({
         state.customer = customer;
         state.uplineCustomers = uplineCustomers;
       }
-    }
-  }
+    },
+  },
 });
 
 const calculateCompanyWinLoss = (record: Record) => {
-  record.companyWinLoss = -record.memberWinLoss + record.agentWinLoss + (record.masterWinLoss || 0) + (record.superWinLoss || 0);
+  record.companyWinLoss =
+    -record.memberWinLoss +
+    record.agentWinLoss +
+    (record.masterWinLoss || 0) +
+    (record.superWinLoss || 0);
 };
 
-export const { toggleMode, queryRequest, querySuccess, selectCustomer } = slice.actions;
+export const {
+  toggleMode,
+  queryRequest,
+  querySuccess,
+  selectCustomer,
+} = slice.actions;
 
-export const query = (payload: QueryProps, callback: Func) => async (dispatch: AppDispatch) => {
+export const query = (payload: QueryProps, callback: Func) => async (
+  dispatch: AppDispatch,
+) => {
   try {
     dispatch(queryRequest(payload));
     const response = await post<QueryData>('/api/winlossdetail/query', payload);
@@ -120,19 +139,17 @@ export const query = (payload: QueryProps, callback: Func) => async (dispatch: A
     records.forEach((record) => calculateCompanyWinLoss(record));
     calculateCompanyWinLoss(total);
     dispatch(querySuccess({ data: response.data }));
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
+  } finally {
     callback();
   }
-}
+};
 
 export const excel = () => async () => {
   try {
-    const rootState: RootState = store.getState();
-    const { fromDate, toDate, customer } = rootState.winLossDetail;
+    const appState: AppState = store.getState();
+    const { fromDate, toDate, customer } = appState.winLossDetail;
     if (customer) {
       const { custId, roleId, username } = customer;
       const payload = {
@@ -140,14 +157,13 @@ export const excel = () => async () => {
         username,
         roleId,
         fromDate,
-        toDate
+        toDate,
       };
       await download('/api/winlossdetail/excel', payload);
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
   }
-}
+};
 
 export default slice.reducer;

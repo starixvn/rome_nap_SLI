@@ -1,21 +1,33 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Col, Button, FormFeedback, Spinner, ModalFooter } from 'reactstrap';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Col,
+  Button,
+  FormFeedback,
+  Spinner,
+  ModalFooter,
+} from 'reactstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { resetPassword, closeModal } from './reducer';
 
 const validationSchema = Yup.object().shape({
-  password: Yup.string()
-    .required('Password is required'),
+  password: Yup.string().required('Password is required'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm Password is required')
+    .required('Confirm Password is required'),
 });
 
 const ResetUserPasswordModal: React.FC = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.resetUserPassword);
+  const { user } = useSelector((state: AppState) => state.resetUserPassword);
 
   if (!user) {
     return <></>;
@@ -24,7 +36,7 @@ const ResetUserPasswordModal: React.FC = () => {
   const initialValues = {
     custId: user.custId,
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   };
   return (
     <Modal isOpen unmountOnClose>
@@ -35,15 +47,12 @@ const ResetUserPasswordModal: React.FC = () => {
           dispatch(resetPassword(values, () => setSubmitting(false)));
         }}
       >
-        {({
-          errors,
-          touched,
-          handleSubmit,
-          isSubmitting
-        }) => (
+        {({ errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>
             <fieldset disabled={isSubmitting}>
-              <ModalHeader {...(!isSubmitting && { toggle: () => dispatch(closeModal()) })}>
+              <ModalHeader
+                {...(!isSubmitting && { toggle: () => dispatch(closeModal()) })}
+              >
                 Reset Password
               </ModalHeader>
               <ModalBody>
@@ -54,23 +63,37 @@ const ResetUserPasswordModal: React.FC = () => {
                 <FormGroup row>
                   <Label sm={4}>Password</Label>
                   <Col sm={8}>
-                    <Input name="password" type="password" autoComplete="off" tag={Field} invalid={!!errors.password && !!touched.password} />
+                    <Input
+                      name="password"
+                      type="password"
+                      autoComplete="off"
+                      tag={Field}
+                      invalid={!!errors.password && !!touched.password}
+                    />
                     <FormFeedback>{errors.password}</FormFeedback>
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Label sm={4}>Confirm Password</Label>
                   <Col sm={8}>
-                    <Input name="confirmPassword" type="password" autoComplete="off" tag={Field} invalid={!!errors.confirmPassword && !!touched.confirmPassword} />
+                    <Input
+                      name="confirmPassword"
+                      type="password"
+                      autoComplete="off"
+                      tag={Field}
+                      invalid={
+                        !!errors.confirmPassword && !!touched.confirmPassword
+                      }
+                    />
                     <FormFeedback>{errors.confirmPassword}</FormFeedback>
                   </Col>
                 </FormGroup>
               </ModalBody>
               <ModalFooter>
                 <Button type="submit" color="primary">
-                  {isSubmitting && <Spinner className='mr-3' />}
-                    Submit
-                  </Button>
+                  {isSubmitting && <Spinner className="mr-3" />}
+                  Submit
+                </Button>
               </ModalFooter>
             </fieldset>
           </Form>

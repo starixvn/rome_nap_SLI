@@ -6,19 +6,25 @@ import { hide } from './reducer';
 
 const ToastContainer: React.FC = () => {
   const dispatch = useDispatch();
-  const { message, color } = useSelector((state: RootState) => state.toast);
+  const { message, color } = useSelector((state: AppState) => state.toast);
   const isOpen = message !== undefined;
 
   return (
-    <div aria-live="polite" aria-atomic="true" className="toast-container d-flex justify-content-center align-items-center">
-      <Toast isOpen={isOpen} fade className={'bg-' + color} onClick={() => dispatch(hide())}>
-        <ToastBody>
-          {message}
-        </ToastBody>
+    <div
+      aria-live="polite"
+      aria-atomic="true"
+      className="toast-container d-flex justify-content-center align-items-center"
+    >
+      <Toast
+        isOpen={isOpen}
+        fade
+        className={'bg-' + color}
+        onClick={() => dispatch(hide())}
+      >
+        <ToastBody>{message}</ToastBody>
       </Toast>
     </div>
   );
-
 };
 
 export default ToastContainer;

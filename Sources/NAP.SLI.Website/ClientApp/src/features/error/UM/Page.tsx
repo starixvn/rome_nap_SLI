@@ -5,7 +5,9 @@ import { RouteLinks } from '../../../common/utils/RouteUtils';
 
 const UMPage: React.FC = () => {
   const history = useHistory();
-  const { from, to, isUnderMaintenanceTime } = useSelector((state: RootState) => state.um);
+  const { from, to, isUnderMaintenanceTime } = useSelector(
+    (state: AppState) => state.um,
+  );
 
   useEffect(() => {
     if (!isUnderMaintenanceTime) {
@@ -14,7 +16,9 @@ const UMPage: React.FC = () => {
   });
 
   return (
-    <h1>Under maintenance from {from} to {to}</h1>
+    <h1>
+      Under maintenance from {from} to {to}
+    </h1>
   );
 };
 

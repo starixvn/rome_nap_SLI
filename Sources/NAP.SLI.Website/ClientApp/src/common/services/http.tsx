@@ -11,7 +11,7 @@ import { history } from '../../App';
 import { isNullOrWhiteSpaces } from '../utils/StringUtils';
 
 const getConfig = (): AxiosRequestConfig => {
-  const headers: any = {};
+  const headers: KeyValueObject = {};
   const token = storage.getToken();
   if (token) {
     headers['Authorization'] = 'Bearer ' + token;
@@ -23,7 +23,7 @@ const getConfig = (): AxiosRequestConfig => {
   }
 
   return {
-    headers: headers
+    headers: headers,
   };
 };
 
@@ -36,11 +36,12 @@ const handleError = (e: AxiosError) => {
       case 403:
         store.dispatch(error('You are not authorized to use this function'));
         return new Error('Handled');
-      case 503:
+      case 503: {
         const umTime = e.response.data as UMTime;
         store.dispatch(checkSuccess({ ...umTime }));
         history.push(RouteLinks.ERROR_UM);
         return new Error('Handled');
+      }
       default:
         store.dispatch(error(e.message));
     }
@@ -51,7 +52,7 @@ const handleError = (e: AxiosError) => {
   return e;
 };
 
-export const post = async function <T>(url: string, data?: any) {
+export const post = async function <T>(url: string, data?: unknown) {
   try {
     store.dispatch(hide());
     const config = getConfig();
@@ -61,11 +62,14 @@ export const post = async function <T>(url: string, data?: any) {
   }
 };
 
-export const download = async (url: string, data?: any) => {
+export const download = async (url: string, data?: unknown) => {
   try {
     store.dispatch(hide());
     const config = getConfig();
-    const blobResponse = await axios.post<Blob>(url, data, { ...config, responseType: 'blob' });
+    const blobResponse = await axios.post<Blob>(url, data, {
+      ...config,
+      responseType: 'blob',
+    });
     if (blobResponse == null || blobResponse.data == null) {
       return Promise.reject({ message: 'Error downloading the file' });
     }
@@ -77,8 +81,14 @@ export const download = async (url: string, data?: any) => {
     let fileName = '';
     const contentDispositionValue = blobResponse.headers['content-disposition'];
     if (contentDispositionValue) {
-      const contentDisposition = ContentDisposition.parse(contentDispositionValue);
-      if (contentDisposition && contentDisposition.parameters && contentDisposition.parameters.filename) {
+      const contentDisposition = ContentDisposition.parse(
+        contentDispositionValue,
+      );
+      if (
+        contentDisposition &&
+        contentDisposition.parameters &&
+        contentDisposition.parameters.filename
+      ) {
         fileName = contentDisposition.parameters.filename;
       }
     }

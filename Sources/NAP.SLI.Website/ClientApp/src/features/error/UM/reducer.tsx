@@ -12,7 +12,7 @@ export type UMTime = {
 const initialState: UMTime = {
   from: '',
   to: '',
-  isUnderMaintenanceTime: false
+  isUnderMaintenanceTime: false,
 };
 const slice = createSlice({
   name: 'um',
@@ -29,13 +29,13 @@ const slice = createSlice({
       } else {
         stopCheckUM();
       }
-    }
-  }
+    },
+  },
 });
 
 export const { checkSuccess } = slice.actions;
 
-let timeout: NodeJS.Timeout | undefined;
+let timeout: number | undefined;
 const timeoutInterval = 10000;
 
 export const stopCheckUM = () => {
@@ -47,8 +47,11 @@ export const stopCheckUM = () => {
 
 export const startCheckUM = async (currentUMTime: UMTime) => {
   stopCheckUM();
-  timeout = setTimeout(async () => await checkUM(currentUMTime), timeoutInterval);
-}
+  timeout = window.setTimeout(
+    async () => await checkUM(currentUMTime),
+    timeoutInterval,
+  );
+};
 
 const checkUM = async (currentUMTime: UMTime) => {
   try {
@@ -57,13 +60,18 @@ const checkUM = async (currentUMTime: UMTime) => {
     if (JSON.stringify(currentUMTime) !== JSON.stringify(umTime)) {
       store.dispatch(checkSuccess({ ...umTime }));
     } else {
-      timeout = setTimeout(async () => await checkUM(currentUMTime), timeoutInterval);
+      timeout = window.setTimeout(
+        async () => await checkUM(currentUMTime),
+        timeoutInterval,
+      );
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-    timeout = setTimeout(async () => await checkUM(currentUMTime), timeoutInterval);
+    timeout = window.setTimeout(
+      async () => await checkUM(currentUMTime),
+      timeoutInterval,
+    );
   }
-}
+};
 
 export default slice.reducer;

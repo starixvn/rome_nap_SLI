@@ -4,7 +4,8 @@ import { handleException } from '../../../common/utils/ExceptionUtils';
 import { post } from '../../../common/services/http';
 import { UserModel } from '../reducer';
 
-const CryptoJS = require('../../../common/libs/CryptoJS');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const cryptoJS: CryptoJS = require('../../../common/libs/CryptoJS');
 
 type ResetPasswordProps = {
   custId: number;
@@ -26,20 +27,23 @@ const slice = createSlice({
     },
     closeModal: (state) => {
       state.user = undefined;
-    }
-  }
+    },
+  },
 });
 
 export const { openModal, closeModal } = slice.actions;
 
-export const resetPassword = (values: ResetPasswordProps, callback: Func) => async (dispatch: AppDispatch) => {
+export const resetPassword = (
+  values: ResetPasswordProps,
+  callback: Func,
+) => async (dispatch: AppDispatch) => {
   try {
     const payload = {
       apiKey: 'user-management:update-user',
       data: {
         custId: values.custId,
-        userPwd: CryptoJS.CfsEnCode(values.password)
-      }
+        userPwd: cryptoJS.CfsEnCode(values.password),
+      },
     };
     const response = await post<ResultData>('/simple-api/command', payload);
     const { isSuccess, errMsg } = response.data;
@@ -49,13 +53,11 @@ export const resetPassword = (values: ResetPasswordProps, callback: Func) => asy
     } else {
       dispatch(error(errMsg));
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
+  } finally {
     callback();
   }
-}
+};
 
 export default slice.reducer;

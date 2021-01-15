@@ -1,25 +1,24 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { minDate, maxDate } from '../../../common/utils/DateUtils';
-import Filter from './Filter';
-import { ReportType } from './reducer';
-import WinLossAnalysisDetails from './WinLossAnalysisDetail';
+// import { minDate, maxDate } from '../../../common/utils/DateUtils';
+// import Filter from './Filter';
+// import { ReportType } from './reducer';
+import Table from './Table';
 
-type BaseLocation = Location & {
-  state: RootState
-}
-
-const WinLossAnalysisPage: React.FC<{ location: BaseLocation }> = ({ location }) => {
-  const state = location.state;
-  const { data } = useSelector((state: RootState) => state.winLossAnalysis);
+const WinLossAnalysisPage: React.FC = () => {
+  const { data } = useSelector((state: AppState) => state.winLossAnalysis);
 
   return (
     <div className="win-loss-analysis-page">
       <div className="page-title">Win Loss Analysis</div>
-      <Filter minDate={minDate} maxDate={maxDate} reportType={ReportType.Daily} {...state} />
-      {data && <WinLossAnalysisDetails />}
+      {/* <Filter
+        minDate={minDate}
+        maxDate={maxDate}
+        reportType={ReportType.Daily}
+      /> */}
+      {data && <Table />}
     </div>
   );
-}
+};
 
 export default WinLossAnalysisPage;

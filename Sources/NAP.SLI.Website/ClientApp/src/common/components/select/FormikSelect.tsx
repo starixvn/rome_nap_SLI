@@ -7,19 +7,26 @@ type Props<T> = {
   options: Array<SelectOption<T>>;
 };
 
-const FormikSelect: React.FC<Props<any>> = ({ options, ...props }) => {
+const FormikSelect: React.FC<Props<InputValue>> = ({
+  options,
+  ...props
+}: Props<InputValue>) => {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(props);
 
-  return <Select
-    {...field}
-    options={options}
-    onChange={selectedOption => {
-      setFieldValue(field.name, selectedOption.value);
-    }}
-    inputProps={{
-      className: 'form-control' + (meta.touched && meta.error ? ' is-invalid' : '')
-    }} />;
+  return (
+    <Select
+      {...field}
+      options={options}
+      onChange={(selectedOption) => {
+        setFieldValue(field.name, selectedOption.value);
+      }}
+      inputProps={{
+        className:
+          'form-control' + (meta.touched && meta.error ? ' is-invalid' : ''),
+      }}
+    />
+  );
 };
 
 export default FormikSelect;

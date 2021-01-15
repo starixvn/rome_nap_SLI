@@ -6,6 +6,6 @@ const BetListPage: React.FC = () => {
       <div className="page-title">Bet List</div>
     </div>
   );
-}
+};
 
 export default BetListPage;

@@ -18,8 +18,8 @@ const slice = createSlice({
     },
     closeModal: (state) => {
       state.user = undefined;
-    }
-  }
+    },
+  },
 });
 
 export const { openModal, closeModal } = slice.actions;
@@ -36,12 +36,14 @@ type UpdateData = ResultData & {
   groupId: number;
 };
 
-export const update = (values: UpdateProps, callback: Func) => async (dispatch: AppDispatch) => {
+export const update = (values: UpdateProps, callback: Func) => async (
+  dispatch: AppDispatch,
+) => {
   try {
     const data = values;
     const payload = {
       apiKey: 'user-management:update-user',
-      data
+      data,
     };
     const response = await post<UpdateData>('/simple-api/command', payload);
     const { isSuccess, errMsg } = response.data;
@@ -52,13 +54,11 @@ export const update = (values: UpdateProps, callback: Func) => async (dispatch: 
     } else {
       dispatch(error(errMsg));
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
+  } finally {
     callback();
   }
-}
+};
 
 export default slice.reducer;

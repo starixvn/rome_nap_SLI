@@ -9,5 +9,5 @@ export const RouteLinks = {
   WIN_LOSS_BY_BETTYPE: '/report/win-loss-by-bettype',
   WIN_LOSS_ANALYSIS: '/report/win-loss-analysis',
   RESULTS: '/report/results',
-  BET_LIST: '/report/bet-list'
+  BET_LIST: '/report/bet-list',
 };

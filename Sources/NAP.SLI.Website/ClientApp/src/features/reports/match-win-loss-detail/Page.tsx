@@ -6,6 +6,6 @@ const MatchWinLossDetailPage: React.FC = () => {
       <div className="page-title">Match Win Loss Detail</div>
     </div>
   );
-}
+};
 
 export default MatchWinLossDetailPage;

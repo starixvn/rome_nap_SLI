@@ -3,12 +3,13 @@ import { success, error } from '../../../common/components/toast/reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import { post } from '../../../common/services/http';
 
-const CryptoJS = require('../../../common/libs/CryptoJS');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const cryptoJS: CryptoJS = require('../../../common/libs/CryptoJS');
 
 type ChangePasswordProps = {
-  oldPassword: string,
-  newPassword: string,
-  confirmPassword: string
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 };
 
 const slice = createSlice({
@@ -19,20 +20,23 @@ const slice = createSlice({
   reducers: {
     toggleModal: (state) => {
       state.isOpen = !state.isOpen;
-    }
+    },
   },
 });
 
 export const { toggleModal } = slice.actions;
 
-export const changePassword = (values: ChangePasswordProps, callback: Func) => async (dispatch: AppDispatch) => {
+export const changePassword = (
+  values: ChangePasswordProps,
+  callback: Func,
+) => async (dispatch: AppDispatch) => {
   try {
     const payload = {
       apiKey: 'account:change-password',
       data: {
-        oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
-        newPassword: CryptoJS.CfsEnCode(values.newPassword)
-      }
+        oldPassword: cryptoJS.CfsEnCode(values.oldPassword),
+        newPassword: cryptoJS.CfsEnCode(values.newPassword),
+      },
     };
     const response = await post<ResultData>('/simple-api/command', payload);
     const { isSuccess, errMsg } = response.data;
@@ -42,13 +46,11 @@ export const changePassword = (values: ChangePasswordProps, callback: Func) => a
     } else {
       dispatch(error(errMsg));
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
+  } finally {
     callback();
   }
-}
+};
 
 export default slice.reducer;

@@ -8,7 +8,7 @@ type Props<T> = {
   inputProps?: InputProps;
 };
 
-const Select: React.FC<Props<any>> = props => {
+const Select = function _<T extends InputValue>(props: Props<T>) {
   const { options, onChange, value, inputProps } = props;
   const [_value, setValue] = useState(value);
 
@@ -17,9 +17,11 @@ const Select: React.FC<Props<any>> = props => {
   }, [props.value, options]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let selectedOptions = options.filter(option => option.value?.toString() === event.target.value);
+    let selectedOptions = options.filter(
+      (option) => option.value?.toString() === event.target.value,
+    );
     if (selectedOptions.length === 0) {
-      selectedOptions = options.filter(option => option.value === undefined);
+      selectedOptions = options.filter((option) => option.value === undefined);
     }
 
     const selectedOption = selectedOptions[0];
@@ -28,10 +30,17 @@ const Select: React.FC<Props<any>> = props => {
   };
 
   return (
-    <Input type="select" {...inputProps} value={_value} onChange={(event) => handleChange(event)}>
-      {options.map((option, index) =>
-        <option key={index} value={option.value}>{option.label}</option>
-      )}
+    <Input
+      type="select"
+      {...inputProps}
+      value={_value}
+      onChange={(event) => handleChange(event)}
+    >
+      {options.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
     </Input>
   );
 };

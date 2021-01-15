@@ -3,7 +3,13 @@ import React, { useState, useEffect } from 'react';
 import Datetime, { DatetimepickerProps } from 'react-datetime';
 import Icon from '@mdi/react';
 import { mdiArrowLeftBold, mdiArrowRightBold } from '@mdi/js';
-import { Input, InputGroup, InputGroupAddon, InputGroupText, InputProps } from 'reactstrap';
+import {
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  InputProps,
+} from 'reactstrap';
 import moment, { Moment } from 'moment';
 
 type Props = DatetimepickerProps & {
@@ -12,7 +18,7 @@ type Props = DatetimepickerProps & {
   disabled: boolean;
 };
 
-const MonthPicker: React.FC<Props> = props => {
+const MonthPicker: React.FC<Props> = (props: Props) => {
   const { minDate, maxDate, disabled } = props;
   const [value, setValue] = useState(props.value);
 
@@ -20,10 +26,16 @@ const MonthPicker: React.FC<Props> = props => {
     setValue(props.value);
   }, [props.value]);
 
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const renderInput = (props: InputProps, openCalendar: Function) => {
     return (
       <InputGroup className="month-picker">
-        <InputGroupAddon addonType="prepend" {...(!props.disabled && { onClick: () => handleOnChange(moment(value).subtract(1, 'months')) })}>
+        <InputGroupAddon
+          addonType="prepend"
+          {...(!props.disabled && {
+            onClick: () => handleOnChange(moment(value).subtract(1, 'months')),
+          })}
+        >
           <InputGroupText>
             <Icon path={mdiArrowLeftBold} />
           </InputGroupText>
@@ -31,7 +43,12 @@ const MonthPicker: React.FC<Props> = props => {
         <div {...(!props.disabled && { onClick: () => openCalendar() })}>
           <Input readOnly {...props} />
         </div>
-        <InputGroupAddon addonType="append" {...(!props.disabled && { onClick: () => handleOnChange(moment(value).add(1, 'months')) })}>
+        <InputGroupAddon
+          addonType="append"
+          {...(!props.disabled && {
+            onClick: () => handleOnChange(moment(value).add(1, 'months')),
+          })}
+        >
           <InputGroupText>
             <Icon path={mdiArrowRightBold} />
           </InputGroupText>
@@ -41,7 +58,7 @@ const MonthPicker: React.FC<Props> = props => {
   };
 
   const inputProps = {
-    disabled
+    disabled,
   };
 
   const handleOnChange = (value: Moment | string) => {
@@ -53,15 +70,18 @@ const MonthPicker: React.FC<Props> = props => {
     return current.isSameOrAfter(minDate) && current.isSameOrBefore(maxDate);
   };
 
-  return <Datetime
-    isValidDate={isValidDate}
-    value={value}
-    dateFormat="MMM - YYYY"
-    onChange={handleOnChange}
-    closeOnSelect={true}
-    timeFormat={false}
-    inputProps={inputProps}
-    renderInput={renderInput} />;
+  return (
+    <Datetime
+      isValidDate={isValidDate}
+      value={value}
+      dateFormat="MMM - YYYY"
+      onChange={handleOnChange}
+      closeOnSelect={true}
+      timeFormat={false}
+      inputProps={inputProps}
+      renderInput={renderInput}
+    />
+  );
 };
 
 export default MonthPicker;

@@ -1,17 +1,30 @@
 import './Page.scss';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container, Row, Col, Collapse, Nav, NavLink, NavItem } from 'reactstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Collapse,
+  Nav,
+  NavLink,
+  NavItem,
+} from 'reactstrap';
 import { NavLink as RRNavLink, Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiChevronDown, mdiChevronUp } from '@mdi/js';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
-import { CustomerLevels, getDownlineLevel, getLevelName, isDownlineLevel } from '../../../common/utils/CustomerLevelUtils';
+import {
+  CustomerLevels,
+  getDownlineLevel,
+  getLevelName,
+  isDownlineLevel,
+} from '../../../common/utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
 
 const CustomerPage: React.FC = () => {
   const dispatch = useDispatch();
-  const { customer } = useSelector((state: RootState) => state.sidebar);
+  const { customer } = useSelector((state: AppState) => state.sidebar);
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
   const [isOpenReports, setIsOpenReports] = useState(true);
 
@@ -20,32 +33,71 @@ const CustomerPage: React.FC = () => {
   }
 
   const { generalInformation, headline } = customer;
-  const { roleId, username, firstName, lastName, username2, fax, phone, mobilePhone } = generalInformation;
+  const {
+    roleId,
+    username,
+    firstName,
+    lastName,
+    username2,
+    fax,
+    phone,
+    mobilePhone,
+  } = generalInformation;
   const { superName, masterName, agentName } = headline;
 
   const handleUsernameClicked = (username: string) => {
     dispatch(selectUsername({ username }));
-  }
+  };
 
   return (
     <div className="customer-page">
       <Container className="my-3">
-        {isDownlineLevel(roleId, CustomerLevels.Super) && <Row>
-          <Col xs="5">Super</Col>
-          <Col xs="7"><span className="text-link" onClick={() => handleUsernameClicked(superName)}>{superName}</span></Col>
-        </Row>}
-        {isDownlineLevel(roleId, CustomerLevels.Master) && <Row>
-          <Col xs="5">Master</Col>
-          <Col xs="7"><span className="text-link" onClick={() => handleUsernameClicked(masterName)}>{masterName}</span></Col>
-        </Row>}
-        {isDownlineLevel(roleId, CustomerLevels.Agent) && <Row>
-          <Col xs="5">Agent</Col>
-          <Col xs="7"><span className="text-link" onClick={() => handleUsernameClicked(agentName)}>{agentName}</span></Col>
-        </Row>}
+        {isDownlineLevel(roleId, CustomerLevels.Super) && (
+          <Row>
+            <Col xs="5">Super</Col>
+            <Col xs="7">
+              <span
+                className="text-link"
+                onClick={() => handleUsernameClicked(superName)}
+              >
+                {superName}
+              </span>
+            </Col>
+          </Row>
+        )}
+        {isDownlineLevel(roleId, CustomerLevels.Master) && (
+          <Row>
+            <Col xs="5">Master</Col>
+            <Col xs="7">
+              <span
+                className="text-link"
+                onClick={() => handleUsernameClicked(masterName)}
+              >
+                {masterName}
+              </span>
+            </Col>
+          </Row>
+        )}
+        {isDownlineLevel(roleId, CustomerLevels.Agent) && (
+          <Row>
+            <Col xs="5">Agent</Col>
+            <Col xs="7">
+              <span
+                className="text-link"
+                onClick={() => handleUsernameClicked(agentName)}
+              >
+                {agentName}
+              </span>
+            </Col>
+          </Row>
+        )}
       </Container>
       <div className="mb-3">
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
-          <Container onClick={() => setIsOpenCustomerInfo(!isOpenCustomerInfo)} className="d-flex">
+          <Container
+            onClick={() => setIsOpenCustomerInfo(!isOpenCustomerInfo)}
+            className="d-flex"
+          >
             <span className="width-inherit">{username}</span>
             <Icon path={isOpenCustomerInfo ? mdiChevronDown : mdiChevronUp} />
           </Container>
@@ -54,7 +106,9 @@ const CustomerPage: React.FC = () => {
           <Container className="pb-2">
             <Row>
               <Col xs="5">Name</Col>
-              <Col xs="7">{firstName} - {lastName}</Col>
+              <Col xs="7">
+                {firstName} - {lastName}
+              </Col>
             </Row>
             <Row>
               <Col xs="5">Nick Name</Col>
@@ -78,12 +132,14 @@ const CustomerPage: React.FC = () => {
       <div className="mb-3">
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
           <Container>
-            <Link to={{
-              pathname: RouteLinks.CUSTOMER_SETTING,
-              state: {
-                ...generalInformation
-              }
-            }}>
+            <Link
+              to={{
+                pathname: RouteLinks.CUSTOMER_SETTING,
+                state: {
+                  ...generalInformation,
+                },
+              }}
+            >
               VIEW SETTING
             </Link>
           </Container>
@@ -91,7 +147,10 @@ const CustomerPage: React.FC = () => {
       </div>
       <div className="mb-3">
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
-          <Container onClick={() => setIsOpenReports(!isOpenReports)} className="d-flex">
+          <Container
+            onClick={() => setIsOpenReports(!isOpenReports)}
+            className="d-flex"
+          >
             <span className="width-inherit">REPORTS</span>
             <Icon path={isOpenReports ? mdiChevronDown : mdiChevronUp} />
           </Container>
@@ -99,53 +158,72 @@ const CustomerPage: React.FC = () => {
         <Collapse isOpen={isOpenReports}>
           <Container className="pb-2">
             <Nav vertical>
-              {roleId !== CustomerLevels.Member && <>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to={{
-                    pathname: RouteLinks.WIN_LOSS_DETAIL,
-                    state: {
-                      ...generalInformation
-                    }
-                  }}>
-                    {getLevelName(getDownlineLevel(roleId)) + ' Win Loss Detail'}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to={{
-                    pathname: RouteLinks.MATCH_WIN_LOSS_DETAIL,
-                    state: {
-                      ...generalInformation
-                    }
-                  }}>
-                    Match Win Loss Detail
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to={{
-                    pathname: RouteLinks.WIN_LOSS_BY_BETTYPE,
-                    state: {
-                      ...generalInformation
-                    }
-                  }}>
-                    Win Loss By Bet Type
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to={{
-                    pathname: RouteLinks.WIN_LOSS_ANALYSIS,
-                    state: {
-                      ...generalInformation
-                    }
-                  }}>
-                    Win Loss Analysis
-                  </NavLink>
-                </NavItem>
-              </>}
-              {roleId === CustomerLevels.Member && <>
-                <NavItem>
-                  <NavLink tag={RRNavLink} to={RouteLinks.BET_LIST}>Bet List</NavLink>
-                </NavItem>
-              </>}
+              {roleId !== CustomerLevels.Member && (
+                <>
+                  <NavItem>
+                    <NavLink
+                      tag={RRNavLink}
+                      to={{
+                        pathname: RouteLinks.WIN_LOSS_DETAIL,
+                        state: {
+                          ...generalInformation,
+                        },
+                      }}
+                    >
+                      {getLevelName(getDownlineLevel(roleId)) +
+                        ' Win Loss Detail'}
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      tag={RRNavLink}
+                      to={{
+                        pathname: RouteLinks.MATCH_WIN_LOSS_DETAIL,
+                        state: {
+                          ...generalInformation,
+                        },
+                      }}
+                    >
+                      Match Win Loss Detail
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      tag={RRNavLink}
+                      to={{
+                        pathname: RouteLinks.WIN_LOSS_BY_BETTYPE,
+                        state: {
+                          ...generalInformation,
+                        },
+                      }}
+                    >
+                      Win Loss By Bet Type
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      tag={RRNavLink}
+                      to={{
+                        pathname: RouteLinks.WIN_LOSS_ANALYSIS,
+                        state: {
+                          ...generalInformation,
+                        },
+                      }}
+                    >
+                      Win Loss Analysis
+                    </NavLink>
+                  </NavItem>
+                </>
+              )}
+              {roleId === CustomerLevels.Member && (
+                <>
+                  <NavItem>
+                    <NavLink tag={RRNavLink} to={RouteLinks.BET_LIST}>
+                      Bet List
+                    </NavLink>
+                  </NavItem>
+                </>
+              )}
             </Nav>
           </Container>
         </Collapse>

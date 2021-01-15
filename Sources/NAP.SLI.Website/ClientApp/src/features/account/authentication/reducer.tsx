@@ -6,7 +6,8 @@ import { stopCheckin, checkin } from '../../../common/services/connection';
 import { post } from '../../../common/services/http';
 import { Account } from '../../../common/services/storage';
 
-const CryptoJS = require('../../../common/libs/CryptoJS');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const cryptoJS: CryptoJS = require('../../../common/libs/CryptoJS');
 
 type State = {
   account?: Account;
@@ -15,7 +16,9 @@ type State = {
 };
 
 const account = storage.get();
-const initialState: State = account ? { isLoading: false, account, message: '' } : { isLoading: false, message: '' };
+const initialState: State = account
+  ? { isLoading: false, account, message: '' }
+  : { isLoading: false, message: '' };
 
 const slice = createSlice({
   name: 'authentication',
@@ -30,8 +33,8 @@ const slice = createSlice({
     },
     logoutSuccess: (state) => {
       state.account = undefined;
-    }
-  }
+    },
+  },
 });
 
 export const { loginFailure, loginSuccess, logoutSuccess } = slice.actions;
@@ -48,45 +51,55 @@ type LoginData = ResultData & {
   connectionId: string;
 };
 
-export const login = (values: LoginRequest, callback: Func) => async (dispatch: AppDispatch) => {
+export const login = (values: LoginRequest, callback: Func) => async (
+  dispatch: AppDispatch,
+) => {
   try {
     const payload = {
       username: values.username.trim(),
-      password: CryptoJS.CfsEnCode(values.password)
+      password: cryptoJS.CfsEnCode(values.password),
     };
-    const response = await post<LoginData>('/api/authentication/login', payload);
-    const { userId, groupId, token, isSuccess, errMsg, connectionId } = response.data;
+    const response = await post<LoginData>(
+      '/api/authentication/login',
+      payload,
+    );
+    const {
+      userId,
+      groupId,
+      token,
+      isSuccess,
+      errMsg,
+      connectionId,
+    } = response.data;
     if (isSuccess) {
       const account = {
         username: payload.username,
         userId,
         groupId,
         token,
-        connectionId
-      }
+        connectionId,
+      };
       storage.save(account);
       dispatch(loginSuccess({ account }));
     } else {
       dispatch(loginFailure({ message: errMsg }));
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
+  } finally {
     callback();
   }
-}
+};
 
 export const logout = () => (dispatch: AppDispatch) => {
   stopCheckin();
   stopRefreshToken();
   storage.remove();
   dispatch(logoutSuccess());
-}
+};
 
 if (account) {
-  setTimeout(async () => {
+  window.setTimeout(async () => {
     await refreshToken();
     await checkin();
   }, 1);

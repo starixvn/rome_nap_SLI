@@ -4,7 +4,7 @@ import { logout } from '../../features/account/authentication/reducer';
 import storage from './storage';
 import { post } from './http';
 
-let timeout: NodeJS.Timeout | undefined;
+let timeout: number | undefined;
 const timeoutInterval = 10 * 60 * 1000;
 
 export const stopRefreshToken = () => {
@@ -12,13 +12,16 @@ export const stopRefreshToken = () => {
     clearTimeout(timeout);
     timeout = undefined;
   }
-}
+};
 
 export const startRefreshToken = () => {
   if (!timeout) {
-    timeout = setTimeout(async () => await refreshToken(), timeoutInterval);
+    timeout = window.setTimeout(
+      async () => await refreshToken(),
+      timeoutInterval,
+    );
   }
-}
+};
 
 type RefreshTokenData = ResultData & {
   token: string;
@@ -28,9 +31,12 @@ export const refreshToken = async () => {
     const account = storage.get();
     if (account) {
       const payload = {
-        token: account.token
+        token: account.token,
       };
-      const response = await post<RefreshTokenData>('/api/authentication/refresh', payload);
+      const response = await post<RefreshTokenData>(
+        '/api/authentication/refresh',
+        payload,
+      );
       const { isSuccess } = response.data;
       if (isSuccess) {
         Object.assign(account, { token: response.data.token });
@@ -41,8 +47,7 @@ export const refreshToken = async () => {
         store.dispatch(logout());
       }
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
   }
-}
+};

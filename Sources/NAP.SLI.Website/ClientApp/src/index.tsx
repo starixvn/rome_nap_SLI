@@ -10,7 +10,7 @@ import SentryFallback from './common/components/error/SentryFallback';
 const urlParams = new URLSearchParams(window.location.search);
 window.configuration.umToken = urlParams.get('umToken');
 init({
-  dsn: window.configuration.sentryDsn
+  dsn: window.configuration.sentryDsn,
 });
 
 ReactDOM.render(
@@ -19,7 +19,7 @@ ReactDOM.render(
       <App />
     </ErrorBoundary>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 registerServiceWorker();

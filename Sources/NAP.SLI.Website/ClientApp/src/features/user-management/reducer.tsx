@@ -29,14 +29,14 @@ export type QueryProps = {
 const initialState: State = {
   username: '',
   groupId: undefined,
-  users: undefined
+  users: undefined,
 };
 
 type PatchUserAction = {
   data: {
     custId: number;
   };
-}
+};
 
 const slice = createSlice({
   name: 'user-management',
@@ -48,48 +48,51 @@ const slice = createSlice({
       state.groupId = groupId;
       state.users = [];
     },
-    querySuccess: (state, action: PayloadAction<{ users: Array<UserModel> }>) => {
+    querySuccess: (
+      state,
+      action: PayloadAction<{ users: Array<UserModel> }>,
+    ) => {
       const { users } = action.payload;
       state.users = users;
     },
     patchUser: (state, action: PayloadAction<PatchUserAction>) => {
       const { data } = action.payload;
       if (state.users) {
-        const user = state.users.filter(u => u.custId === data.custId)[0];
+        const user = state.users.filter((u) => u.custId === data.custId)[0];
         Object.assign(user, data);
       }
-    }
-  }
+    },
+  },
 });
 
 export const { queryRequest, querySuccess, patchUser } = slice.actions;
 
-export const query = (values?: QueryProps, callback: Func = () => { }) => async (dispatch: AppDispatch) => {
+export const query = (values?: QueryProps, callback?: Func) => async (
+  dispatch: AppDispatch,
+) => {
   try {
     let data = values;
     if (!data) {
-      const rootState: RootState = store.getState();
-      const { username, groupId } = rootState.userManagement;
+      const appState: AppState = store.getState();
+      const { username, groupId } = appState.userManagement;
       data = {
         username,
-        groupId
+        groupId,
       };
     }
 
     const payload = {
       apiKey: 'user-management:query-user',
-      data
+      data,
     };
     dispatch(queryRequest({ ...data }));
     const response = await post<Array<UserModel>>('/simple-api/query', payload);
     const users = response.data;
     dispatch(querySuccess({ users }));
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
-    callback();
+  } finally {
+    callback && callback();
   }
 };
 
@@ -98,10 +101,12 @@ type UpdateUserStatusRequest = {
   closed: boolean;
 };
 
-export const updateUserStatus = (data: UpdateUserStatusRequest) => async (dispatch: AppDispatch) => {
+export const updateUserStatus = (data: UpdateUserStatusRequest) => async (
+  dispatch: AppDispatch,
+) => {
   const payload = {
     apiKey: 'user-management:update-user-status',
-    data
+    data,
   };
 
   const response = await post<ResultData>('/simple-api/command', payload);

@@ -14,7 +14,7 @@ type ConfirmProps = {
 const initialState: State = {
   isOpen: false,
   title: '',
-  message: ''
+  message: '',
 };
 
 const slice = createSlice({
@@ -29,18 +29,24 @@ const slice = createSlice({
     },
     hide: (state) => {
       state.isOpen = false;
-    }
-  }
+    },
+  },
 });
 
 export const { show, hide } = slice.actions;
 
-const defaultOnConfirm: Func = () => { };
-const defaultOnCancel: Func = () => { };
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const defaultOnConfirm: Func = () => {};
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const defaultOnCancel: Func = () => {};
 let _onConfirm = defaultOnConfirm;
 let _onCancel = defaultOnCancel;
 
-export const confirm = (data: ConfirmProps, onConfirm?: Func, onCancel?: Func) => (dispatch: AppDispatch) => {
+export const confirm = (
+  data: ConfirmProps,
+  onConfirm?: Func,
+  onCancel?: Func,
+) => (dispatch: AppDispatch) => {
   _onConfirm = onConfirm || defaultOnConfirm;
   _onCancel = onCancel || defaultOnCancel;
   dispatch(show({ ...data }));

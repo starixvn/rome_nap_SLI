@@ -1,10 +1,10 @@
-import { handleException } from "../utils/ExceptionUtils";
+import { handleException } from '../utils/ExceptionUtils';
 import storage from './storage';
 import { logout } from '../../features/account/authentication/reducer';
 import store from '../../store';
 import { post } from './http';
 
-let timeout: NodeJS.Timeout | undefined;
+let timeout: number | undefined;
 const timeoutInterval = 30 * 1000;
 
 export const stopCheckin = () => {
@@ -12,13 +12,13 @@ export const stopCheckin = () => {
     clearTimeout(timeout);
     timeout = undefined;
   }
-}
+};
 
 export const startCheckin = () => {
   if (!timeout) {
-    timeout = setTimeout(async () => await checkin(), timeoutInterval);
+    timeout = window.setTimeout(async () => await checkin(), timeoutInterval);
   }
-}
+};
 
 export const checkin = async () => {
   try {
@@ -28,19 +28,23 @@ export const checkin = async () => {
     }
 
     const payload = {
-      connectionId: account.connectionId
+      connectionId: account.connectionId,
     };
-    const response = await post<ResultData>('/api/authentication/recheckin', payload);
+    const response = await post<ResultData>(
+      '/api/authentication/recheckin',
+      payload,
+    );
     const { isSuccess } = response.data;
     if (isSuccess) {
       stopCheckin();
       startCheckin();
     } else {
-      alert("You have been logged out because your account has logged into another session. Don't recognize this activity? Please contact your upline for assistance.")
+      alert(
+        "You have been logged out because your account has logged into another session. Don't recognize this activity? Please contact your upline for assistance.",
+      );
       store.dispatch(logout());
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
   }
-}
+};

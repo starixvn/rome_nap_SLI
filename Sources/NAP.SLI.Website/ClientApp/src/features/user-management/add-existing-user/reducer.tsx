@@ -5,8 +5,8 @@ import { handleException } from '../../../common/utils/ExceptionUtils';
 import { post } from '../../../common/services/http';
 
 export type AddExistingUserProps = {
-  username: string,
-  groupId: number
+  username: string;
+  groupId: number;
 };
 
 type State = {
@@ -14,7 +14,7 @@ type State = {
 };
 
 const initialState: State = {
-  isOpen: false
+  isOpen: false,
 };
 const slice = createSlice({
   name: 'add-existing-user',
@@ -22,21 +22,23 @@ const slice = createSlice({
   reducers: {
     toggleModal: (state) => {
       state.isOpen = !state.isOpen;
-    }
-  }
+    },
+  },
 });
 
 export const { toggleModal } = slice.actions;
 
-export const add = (values: AddExistingUserProps, callback: Func) => async (dispatch: AppDispatch) => {
+export const add = (values: AddExistingUserProps, callback: Func) => async (
+  dispatch: AppDispatch,
+) => {
   try {
     const payload = {
       apiKey: 'user-management:add-new-user',
       data: {
         username: values.username,
         groupId: values.groupId,
-        isAddNew: false
-      }
+        isAddNew: false,
+      },
     };
     const response = await post<ResultData>('/simple-api/command', payload);
     const { isSuccess, errMsg } = response.data;
@@ -47,13 +49,11 @@ export const add = (values: AddExistingUserProps, callback: Func) => async (disp
     } else {
       dispatch(error(errMsg));
     }
-  }
-  catch (e) {
+  } catch (e) {
     handleException(e);
-  }
-  finally {
+  } finally {
     callback();
   }
-}
+};
 
 export default slice.reducer;

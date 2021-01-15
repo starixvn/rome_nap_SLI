@@ -2,7 +2,7 @@
 @import './variables.scss';
 
 // Import Bootstrap and its default variables
-@import "~bootstrap/scss/bootstrap.scss";
+@import '~bootstrap/scss/bootstrap.scss';
 
 .wrapper {
   display: flex;
@@ -78,7 +78,7 @@ button {
       background-color: inherit;
 
       .breadcrumb-item {
-        &+.breadcrumb-item::before {
+        & + .breadcrumb-item::before {
           content: '>';
         }
 

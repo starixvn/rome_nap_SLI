@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /// <reference types="react-scripts" />
-import { AppDispatch as _AppDispatch, RootState as _RootState } from './store';
+import { AppDispatch as _AppDispatch, AppState as _AppState } from './store';
 
 declare global {
   interface Window {
@@ -24,7 +25,11 @@ declare global {
   type Func = () => void;
 
   namespace Formik {
-    type SetFieldValueFunc = (field: string, value: any, shouldValidate?: boolean) => void;
+    type SetFieldValueFunc = (
+      field: string,
+      value: any,
+      shouldValidate?: boolean,
+    ) => void;
   }
 
   type Customer = {
@@ -34,5 +39,23 @@ declare global {
   };
 
   type AppDispatch = _AppDispatch;
-  type RootState = _RootState;
+  type AppState = _AppState;
+
+  type KeyValueObject = {
+    [key: string]: any;
+  };
+
+  type GernericKeyValueObject<T> = {
+    [key: string]: T;
+  };
+
+  type InputValue = string | ReadonlyArray<string> | number | undefined;
+
+  type InputKeyValueObject = {
+    [key: string]: InputValue;
+  };
+
+  type CryptoJS = {
+    CfsEnCode: (v: string) => string;
+  };
 }
