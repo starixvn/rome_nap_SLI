@@ -71,18 +71,18 @@ const Filter: React.FC<Props> = (props: Props) => {
   };
 
   const handleFromDateChange = (fromDate: string | Moment) => {
-    var isValidDate = moment(fromDate).isValid();
+    const isValidDate = moment(fromDate).isValid();
     if (isValidDate) {
       setFromMinDate(moment(fromDate));
     }
-  }
+  };
 
   const handleToDateChange = (toDate: string | Moment) => {
-    var isValidDate = moment(toDate).isValid();
+    const isValidDate = moment(toDate).isValid();
     if (isValidDate) {
       setToMaxdate(moment(toDate));
     }
-  }
+  };
 
   return (
     <Formik
@@ -116,7 +116,6 @@ const Filter: React.FC<Props> = (props: Props) => {
                   name="fromDate"
                   minDate={minDate}
                   maxDate={toMaxDate}
-                  isReport={true}
                   onChange={handleFromDateChange}
                 />
               </FormGroup>
@@ -128,7 +127,6 @@ const Filter: React.FC<Props> = (props: Props) => {
                   name="toDate"
                   minDate={fromMinDate}
                   maxDate={maxDate}
-                  isReport={true}
                   onChange={handleToDateChange}
                 />
               </FormGroup>

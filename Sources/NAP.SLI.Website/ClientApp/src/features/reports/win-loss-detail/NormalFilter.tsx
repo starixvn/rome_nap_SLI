@@ -123,7 +123,6 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
                   initialValue={today}
                   minDate={minDate}
                   maxDate={toMaxDate}
-                  isReport={true}
                   onChange={handleFromDateChange}
                 />
               </FormGroup>
@@ -135,7 +134,6 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
                   initialValue={today}
                   minDate={fromMinDate}
                   maxDate={maxDate}
-                  isReport={true}
                   onChange={handleToDateChange}
                 />
               </FormGroup>

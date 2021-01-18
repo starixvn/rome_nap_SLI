@@ -9,7 +9,6 @@ type Props = DatetimepickerProps & {
   minDate: Moment;
   maxDate: Moment;
   disabled: boolean;
-  isReport: boolean;
 };
 
 const FormikDatePicker: React.FC<Props> = (props: Props) => {
