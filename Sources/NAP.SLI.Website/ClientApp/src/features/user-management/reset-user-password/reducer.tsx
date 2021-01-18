@@ -3,9 +3,7 @@ import { success, error } from '../../../common/components/toast/reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import { post } from '../../../common/services/http';
 import { UserModel } from '../reducer';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const cryptoJS: CryptoJS = require('../../../common/libs/CryptoJS');
+import { CryptoJS } from '../../../common/utils/FunctionUtils';
 
 type ResetPasswordProps = {
   custId: number;
@@ -42,7 +40,7 @@ export const resetPassword = (
       apiKey: 'user-management:update-user',
       data: {
         custId: values.custId,
-        userPwd: cryptoJS.CfsEnCode(values.password),
+        userPwd: CryptoJS.CfsEnCode(values.password),
       },
     };
     const response = await post<ResultData>('/simple-api/command', payload);

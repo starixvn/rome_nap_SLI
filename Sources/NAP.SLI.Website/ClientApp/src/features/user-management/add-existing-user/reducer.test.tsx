@@ -9,10 +9,8 @@ const initialState = {
   isOpen: false,
 };
 
-describe('reducer', () => {
-  test('toggleModal', () => {
-    const state = reducer(initialState, toggleModal());
-    console.log(state);
-    toggleModal();
-  });
+test('toggleModal', () => {
+  const state = reducer(initialState, toggleModal());
+  console.log(state);
+  toggleModal();
 });

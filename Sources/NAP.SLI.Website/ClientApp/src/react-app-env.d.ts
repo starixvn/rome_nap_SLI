@@ -54,8 +54,4 @@ declare global {
   type InputKeyValueObject = {
     [key: string]: InputValue;
   };
-
-  type CryptoJS = {
-    CfsEnCode: (v: string) => string;
-  };
 }

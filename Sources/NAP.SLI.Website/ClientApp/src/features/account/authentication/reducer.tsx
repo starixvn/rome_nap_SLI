@@ -5,9 +5,7 @@ import { stopRefreshToken, refreshToken } from '../../../common/services/token';
 import { stopCheckin, checkin } from '../../../common/services/connection';
 import { post } from '../../../common/services/http';
 import { Account } from '../../../common/services/storage';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const cryptoJS: CryptoJS = require('../../../common/libs/CryptoJS');
+import { CryptoJS } from '../../../common/utils/FunctionUtils';
 
 type State = {
   account?: Account;
@@ -57,7 +55,7 @@ export const login = (values: LoginRequest, callback: Func) => async (
   try {
     const payload = {
       username: values.username.trim(),
-      password: cryptoJS.CfsEnCode(values.password),
+      password: CryptoJS.CfsEnCode(values.password),
     };
     const response = await post<LoginData>(
       '/api/authentication/login',

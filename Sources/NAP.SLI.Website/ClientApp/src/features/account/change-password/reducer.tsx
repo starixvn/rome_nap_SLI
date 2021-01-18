@@ -2,9 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { success, error } from '../../../common/components/toast/reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import { post } from '../../../common/services/http';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const cryptoJS: CryptoJS = require('../../../common/libs/CryptoJS');
+import { CryptoJS } from '../../../common/utils/FunctionUtils';
 
 type ChangePasswordProps = {
   oldPassword: string;
@@ -34,8 +32,8 @@ export const changePassword = (
     const payload = {
       apiKey: 'account:change-password',
       data: {
-        oldPassword: cryptoJS.CfsEnCode(values.oldPassword),
-        newPassword: cryptoJS.CfsEnCode(values.newPassword),
+        oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
+        newPassword: CryptoJS.CfsEnCode(values.newPassword),
       },
     };
     const response = await post<ResultData>('/simple-api/command', payload);

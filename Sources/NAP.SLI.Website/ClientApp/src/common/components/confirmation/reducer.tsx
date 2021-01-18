@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { noop } from '../../utils/FunctionUtils';
 
 type State = {
   isOpen: boolean;
@@ -35,10 +36,8 @@ const slice = createSlice({
 
 export const { show, hide } = slice.actions;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const defaultOnConfirm: Func = () => {};
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const defaultOnCancel: Func = () => {};
+const defaultOnConfirm: Func = noop;
+const defaultOnCancel: Func = noop;
 let _onConfirm = defaultOnConfirm;
 let _onCancel = defaultOnCancel;
 

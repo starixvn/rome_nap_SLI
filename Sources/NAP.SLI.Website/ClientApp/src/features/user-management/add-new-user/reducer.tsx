@@ -3,9 +3,7 @@ import { success, error } from '../../../common/components/toast/reducer';
 import { query } from '../reducer';
 import { handleException } from '../../../common/utils/ExceptionUtils';
 import { post } from '../../../common/services/http';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const cryptoJS: CryptoJS = require('../../../common/libs/CryptoJS');
+import { CryptoJS } from '../../../common/utils/FunctionUtils';
 
 export type AddNewUserProps = {
   username: string;
@@ -42,7 +40,7 @@ export const add = (values: AddNewUserProps, callback: Func) => async (
       apiKey: 'user-management:add-new-user',
       data: {
         username: values.username,
-        userPwd: cryptoJS.CfsEnCode(values.password),
+        userPwd: CryptoJS.CfsEnCode(values.password),
         firstName: values.firstName,
         lastName: values.lastName,
         groupId: values.groupId,
