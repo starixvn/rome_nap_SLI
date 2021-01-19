@@ -68,6 +68,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
 
         private bool IsMatch(Mapper<SuperRecord> mapper, SuperRecord superRecord, bool isBody)
         {
+            var a = (decimal)mapper.Mappings[Column.B](superRecord);
             var result = (decimal)mapper.Mappings[Column.B](superRecord) == superRecord.BetCount &&
                 (decimal)mapper.Mappings[Column.C](superRecord) == superRecord.Turnover &&
                 (decimal)mapper.Mappings[Column.D](superRecord) == superRecord.MemberWinLoss &&

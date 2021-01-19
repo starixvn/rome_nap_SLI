@@ -1,5 +1,5 @@
 namespace NAP.SLI.WinLossAnalysis.Services
-{ 
+{
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -14,32 +14,46 @@ namespace NAP.SLI.WinLossAnalysis.Services
     using ONEbook.SpreadSheets;
     using ONEbook.SpreadSheets.NPOI;
 
-    public interface IWinLossAnalysisService {
+    public interface IWinLossAnalysisService
+    {
         Task<QueryModel> Query(WinLossAnalysisQueryRequest request);
-        
+
+        Task<byte[]> ExcelViewSuper(WinLossAnalysisExcelRequest request);
+
         Task<byte[]> ExcelViewMaster(WinLossAnalysisExcelRequest request);
 
         Task<byte[]> ExcelViewAgent(WinLossAnalysisExcelRequest request);
-
-        Task<byte[]> ExcelViewMember(WinLossAnalysisExcelRequest request);
     }
 
-    public class WinLossAnalysisService : IWinLossAnalysisService {
+    public class WinLossAnalysisService : IWinLossAnalysisService
+    {
         private readonly IReportService reportService;
         private readonly IDynamicRepositoryEx dynamicRepositoryEx;
         private readonly IAppSettings appSettings;
         private readonly ISharedLocalizer sharedLocalizer;
+        private readonly INoLocalizer noLocalizer;
+        private readonly INpoiWorkbookFactory npoiWorkbookFactory;
 
-        public WinLossAnalysisService(IReportService reportService, IDynamicRepositoryEx dynamicRepositoryEx, IAppSettings appSettings, ISharedLocalizer sharedLocalizer){
+        public WinLossAnalysisService(
+            IReportService reportService,
+            IDynamicRepositoryEx dynamicRepositoryEx,
+            IAppSettings appSettings,
+            ISharedLocalizer sharedLocalizer,
+            INoLocalizer noLocalizer,
+            INpoiWorkbookFactory npoiWorkbookFactory)
+        {
             this.reportService = reportService;
             this.dynamicRepositoryEx = dynamicRepositoryEx;
             this.appSettings = appSettings;
             this.sharedLocalizer = sharedLocalizer;
+            this.npoiWorkbookFactory = npoiWorkbookFactory;
+            this.noLocalizer = noLocalizer;
         }
 
-        public async Task<QueryModel> Query(WinLossAnalysisQueryRequest request) {
+        public async Task<QueryModel> Query(WinLossAnalysisQueryRequest request)
+        {
             var balanceUpDayModel = await reportService.GetBalanceUpDay().ConfigureAwait(false);
-            var criteria = new QueryWinLossAnalysisCriteria(balanceUpDayModel)
+            var criteria = new WinLossAnalysisQueryCriteria(balanceUpDayModel)
             {
                 CustId = request.CustId,
                 RoleId = request.RoleId,
@@ -50,14 +64,14 @@ namespace NAP.SLI.WinLossAnalysis.Services
             return await Query(criteria).ConfigureAwait(false);
         }
 
-         public async Task<byte[]> ExcelViewAgent(WinLossAnalysisExcelRequest request)
+        public async Task<byte[]> ExcelViewAgent(WinLossAnalysisExcelRequest request)
         {
             var agentData = await Query(request).ConfigureAwait(false);
-            var workbook = new NpoiWorkbook<AgentAnalysisModel>();
-            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossDetail", "Member.xls");
+            var workbook = npoiWorkbookFactory.Create<AgentAnalysisModel>();
+            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossAnalysis", "Member.xls");
             workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
             workbook.Title(request.GetExcelTitle());
-            workbook.Header(key => key);
+            workbook.Header(noLocalizer.Localise);
             workbook.Body(agentData.Records as IEnumerable<AgentAnalysisModel>, CreateViewAgentMapper(true));
             workbook.Footer(agentData.Total as AgentAnalysisModel, CreateViewAgentMapper());
             workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
@@ -71,7 +85,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
                             .Map(Column.C, x => x.Turnover)
                             .Map(Column.D, x => x.MemberWinLoss)
                             .Map(Column.E, x => x.AgentWinLoss)
-                            .Map(Column.F, x => x.MemberWinLoss + x.AgentWinLoss);
+                            .Map(Column.F, x => -x.MemberWinLoss + x.AgentWinLoss);
             if (isBody)
             {
                 mapper.Map(Column.A, x => x.RollupKey);
@@ -83,11 +97,11 @@ namespace NAP.SLI.WinLossAnalysis.Services
         public async Task<byte[]> ExcelViewMaster(WinLossAnalysisExcelRequest request)
         {
             var agentData = await Query(request).ConfigureAwait(false);
-            var workbook = new NpoiWorkbook<MasterAnalysisModel>();
+            var workbook = npoiWorkbookFactory.Create<MasterAnalysisModel>();
             var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossAnalysis", "Agent.xls");
             workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
             workbook.Title(request.GetExcelTitle());
-            workbook.Header(key => key);
+            workbook.Header(noLocalizer.Localise);
             workbook.Body(agentData.Records as IEnumerable<MasterAnalysisModel>, CreateViewMasterMapper(true));
             workbook.Footer(agentData.Total as MasterAnalysisModel, CreateViewMasterMapper());
             workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
@@ -102,7 +116,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
                             .Map(Column.D, x => x.MemberWinLoss)
                             .Map(Column.E, x => x.AgentWinLoss)
                             .Map(Column.F, x => x.MasterWinLoss)
-                            .Map(Column.G, x => x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss);
+                            .Map(Column.G, x => -x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss);
             if (isBody)
             {
                 mapper.Map(Column.A, x => x.RollupKey);
@@ -111,14 +125,14 @@ namespace NAP.SLI.WinLossAnalysis.Services
             return mapper;
         }
 
-        public async Task<byte[]> ExcelViewMember(WinLossAnalysisExcelRequest request)
+        public async Task<byte[]> ExcelViewSuper(WinLossAnalysisExcelRequest request)
         {
             var agentData = await Query(request).ConfigureAwait(false);
-            var workbook = new NpoiWorkbook<SuperAnalysisModel>();
+            var workbook = npoiWorkbookFactory.Create<SuperAnalysisModel>();
             var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossAnalysis", "Master.xls");
             workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
             workbook.Title(request.GetExcelTitle());
-            workbook.Header(key => key);
+            workbook.Header(noLocalizer.Localise);
             workbook.Body(agentData.Records as IEnumerable<SuperAnalysisModel>, CreateViewSuperMapper(true));
             workbook.Footer(agentData.Total as SuperAnalysisModel, CreateViewSuperMapper());
             workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
@@ -131,10 +145,10 @@ namespace NAP.SLI.WinLossAnalysis.Services
                             .Map(Column.B, x => x.BetCount)
                             .Map(Column.C, x => x.Turnover)
                             .Map(Column.D, x => x.MemberWinLoss)
-                            .Map(Column.G, x => x.AgentWinLoss)
-                            .Map(Column.H, x => x.MasterWinLoss)
-                            .Map(Column.I, x => x.SuperWinLoss)
-                            .Map(Column.J, x => x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss + x.SuperWinLoss);
+                            .Map(Column.E, x => x.AgentWinLoss)
+                            .Map(Column.F, x => x.MasterWinLoss)
+                            .Map(Column.G, x => x.SuperWinLoss)
+                            .Map(Column.H, x => -x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss + x.SuperWinLoss);
             if (isBody)
             {
                 mapper.Map(Column.A, x => x.RollupKey);
@@ -146,7 +160,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
         private async Task<QueryModel> Query(WinLossAnalysisExcelRequest request)
         {
             var balanceUpDayModel = await reportService.GetBalanceUpDay().ConfigureAwait(false);
-            var criteria = new QueryWinLossAnalysisCriteria(balanceUpDayModel)
+            var criteria = new WinLossAnalysisQueryCriteria(balanceUpDayModel)
             {
                 CustId = request.CustId,
                 RoleId = request.RoleId,
@@ -157,7 +171,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
             return await Query(criteria).ConfigureAwait(false);
         }
 
-        private async Task<QueryModel> Query(QueryWinLossAnalysisCriteria criteria)
+        private async Task<QueryModel> Query(WinLossAnalysisQueryCriteria criteria)
         {
             (IEnumerable<object> firstResultSet, IEnumerable<object> secondResultSet) result;
             switch (criteria.RoleId)
@@ -166,10 +180,10 @@ namespace NAP.SLI.WinLossAnalysis.Services
                     result = await dynamicRepositoryEx.FetchMultipleAsync<SuperAnalysisModel, SuperAnalysisModel>(criteria).ConfigureAwait(false);
                     break;
                 case (int)CustomerLevels.Master:
-                    result = await dynamicRepositoryEx.FetchMultipleAsync<MasterAnalysisModel, SuperAnalysisModel>(criteria).ConfigureAwait(false);
+                    result = await dynamicRepositoryEx.FetchMultipleAsync<MasterAnalysisModel, MasterAnalysisModel>(criteria).ConfigureAwait(false);
                     break;
                 case (int)CustomerLevels.Agent:
-                    result = await dynamicRepositoryEx.FetchMultipleAsync<AgentAnalysisModel, SuperAnalysisModel>(criteria).ConfigureAwait(false);
+                    result = await dynamicRepositoryEx.FetchMultipleAsync<AgentAnalysisModel, AgentAnalysisModel>(criteria).ConfigureAwait(false);
                     break;
                 default:
                     throw new NotImplementedException();

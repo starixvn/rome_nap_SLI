@@ -21,9 +21,9 @@ namespace NAP.SLI.WinLossAnalysis.Handlers
         {
             return request.RoleId switch
             {
-                (int)CustomerLevels.Super => await service.ExcelViewMaster(request).ConfigureAwait(false),
-                (int)CustomerLevels.Master => await service.ExcelViewAgent(request).ConfigureAwait(false),
-                (int)CustomerLevels.Agent => await service.ExcelViewMember(request).ConfigureAwait(false),
+                (int)CustomerLevels.Super => await service.ExcelViewSuper(request).ConfigureAwait(false),
+                (int)CustomerLevels.Master => await service.ExcelViewMaster(request).ConfigureAwait(false),
+                (int)CustomerLevels.Agent => await service.ExcelViewAgent(request).ConfigureAwait(false),
                 _ => throw new NotImplementedException()
             };
         }

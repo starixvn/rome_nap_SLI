@@ -5,11 +5,11 @@ namespace NAP.SLI.WinLossAnalysis.Criteria
     using Fanex.Data.Repository;
     using NAP.SLI.Common.Models;
 
-    public class QueryWinLossAnalysisCriteria : CriteriaBase
+    public class WinLossAnalysisQueryCriteria : CriteriaBase
     {
         private readonly BalanceUpDayModel balanceUpDayModel;
 
-        public QueryWinLossAnalysisCriteria(BalanceUpDayModel balanceUpDayModel)
+        public WinLossAnalysisQueryCriteria(BalanceUpDayModel balanceUpDayModel)
         {
             this.balanceUpDayModel = balanceUpDayModel;
         }
