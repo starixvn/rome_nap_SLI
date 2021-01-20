@@ -5,6 +5,7 @@ import {
   Reducer,
   CombinedState,
   Action,
+  ThunkAction,
 } from '@reduxjs/toolkit';
 import confirmationReducer from './common/components/confirmation/reducer';
 import toastReducer from './common/components/toast/reducer';
@@ -42,8 +43,12 @@ const appReducer = combineReducers({
   um: umReducer,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const rootReducer: Reducer<CombinedState<any>, Action> = (state, action) => {
+export type AppState = ReturnType<typeof appReducer>;
+
+const rootReducer: Reducer<CombinedState<AppState>, Action> = (
+  state,
+  action,
+) => {
   if (action.type === logoutSuccess.type) {
     return appReducer(undefined, action);
   }
@@ -56,11 +61,7 @@ const store = configureStore({
   middleware,
 });
 
-export type AppState = ReturnType<typeof appReducer> & {
-  custId: number;
-  roleId: number;
-  username: string;
-};
 export type AppDispatch = typeof store.dispatch;
+export type AppThunk = ThunkAction<void, AppState, unknown, Action<string>>;
 
 export default store;

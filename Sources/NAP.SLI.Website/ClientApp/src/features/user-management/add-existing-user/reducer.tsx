@@ -16,7 +16,7 @@ type State = {
 const initialState: State = {
   isOpen: false,
 };
-const slice = createSlice({
+export const slice = createSlice({
   name: 'add-existing-user',
   initialState,
   reducers: {
@@ -28,9 +28,10 @@ const slice = createSlice({
 
 export const { toggleModal } = slice.actions;
 
-export const add = (values: AddExistingUserProps, callback: Func) => async (
-  dispatch: AppDispatch,
-) => {
+export const add = (
+  values: AddExistingUserProps,
+  callback: Func,
+): AppThunk => async (dispatch: AppDispatch) => {
   try {
     const payload = {
       apiKey: 'user-management:add-new-user',
@@ -41,15 +42,23 @@ export const add = (values: AddExistingUserProps, callback: Func) => async (
       },
     };
     const response = await post<ResultData>('/simple-api/command', payload);
+    console.log(response);
     const { isSuccess, errMsg } = response.data;
     if (isSuccess) {
+      console.log('success1');
       dispatch(success('Added successfully'));
+      console.log('success2');
+      console.log('toggleModal1');
       dispatch(toggleModal());
+      console.log('toggleModal2');
+      console.log('query1');
       dispatch(query());
+      console.log('query2');
     } else {
       dispatch(error(errMsg));
     }
   } catch (e) {
+    console.log('handleException');
     handleException(e);
   } finally {
     callback();

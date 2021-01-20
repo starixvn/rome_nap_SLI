@@ -96,12 +96,12 @@ export const query = (values?: QueryProps, callback?: Func) => async (
   }
 };
 
-type UpdateUserStatusRequest = {
+type UpdateUserStatusProps = {
   custId: number;
   closed: boolean;
 };
 
-export const updateUserStatus = (data: UpdateUserStatusRequest) => async (
+export const updateUserStatus = (data: UpdateUserStatusProps) => async (
   dispatch: AppDispatch,
 ) => {
   const payload = {

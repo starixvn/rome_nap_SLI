@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /// <reference types="react-scripts" />
-import { AppDispatch as _AppDispatch, AppState as _AppState } from './store';
+import {
+  AppDispatch as _AppDispatch,
+  AppState as _AppState,
+  AppThunk as _AppThunk,
+} from './store';
 
 declare global {
   interface Window {
@@ -40,6 +44,7 @@ declare global {
 
   type AppDispatch = _AppDispatch;
   type AppState = _AppState;
+  type AppThunk = _AppThunk;
 
   type KeyValueObject = {
     [key: string]: any;
