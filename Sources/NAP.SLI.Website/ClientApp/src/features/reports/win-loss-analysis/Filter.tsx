@@ -41,8 +41,10 @@ const Filter: React.FC<Props> = (props: Props) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
   const today = getToday();
-  const [fromMinDate, setFromMinDate] = useState(today);
-  const [toMaxDate, setToMaxdate] = useState(today);
+  const [fromDate, setFromDate] = useState(today);
+  const [toDate, setToDate] = useState(today);
+  const [fromMinDate, setFromMinDate] = useState(minDate);
+  const [toMaxDate, setToMaxdate] = useState(maxDate);
 
   useEffect(() => {
     if (!formikRef.current) {
@@ -70,25 +72,37 @@ const Filter: React.FC<Props> = (props: Props) => {
     }
   };
 
-  const handleFromDateChange = (fromDate: string | Moment) => {
-    const isValidDate = moment(fromDate).isValid();
-    if (isValidDate) {
-      setFromMinDate(moment(fromDate));
+  const handleFromDateChange = (
+    selectedDate: string | Moment,
+    setFieldValue: Formik.SetFieldValueFunc,
+  ) => {
+    const selectedFromDate = moment(selectedDate);
+    if (selectedFromDate.isAfter(toDate)) {
+      setToDate(selectedFromDate);
+      setFieldValue('toDate', selectedFromDate);
     }
+
+    setFromMinDate(selectedFromDate);
   };
 
-  const handleToDateChange = (toDate: string | Moment) => {
-    const isValidDate = moment(toDate).isValid();
-    if (isValidDate) {
-      setToMaxdate(moment(toDate));
+  const handleToDateChange = (
+    selectedDate: string | Moment,
+    setFieldValue: Formik.SetFieldValueFunc,
+  ) => {
+    const selectedToDate = moment(selectedDate);
+    if (selectedToDate.isBefore(fromDate)) {
+      setFromDate(selectedToDate);
+      setFieldValue('fromDate', selectedToDate);
     }
+
+    setToMaxdate(selectedToDate);
   };
 
   return (
     <Formik
       initialValues={{
-        fromDate: getToday(),
-        toDate: getToday(),
+        fromDate: today,
+        toDate: today,
       }}
       onSubmit={(values, { setSubmitting }) => {
         dispatch(
@@ -111,23 +125,25 @@ const Filter: React.FC<Props> = (props: Props) => {
               <FormGroup className="mr-5">
                 <Label className="mr-2">From</Label>
                 <FormikDatePicker
-                  initialValue={today}
+                  value={fromDate}
                   disabled={isSubmitting}
                   name="fromDate"
                   minDate={minDate}
                   maxDate={toMaxDate}
-                  onChange={handleFromDateChange}
+                  onChange={(value) =>
+                    handleFromDateChange(value, setFieldValue)
+                  }
                 />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Label className="mr-2">To</Label>
                 <FormikDatePicker
-                  initialValue={today}
                   disabled={isSubmitting}
+                  value={toDate}
                   name="toDate"
                   minDate={fromMinDate}
                   maxDate={maxDate}
-                  onChange={handleToDateChange}
+                  onChange={(value) => handleToDateChange(value, setFieldValue)}
                 />
               </FormGroup>
               <FormGroup className="mr-5">

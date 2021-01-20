@@ -4,7 +4,7 @@ import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { useLocation } from 'react-router-dom';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
-import { minDate, getToday } from '../../../common/utils/DateUtils';
+import { minDate, maxDate } from '../../../common/utils/DateUtils';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getDownlineLevel,
@@ -31,7 +31,6 @@ const WinLossDetailPage: React.FC = () => {
     fromDate,
     toDate,
   } = useSelector((state: AppState) => state.winLossDetail);
-  const maxDate = getToday();
 
   useEffect(() => {
     if (!location.state) {

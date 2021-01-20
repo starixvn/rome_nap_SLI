@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { minDate, getToday } from '../../../common/utils/DateUtils';
+import { minDate, maxDate } from '../../../common/utils/DateUtils';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import Filter from './Filter';
 import { ReportType, selectCustomer } from './reducer';
@@ -13,7 +13,6 @@ const WinLossAnalysisPage: React.FC = () => {
   const dispatch = useDispatch();
   const state = location.state;
   const { data } = useSelector((state: AppState) => state.winLossAnalysis);
-  const maxDate = getToday();
 
   useEffect(() => {
     if (!location.state) {

@@ -39,8 +39,10 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
     (state: AppState) => state.winLossDetail,
   );
   const today = getToday();
-  const [fromMinDate, setFromMinDate] = useState(today);
-  const [toMaxDate, setToMaxdate] = useState(today);
+  const [fromDate, setFromDate] = useState(today);
+  const [toDate, setToDate] = useState(today);
+  const [fromMinDate, setFromMinDate] = useState(minDate);
+  const [toMaxDate, setToMaxdate] = useState(maxDate);
 
   if (!customer) {
     return <></>;
@@ -73,17 +75,31 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
     }
   };
 
-  const handleFromDateChange = (fromDate: string | Moment) => {
-    if (moment(fromDate).isValid()) {
-      setFromMinDate(moment(fromDate));
+  const handleFromDateChange = (
+    selectedDate: string | Moment,
+    setFieldValue: Formik.SetFieldValueFunc,
+  ) => {
+    const selectedFromDate = moment(selectedDate);
+    if (selectedFromDate.isAfter(toDate)) {
+      setToDate(selectedFromDate);
+      setFieldValue('toDate', selectedFromDate);
     }
+
+    setToMaxdate(selectedFromDate);
     setDropdownIndex(ReportDateRanges.length - 1);
   };
 
-  const handleToDateChange = (toDate: string | Moment) => {
-    if (moment(toDate).isValid()) {
-      setToMaxdate(moment(toDate));
+  const handleToDateChange = (
+    selectedDate: string | Moment,
+    setFieldValue: Formik.SetFieldValueFunc,
+  ) => {
+    const selectedToDate = moment(selectedDate);
+    if (selectedToDate.isBefore(fromDate)) {
+      setFromDate(selectedToDate);
+      setFieldValue('fromDate', selectedToDate);
     }
+
+    setToMaxdate(selectedToDate);
     setDropdownIndex(ReportDateRanges.length - 1);
   };
 
@@ -91,8 +107,8 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
     <Formik
       innerRef={formikRef}
       initialValues={{
-        fromDate: getToday(),
-        toDate: getToday(),
+        fromDate: today,
+        toDate: today,
       }}
       onSubmit={(values, { setSubmitting }) => {
         dispatch(
@@ -120,10 +136,11 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
                 <FormikDatePicker
                   disabled={isSubmitting}
                   name="fromDate"
-                  initialValue={today}
                   minDate={minDate}
                   maxDate={toMaxDate}
-                  onChange={handleFromDateChange}
+                  onChange={(value) =>
+                    handleFromDateChange(value, setFieldValue)
+                  }
                 />
               </FormGroup>
               <FormGroup className="mr-5">
@@ -131,10 +148,9 @@ const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
                 <FormikDatePicker
                   disabled={isSubmitting}
                   name="toDate"
-                  initialValue={today}
                   minDate={fromMinDate}
                   maxDate={maxDate}
-                  onChange={handleToDateChange}
+                  onChange={(value) => handleToDateChange(value, setFieldValue)}
                 />
               </FormGroup>
               <FormGroup className="mr-5">
