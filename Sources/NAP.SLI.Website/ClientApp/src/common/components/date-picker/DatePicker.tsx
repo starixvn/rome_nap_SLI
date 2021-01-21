@@ -13,16 +13,15 @@ import {
 import { Moment } from 'moment';
 import { maxDate, minDate } from '../../utils/DateUtils';
 
-type Props = DatetimepickerProps & {
-  minDate: Moment;
-  maxDate: Moment;
-  disabled: boolean;
-};
-
 const defaultProps = {
   minDate,
   maxDate,
 };
+
+type Props = DatetimepickerProps &
+  typeof defaultProps & {
+    disabled: boolean;
+  };
 
 const DatePicker = (props: Props) => {
   const [value, setValue] = useState(props.value);

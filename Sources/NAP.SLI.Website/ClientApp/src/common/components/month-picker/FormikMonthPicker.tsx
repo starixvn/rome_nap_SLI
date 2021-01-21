@@ -1,30 +1,5 @@
-import React from 'react';
-import { useField, useFormikContext } from 'formik';
 import MonthPicker from './MonthPicker';
-import { Moment } from 'moment';
-import { DatetimepickerProps } from 'react-datetime';
+import { withDatetime } from '../../utils/FormikUtils';
 
-type Props = DatetimepickerProps & {
-  name: string;
-  minDate: Moment;
-  maxDate: Moment;
-  disabled: boolean;
-};
-
-const FormikMonthPicker = (props: Props) => {
-  const { setFieldValue } = useFormikContext();
-  const [field] = useField(props.name);
-
-  return (
-    <MonthPicker
-      {...field}
-      {...props}
-      onChange={(value) => {
-        setFieldValue(field.name, value);
-        props.onChange && props.onChange(value);
-      }}
-    />
-  );
-};
-
+const FormikMonthPicker = withDatetime(MonthPicker);
 export default FormikMonthPicker;
