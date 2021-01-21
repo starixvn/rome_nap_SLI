@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   return <h1>Welcome to U3 Site</h1>;
 };
 

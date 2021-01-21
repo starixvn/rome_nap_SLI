@@ -20,7 +20,7 @@ type Props = {
   maxDate: Moment;
 };
 
-const HistoryFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
+const HistoryFilter = ({ minDate, maxDate }: Props) => {
   const formikRef = createRef<FormikProps<FormikValues>>();
   const dispatch = useDispatch();
   const { customer, pageIndex, pageSize, isHistory } = useSelector(

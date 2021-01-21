@@ -18,7 +18,7 @@ type Props = DatetimepickerProps & {
   disabled: boolean;
 };
 
-const MonthPicker: React.FC<Props> = (props: Props) => {
+const MonthPicker = (props: Props) => {
   const { minDate, maxDate, disabled } = props;
   const [value, setValue] = useState(props.value);
 

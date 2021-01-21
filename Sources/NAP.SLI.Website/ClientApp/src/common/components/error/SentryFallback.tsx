@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SentryFallback: React.FC = () => {
+const SentryFallback = () => {
   return <div>An error has occurred</div>;
 };
 

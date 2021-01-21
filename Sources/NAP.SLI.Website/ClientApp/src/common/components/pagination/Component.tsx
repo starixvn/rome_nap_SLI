@@ -20,7 +20,7 @@ type Props = {
   total: number;
 };
 
-const PaginationComponent: React.FC<Props> = (props: Props) => {
+const PaginationComponent = (props: Props) => {
   const isMounted = React.useRef(false);
   const { pageSize, pageSizes, pageIndex, onPageChange, total } = props;
   const pageSizeOptions = generateSelectOptionsFromList(

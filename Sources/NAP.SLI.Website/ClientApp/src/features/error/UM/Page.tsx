@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 
-const UMPage: React.FC = () => {
+const UMPage = () => {
   const history = useHistory();
   const { from, to, isUnderMaintenanceTime } = useSelector(
     (state: AppState) => state.um,

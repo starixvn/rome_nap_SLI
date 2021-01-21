@@ -7,7 +7,7 @@ import Filter from './Filter';
 import { ReportType, selectCustomer } from './reducer';
 import WinLossAnalysisDetails from './Table';
 
-const WinLossAnalysisPage: React.FC = () => {
+const WinLossAnalysisPage = () => {
   const history = useHistory();
   const location = useLocation<Customer>();
   const dispatch = useDispatch();

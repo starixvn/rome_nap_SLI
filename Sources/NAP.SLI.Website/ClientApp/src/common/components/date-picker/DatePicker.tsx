@@ -24,7 +24,7 @@ const defaultProps = {
   maxDate,
 };
 
-const DatePicker: React.FC<Props> = (props: Props) => {
+const DatePicker = (props: Props) => {
   const [value, setValue] = useState(props.value);
   const { minDate, maxDate, disabled } = props;
 

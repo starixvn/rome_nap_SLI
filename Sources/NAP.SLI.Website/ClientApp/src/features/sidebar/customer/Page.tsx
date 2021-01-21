@@ -22,7 +22,7 @@ import {
 } from '../../../common/utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
 
-const CustomerPage: React.FC = () => {
+const CustomerPage = () => {
   const dispatch = useDispatch();
   const { customer } = useSelector((state: AppState) => state.sidebar);
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);

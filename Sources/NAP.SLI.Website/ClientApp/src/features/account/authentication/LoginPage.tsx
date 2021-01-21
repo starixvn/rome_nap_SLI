@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
 });
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { message, account } = useSelector(

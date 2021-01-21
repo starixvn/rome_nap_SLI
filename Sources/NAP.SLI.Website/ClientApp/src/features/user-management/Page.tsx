@@ -31,7 +31,7 @@ import FormikSelect from '../../common/components/select/FormikSelect';
 import { confirm } from '../../common/components/confirmation/reducer';
 import { formatDateTime } from '../../common/utils/DateUtils';
 
-const UserManagementPage: React.FC = () => {
+const UserManagementPage = () => {
   const dispatch = useDispatch();
   const formikRef = useRef<FormikProps<QueryProps>>(null);
   const { users, username, groupId } = useSelector(

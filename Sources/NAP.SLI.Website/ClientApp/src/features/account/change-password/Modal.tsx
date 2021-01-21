@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
     .required('Confirm Password is required'),
 });
 
-const ChangePasswordModal: React.FC = () => {
+const ChangePasswordModal = () => {
   const dispatch = useDispatch();
   const { account } = useSelector((state: AppState) => state.authentication);
   const { isOpen } = useSelector((state: AppState) => state.changePassword);

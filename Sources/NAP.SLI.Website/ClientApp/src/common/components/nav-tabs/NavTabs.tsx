@@ -14,7 +14,7 @@ type TabProps = {
   component: React.FC;
 };
 
-const NavTabs: React.FC<Props> = (props: Props) => {
+const NavTabs = (props: Props) => {
   const [activeTab, setActiveTab] = useState(props.activeIndex);
 
   return (

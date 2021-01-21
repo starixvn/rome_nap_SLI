@@ -30,7 +30,7 @@ type Props = {
   maxDate: Moment;
 };
 
-const NormalFilter: React.FC<Props> = ({ minDate, maxDate }: Props) => {
+const NormalFilter = ({ minDate, maxDate }: Props) => {
   const formikRef = createRef<FormikProps<FormikValues>>();
   const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);

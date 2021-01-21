@@ -11,7 +11,7 @@ type Props = DatetimepickerProps & {
   disabled: boolean;
 };
 
-const FormikDatePicker: React.FC<Props> = (props: Props) => {
+const FormikDatePicker = (props: Props) => {
   const { setFieldValue } = useFormikContext();
   const [field] = useField(props.name);
 

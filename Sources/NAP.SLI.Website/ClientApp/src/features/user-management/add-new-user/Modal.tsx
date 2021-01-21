@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string().required('Last Name is required'),
 });
 
-const AddNewUserModal: React.FC = () => {
+const AddNewUserModal = () => {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state: AppState) => state.addNewUser);
 

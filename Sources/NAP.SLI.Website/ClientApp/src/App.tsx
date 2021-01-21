@@ -27,7 +27,7 @@ import { startCheckin, stopCheckin } from './common/services/connection';
 
 export const history = createBrowserHistory();
 
-const App: React.FC = () => {
+const App = () => {
   const { account } = useSelector((state: AppState) => state.authentication);
   const { isOpen } = useSelector((state: AppState) => state.sidebar);
   const { isUnderMaintenanceTime } = useSelector((state: AppState) => state.um);

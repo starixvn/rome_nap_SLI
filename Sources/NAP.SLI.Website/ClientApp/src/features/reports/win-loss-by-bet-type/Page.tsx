@@ -1,6 +1,6 @@
 import React from 'react';
 
-const WinLossByBetTypePage: React.FC = () => {
+const WinLossByBetTypePage = () => {
   return (
     <div className="win-loss-by-bet-type-page">
       <div className="page-title">Win Loss By Bettype</div>

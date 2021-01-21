@@ -14,7 +14,7 @@ import {
 import { RouteLinks } from '../../../common/utils/RouteUtils';
 import { selectCustomer, Record } from './reducer';
 
-const TableComponent: React.FC = () => {
+const TableComponent = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { data, customer } = useSelector(

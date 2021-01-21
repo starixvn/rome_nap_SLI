@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string().required('Last Name is required'),
 });
 
-const EditUserModal: React.FC = () => {
+const EditUserModal = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: AppState) => state.editUser);
 

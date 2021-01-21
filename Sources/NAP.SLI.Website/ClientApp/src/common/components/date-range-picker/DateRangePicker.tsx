@@ -1,6 +1,5 @@
 import React from 'react';
 
-export const DateRangePicker : React.FC = (props) => {
-  return <>
-  </>;
-}
+export const DateRangePicker = () => {
+  return <></>;
+};

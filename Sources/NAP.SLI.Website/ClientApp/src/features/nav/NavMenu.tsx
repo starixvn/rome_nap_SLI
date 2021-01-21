@@ -23,7 +23,7 @@ import { toggle } from '../sidebar/reducer';
 import { RouteLinks } from '../../common/utils/RouteUtils';
 import { UserGroup } from '../../common/utils/UserGroupUtils';
 
-const NavMenu: React.FC = () => {
+const NavMenu = () => {
   const dispatch = useDispatch();
   const { account } = useSelector((state: AppState) => state.authentication);
   const [isOpen, setIsOpen] = useState(false);

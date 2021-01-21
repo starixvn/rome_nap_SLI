@@ -16,7 +16,7 @@ const validationSchema = Yup.object().shape({
   username: Yup.string().required('Required').min(2, 'At least 2 characters'),
 });
 
-const SideBar: React.FC = () => {
+const SideBar = () => {
   const typeaheadRef: RefObject<
     AsyncTypeahead<QueryUsernameSuggestionRecord> & { clear: Func }
   > = createRef();

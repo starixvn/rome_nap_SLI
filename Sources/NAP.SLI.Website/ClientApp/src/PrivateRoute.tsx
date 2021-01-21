@@ -7,10 +7,7 @@ type Props = RouteProps & {
   component: React.FC;
 };
 
-const PrivateRoute: React.FC<Props> = ({
-  component: Component,
-  ...rest
-}: Props) => {
+const PrivateRoute = ({ component: Component, ...rest }: Props) => {
   const { account } = useSelector((state: AppState) => state.authentication);
   const isLoggined = account !== undefined;
 

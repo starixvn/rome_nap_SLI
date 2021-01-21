@@ -14,7 +14,7 @@ import { formatDate } from '../../../common/utils/DateUtils';
 import { Moment } from 'moment';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const TableComponent: React.FC = () => {
+const TableComponent = () => {
   const { data, customer, reportType, fromDate, toDate } = useSelector(
     (state: AppState) => state.winLossAnalysis,
   );

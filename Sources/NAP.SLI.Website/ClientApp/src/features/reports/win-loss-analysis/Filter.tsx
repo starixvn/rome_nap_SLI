@@ -33,7 +33,7 @@ type Props = {
   maxDate: Moment;
 };
 
-const Filter: React.FC<Props> = (props: Props) => {
+const Filter = (props: Props) => {
   const formikRef = createRef<FormikProps<any>>();
   const dispatch = useDispatch();
   const { custId, roleId, minDate, maxDate } = props;

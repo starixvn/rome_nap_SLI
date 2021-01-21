@@ -7,10 +7,7 @@ type Props<T> = {
   options: Array<SelectOption<T>>;
 };
 
-const FormikSelect: React.FC<Props<InputValue>> = ({
-  options,
-  ...props
-}: Props<InputValue>) => {
+const FormikSelect = ({ options, ...props }: Props<InputValue>) => {
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(props);
 

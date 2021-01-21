@@ -17,7 +17,7 @@ import Pagination from '../../../common/components/pagination/Component';
 import { query } from './reducer';
 import { PageSizes } from '../../../common/utils/ReportUtils';
 
-const WinLossDetailPage: React.FC = () => {
+const WinLossDetailPage = () => {
   const history = useHistory();
   const location = useLocation<Customer>();
   const dispatch = useDispatch();

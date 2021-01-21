@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
   username: Yup.string().required('User Name is required'),
 });
 
-const AddExistingUserModal: React.FC = () => {
+const AddExistingUserModal = () => {
   const dispatch = useDispatch();
   const { isOpen } = useSelector((state: AppState) => state.addExistingUser);
 
