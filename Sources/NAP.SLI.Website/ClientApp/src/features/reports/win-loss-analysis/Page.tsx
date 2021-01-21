@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { minDate, maxDate } from '../../../common/utils/DateUtils';
-import { RouteLinks } from '../../../common/utils/RouteUtils';
+import { minDate, maxDate } from 'utils/DateUtils';
+import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
 import { ReportType, selectCustomer } from './reducer';
 import WinLossAnalysisDetails from './Table';

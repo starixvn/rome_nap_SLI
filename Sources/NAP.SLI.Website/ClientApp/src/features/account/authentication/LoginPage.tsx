@@ -21,7 +21,7 @@ import { mdiAccount, mdiLock } from '@mdi/js';
 import { login } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
-import { RouteLinks } from '../../../common/utils/RouteUtils';
+import { RouteLinks } from 'utils/RouteUtils';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),

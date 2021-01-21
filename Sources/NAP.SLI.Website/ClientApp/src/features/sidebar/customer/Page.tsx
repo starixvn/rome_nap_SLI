@@ -13,13 +13,13 @@ import {
 import { NavLink as RRNavLink, Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiChevronDown, mdiChevronUp } from '@mdi/js';
-import { RouteLinks } from '../../../common/utils/RouteUtils';
+import { RouteLinks } from 'utils/RouteUtils';
 import {
   CustomerLevels,
   getDownlineLevel,
   getLevelName,
   isDownlineLevel,
-} from '../../../common/utils/CustomerLevelUtils';
+} from 'utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
 
 const CustomerPage = () => {

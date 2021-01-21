@@ -17,8 +17,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { toggleModal, add, AddNewUserProps } from './reducer';
-import { UserGroupSelectOptions } from '../../../common/utils/UserGroupUtils';
-import FormikSelect from '../../../common/components/select/FormikSelect';
+import { UserGroupSelectOptions } from 'utils/UserGroupUtils';
+import FormikSelect from 'components/select/FormikSelect';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('User Name is required'),

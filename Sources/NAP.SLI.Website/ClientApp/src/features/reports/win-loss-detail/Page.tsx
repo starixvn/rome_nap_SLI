@@ -4,18 +4,15 @@ import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { useLocation } from 'react-router-dom';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
-import { minDate, maxDate } from '../../../common/utils/DateUtils';
+import { minDate, maxDate } from 'utils/DateUtils';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  getDownlineLevel,
-  getLevelName,
-} from '../../../common/utils/CustomerLevelUtils';
+import { getDownlineLevel, getLevelName } from 'utils/CustomerLevelUtils';
 import Table from './Table';
 import { selectCustomer } from './reducer';
-import { RouteLinks } from '../../../common/utils/RouteUtils';
-import Pagination from '../../../common/components/pagination/Component';
+import { RouteLinks } from 'utils/RouteUtils';
+import Pagination from 'components/pagination/Component';
 import { query } from './reducer';
-import { PageSizes } from '../../../common/utils/ReportUtils';
+import { PageSizes } from 'utils/ReportUtils';
 
 const WinLossDetailPage = () => {
   const history = useHistory();

@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { init, ErrorBoundary } from '@sentry/react';
-import store from './store';
-import App from './App';
+import store from './app/store';
+import App from './app/App';
 import registerServiceWorker from './registerServiceWorker';
-import SentryFallback from './common/components/error/SentryFallback';
+import SentryFallback from './components/error/SentryFallback';
 
 const urlParams = new URLSearchParams(window.location.search);
 window.configuration.umToken = urlParams.get('umToken');

@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { success, error } from '../../../common/components/toast/reducer';
+import { success, error } from 'components/toast/reducer';
 import { query } from '../reducer';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { post } from '../../../common/services/http';
+import { handleException } from 'utils/ExceptionUtils';
+import { post } from 'services/http';
 
 export type AddExistingUserProps = {
   username: string;
   groupId: number;
 };
 
-type State = {
+export type State = {
   isOpen: boolean;
 };
 

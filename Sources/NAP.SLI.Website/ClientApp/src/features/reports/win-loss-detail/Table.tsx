@@ -2,16 +2,13 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Table } from 'reactstrap';
-import {
-  formatInteger,
-  formatDecimal,
-} from '../../../common/utils/NumberUtils';
+import { formatInteger, formatDecimal } from 'utils/NumberUtils';
 import {
   CustomerLevels,
   isUplineOrSameLevel,
   getDownlineLevel,
-} from '../../../common/utils/CustomerLevelUtils';
-import { RouteLinks } from '../../../common/utils/RouteUtils';
+} from 'utils/CustomerLevelUtils';
+import { RouteLinks } from 'utils/RouteUtils';
 import { selectCustomer, Record } from './reducer';
 
 const TableComponent = () => {

@@ -26,10 +26,10 @@ import { openModal as openResetUserPasswordModal } from './reset-user-password/r
 import {
   UserGroupSelectOptionsWithAll,
   getGroupName,
-} from '../../common/utils/UserGroupUtils';
-import FormikSelect from '../../common/components/select/FormikSelect';
-import { confirm } from '../../common/components/confirmation/reducer';
-import { formatDateTime } from '../../common/utils/DateUtils';
+} from 'utils/UserGroupUtils';
+import FormikSelect from 'components/select/FormikSelect';
+import { confirm } from 'components/confirmation/reducer';
+import { formatDateTime } from 'utils/DateUtils';
 
 const UserManagementPage = () => {
   const dispatch = useDispatch();

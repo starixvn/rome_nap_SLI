@@ -1,7 +1,7 @@
-import { handleException } from '../utils/ExceptionUtils';
+import { handleException } from 'utils/ExceptionUtils';
 import storage from './storage';
-import { logout } from '../../features/account/authentication/reducer';
-import store from '../../store';
+import { logout } from 'features/account/authentication/reducer';
+import store from 'app/store';
 import { post } from './http';
 
 let timeout: number | undefined;

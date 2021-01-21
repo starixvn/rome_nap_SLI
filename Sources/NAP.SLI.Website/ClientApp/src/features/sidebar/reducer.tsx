@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { handleException } from '../../common/utils/ExceptionUtils';
-import { post } from '../../common/services/http';
+import { handleException } from 'utils/ExceptionUtils';
+import { post } from 'services/http';
 
 export type Customer = {
   generalInformation: GeneralInformation;

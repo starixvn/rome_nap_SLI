@@ -1,9 +1,9 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
-import { PageSize } from '../../../common/utils/ReportUtils';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { formatDate, getToday } from '../../../common/utils/DateUtils';
-import store from '../../../store';
-import { download, post } from '../../../common/services/http';
+import { PageSize } from 'utils/ReportUtils';
+import { handleException } from 'utils/ExceptionUtils';
+import { formatDate, getToday } from 'utils/DateUtils';
+import store from 'app/store';
+import { download, post } from 'services/http';
 
 export type Record = {
   custId: number;

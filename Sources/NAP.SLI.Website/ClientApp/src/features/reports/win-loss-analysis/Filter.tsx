@@ -13,12 +13,8 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { Formik, FormikProps } from 'formik';
-import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
-import {
-  getToday,
-  formatDate,
-  ReportDateRanges,
-} from '../../../common/utils/DateUtils';
+import FormikDatePicker from 'components/date-picker/FormikDatePicker';
+import { getToday, formatDate, ReportDateRanges } from 'utils/DateUtils';
 import { useDispatch } from 'react-redux';
 import { query, WinLossAnalysisState } from './reducer';
 import { Moment } from 'moment';

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { post } from '../../../common/services/http';
-import store from '../../../store';
+import { handleException } from 'utils/ExceptionUtils';
+import { post } from 'services/http';
+import store from 'app/store';
 
 export type UMTime = {
   from: string;

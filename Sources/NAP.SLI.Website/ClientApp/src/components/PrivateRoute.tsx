@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RouteLinks } from './common/utils/RouteUtils';
+import { RouteLinks } from 'utils/RouteUtils';
 
 type Props = RouteProps & {
   component: React.FC;

@@ -1,11 +1,11 @@
-import storage from '../../../common/services/storage';
+import storage from 'services/storage';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { stopRefreshToken, refreshToken } from '../../../common/services/token';
-import { stopCheckin, checkin } from '../../../common/services/connection';
-import { post } from '../../../common/services/http';
-import { Account } from '../../../common/services/storage';
-import { CryptoJS } from '../../../common/utils/FunctionUtils';
+import { handleException } from 'utils/ExceptionUtils';
+import { stopRefreshToken, refreshToken } from 'services/token';
+import { stopCheckin, checkin } from 'services/connection';
+import { post } from 'services/http';
+import { Account } from 'services/storage';
+import { CryptoJS } from 'utils/FunctionUtils';
 
 type State = {
   account?: Account;

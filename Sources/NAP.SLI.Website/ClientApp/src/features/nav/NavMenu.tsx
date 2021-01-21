@@ -17,11 +17,11 @@ import {
 import { NavLink as RRNavLink } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiViewDashboard } from '@mdi/js';
-import { logout } from '../account/authentication/reducer';
-import { toggleModal } from '../account/change-password/reducer';
-import { toggle } from '../sidebar/reducer';
-import { RouteLinks } from '../../common/utils/RouteUtils';
-import { UserGroup } from '../../common/utils/UserGroupUtils';
+import { logout } from 'features/account/authentication/reducer';
+import { toggleModal } from 'features/account/change-password/reducer';
+import { toggle } from 'features/sidebar/reducer';
+import { RouteLinks } from 'utils/RouteUtils';
+import { UserGroup } from 'utils/UserGroupUtils';
 
 const NavMenu = () => {
   const dispatch = useDispatch();

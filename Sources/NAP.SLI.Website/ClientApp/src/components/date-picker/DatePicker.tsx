@@ -11,7 +11,7 @@ import {
   InputProps,
 } from 'reactstrap';
 import { Moment } from 'moment';
-import { maxDate, minDate } from '../../utils/DateUtils';
+import { maxDate, minDate } from 'utils/DateUtils';
 
 const defaultProps = {
   minDate,

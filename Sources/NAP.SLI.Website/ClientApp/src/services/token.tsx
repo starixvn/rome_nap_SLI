@@ -1,6 +1,6 @@
-import { handleException } from '../utils/ExceptionUtils';
-import store from '../../store';
-import { logout } from '../../features/account/authentication/reducer';
+import { handleException } from 'utils/ExceptionUtils';
+import store from 'app/store';
+import { logout } from 'features/account/authentication/reducer';
 import storage from './storage';
 import { post } from './http';
 

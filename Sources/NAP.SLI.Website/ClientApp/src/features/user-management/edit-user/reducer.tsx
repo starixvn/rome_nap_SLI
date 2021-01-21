@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { patchUser, UserModel } from '../reducer';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { success, error } from '../../../common/components/toast/reducer';
-import { post } from '../../../common/services/http';
+import { handleException } from 'utils/ExceptionUtils';
+import { success, error } from 'components/toast/reducer';
+import { post } from 'services/http';
 
 type State = {
   user?: UserModel;

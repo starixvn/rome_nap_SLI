@@ -2,9 +2,9 @@
 /// <reference types="react-scripts" />
 import {
   AppDispatch as _AppDispatch,
-  AppState as _AppState,
   AppThunk as _AppThunk,
-} from './store';
+} from './app/store';
+import { AppState as _AppState } from './app/reducer';
 
 declare global {
   interface Window {

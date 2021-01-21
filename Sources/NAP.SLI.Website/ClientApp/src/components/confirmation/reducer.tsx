@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { noop } from '../../utils/FunctionUtils';
+import { noop } from 'utils/FunctionUtils';
 
 type State = {
   isOpen: boolean;

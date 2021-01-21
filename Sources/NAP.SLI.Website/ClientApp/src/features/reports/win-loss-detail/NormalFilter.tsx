@@ -12,12 +12,8 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import { Formik, FormikProps, FormikValues } from 'formik';
-import FormikDatePicker from '../../../common/components/date-picker/FormikDatePicker';
-import {
-  formatDate,
-  getToday,
-  ReportDateRanges,
-} from '../../../common/utils/DateUtils';
+import FormikDatePicker from 'components/date-picker/FormikDatePicker';
+import { formatDate, getToday, ReportDateRanges } from 'utils/DateUtils';
 import { query, toggleMode, excel } from './reducer';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';

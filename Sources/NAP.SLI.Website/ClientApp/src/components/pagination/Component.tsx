@@ -7,8 +7,8 @@ import {
   mdiPagePreviousOutline,
   mdiPageNextOutline,
 } from '@mdi/js';
-import Select from '../select/Select';
-import { generateSelectOptionsFromList } from '../../utils/SelectUtils';
+import Select from 'components/select/Select';
+import { generateSelectOptionsFromList } from 'utils/SelectUtils';
 import { Input, Button, Form } from 'reactstrap';
 import { Formik, Field } from 'formik';
 

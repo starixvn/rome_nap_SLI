@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { success, error } from '../../../common/components/toast/reducer';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { post } from '../../../common/services/http';
-import { CryptoJS } from '../../../common/utils/FunctionUtils';
+import { success, error } from 'components/toast/reducer';
+import { handleException } from 'utils/ExceptionUtils';
+import { post } from 'services/http';
+import { CryptoJS } from 'utils/FunctionUtils';
 
 type ChangePasswordProps = {
   oldPassword: string;

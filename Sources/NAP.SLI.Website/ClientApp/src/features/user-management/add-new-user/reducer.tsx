@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { success, error } from '../../../common/components/toast/reducer';
+import { success, error } from 'components/toast/reducer';
 import { query } from '../reducer';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { post } from '../../../common/services/http';
-import { CryptoJS } from '../../../common/utils/FunctionUtils';
+import { handleException } from 'utils/ExceptionUtils';
+import { post } from 'services/http';
+import { CryptoJS } from 'utils/FunctionUtils';
 
 export type AddNewUserProps = {
   username: string;

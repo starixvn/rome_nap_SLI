@@ -1,16 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
-import {
-  formatInteger,
-  formatDecimal,
-} from '../../../common/utils/NumberUtils';
-import {
-  CustomerLevels,
-  isUplineOrSameLevel,
-} from '../../../common/utils/CustomerLevelUtils';
+import { formatInteger, formatDecimal } from 'utils/NumberUtils';
+import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
 import { ReportType } from './reducer';
-import { formatDate } from '../../../common/utils/DateUtils';
+import { formatDate } from 'utils/DateUtils';
 import { Moment } from 'moment';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity

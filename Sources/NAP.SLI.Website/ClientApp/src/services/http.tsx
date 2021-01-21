@@ -2,13 +2,13 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import ContentDisposition from 'content-disposition';
 import FileSaver from 'file-saver';
 import storage from './storage';
-import store from '../../store';
-import { hide, error } from '../components/toast/reducer';
-import { logout } from '../../features/account/authentication/reducer';
-import { checkSuccess, UMTime } from '../../features/error/UM/reducer';
-import { RouteLinks } from '../utils/RouteUtils';
-import { history } from '../../App';
-import { isNullOrWhiteSpaces } from '../utils/StringUtils';
+import store from 'app/store';
+import { hide, error } from 'components/toast/reducer';
+import { logout } from 'features/account/authentication/reducer';
+import { checkSuccess, UMTime } from 'features/error/UM/reducer';
+import { RouteLinks } from 'utils/RouteUtils';
+import { history } from 'app/App';
+import { isNullOrWhiteSpaces } from 'utils/StringUtils';
 
 const getConfig = (): AxiosRequestConfig => {
   const headers: KeyValueObject = {};

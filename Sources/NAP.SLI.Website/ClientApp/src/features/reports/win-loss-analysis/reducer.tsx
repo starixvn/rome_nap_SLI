@@ -1,8 +1,8 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
-import { formatDate, getToday } from '../../../common/utils/DateUtils';
-import { handleException } from '../../../common/utils/ExceptionUtils';
-import { post, download } from '../../../common/services/http';
-import store from '../../../store';
+import { formatDate, getToday } from 'utils/DateUtils';
+import { handleException } from 'utils/ExceptionUtils';
+import { post, download } from 'services/http';
+import store from 'app/store';
 
 export const ReportType = {
   Daily: 1,
