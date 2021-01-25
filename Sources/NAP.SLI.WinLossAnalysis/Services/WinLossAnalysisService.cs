@@ -61,6 +61,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
                 FromDate = request.FromDate,
                 ToDate = request.ToDate
             };
+            
             return await Query(criteria).ConfigureAwait(false);
         }
 

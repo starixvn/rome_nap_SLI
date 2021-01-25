@@ -33,6 +33,87 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
 
         [Theory]
         [AutoDomainData]
+        public async Task TestMethod_QuerySuper(
+            IReportService reportService,
+            ISharedLocalizer sharedLocalizer,
+            INoLocalizer noLocalizer,
+            IAppSettings appSettings,
+            IDynamicRepositoryEx dynamicRepositoryEx,
+            INpoiWorkbookFactory npoiWorkbookFactory,
+            BalanceUpDayModel balanceUpDayModel,
+            (IEnumerable<SuperAnalysisModel>, IEnumerable<SuperAnalysisModel>) fetchData)
+        {
+            //Arrange
+            var winLossAnalysisService = new WinLossAnalysisService(reportService, dynamicRepositoryEx, appSettings, sharedLocalizer, noLocalizer, npoiWorkbookFactory);
+            var request = CreatQueryRequestByRole(CustomerLevels.Super);
+            reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
+            dynamicRepositoryEx.FetchMultipleAsync<SuperAnalysisModel, SuperAnalysisModel>(Arg.Any<WinLossAnalysisQueryCriteria>()).Returns(Task.FromResult(fetchData));
+            //Act
+            var result = await winLossAnalysisService.Query(request);
+
+            //Assert
+            await dynamicRepositoryEx.Received().FetchMultipleAsync<SuperAnalysisModel, SuperAnalysisModel>(Arg.Is<WinLossAnalysisQueryCriteria>(criteria => IsMatch(criteria, balanceUpDayModel, request)));
+            Assert.Equal(fetchData.Item1, result.Records);
+            Assert.Equal(fetchData.Item2.First(), result.Total);
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public async Task TestMethod_QueryMaster(
+            IReportService reportService,
+            ISharedLocalizer sharedLocalizer,
+            INoLocalizer noLocalizer,
+            IAppSettings appSettings,
+            IDynamicRepositoryEx dynamicRepositoryEx,
+            INpoiWorkbookFactory npoiWorkbookFactory,
+            BalanceUpDayModel balanceUpDayModel,
+            (IEnumerable<MasterAnalysisModel>, IEnumerable<MasterAnalysisModel>) fetchData)
+        {
+            //Arrange
+            var winLossAnalysisService = new WinLossAnalysisService(reportService, dynamicRepositoryEx, appSettings, sharedLocalizer, noLocalizer, npoiWorkbookFactory);
+            var request = CreatQueryRequestByRole(CustomerLevels.Master);
+            reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
+            dynamicRepositoryEx.FetchMultipleAsync<MasterAnalysisModel, MasterAnalysisModel>(Arg.Any<WinLossAnalysisQueryCriteria>()).Returns(Task.FromResult(fetchData));
+            //Act
+            var result = await winLossAnalysisService.Query(request);
+
+            //Assert
+            await dynamicRepositoryEx.Received().FetchMultipleAsync<MasterAnalysisModel, MasterAnalysisModel>(Arg.Is<WinLossAnalysisQueryCriteria>(criteria => IsMatch(criteria, balanceUpDayModel, request)));
+            Assert.Equal(fetchData.Item1, result.Records);
+            Assert.Equal(fetchData.Item2.First(), result.Total);
+        }
+
+        
+        [Theory]
+        [AutoDomainData]
+        public async Task TestMethod_QueryAgent(
+            IReportService reportService,
+            ISharedLocalizer sharedLocalizer,
+            INoLocalizer noLocalizer,
+            IAppSettings appSettings,
+            IDynamicRepositoryEx dynamicRepositoryEx,
+            INpoiWorkbookFactory npoiWorkbookFactory,
+            BalanceUpDayModel balanceUpDayModel,
+            (IEnumerable<AgentAnalysisModel>, IEnumerable<AgentAnalysisModel>) fetchData)
+        {
+            //Arrange
+            var winLossAnalysisService = new WinLossAnalysisService(reportService, dynamicRepositoryEx, appSettings, sharedLocalizer, noLocalizer, npoiWorkbookFactory);
+            var request = CreatQueryRequestByRole(CustomerLevels.Agent);
+            reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
+            dynamicRepositoryEx.FetchMultipleAsync<AgentAnalysisModel, AgentAnalysisModel>(Arg.Any<WinLossAnalysisQueryCriteria>()).Returns(Task.FromResult(fetchData));
+            //Act
+            var result = await winLossAnalysisService.Query(request);
+
+            //Assert
+            await dynamicRepositoryEx.Received().FetchMultipleAsync<AgentAnalysisModel, AgentAnalysisModel>(Arg.Is<WinLossAnalysisQueryCriteria>(criteria => IsMatch(criteria, balanceUpDayModel, request)));
+            Assert.Equal(fetchData.Item1, result.Records);
+            Assert.Equal(fetchData.Item2.First(), result.Total);
+        }
+
+
+
+        [Theory]
+        [AutoDomainData]
         public async Task TestMethod_ExcelSuper(
             IReportService reportService,
             ISharedLocalizer sharedLocalizer,
@@ -205,10 +286,31 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
                 templateInfo.FreezeColumnName == Column.B;
         }
 
+        private bool IsMatch(WinLossAnalysisQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossAnalysisQueryRequest request)
+        {
+            return criteria.BalanceUpDay == balanceUpDayModel.BalanceUpDay &&
+                criteria.MoveBetsDay == balanceUpDayModel.MoveBetsDay &&
+                criteria.CustId == request.CustId &&
+                criteria.RoleId == request.RoleId &&
+                criteria.ReportType == request.ReportType &&
+                criteria.FromDate == request.FromDate &&
+                criteria.ToDate == request.ToDate;
+        }
+
         private WinLossAnalysisExcelRequest CreateExcelRequestByRole(CustomerLevels role)
         {
             var fixture = new Fixture();
             var request = fixture.Build<WinLossAnalysisExcelRequest>()
+                .With(c => c.RoleId, (int)role)
+                .Create();
+
+            return request;
+        }
+
+        private WinLossAnalysisQueryRequest CreatQueryRequestByRole(CustomerLevels role)
+        {
+            var fixture = new Fixture();
+            var request = fixture.Build<WinLossAnalysisQueryRequest>()
                 .With(c => c.RoleId, (int)role)
                 .Create();
 
