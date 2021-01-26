@@ -1,27 +1,23 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { confirmed } from './reducer';
 
-const Confirmation = () => {
-  const dispatch = useDispatch();
-  const { isOpen, title, message } = useSelector(
-    (state: AppState) => state.confirmation,
-  );
+type Props = {
+  title: string;
+  message: string;
+  onConfirm: Func;
+  onCancel: Func;
+};
 
-  const handleConfirm = (isOk: boolean) => {
-    dispatch(confirmed(isOk));
-  };
-
+const Confirmation = ({ title, message, onConfirm, onCancel }: Props) => {
   return (
-    <Modal isOpen={isOpen} unmountOnClose>
-      <ModalHeader toggle={() => handleConfirm(false)}>{title}</ModalHeader>
+    <Modal isOpen unmountOnClose>
+      <ModalHeader toggle={() => onConfirm()}>{title}</ModalHeader>
       <ModalBody>{message}</ModalBody>
       <ModalFooter>
-        <Button color="primary" onClick={() => handleConfirm(true)}>
+        <Button color="primary" onClick={() => onConfirm()}>
           OK
         </Button>
-        <Button color="secondary" onClick={() => handleConfirm(false)}>
+        <Button color="secondary" onClick={() => onCancel()}>
           Cancel
         </Button>
       </ModalFooter>

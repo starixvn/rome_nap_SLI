@@ -1,5 +1,5 @@
 import './Page.scss';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Label,
   Form,
@@ -12,9 +12,15 @@ import {
 } from 'reactstrap';
 import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
-import { useSelector, useDispatch } from 'react-redux';
-import { Formik, Field, FormikProps } from 'formik';
-import { query, updateUserStatus, UserModel, QueryProps } from './reducer';
+import { useSelector } from 'react-redux';
+import { Formik, Field, FormikProps, FormikHelpers } from 'formik';
+import {
+  query,
+  updateUserStatus,
+  QueryProps,
+  UserModel,
+  patchUser,
+} from './reducer';
 import AddNewUserModal from './add-new-user/Modal';
 import { toggleModal as toggleAddNewUserModel } from './add-new-user/reducer';
 import AddExistingUserModal from './add-existing-user/Modal';
@@ -28,15 +34,16 @@ import {
   getGroupName,
 } from 'utils/UserGroupUtils';
 import FormikSelect from 'components/select/FormikSelect';
-import { confirm } from 'components/confirmation/reducer';
 import { formatDateTime } from 'utils/DateUtils';
+import { useAppDispatch } from 'app/store';
+import Confirmation from 'components/confirmation/Confirmation';
+import { error, success } from 'components/toast/reducer';
 
 const UserManagementPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const [user, setUser] = useState<UserModel | undefined>(undefined);
   const formikRef = useRef<FormikProps<QueryProps>>(null);
-  const { users, username, groupId } = useSelector(
-    (state: AppState) => state.userManagement,
-  );
+  const { users, arg } = useSelector((state: AppState) => state.userManagement);
 
   useEffect(() => {
     if (formikRef.current && users === undefined) {
@@ -44,27 +51,62 @@ const UserManagementPage = () => {
     }
   }, [users]);
 
-  const handleStatusClick = (user: UserModel) => {
+  const handleQuery = async (
+    values: QueryProps,
+    { setSubmitting }: FormikHelpers<QueryProps>,
+  ) => {
+    if (
+      values.groupId &&
+      values.groupId === UserGroupSelectOptionsWithAll[0].value
+    ) {
+      values.groupId = undefined;
+    }
+
+    setSubmitting(true);
+    await dispatch(query(values));
+    setSubmitting(false);
+  };
+
+  const handleUpdateStatus = async (user: UserModel) => {
+    const newClosed = !user.closed;
+    const payload = {
+      custId: user.custId,
+      closed: newClosed,
+    };
+    const resultAction = await dispatch(updateUserStatus(payload));
+    if (updateUserStatus.fulfilled.match(resultAction)) {
+      const resultData = resultAction.payload;
+      if (resultData.isSuccess) {
+        closeConfirmation();
+        dispatch(success('Updated successfully'));
+        dispatch(patchUser({ data: payload }));
+      } else {
+        dispatch(error(resultData.errMsg));
+      }
+    }
+  };
+
+  const closeConfirmation = () => {
+    setUser(undefined);
+  };
+
+  const renderConfirmation = () => {
+    if (!user) {
+      return <></>;
+    }
+
     const newClosed = !user.closed;
     const title = newClosed ? 'Deactivate User' : 'Activate User';
     const message = `Are you sure to ${
       newClosed ? 'deactivate' : 'activate'
     } user [${user.userName}]?`;
-    dispatch(
-      confirm(
-        {
-          title,
-          message,
-        },
-        () => {
-          dispatch(
-            updateUserStatus({
-              custId: user.custId,
-              closed: newClosed,
-            }),
-          );
-        },
-      ),
+    return (
+      <Confirmation
+        title={title}
+        message={message}
+        onConfirm={async () => await handleUpdateStatus(user)}
+        onCancel={closeConfirmation}
+      />
     );
   };
 
@@ -104,7 +146,7 @@ const UserManagementPage = () => {
               <Input
                 type="checkbox"
                 checked={!user.closed}
-                onChange={() => handleStatusClick(user)}
+                onChange={() => setUser(user)}
               />
             </td>
             <td className="text-center">
@@ -120,10 +162,7 @@ const UserManagementPage = () => {
     );
   };
 
-  const initialValues = {
-    username,
-    groupId,
-  };
+  const initialValues = arg;
   return (
     <div className="user-management-page">
       <div className="page-title">User Management</div>
@@ -131,13 +170,7 @@ const UserManagementPage = () => {
         <Formik
           innerRef={formikRef}
           initialValues={initialValues}
-          onSubmit={(values, { setSubmitting }) => {
-            values.groupId =
-              values.groupId === UserGroupSelectOptionsWithAll[0].value
-                ? undefined
-                : values.groupId;
-            dispatch(query(values, () => setSubmitting(false)));
-          }}
+          onSubmit={handleQuery}
         >
           {({ handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
@@ -213,6 +246,7 @@ const UserManagementPage = () => {
       <AddExistingUserModal />
       <EditUserModal />
       <ResetUserPasswordModal />
+      {renderConfirmation()}
     </div>
   );
 };

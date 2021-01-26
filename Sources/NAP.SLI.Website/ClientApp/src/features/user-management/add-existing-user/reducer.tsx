@@ -1,8 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { success, error } from 'components/toast/reducer';
-import { query } from '../reducer';
-import { handleException } from 'utils/ExceptionUtils';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { post } from 'services/http';
+import { handleException } from 'utils/ExceptionUtils';
 
 export type AddExistingUserProps = {
   username: string;
@@ -13,11 +11,34 @@ export type State = {
   isOpen: boolean;
 };
 
+const sliceName = 'add-existing-user';
 const initialState: State = {
   isOpen: false,
 };
+
+export const addExisting = createAsyncThunk<ResultData, AddExistingUserProps>(
+  `${sliceName}/add`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const payload = {
+        apiKey: 'user-management:add-new-user',
+        data: {
+          username: values.username,
+          groupId: values.groupId,
+          isAddNew: false,
+        },
+      };
+      const response = await post<ResultData>('/simple-api/command', payload);
+      return response.data;
+    } catch (err) {
+      handleException(err);
+      return rejectWithValue(err);
+    }
+  },
+);
+
 export const slice = createSlice({
-  name: 'add-existing-user',
+  name: sliceName,
   initialState,
   reducers: {
     toggleModal: (state) => {
@@ -27,42 +48,5 @@ export const slice = createSlice({
 });
 
 export const { toggleModal } = slice.actions;
-
-export const add = (
-  values: AddExistingUserProps,
-  callback: Func,
-): AppThunk => async (dispatch: AppDispatch) => {
-  try {
-    const payload = {
-      apiKey: 'user-management:add-new-user',
-      data: {
-        username: values.username,
-        groupId: values.groupId,
-        isAddNew: false,
-      },
-    };
-    const response = await post<ResultData>('/simple-api/command', payload);
-    console.log(response);
-    const { isSuccess, errMsg } = response.data;
-    if (isSuccess) {
-      console.log('success1');
-      dispatch(success('Added successfully'));
-      console.log('success2');
-      console.log('toggleModal1');
-      dispatch(toggleModal());
-      console.log('toggleModal2');
-      console.log('query1');
-      dispatch(query());
-      console.log('query2');
-    } else {
-      dispatch(error(errMsg));
-    }
-  } catch (e) {
-    console.log('handleException');
-    handleException(e);
-  } finally {
-    callback();
-  }
-};
 
 export default slice.reducer;

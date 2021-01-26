@@ -13,7 +13,6 @@ import UserManagementPage from 'features/user-management/Page';
 import LoginPage from 'features/account/authentication/LoginPage';
 import HomePage from 'features/home/Page';
 import ChangePasswordModal from 'features/account/change-password/Modal';
-import Confirmation from 'components/confirmation/Confirmation';
 import ToastContainer from 'components/toast/ToastContainer';
 import CustomerSettingPage from 'features/customer-setting/Page';
 import WinLossDetailPage from 'features/reports/win-loss-detail/Page';
@@ -95,7 +94,6 @@ const App = () => {
           </div>
         </div>
       </div>
-      <Confirmation />
       <ToastContainer />
     </Router>
   );

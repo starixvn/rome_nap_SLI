@@ -13,12 +13,15 @@ import {
   Spinner,
   ModalFooter,
 } from 'reactstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { Formik, Field } from 'formik';
+import { useSelector } from 'react-redux';
+import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { update, closeModal } from './reducer';
+import { update, closeModal, UpdateProps } from './reducer';
 import { UserGroupSelectOptions } from 'utils/UserGroupUtils';
 import FormikSelect from 'components/select/FormikSelect';
+import { useAppDispatch } from 'app/store';
+import { error, success } from 'components/toast/reducer';
+import { patchUser } from '../reducer';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
@@ -26,12 +29,32 @@ const validationSchema = Yup.object().shape({
 });
 
 const EditUserModal = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { user } = useSelector((state: AppState) => state.editUser);
 
   if (!user) {
     return <></>;
   }
+
+  const handleUpdate = async (
+    values: UpdateProps,
+    { setSubmitting }: FormikHelpers<UpdateProps>,
+  ) => {
+    setSubmitting(true);
+    const resultAction = await dispatch(update(values));
+    setSubmitting(false);
+
+    if (update.fulfilled.match(resultAction)) {
+      const resultData = resultAction.payload;
+      if (resultData.isSuccess) {
+        dispatch(success('Updated successfully'));
+        dispatch(closeModal());
+        dispatch(patchUser({ data: values }));
+      } else {
+        dispatch(error(resultData.errMsg));
+      }
+    }
+  };
 
   const initialValues = {
     custId: user.custId,
@@ -44,9 +67,7 @@ const EditUserModal = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          dispatch(update(values, () => setSubmitting(false)));
-        }}
+        onSubmit={handleUpdate}
       >
         {({ errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>

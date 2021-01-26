@@ -1,16 +1,46 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { patchUser, UserModel } from '../reducer';
-import { handleException } from 'utils/ExceptionUtils';
-import { success, error } from 'components/toast/reducer';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserModel } from '../reducer';
 import { post } from 'services/http';
+import { handleException } from 'utils/ExceptionUtils';
 
 type State = {
   user?: UserModel;
 };
 
+export type UpdateProps = {
+  custId: number;
+  firstName: string;
+  lastName: string;
+  groupId: number;
+};
+
+type UpdateData = ResultData & {
+  custId: number;
+  groupId: number;
+};
+
 const initialState: State = {};
+const sliceName = 'edit-user';
+
+export const update = createAsyncThunk<UpdateData, UpdateProps>(
+  `${sliceName}/update`,
+  async (updateProps, { rejectWithValue }) => {
+    try {
+      const payload = {
+        apiKey: 'user-management:update-user',
+        data: updateProps,
+      };
+      const response = await post<UpdateData>('/simple-api/command', payload);
+      return response.data;
+    } catch (err) {
+      handleException(err);
+      return rejectWithValue(err);
+    }
+  },
+);
+
 const slice = createSlice({
-  name: 'edit-user',
+  name: sliceName,
   initialState,
   reducers: {
     openModal: (state, action: PayloadAction<{ user: UserModel }>) => {
@@ -23,42 +53,5 @@ const slice = createSlice({
 });
 
 export const { openModal, closeModal } = slice.actions;
-
-type UpdateProps = {
-  custId: number;
-  firstName: string;
-  lastName: string;
-  groupId: number;
-};
-
-type UpdateData = ResultData & {
-  custId: number;
-  groupId: number;
-};
-
-export const update = (values: UpdateProps, callback: Func) => async (
-  dispatch: AppDispatch,
-) => {
-  try {
-    const data = values;
-    const payload = {
-      apiKey: 'user-management:update-user',
-      data,
-    };
-    const response = await post<UpdateData>('/simple-api/command', payload);
-    const { isSuccess, errMsg } = response.data;
-    if (isSuccess) {
-      dispatch(success('Updated successfully'));
-      dispatch(patchUser({ data }));
-      dispatch(closeModal());
-    } else {
-      dispatch(error(errMsg));
-    }
-  } catch (e) {
-    handleException(e);
-  } finally {
-    callback();
-  }
-};
 
 export default slice.reducer;

@@ -1,7 +1,8 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.tsdk": "node_modules/typescript/lib",
   "search.exclude": {
     "**/libs/*.js": true
   },
-  "jestrunner.jestCommand": "npm run test --"
+  "jest.pathToJest": "npm run test --",
+  "cSpell.words": ["formik", "cust", "unmount", "reduxjs", "bettype", "checkin"]
 }

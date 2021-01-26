@@ -1,6 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { success, error } from 'components/toast/reducer';
-import { query } from '../reducer';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 import { CryptoJS } from 'utils/FunctionUtils';
@@ -20,8 +18,34 @@ type State = {
 const initialState: State = {
   isOpen: false,
 };
+const sliceName = 'add-new-user';
+
+export const addNew = createAsyncThunk<ResultData, AddNewUserProps>(
+  `${sliceName}/add`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const payload = {
+        apiKey: 'user-management:add-new-user',
+        data: {
+          username: values.username,
+          userPwd: CryptoJS.CfsEnCode(values.password),
+          firstName: values.firstName,
+          lastName: values.lastName,
+          groupId: values.groupId,
+          isAddNew: true,
+        },
+      };
+      const response = await post<ResultData>('/simple-api/command', payload);
+      return response.data;
+    } catch (err) {
+      handleException(err);
+      return rejectWithValue(err);
+    }
+  },
+);
+
 const slice = createSlice({
-  name: 'add-new-user',
+  name: sliceName,
   initialState,
   reducers: {
     toggleModal: (state) => {
@@ -31,36 +55,5 @@ const slice = createSlice({
 });
 
 export const { toggleModal } = slice.actions;
-
-export const add = (values: AddNewUserProps, callback: Func) => async (
-  dispatch: AppDispatch,
-) => {
-  try {
-    const payload = {
-      apiKey: 'user-management:add-new-user',
-      data: {
-        username: values.username,
-        userPwd: CryptoJS.CfsEnCode(values.password),
-        firstName: values.firstName,
-        lastName: values.lastName,
-        groupId: values.groupId,
-        isAddNew: true,
-      },
-    };
-    const response = await post<ResultData>('/simple-api/command', payload);
-    const { isSuccess, errMsg } = response.data;
-    if (isSuccess) {
-      dispatch(success('Added successfully'));
-      dispatch(toggleModal());
-      dispatch(query());
-    } else {
-      dispatch(error(errMsg));
-    }
-  } catch (e) {
-    handleException(e);
-  } finally {
-    callback();
-  }
-};
 
 export default slice.reducer;

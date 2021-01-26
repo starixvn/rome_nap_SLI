@@ -7,6 +7,7 @@ import {
 import { ThunkAction } from 'redux-thunk';
 import { logoutSuccess } from 'features/account/authentication/reducer';
 import appReducer, { AppState } from './reducer';
+import { useDispatch } from 'react-redux';
 
 const reducer: Reducer<CombinedState<AppState>, Action> = (state, action) => {
   if (action.type === logoutSuccess.type) {
@@ -21,6 +22,7 @@ const store = configureStore({
 });
 
 export type AppDispatch = typeof store.dispatch;
-export type AppThunk = ThunkAction<void, AppState, unknown, Action<string>>;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export default store;

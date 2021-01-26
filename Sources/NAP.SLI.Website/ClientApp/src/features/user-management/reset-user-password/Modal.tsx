@@ -13,10 +13,13 @@ import {
   Spinner,
   ModalFooter,
 } from 'reactstrap';
-import { useSelector, useDispatch } from 'react-redux';
-import { Formik, Field } from 'formik';
+import { useSelector } from 'react-redux';
+import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { resetPassword, closeModal } from './reducer';
+import { resetPassword, closeModal, ResetPasswordProps } from './reducer';
+import { useAppDispatch } from 'app/store';
+import { error, success } from 'components/toast/reducer';
+import { patchUser } from '../reducer';
 
 const validationSchema = Yup.object().shape({
   password: Yup.string().required('Password is required'),
@@ -26,8 +29,28 @@ const validationSchema = Yup.object().shape({
 });
 
 const ResetUserPasswordModal = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { user } = useSelector((state: AppState) => state.resetUserPassword);
+
+  const handleResetPassword = async (
+    values: ResetPasswordProps,
+    { setSubmitting }: FormikHelpers<ResetPasswordProps>,
+  ) => {
+    setSubmitting(true);
+    const resultAction = await dispatch(resetPassword(values));
+    setSubmitting(false);
+
+    if (resetPassword.fulfilled.match(resultAction)) {
+      const resultData = resultAction.payload;
+      if (resultData.isSuccess) {
+        dispatch(success('Updated successfully'));
+        dispatch(closeModal());
+        dispatch(patchUser({ data: values }));
+      } else {
+        dispatch(error(resultData.errMsg));
+      }
+    }
+  };
 
   if (!user) {
     return <></>;
@@ -43,9 +66,7 @@ const ResetUserPasswordModal = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          dispatch(resetPassword(values, () => setSubmitting(false)));
-        }}
+        onSubmit={handleResetPassword}
       >
         {({ errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>

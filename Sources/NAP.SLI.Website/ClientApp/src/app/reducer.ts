@@ -1,5 +1,4 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import confirmationReducer from 'components/confirmation/reducer';
 import toastReducer from 'components/toast/reducer';
 import sidebarReducer from 'features/sidebar/reducer';
 import authenticationReducer from 'features/account/authentication/reducer';
@@ -14,7 +13,6 @@ import winLossAnalysisReducer from 'features/reports/win-loss-analysis/reducer';
 import umReducer from 'features/error/UM/reducer';
 
 const appReducer = combineReducers({
-  confirmation: confirmationReducer,
   toast: toastReducer,
   sidebar: sidebarReducer,
   authentication: authenticationReducer,
