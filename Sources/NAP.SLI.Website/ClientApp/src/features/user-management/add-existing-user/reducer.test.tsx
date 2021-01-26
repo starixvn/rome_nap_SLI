@@ -1,7 +1,24 @@
+import * as http from 'services/http';
+import * as ExceptionUtils from 'utils/ExceptionUtils';
+import reducer, { toggleModal, addExisting } from './reducer';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import { Action, DeepPartial, ThunkDispatch } from '@reduxjs/toolkit';
 import store from 'app/store';
-import reducer, { toggleModal } from './reducer';
+
+jest.mock('services/http');
+jest.mock('utils/ExceptionUtils');
+
+const mockHttp = http as jest.Mocked<typeof http>;
+const mockExceptionUtils = ExceptionUtils as jest.Mocked<typeof ExceptionUtils>;
 
 describe('reducer', () => {
+  const mockHandleException = mockExceptionUtils.handleException.mockImplementation();
+
+  beforeEach(() => {
+    mockHandleException.mockClear();
+  });
+
   test('initialState', () => {
     // Act
     const state = store.getState().addExistingUser;
@@ -19,6 +36,64 @@ describe('reducer', () => {
     // Assert
     expect(state).toEqual({
       isOpen: true,
+    });
+  });
+
+  describe('addExisting', () => {
+    const mockStore = configureStore<
+      DeepPartial<AppState>,
+      ThunkDispatch<DeepPartial<AppState>, unknown, Action<string>>
+    >([thunk]);
+    const store = mockStore({});
+
+    const props = {
+      username: '',
+      groupId: 1,
+    };
+
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    test('fulfilled', async () => {
+      // Arrange
+      const data = {
+        isSuccess: true,
+      };
+      mockHttp.post.mockResolvedValueOnce({
+        headers: {},
+        config: {},
+        status: 200,
+        statusText: 'OK',
+        data,
+      });
+
+      // Act
+      await store.dispatch(addExisting(props));
+
+      // Assert
+      const actions = store.getActions();
+      expect(actions[0].type).toEqual(addExisting.pending.type);
+      expect(actions[1].type).toEqual(addExisting.fulfilled.type);
+      expect(actions[1].payload).toEqual(data);
+    });
+
+    test('rejected', async () => {
+      // Arrange
+      const err = new Error('test');
+      mockHttp.post.mockRejectedValueOnce(err);
+
+      // Act
+      await store.dispatch(addExisting(props));
+
+      // Assert
+      expect(mockHandleException).toHaveBeenCalledTimes(1);
+      expect(mockHandleException.mock.calls[0][0]).toEqual(err);
+
+      const actions = store.getActions();
+      expect(actions[0].type).toEqual(addExisting.pending.type);
+      expect(actions[1].type).toEqual(addExisting.rejected.type);
+      expect(actions[1].payload).toEqual(err);
     });
   });
 });

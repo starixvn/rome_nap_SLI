@@ -4,7 +4,6 @@ import {
   CombinedState,
   Action,
 } from '@reduxjs/toolkit';
-import { ThunkAction } from 'redux-thunk';
 import { logoutSuccess } from 'features/account/authentication/reducer';
 import appReducer, { AppState } from './reducer';
 import { useDispatch } from 'react-redux';
