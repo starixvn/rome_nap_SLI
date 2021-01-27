@@ -13,7 +13,7 @@ import {
   Spinner,
   ModalFooter,
 } from 'reactstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, batch } from 'react-redux';
 import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { update, closeModal, UpdateProps } from './reducer';
@@ -47,9 +47,11 @@ const EditUserModal = () => {
     if (update.fulfilled.match(resultAction)) {
       const resultData = resultAction.payload;
       if (resultData.isSuccess) {
-        dispatch(success('Updated successfully'));
-        dispatch(closeModal());
-        dispatch(patchUser({ data: values }));
+        batch(() => {
+          dispatch(success('Updated successfully'));
+          dispatch(closeModal());
+          dispatch(patchUser({ data: values }));
+        });
       } else {
         dispatch(error(resultData.errMsg));
       }

@@ -12,16 +12,17 @@ import {
   Spinner,
   FormFeedback,
 } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Formik, Field } from 'formik';
+import { useSelector } from 'react-redux';
+import { Formik, Field, FormikHelpers } from 'formik';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import Icon from '@mdi/react';
 import { mdiAccount, mdiLock } from '@mdi/js';
-import { login } from './reducer';
+import { login, LoginProps } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
 import { RouteLinks } from 'utils/RouteUtils';
+import { useAppDispatch } from 'app/store';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -29,7 +30,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const { message, account } = useSelector(
     (state: AppState) => state.authentication,
@@ -42,6 +43,19 @@ const LoginPage = () => {
     }
   });
 
+  const handleLogin = async (
+    values: LoginProps,
+    { setSubmitting }: FormikHelpers<LoginProps>,
+  ) => {
+    setSubmitting(true);
+    const resultAction = await dispatch(login(values));
+    setSubmitting(false);
+
+    if (login.fulfilled.match(resultAction)) {
+      history.push(RouteLinks.HOME);
+    }
+  };
+
   const initialValues = {
     username: '',
     password: '',
@@ -50,9 +64,7 @@ const LoginPage = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        dispatch(login(values, () => setSubmitting(false)));
-      }}
+      onSubmit={handleLogin}
     >
       {({ errors, touched, handleSubmit, isSubmitting }) => (
         <Form className="login-page" onSubmit={handleSubmit}>

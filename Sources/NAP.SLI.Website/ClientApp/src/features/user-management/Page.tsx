@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
-import { useSelector } from 'react-redux';
+import { useSelector, batch } from 'react-redux';
 import { Formik, Field, FormikProps, FormikHelpers } from 'formik';
 import {
   query,
@@ -43,7 +43,9 @@ const UserManagementPage = () => {
   const dispatch = useAppDispatch();
   const [user, setUser] = useState<UserModel | undefined>(undefined);
   const formikRef = useRef<FormikProps<QueryProps>>(null);
-  const { users, arg } = useSelector((state: AppState) => state.userManagement);
+  const { users, queryArg } = useSelector(
+    (state: AppState) => state.userManagement,
+  );
 
   useEffect(() => {
     if (formikRef.current && users === undefined) {
@@ -78,8 +80,10 @@ const UserManagementPage = () => {
       const resultData = resultAction.payload;
       if (resultData.isSuccess) {
         closeConfirmation();
-        dispatch(success('Updated successfully'));
-        dispatch(patchUser({ data: payload }));
+        batch(() => {
+          dispatch(success('Updated successfully'));
+          dispatch(patchUser({ data: payload }));
+        });
       } else {
         dispatch(error(resultData.errMsg));
       }
@@ -162,7 +166,7 @@ const UserManagementPage = () => {
     );
   };
 
-  const initialValues = arg;
+  const initialValues = queryArg;
   return (
     <div className="user-management-page">
       <div className="page-title">User Management</div>

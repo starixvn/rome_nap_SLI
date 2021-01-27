@@ -3,6 +3,17 @@
   "search.exclude": {
     "**/libs/*.js": true
   },
-  "jest.pathToJest": "npm run test --",
-  "cSpell.words": ["formik", "cust", "unmount", "reduxjs", "bettype", "checkin"]
+  // "jest.pathToJest": "npm test -- --coverage --updateSnapshot",
+  // "jest.autoEnable": false,
+  // "jest.debugMode": true,
+  "cSpell.words": [
+    "formik",
+    "cust",
+    "unmount",
+    "reduxjs",
+    "bettype",
+    "checkin",
+    "immer",
+    "upline"
+  ]
 }

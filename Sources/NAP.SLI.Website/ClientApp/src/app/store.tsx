@@ -4,12 +4,12 @@ import {
   CombinedState,
   Action,
 } from '@reduxjs/toolkit';
-import { logoutSuccess } from 'features/account/authentication/reducer';
+import { logout } from 'features/account/authentication/reducer';
 import appReducer, { AppState } from './reducer';
 import { useDispatch } from 'react-redux';
 
 const reducer: Reducer<CombinedState<AppState>, Action> = (state, action) => {
-  if (action.type === logoutSuccess.type) {
+  if (action.type === logout.type) {
     return appReducer(undefined, action);
   }
 

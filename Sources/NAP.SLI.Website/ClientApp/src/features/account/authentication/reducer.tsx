@@ -1,43 +1,20 @@
 import storage from 'services/storage';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { handleException } from 'utils/ExceptionUtils';
 import { stopRefreshToken, refreshToken } from 'services/token';
 import { stopCheckin, checkin } from 'services/connection';
 import { post } from 'services/http';
 import { Account } from 'services/storage';
 import { CryptoJS } from 'utils/FunctionUtils';
+import { AxiosError } from 'axios';
 
 type State = {
   account?: Account;
-  message: string;
+  message?: string;
   isLoading: boolean;
 };
 
-const account = storage.get();
-const initialState: State = account
-  ? { isLoading: false, account, message: '' }
-  : { isLoading: false, message: '' };
-
-const slice = createSlice({
-  name: 'authentication',
-  initialState,
-  reducers: {
-    loginFailure: (state, action: PayloadAction<{ message: string }>) => {
-      state.message = action.payload.message;
-    },
-    loginSuccess: (state, action: PayloadAction<{ account: Account }>) => {
-      state.account = action.payload.account;
-      state.message = '';
-    },
-    logoutSuccess: (state) => {
-      state.account = undefined;
-    },
-  },
-});
-
-export const { loginFailure, loginSuccess, logoutSuccess } = slice.actions;
-
-type LoginRequest = {
+export type LoginProps = {
   username: string;
   password: string;
 };
@@ -49,9 +26,19 @@ type LoginData = ResultData & {
   connectionId: string;
 };
 
-export const login = (values: LoginRequest, callback: Func) => async (
-  dispatch: AppDispatch,
-) => {
+const sliceName = 'authentication';
+const account = storage.get();
+const initialState: State = account
+  ? { isLoading: false, account, message: '' }
+  : { isLoading: false, message: '' };
+
+export const login = createAsyncThunk<
+  Account,
+  LoginProps,
+  {
+    rejectValue: string;
+  }
+>(`${sliceName}/login`, async (values, { rejectWithValue }) => {
   try {
     const payload = {
       username: values.username.trim(),
@@ -61,40 +48,57 @@ export const login = (values: LoginRequest, callback: Func) => async (
       '/api/authentication/login',
       payload,
     );
-    const {
-      userId,
-      groupId,
-      token,
-      isSuccess,
-      errMsg,
-      connectionId,
-    } = response.data;
+    const data = response.data;
+    const { userId, groupId, token, isSuccess, errMsg, connectionId } = data;
     if (isSuccess) {
-      const account = {
+      return {
         username: payload.username,
         userId,
         groupId,
         token,
         connectionId,
       };
-      storage.save(account);
-      dispatch(loginSuccess({ account }));
     } else {
-      dispatch(loginFailure({ message: errMsg }));
+      return rejectWithValue(errMsg);
     }
-  } catch (e) {
-    handleException(e);
-  } finally {
-    callback();
-  }
-};
+  } catch (err) {
+    handleException(err);
+    const error: AxiosError<string> = err;
+    if (!error.response) {
+      throw err;
+    }
 
-export const logout = () => (dispatch: AppDispatch) => {
-  stopCheckin();
-  stopRefreshToken();
-  storage.remove();
-  dispatch(logoutSuccess());
-};
+    return rejectWithValue(error.response.data);
+  }
+});
+
+const slice = createSlice({
+  name: sliceName,
+  initialState,
+  reducers: {
+    logout: (state) => {
+      stopCheckin();
+      stopRefreshToken();
+      storage.remove();
+      state.account = undefined;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(login.pending, (state) => {
+      state.message = undefined;
+    });
+    builder.addCase(login.fulfilled, (state, action) => {
+      const account = action.payload;
+      storage.save(account);
+      state.account = account;
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.message = action.payload;
+    });
+  },
+});
+
+export const { logout } = slice.actions;
 
 if (account) {
   window.setTimeout(async () => {

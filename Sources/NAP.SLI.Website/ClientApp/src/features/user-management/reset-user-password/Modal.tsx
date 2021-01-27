@@ -13,7 +13,7 @@ import {
   Spinner,
   ModalFooter,
 } from 'reactstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, batch } from 'react-redux';
 import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { resetPassword, closeModal, ResetPasswordProps } from './reducer';
@@ -43,9 +43,11 @@ const ResetUserPasswordModal = () => {
     if (resetPassword.fulfilled.match(resultAction)) {
       const resultData = resultAction.payload;
       if (resultData.isSuccess) {
-        dispatch(success('Updated successfully'));
-        dispatch(closeModal());
-        dispatch(patchUser({ data: values }));
+        batch(() => {
+          dispatch(success('Updated successfully'));
+          dispatch(closeModal());
+          dispatch(patchUser({ data: values }));
+        });
       } else {
         dispatch(error(resultData.errMsg));
       }

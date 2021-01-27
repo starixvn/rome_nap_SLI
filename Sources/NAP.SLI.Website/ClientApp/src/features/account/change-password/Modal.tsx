@@ -13,10 +13,12 @@ import {
   Col,
   FormFeedback,
 } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Formik, Field } from 'formik';
+import { batch, useSelector } from 'react-redux';
+import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { toggleModal, changePassword } from './reducer';
+import { toggleModal, changePassword, ChangePasswordProps } from './reducer';
+import { error, success } from 'components/toast/reducer';
+import { useAppDispatch } from 'app/store';
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Old Password is required'),
@@ -27,7 +29,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const ChangePasswordModal = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { account } = useSelector((state: AppState) => state.authentication);
   const { isOpen } = useSelector((state: AppState) => state.changePassword);
 
@@ -42,14 +44,33 @@ const ChangePasswordModal = () => {
     confirmPassword: '',
   };
 
+  const handleChangePassword = async (
+    values: ChangePasswordProps,
+    { setSubmitting }: FormikHelpers<ChangePasswordProps>,
+  ) => {
+    setSubmitting(true);
+    const resultAction = await dispatch(changePassword(values));
+    setSubmitting(false);
+
+    if (changePassword.fulfilled.match(resultAction)) {
+      const resultData = resultAction.payload;
+      if (resultData.isSuccess) {
+        batch(async () => {
+          dispatch(success('Password changed successfully'));
+          dispatch(toggleModal());
+        });
+      } else {
+        dispatch(error(resultData.errMsg));
+      }
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} unmountOnClose>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          dispatch(changePassword(values, () => setSubmitting(false)));
-        }}
+        onSubmit={handleChangePassword}
       >
         {({ errors, touched, handleSubmit, isSubmitting }) => (
           <Form onSubmit={handleSubmit}>

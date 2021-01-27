@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import produce from 'immer';
 import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 
@@ -14,7 +15,7 @@ export type UserModel = {
 };
 
 type State = {
-  arg: QueryProps;
+  queryArg: QueryProps;
   users?: Array<UserModel>;
 };
 
@@ -35,7 +36,7 @@ type UpdateUserStatusProps = {
 };
 
 const initialState: State = {
-  arg: {
+  queryArg: {
     username: '',
     groupId: undefined,
   },
@@ -88,14 +89,16 @@ const slice = createSlice({
     patchUser: (state, action: PayloadAction<PatchUserAction>) => {
       const { data } = action.payload;
       if (state.users) {
-        const user = state.users.filter((u) => u.custId === data.custId)[0];
-        Object.assign(user, data);
+        state.users = produce(state.users, (users) => {
+          const user = users.filter((u) => u.custId === data.custId)[0];
+          Object.assign(user, data);
+        });
       }
     },
   },
   extraReducers: (builder) => {
     builder.addCase(query.pending, (state, { meta }) => {
-      state.arg = meta.arg;
+      state.queryArg = meta.arg;
       state.users = [];
     });
     builder.addCase(query.fulfilled, (state, { payload }) => {

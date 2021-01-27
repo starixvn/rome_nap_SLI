@@ -18,7 +18,7 @@ const clearTimer = () => {
   }
 };
 
-const autoHide = () => (dispatch: AppDispatch) => {
+const autoHide = (dispatch: AppDispatch) => {
   clearTimer();
   timeout = window.setTimeout(() => dispatch(hide()), 3000);
 };
@@ -46,17 +46,17 @@ export const { show, hide } = slice.actions;
 
 export const success = (message: string) => (dispatch: AppDispatch) => {
   dispatch(show({ message, color: 'success' }));
-  dispatch(autoHide());
+  autoHide(dispatch);
 };
 
 export const info = (message: string) => (dispatch: AppDispatch) => {
   dispatch(show({ message, color: 'info' }));
-  dispatch(autoHide());
+  autoHide(dispatch);
 };
 
 export const error = (message: string) => (dispatch: AppDispatch) => {
   dispatch(show({ message, color: 'danger' }));
-  dispatch(autoHide());
+  autoHide(dispatch);
 };
 
 export default slice.reducer;

@@ -13,7 +13,7 @@ import {
   FormFeedback,
   Spinner,
 } from 'reactstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, batch } from 'react-redux';
 import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { toggleModal, addNew, AddNewUserProps } from './reducer';
@@ -33,7 +33,7 @@ const validationSchema = Yup.object().shape({
 const AddNewUserModal = () => {
   const dispatch = useAppDispatch();
   const { isOpen } = useSelector((state: AppState) => state.addNewUser);
-  const { arg } = useSelector((state: AppState) => state.userManagement);
+  const { queryArg } = useSelector((state: AppState) => state.userManagement);
 
   const handleAdd = async (
     values: AddNewUserProps,
@@ -46,9 +46,11 @@ const AddNewUserModal = () => {
     if (addNew.fulfilled.match(resultAction)) {
       const resultData = resultAction.payload;
       if (resultData.isSuccess) {
-        dispatch(success('Updated successfully'));
-        dispatch(toggleModal());
-        dispatch(query(arg));
+        batch(() => {
+          dispatch(success('Updated successfully'));
+          dispatch(toggleModal());
+          dispatch(query(queryArg));
+        });
       } else {
         dispatch(error(resultData.errMsg));
       }
