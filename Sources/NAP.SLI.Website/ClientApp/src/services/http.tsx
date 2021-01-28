@@ -5,7 +5,7 @@ import storage from './storage';
 import store from 'app/store';
 import { hide, error } from 'components/toast/reducer';
 import { logout } from 'features/account/authentication/reducer';
-import { checkSuccess, UMTime } from 'features/error/UM/reducer';
+import { updateUM, UMTime } from 'features/error/UM/reducer';
 import { RouteLinks } from 'utils/RouteUtils';
 import { history } from 'app/App';
 import { isNullOrWhiteSpaces } from 'utils/StringUtils';
@@ -38,7 +38,7 @@ const handleError = (e: AxiosError) => {
         return new Error('Handled');
       case 503: {
         const umTime = e.response.data as UMTime;
-        store.dispatch(checkSuccess({ ...umTime }));
+        store.dispatch(updateUM(umTime));
         history.push(RouteLinks.ERROR_UM);
         return new Error('Handled');
       }

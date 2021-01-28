@@ -5,8 +5,8 @@ import { DatetimepickerProps } from 'react-datetime';
 
 type Props = DatetimepickerProps & {
   name: string;
-  minDate: Moment;
-  maxDate: Moment;
+  minDate?: Moment;
+  maxDate?: Moment;
   disabled: boolean;
 };
 

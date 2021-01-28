@@ -11,10 +11,16 @@ import {
   InputProps,
 } from 'reactstrap';
 import moment, { Moment } from 'moment';
+import { maxDate, minDate } from 'utils/DateUtils';
+
+const defaultProps = {
+  minDate,
+  maxDate,
+};
 
 type Props = DatetimepickerProps & {
-  minDate: Moment;
-  maxDate: Moment;
+  minDate?: Moment;
+  maxDate?: Moment;
   disabled: boolean;
 };
 
@@ -84,4 +90,5 @@ const MonthPicker = (props: Props) => {
   );
 };
 
+MonthPicker.defaultProps = defaultProps;
 export default MonthPicker;

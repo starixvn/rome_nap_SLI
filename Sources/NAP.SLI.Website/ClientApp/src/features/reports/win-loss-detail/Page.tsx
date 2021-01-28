@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
 import { minDate, maxDate } from 'utils/DateUtils';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getDownlineLevel, getLevelName } from 'utils/CustomerLevelUtils';
 import Table from './Table';
 import { selectCustomer } from './reducer';
@@ -13,21 +13,15 @@ import { RouteLinks } from 'utils/RouteUtils';
 import Pagination from 'components/pagination/Component';
 import { query } from './reducer';
 import { PageSizes } from 'utils/ReportUtils';
+import { useAppDispatch } from 'app/store';
 
 const WinLossDetailPage = () => {
   const history = useHistory();
   const location = useLocation<Customer>();
-  const dispatch = useDispatch();
-  const {
-    isHistory,
-    data,
-    customer,
-    uplineCustomers,
-    pageIndex,
-    pageSize,
-    fromDate,
-    toDate,
-  } = useSelector((state: AppState) => state.winLossDetail);
+  const dispatch = useAppDispatch();
+  const { queryData, queryCustomer, uplineCustomers, queryArg } = useSelector(
+    (state: AppState) => state.winLossDetail,
+  );
 
   useEffect(() => {
     if (!location.state) {
@@ -49,37 +43,38 @@ const WinLossDetailPage = () => {
     );
   }, [location]);
 
-  if (!customer) {
+  if (!queryCustomer) {
     return <></>;
   }
 
-  const handlePageChange = (
+  const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
+
+  const handlePageChange = async (
     pageIndex: number,
     pageSize: number,
     callback: Func,
   ) => {
-    const { custId, roleId } = customer;
-    dispatch(
-      query(
-        {
-          isHistory,
-          custId,
-          roleId,
-          fromDate,
-          toDate,
-          pageIndex,
-          pageSize,
-        },
-        callback,
-      ),
+    const { custId, roleId } = queryCustomer;
+    await dispatch(
+      query({
+        isHistory,
+        custId,
+        roleId,
+        fromDate,
+        toDate,
+        pageIndex,
+        pageSize,
+      }),
     );
+    callback();
   };
 
   return (
     <div className="win-loss-detail-page">
       <div className="page-title">
         <span>
-          {getLevelName(getDownlineLevel(customer.roleId)) + ' Win Loss Detail'}{' '}
+          {getLevelName(getDownlineLevel(queryCustomer.roleId)) +
+            ' Win Loss Detail'}{' '}
           (
         </span>
         <Breadcrumb>
@@ -96,7 +91,7 @@ const WinLossDetailPage = () => {
                 </span>
               </BreadcrumbItem>
             ))}
-          <BreadcrumbItem active>{customer.username}</BreadcrumbItem>
+          <BreadcrumbItem active>{queryCustomer.username}</BreadcrumbItem>
         </Breadcrumb>
         <span>)</span>
       </div>
@@ -105,15 +100,15 @@ const WinLossDetailPage = () => {
       ) : (
         <HistoryFilter minDate={minDate} maxDate={maxDate} />
       )}
-      {data && (
+      {queryData && (
         <>
           <Table />
-          {data.totalRecords > 0 && (
+          {queryData.totalRecords > 0 && (
             <Pagination
               pageIndex={pageIndex}
               pageSize={pageSize}
               pageSizes={PageSizes}
-              total={data.totalRecords}
+              total={queryData.totalRecords}
               onPageChange={handlePageChange}
             />
           )}

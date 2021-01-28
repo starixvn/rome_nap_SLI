@@ -1,8 +1,8 @@
 import './SideBar.scss';
 import React, { useState, createRef, useEffect, RefObject } from 'react';
 import { Button, Form, Navbar, Spinner, FormFeedback } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { Formik, FormikProps } from 'formik';
+import { useSelector } from 'react-redux';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import CustomerPage from './customer/Page';
@@ -11,6 +11,7 @@ import {
   getCustomerInformation,
   QueryUsernameSuggestionRecord,
 } from './reducer';
+import { useAppDispatch } from 'app/store';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Required').min(2, 'At least 2 characters'),
@@ -23,7 +24,7 @@ const SideBar = () => {
   const formikRef: RefObject<
     FormikProps<QueryUsernameSuggestionRecord>
   > = createRef();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<Array<QueryUsernameSuggestionRecord>>(
     [],
@@ -45,6 +46,11 @@ const SideBar = () => {
       handleSubmit();
     }
   }, [username]);
+
+  const initialState = {
+    username,
+  };
+  type State = typeof initialState;
 
   const handleSearch = (value: string) => {
     setIsLoading(true);
@@ -73,23 +79,24 @@ const SideBar = () => {
       setFieldValue('username', selectedOptions[0].username);
   };
 
+  const handleGetCustomerInformation = async (
+    values: State,
+    { setSubmitting }: FormikHelpers<State>,
+  ) => {
+    setSubmitting(true);
+    await dispatch(getCustomerInformation(values.username));
+    setSubmitting(false);
+  };
+
   return (
     <div className="sidebar border-right">
       <Navbar className="navbar-expand border-bottom box-shadow">
         <Formik
           innerRef={formikRef}
           enableReinitialize
-          initialValues={{
-            username,
-          }}
+          initialValues={initialState}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            dispatch(
-              getCustomerInformation(values.username, () =>
-                setSubmitting(false),
-              ),
-            );
-          }}
+          onSubmit={handleGetCustomerInformation}
         >
           {({ errors, touched, handleSubmit, isSubmitting, setFieldValue }) => (
             <Form inline className="form-search" onSubmit={handleSubmit}>

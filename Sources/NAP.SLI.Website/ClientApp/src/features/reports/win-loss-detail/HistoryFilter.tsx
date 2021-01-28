@@ -1,15 +1,16 @@
 import React, { createRef, useEffect } from 'react';
 import { Label, Form, Button, FormGroup, Container, Spinner } from 'reactstrap';
-import { Formik, FormikProps, FormikValues } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import FormikMonthPicker from 'components/month-picker/FormikMonthPicker';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { generateRangeSelectOptions } from 'utils/SelectUtils';
 import FormikSelect from 'components/select/FormikSelect';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
 import { query, toggleMode, excel } from './reducer';
 import moment, { Moment } from 'moment';
+import { useAppDispatch } from 'app/store';
 
 const generateDateOptions = (date: Moment) => {
   return generateRangeSelectOptions(1, date.daysInMonth());
@@ -21,22 +22,32 @@ type Props = {
 };
 
 const HistoryFilter = ({ minDate, maxDate }: Props) => {
-  const formikRef = createRef<FormikProps<FormikValues>>();
-  const dispatch = useDispatch();
-  const { customer, pageIndex, pageSize, isHistory } = useSelector(
+  const dispatch = useAppDispatch();
+  const { queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
 
-  if (!customer) {
+  if (!queryCustomer) {
     return <></>;
   }
 
-  const { custId, roleId } = customer;
+  const { custId, roleId } = queryCustomer;
+  const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
 
   const month = getToday();
   const dateOptions = generateDateOptions(month);
   const fromDateOption = dateOptions[0].value;
   const toDateOption = dateOptions[month.date() - 1].value;
+
+  const initialValues = {
+    month,
+    dateOptions,
+    fromDateOption,
+    toDateOption,
+  };
+
+  type FormikValues = typeof initialValues;
+  const formikRef = createRef<FormikProps<FormikValues>>();
 
   useEffect(() => {
     if (!formikRef.current) {
@@ -63,35 +74,43 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
     }
   };
 
-  const initialValues = {
-    month,
-    dateOptions,
-    fromDateOption,
-    toDateOption,
+  const handleQuery = async (
+    values: FormikValues,
+    { setSubmitting }: FormikHelpers<FormikValues>,
+  ) => {
+    setSubmitting(true);
+    const month = values.month;
+    const fromDate = moment(month).date(values.fromDateOption);
+    const toDate = moment(month).date(values.toDateOption);
+    const queryPayload = {
+      isHistory,
+      custId,
+      roleId,
+      fromDate: formatDate(fromDate),
+      toDate: formatDate(toDate),
+      pageIndex,
+      pageSize,
+    };
+    await dispatch(query(queryPayload));
+    setSubmitting(false);
   };
+
+  const handleExcel = async () => {
+    const excelPayload = {
+      isHistory,
+      custId,
+      roleId,
+      fromDate,
+      toDate,
+    };
+    await excel(excelPayload);
+  };
+
   return (
     <Formik
       innerRef={formikRef}
       initialValues={initialValues}
-      onSubmit={(values, { setSubmitting }) => {
-        const month = values.month;
-        const fromDate = moment(month).date(values.fromDateOption);
-        const toDate = moment(month).date(values.toDateOption);
-        dispatch(
-          query(
-            {
-              isHistory,
-              custId,
-              roleId,
-              fromDate: formatDate(fromDate),
-              toDate: formatDate(toDate),
-              pageIndex,
-              pageSize,
-            },
-            () => setSubmitting(false),
-          ),
-        );
-      }}
+      onSubmit={handleQuery}
     >
       {({ values, setFieldValue, handleSubmit, isSubmitting }) => (
         <Container fluid className="filter">
@@ -135,7 +154,7 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
                   color="success"
                   className="btn-excel"
                   title="Export to Excel"
-                  onClick={() => dispatch(excel())}
+                  onClick={handleExcel}
                 >
                   <Icon path={mdiFileExcelOutline} />
                 </Button>

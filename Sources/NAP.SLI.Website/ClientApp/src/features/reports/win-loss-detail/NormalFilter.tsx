@@ -11,15 +11,16 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { Formik, FormikProps, FormikValues } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import FormikDatePicker from 'components/date-picker/FormikDatePicker';
 import { formatDate, getToday, ReportDateRanges } from 'utils/DateUtils';
 import { query, toggleMode, excel } from './reducer';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Moment } from 'moment';
 import moment from 'moment';
+import { useAppDispatch } from 'app/store';
 
 type Props = {
   minDate: Moment;
@@ -28,23 +29,26 @@ type Props = {
 
 const NormalFilter = ({ minDate, maxDate }: Props) => {
   const formikRef = createRef<FormikProps<FormikValues>>();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
-  const { customer, pageIndex, pageSize, isHistory } = useSelector(
+  const { queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
   const today = getToday();
-  const [fromDate, setFromDate] = useState(today);
-  const [toDate, setToDate] = useState(today);
-  const [fromMinDate, setFromMinDate] = useState(minDate);
-  const [toMaxDate, setToMaxdate] = useState(maxDate);
+  const initialValues = {
+    fromDate: today,
+    toDate: today,
+  };
 
-  if (!customer) {
+  type FormikValues = typeof initialValues;
+
+  if (!queryCustomer) {
     return <></>;
   }
 
-  const { custId, roleId } = customer;
+  const { custId, roleId } = queryCustomer;
+  const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
   useEffect(() => {
     if (!formikRef.current) {
       return;
@@ -77,11 +81,9 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
   ) => {
     const selectedFromDate = moment(selectedDate);
     if (selectedFromDate.isAfter(toDate)) {
-      setToDate(selectedFromDate);
       setFieldValue('toDate', selectedFromDate);
     }
 
-    setToMaxdate(selectedFromDate);
     setDropdownIndex(ReportDateRanges.length - 1);
   };
 
@@ -91,37 +93,46 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
   ) => {
     const selectedToDate = moment(selectedDate);
     if (selectedToDate.isBefore(fromDate)) {
-      setFromDate(selectedToDate);
       setFieldValue('fromDate', selectedToDate);
     }
 
-    setToMaxdate(selectedToDate);
     setDropdownIndex(ReportDateRanges.length - 1);
+  };
+
+  const handleQuery = async (
+    values: FormikValues,
+    { setSubmitting }: FormikHelpers<FormikValues>,
+  ) => {
+    setSubmitting(true);
+    const queryPayload = {
+      isHistory,
+      custId,
+      roleId,
+      fromDate: formatDate(values.fromDate),
+      toDate: formatDate(values.toDate),
+      pageIndex,
+      pageSize,
+    };
+    await dispatch(query(queryPayload));
+    setSubmitting(false);
+  };
+
+  const handleExcel = async () => {
+    const excelPayload = {
+      isHistory,
+      custId,
+      roleId,
+      fromDate,
+      toDate,
+    };
+    await excel(excelPayload);
   };
 
   return (
     <Formik
       innerRef={formikRef}
-      initialValues={{
-        fromDate: today,
-        toDate: today,
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        dispatch(
-          query(
-            {
-              isHistory,
-              custId,
-              roleId,
-              pageIndex,
-              pageSize,
-              fromDate: formatDate(values.fromDate),
-              toDate: formatDate(values.toDate),
-            },
-            () => setSubmitting(false),
-          ),
-        );
-      }}
+      initialValues={initialValues}
+      onSubmit={handleQuery}
     >
       {({ handleSubmit, isSubmitting, setFieldValue }) => (
         <Container fluid className="filter">
@@ -133,7 +144,6 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
                   disabled={isSubmitting}
                   name="fromDate"
                   minDate={minDate}
-                  maxDate={toMaxDate}
                   onChange={(value) =>
                     handleFromDateChange(value, setFieldValue)
                   }
@@ -144,7 +154,6 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
                 <FormikDatePicker
                   disabled={isSubmitting}
                   name="toDate"
-                  minDate={fromMinDate}
                   maxDate={maxDate}
                   onChange={(value) => handleToDateChange(value, setFieldValue)}
                 />
@@ -187,7 +196,7 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
                   color="success"
                   className="btn-excel"
                   title="Export to Excel"
-                  onClick={() => dispatch(excel())}
+                  onClick={handleExcel}
                 >
                   <Icon path={mdiFileExcelOutline} />
                 </Button>

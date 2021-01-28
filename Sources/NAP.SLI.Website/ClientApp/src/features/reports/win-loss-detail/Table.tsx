@@ -14,16 +14,16 @@ import { selectCustomer, Record } from './reducer';
 const TableComponent = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { data, customer } = useSelector(
+  const { queryData, queryCustomer } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
 
-  if (!data || !customer) {
+  if (!queryData || !queryCustomer) {
     return <></>;
   }
 
-  const { records, total } = data;
-  const { roleId } = customer;
+  const { records, total } = queryData;
+  const { roleId } = queryCustomer;
   const removedColumnTotal =
     roleId === CustomerLevels.Master
       ? 1

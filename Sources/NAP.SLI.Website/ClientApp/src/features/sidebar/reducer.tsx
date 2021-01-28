@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 
@@ -42,36 +42,53 @@ type State = {
   message?: string;
 };
 
+type GetCustomerInformationData = ResultData & {
+  generalInformation: GeneralInformation;
+  headline: Headline;
+};
+
+const sliceName = 'sidebar';
+
+export const getCustomerInformation = createAsyncThunk<
+  GetCustomerInformationData,
+  string,
+  {
+    rejectValue: string;
+  }
+>(
+  `${sliceName}/getCustomerInformation`,
+  async (username, { rejectWithValue }) => {
+    try {
+      const payload = {
+        username,
+      };
+      const { data } = await post<GetCustomerInformationData>(
+        '/api/customer/information',
+        payload,
+      );
+      const { isSuccess, errMsg } = data;
+      if (isSuccess) {
+        return data;
+      }
+
+      return rejectWithValue(errMsg);
+    } catch (err) {
+      handleException(err);
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
 const initialState: State = {
   isOpen: false,
   username: '',
 };
 const slice = createSlice({
-  name: 'sidebar',
+  name: sliceName,
   initialState,
   reducers: {
     toggle: (state) => {
       state.isOpen = !state.isOpen;
-    },
-    getCustomerInformationRequest: (
-      state,
-      action: PayloadAction<{ username: string }>,
-    ) => {
-      state.message = undefined;
-      state.customer = undefined;
-      state.username = action.payload.username;
-    },
-    getCustomerInformationSuccess: (
-      state,
-      action: PayloadAction<{ customer: Customer }>,
-    ) => {
-      state.customer = action.payload.customer;
-    },
-    getCustomerInformationFailure: (
-      state,
-      action: PayloadAction<{ message: string }>,
-    ) => {
-      state.message = action.payload.message;
     },
     selectUsername: (state, action) => {
       state.customer = undefined;
@@ -79,15 +96,22 @@ const slice = createSlice({
       state.username = action.payload.username;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getCustomerInformation.pending, (state, { meta }) => {
+      state.message = undefined;
+      state.customer = undefined;
+      state.username = meta.arg;
+    });
+    builder.addCase(getCustomerInformation.fulfilled, (state, { payload }) => {
+      state.customer = payload;
+    });
+    builder.addCase(getCustomerInformation.rejected, (state, { payload }) => {
+      state.message = payload;
+    });
+  },
 });
 
-export const {
-  toggle,
-  getCustomerInformationRequest,
-  getCustomerInformationFailure,
-  getCustomerInformationSuccess,
-  selectUsername,
-} = slice.actions;
+export const { toggle, selectUsername } = slice.actions;
 
 export type QueryUsernameSuggestionRecord = {
   username: string;
@@ -105,40 +129,6 @@ export const queryUsernameSuggestion = async (value: string) => {
     payload,
   );
   return response.data;
-};
-
-type GetCustomerInformationData = ResultData & {
-  generalInformation: GeneralInformation;
-  headline: Headline;
-};
-export const getCustomerInformation = (
-  username: string,
-  callback: Func,
-) => async (dispatch: AppDispatch) => {
-  try {
-    dispatch(getCustomerInformationRequest({ username }));
-    const payload = {
-      username,
-    };
-    const response = await post<GetCustomerInformationData>(
-      '/api/customer/information',
-      payload,
-    );
-    const { isSuccess, errMsg, generalInformation, headline } = response.data;
-    if (isSuccess) {
-      const customer = {
-        generalInformation,
-        headline,
-      };
-      dispatch(getCustomerInformationSuccess({ customer }));
-    } else {
-      dispatch(getCustomerInformationFailure({ message: errMsg }));
-    }
-  } catch (e) {
-    handleException(e);
-  } finally {
-    callback();
-  }
 };
 
 export default slice.reducer;

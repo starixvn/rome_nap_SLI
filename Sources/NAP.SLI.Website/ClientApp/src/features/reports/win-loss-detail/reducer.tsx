@@ -1,8 +1,12 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  current,
+  PayloadAction,
+} from '@reduxjs/toolkit';
 import { PageSize } from 'utils/ReportUtils';
 import { handleException } from 'utils/ExceptionUtils';
 import { formatDate, getToday } from 'utils/DateUtils';
-import store from 'app/store';
 import { download, post } from 'services/http';
 
 export type Record = {
@@ -17,25 +21,32 @@ export type Record = {
   memberWinLoss: number;
 };
 
-type State = {
+type QueryArg = {
   isHistory: boolean;
   fromDate: string;
   toDate: string;
-  customer?: Customer;
-  data?: QueryData;
-  uplineCustomers: Array<Customer>;
   pageIndex: number;
   pageSize: number;
 };
 
-type QueryProps = {
-  isHistory: boolean;
+type QueryProps = QueryArg & {
   custId: number;
   roleId: number;
+};
+
+type ExcelProps = {
+  custId: number;
+  roleId: number;
+  isHistory: boolean;
   fromDate: string;
   toDate: string;
-  pageIndex: number;
-  pageSize: number;
+};
+
+type State = {
+  uplineCustomers: Array<Customer>;
+  queryCustomer?: Customer;
+  queryArg: QueryArg;
+  queryData?: QueryData;
 };
 
 export type QueryData = {
@@ -46,40 +57,56 @@ export type QueryData = {
 
 const today = getToday();
 const initialState: State = {
-  isHistory: false,
-  fromDate: formatDate(today),
-  toDate: formatDate(today),
-  customer: undefined,
-  data: undefined,
   uplineCustomers: [],
-  pageIndex: 1,
-  pageSize: PageSize,
+  queryCustomer: undefined,
+  queryData: undefined,
+  queryArg: {
+    isHistory: false,
+    fromDate: formatDate(today),
+    toDate: formatDate(today),
+    pageIndex: 1,
+    pageSize: PageSize,
+  },
+};
+const sliceName = 'win-loss-detail';
+
+const calculateCompanyWinLoss = (record: Record) => {
+  record.companyWinLoss =
+    -record.memberWinLoss +
+    record.agentWinLoss +
+    (record.masterWinLoss || 0) +
+    (record.superWinLoss || 0);
+};
+
+export const query = createAsyncThunk<QueryData, QueryProps>(
+  `${sliceName}/query`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await post<QueryData>(
+        '/api/win-loss-detail/query',
+        values,
+      );
+      const { records, total } = data;
+      records.forEach((record) => calculateCompanyWinLoss(record));
+      calculateCompanyWinLoss(total);
+      return data;
+    } catch (err) {
+      handleException(err);
+      return rejectWithValue(err);
+    }
+  },
+);
+
+export const excel = async (payload: ExcelProps) => {
+  return await download('/api/win-loss-detail/excel', payload);
 };
 
 const slice = createSlice({
-  name: 'win-loss-detail',
+  name: sliceName,
   initialState,
   reducers: {
     toggleMode: (state) => {
-      state.isHistory = !state.isHistory;
-    },
-    queryRequest: (state, action: PayloadAction<QueryProps>) => {
-      const {
-        fromDate,
-        toDate,
-        pageIndex,
-        pageSize,
-        isHistory,
-      } = action.payload;
-      state.isHistory = isHistory;
-      state.fromDate = fromDate;
-      state.toDate = toDate;
-      state.pageIndex = pageIndex;
-      state.pageSize = pageSize;
-      state.data = undefined;
-    },
-    querySuccess: (state, action: PayloadAction<{ data: QueryData }>) => {
-      state.data = action.payload.data;
+      state.queryArg.isHistory = !state.queryArg.isHistory;
     },
     selectCustomer: (
       state,
@@ -87,8 +114,8 @@ const slice = createSlice({
     ) => {
       const { customer, isReset } = action.payload;
       const currentState = current(state);
-      if (isReset || !currentState.customer) {
-        state.customer = customer;
+      if (isReset || !currentState.queryCustomer) {
+        state.queryCustomer = customer;
         state.uplineCustomers = [];
       } else {
         const uplineCustomers = [];
@@ -104,66 +131,31 @@ const slice = createSlice({
         }
 
         if (isDrillDown) {
-          uplineCustomers.push(currentState.customer);
+          uplineCustomers.push(currentState.queryCustomer);
         }
 
-        state.customer = customer;
+        state.queryCustomer = customer;
         state.uplineCustomers = uplineCustomers;
       }
     },
   },
-});
-
-const calculateCompanyWinLoss = (record: Record) => {
-  record.companyWinLoss =
-    -record.memberWinLoss +
-    record.agentWinLoss +
-    (record.masterWinLoss || 0) +
-    (record.superWinLoss || 0);
-};
-
-export const {
-  toggleMode,
-  queryRequest,
-  querySuccess,
-  selectCustomer,
-} = slice.actions;
-
-export const query = (payload: QueryProps, callback: Func) => async (
-  dispatch: AppDispatch,
-) => {
-  try {
-    dispatch(queryRequest(payload));
-    const response = await post<QueryData>('/api/winlossdetail/query', payload);
-    const { records, total } = response.data;
-    records.forEach((record) => calculateCompanyWinLoss(record));
-    calculateCompanyWinLoss(total);
-    dispatch(querySuccess({ data: response.data }));
-  } catch (e) {
-    handleException(e);
-  } finally {
-    callback();
-  }
-};
-
-export const excel = () => async () => {
-  try {
-    const appState: AppState = store.getState();
-    const { fromDate, toDate, customer } = appState.winLossDetail;
-    if (customer) {
-      const { custId, roleId, username } = customer;
-      const payload = {
-        custId,
-        username,
-        roleId,
+  extraReducers: (builder) => {
+    builder.addCase(query.pending, (state, { meta }) => {
+      const { fromDate, toDate, pageIndex, pageSize, isHistory } = meta.arg;
+      state.queryArg = {
         fromDate,
         toDate,
+        pageIndex,
+        pageSize,
+        isHistory,
       };
-      await download('/api/winlossdetail/excel', payload);
-    }
-  } catch (e) {
-    handleException(e);
-  }
-};
+    });
+    builder.addCase(query.fulfilled, (state, { payload }) => {
+      state.queryData = payload;
+    });
+  },
+});
+
+export const { toggleMode, selectCustomer } = slice.actions;
 
 export default slice.reducer;

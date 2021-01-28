@@ -7,7 +7,7 @@
     using NAP.SLI.WinLossDetail.Requests;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/win-loss-detail")]
     public class WinLossDetailController : ControllerBase
     {
         private readonly IMediator mediator;
