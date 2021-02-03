@@ -5,6 +5,7 @@ import Modal from './Modal';
 import { Provider } from 'react-redux';
 import { Action, DeepPartial, ThunkDispatch } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
+import { mount, ReactWrapper } from 'enzyme';
 
 jest.mock('app/store');
 
@@ -21,32 +22,39 @@ const userManagement = {
 
 describe('Modal', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const renderComponent = (store: any): RenderResult =>
-    render(
+  const renderComponent = (store: any): ReactWrapper =>
+    mount(
       <Provider store={store}>
         <Modal />
       </Provider>,
     );
 
-  test('not open modal', () => {
+  it('not open modal', () => {
     const store = mockStore({
       addExistingUser: {
         isOpen: false,
       },
       userManagement,
     });
-    const { asFragment } = renderComponent(store);
-    expect(asFragment()).toMatchSnapshot();
+
+    const component = renderComponent(store);
+
+    expect(component).toMatchSnapshot();
+
+    component.unmount();
   });
 
-  test('open modal', () => {
+  it('open modal', () => {
     const store = mockStore({
       addExistingUser: {
         isOpen: true,
       },
       userManagement,
     });
-    const { asFragment } = renderComponent(store);
-    expect(asFragment()).toMatchSnapshot();
+    const component = renderComponent(store);
+
+    expect(component).toMatchSnapshot();
+
+    component.unmount();
   });
 });

@@ -38,6 +38,7 @@
     "@testing-library/user-event": "^12.6.0",
     "@types/classnames": "^2.2.11",
     "@types/content-disposition": "^0.5.3",
+    "@types/enzyme": "^3.10.8",
     "@types/file-saver": "^2.0.1",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.21",
@@ -52,6 +53,9 @@
     "@types/redux-mock-store": "^1.0.2",
     "@types/yup": "^0.29.11",
     "@typescript-eslint/parser": "^4.13.0",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.4.1",
+    "enzyme": "^3.11.0",
+    "enzyme-to-json": "^3.6.1",
     "eslint": "^7.18.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-flowtype": "^5.2.0",
@@ -82,6 +86,9 @@
     ]
   },
   "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!/node_modules/",
