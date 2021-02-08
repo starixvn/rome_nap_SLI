@@ -4,7 +4,7 @@ import UserManagementPage from './Page';
 import { Provider } from 'react-redux';
 import { Action, DeepPartial, ThunkDispatch } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import moment from 'moment';
 
 jest.mock('app/store');

@@ -15,8 +15,8 @@ const mockStore = configureStore<
 
 describe('SideBar', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const renderComponent = (store: any): ShallowWrapper =>
-    shallow(
+  const renderComponent = (store: any) =>
+    render(
       <Provider store={store}>
         <SideBar />
       </Provider>,
