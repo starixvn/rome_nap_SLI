@@ -2,12 +2,18 @@ import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { handleException } from 'utils/ExceptionUtils';
 import { post, download } from 'services/http';
-import store from 'app/store';
 
 export const ReportType = {
   Daily: 1,
   Monthly: 2,
   Sport: 3,
+};
+
+type ExcelProps = {
+  custId: number;
+  roleId: number;
+  fromDate: string;
+  toDate: string;
 };
 
 type WinLossAnalysisRecord = {
@@ -134,30 +140,8 @@ export const query = (
   }
 };
 
-export const excel = () => async () => {
-  try {
-    const rootState: AppState = store.getState();
-    const {
-      fromDate,
-      toDate,
-      customer,
-      reportType,
-    } = rootState.winLossAnalysis;
-    if (customer) {
-      const { custId, roleId, username } = customer;
-      const payload = {
-        custId,
-        username,
-        roleId,
-        fromDate,
-        toDate,
-        reportType,
-      };
-      await download('/api/winlossanalysis/excel', payload);
-    }
-  } catch (e) {
-    handleException(e);
-  }
+export const excel = async (payload: ExcelProps) => {
+  return await download('/api/winlossanalysis/excel', payload);
 };
 
 export default slice.reducer;

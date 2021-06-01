@@ -16,9 +16,11 @@ import { Formik, FormikProps } from 'formik';
 import FormikDatePicker from 'components/date-picker/FormikDatePicker';
 import { getToday, formatDate, ReportDateRanges } from 'utils/DateUtils';
 import { useDispatch } from 'react-redux';
-import { query, WinLossAnalysisState } from './reducer';
+import { excel, query, WinLossAnalysisState } from './reducer';
 import { Moment } from 'moment';
 import moment from 'moment';
+import Icon from '@mdi/react';
+import { mdiFileExcelOutline } from '@mdi/js';
 
 type Props = {
   custId: number;
@@ -92,6 +94,16 @@ const Filter = (props: Props) => {
     }
 
     setToMaxdate(selectedToDate);
+  };
+
+  const handleExcel = async () => {
+    const excelPayload = {
+      custId,
+      roleId,
+      fromDate: formatDate(fromDate),
+      toDate: formatDate(toDate),
+    };
+    await excel(excelPayload);
   };
 
   return (
@@ -172,6 +184,17 @@ const Filter = (props: Props) => {
                     ))}
                   </DropdownMenu>
                 </Dropdown>
+              </FormGroup>
+              <FormGroup>
+                <Button
+                  type="button"
+                  color="success"
+                  className="btn-excel"
+                  title="Export to Excel"
+                  onClick={handleExcel}
+                >
+                  <Icon path={mdiFileExcelOutline} />
+                </Button>
               </FormGroup>
             </fieldset>
           </Form>
