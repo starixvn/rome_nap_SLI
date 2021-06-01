@@ -7,7 +7,7 @@ namespace NAP.SLI.WinLossAnalysis.Controllers
     using NAP.SLI.WinLossAnalysis.Requests;
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/win-loss-analysis")]
     public class WinLossAnalysisController: ControllerBase
     {
         private readonly IMediator mediator;

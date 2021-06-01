@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import {
   Label,
   Form,
@@ -6,44 +6,49 @@ import {
   FormGroup,
   Container,
   Spinner,
-  ButtonGroup,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { Formik, FormikProps } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import FormikDatePicker from 'components/date-picker/FormikDatePicker';
-import { getToday, formatDate, ReportDateRanges } from 'utils/DateUtils';
-import { useDispatch } from 'react-redux';
-import { excel, query, WinLossAnalysisState } from './reducer';
-import { Moment } from 'moment';
-import moment from 'moment';
+import { formatDate, getToday, ReportDateRanges } from 'utils/DateUtils';
+import { query, excel } from './reducer';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
+import { useSelector } from 'react-redux';
+import { Moment } from 'moment';
+import moment from 'moment';
+import { useAppDispatch } from 'app/store';
 
 type Props = {
-  custId: number;
-  roleId: number;
-  username: string;
-  reportType: number;
   minDate: Moment;
   maxDate: Moment;
 };
 
-const Filter = (props: Props) => {
-  const formikRef = createRef<FormikProps<any>>();
-  const dispatch = useDispatch();
-  const { custId, roleId, minDate, maxDate } = props;
-  const [reportType, setReportType] = useState(props.reportType);
+const Filter = ({ minDate, maxDate }: Props) => {
+  const formikRef = createRef<FormikProps<FormikValues>>();
+  const dispatch = useAppDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
+  const { queryCustomer, queryArg } = useSelector(
+    (state: AppState) => state.winLossAnalysis,
+  );
   const today = getToday();
-  const [fromDate, setFromDate] = useState(today);
-  const [toDate, setToDate] = useState(today);
-  const [fromMinDate, setFromMinDate] = useState(minDate);
-  const [toMaxDate, setToMaxdate] = useState(maxDate);
+  const initialValues = {
+    fromDate: today,
+    toDate: today,
+  };
 
+  type FormikValues = typeof initialValues;
+
+  if (!queryCustomer) {
+    return <></>;
+  }
+
+  const { custId, roleId } = queryCustomer;
+  const { reportType, fromDate, toDate } = queryArg;
   useEffect(() => {
     if (!formikRef.current) {
       return;
@@ -76,11 +81,10 @@ const Filter = (props: Props) => {
   ) => {
     const selectedFromDate = moment(selectedDate);
     if (selectedFromDate.isAfter(toDate)) {
-      setToDate(selectedFromDate);
       setFieldValue('toDate', selectedFromDate);
     }
 
-    setFromMinDate(selectedFromDate);
+    setDropdownIndex(ReportDateRanges.length - 1);
   };
 
   const handleToDateChange = (
@@ -89,42 +93,44 @@ const Filter = (props: Props) => {
   ) => {
     const selectedToDate = moment(selectedDate);
     if (selectedToDate.isBefore(fromDate)) {
-      setFromDate(selectedToDate);
       setFieldValue('fromDate', selectedToDate);
     }
 
-    setToMaxdate(selectedToDate);
+    setDropdownIndex(ReportDateRanges.length - 1);
+  };
+
+  const handleQuery = async (
+    values: FormikValues,
+    { setSubmitting }: FormikHelpers<FormikValues>,
+  ) => {
+    setSubmitting(true);
+    const queryPayload = {
+      reportType,
+      custId,
+      roleId,
+      fromDate: formatDate(values.fromDate),
+      toDate: formatDate(values.toDate),
+    };
+    await dispatch(query(queryPayload));
+    setSubmitting(false);
   };
 
   const handleExcel = async () => {
     const excelPayload = {
+      reportType,
       custId,
       roleId,
-      fromDate: formatDate(fromDate),
-      toDate: formatDate(toDate),
+      fromDate,
+      toDate,
     };
     await excel(excelPayload);
   };
 
   return (
     <Formik
-      initialValues={{
-        fromDate: today,
-        toDate: today,
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        dispatch(
-          query(
-            {
-              custId,
-              roleId,
-              reportType,
-              ...values,
-            } as WinLossAnalysisState,
-            () => setSubmitting(false),
-          ),
-        );
-      }}
+      innerRef={formikRef}
+      initialValues={initialValues}
+      onSubmit={handleQuery}
     >
       {({ handleSubmit, isSubmitting, setFieldValue }) => (
         <Container fluid className="filter">
@@ -133,11 +139,9 @@ const Filter = (props: Props) => {
               <FormGroup className="mr-5">
                 <Label className="mr-2">From</Label>
                 <FormikDatePicker
-                  value={fromDate}
                   disabled={isSubmitting}
                   name="fromDate"
                   minDate={minDate}
-                  maxDate={toMaxDate}
                   onChange={(value) =>
                     handleFromDateChange(value, setFieldValue)
                   }
@@ -147,16 +151,15 @@ const Filter = (props: Props) => {
                 <Label className="mr-2">To</Label>
                 <FormikDatePicker
                   disabled={isSubmitting}
-                  value={toDate}
                   name="toDate"
-                  minDate={fromMinDate}
                   maxDate={maxDate}
                   onChange={(value) => handleToDateChange(value, setFieldValue)}
                 />
               </FormGroup>
               <FormGroup className="mr-5">
                 <Button type="submit" color="primary">
-                  {isSubmitting && <Spinner className="mr-3" />} Submit
+                  {isSubmitting && <Spinner className="mr-3" />}
+                  Submit
                 </Button>
               </FormGroup>
               <FormGroup className="mr-5">
@@ -198,33 +201,6 @@ const Filter = (props: Props) => {
               </FormGroup>
             </fieldset>
           </Form>
-          <>You can view the report data from {formatDate(minDate)}.</>
-          <Container fluid={true} className="my-2">
-            <span>Report By</span>
-            <ButtonGroup className="mx-4">
-              <Button
-                color="primary"
-                onClick={() => setReportType(1)}
-                active={reportType == 1}
-              >
-                Daily
-              </Button>
-              <Button
-                color="primary"
-                onClick={() => setReportType(2)}
-                active={reportType == 2}
-              >
-                Monthly
-              </Button>
-              <Button
-                color="primary"
-                onClick={() => setReportType(3)}
-                active={reportType == 3}
-              >
-                Sport
-              </Button>
-            </ButtonGroup>
-          </Container>
         </Container>
       )}
     </Formik>

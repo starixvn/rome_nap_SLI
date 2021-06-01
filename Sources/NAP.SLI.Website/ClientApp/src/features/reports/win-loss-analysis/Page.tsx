@@ -1,51 +1,41 @@
+import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { minDate, maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
-import { ReportType, selectCustomer } from './reducer';
-import WinLossAnalysisDetails from './Table';
+import { selectCustomer } from './reducer';
+import Table from './Table';
 
-const WinLossAnalysisPage = () => {
+const Page = () => {
   const history = useHistory();
   const location = useLocation<Customer>();
-  const dispatch = useDispatch();
-  const state = location.state;
-  const { data } = useSelector((state: AppState) => state.winLossAnalysis);
+  const dispatch = useAppDispatch();
+
+  if (!location.state) {
+    history.push(RouteLinks.HOME);
+    return <></>;
+  }
+
+  const { custId, roleId, username } = location.state;
 
   useEffect(() => {
-    if (!location.state) {
-      history.push(RouteLinks.HOME);
-      return;
-    }
-
-    const { custId, roleId, username } = location.state;
-
     dispatch(
       selectCustomer({
-        customer: {
-          custId,
-          roleId,
-          username,
-        },
-        isReset: true,
+        custId,
+        roleId,
+        username,
       }),
     );
   }, [location]);
 
   return (
     <div className="win-loss-analysis-page">
-      <div className="page-title">Win Loss Analysis</div>
-      <Filter
-        minDate={minDate}
-        maxDate={maxDate}
-        reportType={ReportType.Daily}
-        {...state}
-      />
-      {data && <WinLossAnalysisDetails />}
+      <div className="page-title">Win Loss Analysis ({username}</div>
+      <Filter minDate={minDate} maxDate={maxDate} />
+      <Table />
     </div>
   );
 };
 
-export default WinLossAnalysisPage;
+export default Page;

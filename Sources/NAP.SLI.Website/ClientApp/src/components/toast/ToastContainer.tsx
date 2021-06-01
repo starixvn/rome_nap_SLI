@@ -1,11 +1,12 @@
 import './ToastContainer.scss';
 import React from 'react';
 import { Toast, ToastBody } from 'reactstrap';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { hide } from './reducer';
+import { useAppDispatch } from 'app/store';
 
 const ToastContainer = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { message, color } = useSelector((state: AppState) => state.toast);
   const isOpen = message !== undefined;
 

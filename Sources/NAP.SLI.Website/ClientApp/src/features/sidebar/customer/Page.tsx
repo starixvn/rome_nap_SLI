@@ -1,6 +1,6 @@
 import './Page.scss';
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Container,
   Row,
@@ -21,9 +21,10 @@ import {
   isDownlineLevel,
 } from 'utils/CustomerLevelUtils';
 import { selectUsername } from '../reducer';
+import { useAppDispatch } from 'app/store';
 
 const CustomerPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { customer } = useSelector((state: AppState) => state.sidebar);
   const [isOpenCustomerInfo, setIsOpenCustomerInfo] = useState(true);
   const [isOpenReports, setIsOpenReports] = useState(true);

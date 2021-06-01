@@ -22,6 +22,7 @@ type Props = {
 };
 
 const HistoryFilter = ({ minDate, maxDate }: Props) => {
+  const formikRef = createRef<FormikProps<FormikValues>>();
   const dispatch = useAppDispatch();
   const { queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
@@ -47,7 +48,6 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
   };
 
   type FormikValues = typeof initialValues;
-  const formikRef = createRef<FormikProps<FormikValues>>();
 
   useEffect(() => {
     if (!formikRef.current) {

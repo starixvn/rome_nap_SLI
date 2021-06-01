@@ -1,6 +1,6 @@
 import './NavMenu.scss';
 import React, { useState, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Collapse,
   Navbar,
@@ -22,9 +22,10 @@ import { toggleModal } from 'features/account/change-password/reducer';
 import { toggle } from 'features/sidebar/reducer';
 import { RouteLinks } from 'utils/RouteUtils';
 import { UserGroup } from 'utils/UserGroupUtils';
+import { useAppDispatch } from 'app/store';
 
 const NavMenu = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { account } = useSelector((state: AppState) => state.authentication);
   const [isOpen, setIsOpen] = useState(false);
 

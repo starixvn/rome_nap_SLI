@@ -1,22 +1,34 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { handleException } from 'utils/ExceptionUtils';
 import { post, download } from 'services/http';
 
-export const ReportType = {
-  Daily: 1,
-  Monthly: 2,
-  Sport: 3,
-};
+export enum ReportType {
+  Daily = 1,
+  Monthly = 2,
+  Sport = 3,
+}
 
 type ExcelProps = {
+  reportType: ReportType;
   custId: number;
   roleId: number;
   fromDate: string;
   toDate: string;
 };
 
-type WinLossAnalysisRecord = {
+type QueryArg = {
+  reportType: ReportType;
+  fromDate: string;
+  toDate: string;
+};
+
+type QueryProps = QueryArg & {
+  custId: number;
+  roleId: number;
+};
+
+type Record = {
   sportType: string;
   betCount: number;
   turnover: number;
@@ -28,76 +40,76 @@ type WinLossAnalysisRecord = {
   companyWinLoss: number;
 };
 
-export type WinLossAnalysisData = {
-  records: Array<WinLossAnalysisRecord>;
-  total: WinLossAnalysisRecord;
+export type QueryData = {
+  records: Array<Record>;
+  total: Record;
 };
 
-export type WinLossAnalysisState = {
-  fromDate: any;
-  toDate: any;
-  customer?: Customer;
-  custId: number;
-  roleId: number;
-  username: string;
-  productIds: number;
-  reportType: number;
-  data?: WinLossAnalysisData;
+type State = {
+  queryCustomer?: Customer;
+  queryArg: QueryArg;
+  queryData?: QueryData;
 };
-
-type DefaultFunction = () => void;
 
 const today = getToday();
-const initialState: WinLossAnalysisState = {
-  fromDate: formatDate(today),
-  toDate: formatDate(today),
-  customer: undefined,
-  custId: -1,
-  roleId: 1,
-  username: '',
-  productIds: 1,
-  reportType: ReportType.Daily,
-  data: undefined,
+const initialState: State = {
+  queryCustomer: undefined,
+  queryData: undefined,
+  queryArg: {
+    reportType: ReportType.Daily,
+    fromDate: formatDate(today),
+    toDate: formatDate(today),
+  },
 };
 
+const sliceName = 'win-loss-analysis';
+
+export const query = createAsyncThunk<QueryData, QueryProps>(
+  `${sliceName}/query`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await post<QueryData>(
+        '/api/win-loss-analysis/query',
+        values,
+      );
+      const { records, total } = data;
+      records.forEach((record) => calculateCompanyWinLoss(record));
+      calculateCompanyWinLoss(total);
+      return data;
+    } catch (err) {
+      handleException(err);
+      return rejectWithValue(err);
+    }
+  },
+);
+
 const slice = createSlice({
-  name: 'win-loss-analysis',
+  name: sliceName,
   initialState,
   reducers: {
-    queryRequest: (state, action) => {
-      const {
+    setReportType: (state, action: PayloadAction<ReportType>) => {
+      state.queryArg.reportType = action.payload;
+    },
+    selectCustomer: (state, action: PayloadAction<Customer>) => {
+      state.queryCustomer = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(query.pending, (state, { meta }) => {
+      const { fromDate, toDate, reportType } = meta.arg;
+      state.queryArg = {
         fromDate,
         toDate,
-        customer,
-        productIds,
         reportType,
-      } = action.payload;
-      state.fromDate = fromDate;
-      state.toDate = toDate;
-      state.customer = customer;
-      state.productIds = productIds;
-      state.reportType = reportType;
-      state.data = undefined;
-    },
-    querySuccess: (state, action) => {
-      state.data = action.payload.data;
-    },
-    selectCustomer: (
-      state,
-      action: PayloadAction<{ customer: Customer; isReset: boolean }>,
-    ) => {
-      const { customer, isReset } = action.payload;
-      const currentState = current(state);
-      if (isReset && !currentState.customer) {
-        state.customer = customer;
-      }
-    },
+      };
+    });
+    builder.addCase(query.fulfilled, (state, { payload }) => {
+      state.queryData = payload;
+    });
   },
 });
 
-export const { queryRequest, querySuccess, selectCustomer } = slice.actions;
-
-const calculateCompanyWinLoss = (winLoss: WinLossAnalysisRecord) => {
+const calculateCompanyWinLoss = (winLoss: Record) => {
   winLoss.companyWinLoss =
     -winLoss.memberWinLoss +
     winLoss.agentWinLoss +
@@ -105,43 +117,10 @@ const calculateCompanyWinLoss = (winLoss: WinLossAnalysisRecord) => {
     (winLoss.superWinLoss || 0);
 };
 
-type QueryData = {
-  records: Array<WinLossAnalysisRecord>;
-  total: WinLossAnalysisRecord;
-};
-export const query = (
-  data: WinLossAnalysisState,
-  callback: DefaultFunction,
-) => async (dispatch: any) => {
-  try {
-    dispatch(
-      queryRequest({
-        fromDate: formatDate(data.fromDate),
-        toDate: formatDate(data.toDate),
-        customer: {
-          custId: data.custId,
-          username: data.username,
-          roleId: data.roleId,
-        },
-        productIds: data.productIds,
-        reportType: data.reportType,
-      }),
-    );
-
-    const response = await post<QueryData>('/api/winlossanalysis/query', data);
-    const { records, total } = response.data;
-    records.forEach((record) => calculateCompanyWinLoss(record));
-    calculateCompanyWinLoss(total);
-    dispatch(querySuccess({ data: response.data }));
-  } catch (e) {
-    handleException(e);
-  } finally {
-    callback();
-  }
-};
-
 export const excel = async (payload: ExcelProps) => {
-  return await download('/api/winlossanalysis/excel', payload);
+  return await download('/api/win-loss-analysis/excel', payload);
 };
+
+export const { setReportType, selectCustomer } = slice.actions;
 
 export default slice.reducer;

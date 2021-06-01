@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from 'utils/NumberUtils';
@@ -9,12 +9,15 @@ import {
   getDownlineLevel,
 } from 'utils/CustomerLevelUtils';
 import { RouteLinks } from 'utils/RouteUtils';
-import { selectCustomer, Record } from './reducer';
+import { selectCustomer, Record, query } from './reducer';
+import { useAppDispatch } from 'app/store';
+import { PageSizes } from 'utils/ReportUtils';
+import Pagination from 'components/pagination/Component';
 
 const TableComponent = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const history = useHistory();
-  const { queryData, queryCustomer } = useSelector(
+  const { queryData, queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
 
@@ -22,14 +25,22 @@ const TableComponent = () => {
     return <></>;
   }
 
-  const { records, total } = queryData;
+  const { pageIndex, pageSize, isHistory, fromDate, toDate } = queryArg;
+  const { records, total, totalRecords } = queryData;
   const { roleId } = queryCustomer;
-  const removedColumnTotal =
-    roleId === CustomerLevels.Master
-      ? 1
-      : roleId === CustomerLevels.Agent
-      ? 2
-      : 0;
+
+  const getRemovedColumnTotal = () => {
+    switch (roleId) {
+      case CustomerLevels.Master:
+        return 1;
+      case CustomerLevels.Agent:
+        return 2;
+      default:
+        return 0;
+    }
+  };
+
+  const removedColumnTotal = getRemovedColumnTotal();
 
   const handleUsernameClicked = (record: Record) => {
     const customer = {
@@ -45,103 +56,138 @@ const TableComponent = () => {
     dispatch(selectCustomer({ customer, isReset: false }));
   };
 
+  const handlePageChange = async (
+    pageIndex: number,
+    pageSize: number,
+    callback: Func,
+  ) => {
+    const { custId, roleId } = queryCustomer;
+    await dispatch(
+      query({
+        isHistory,
+        custId,
+        roleId,
+        fromDate,
+        toDate,
+        pageIndex,
+        pageSize,
+      }),
+    );
+    callback();
+  };
+
   return (
-    <Table hover bordered striped>
-      <thead>
-        <tr>
-          <th className="text-center align-middle" rowSpan={2}>
-            Username
-          </th>
-          <th className="text-center align-middle" rowSpan={2}>
-            Bet Count
-          </th>
-          <th className="text-center align-middle" rowSpan={2}>
-            Turnover
-          </th>
-          <th className="text-center" colSpan={5 - removedColumnTotal}>
-            Win/Loss
-          </th>
-        </tr>
-        <tr>
-          <th className="text-center">Member</th>
-          <th className="text-center">Agent</th>
-          {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-            <th className="text-center">Master</th>
-          )}
-          {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-            <th className="text-center">Super</th>
-          )}
-          <th className="text-center">Company</th>
-        </tr>
-      </thead>
-      <tbody>
-        {records.length === 0 ? (
+    <>
+      <Table hover bordered striped>
+        <thead>
           <tr>
-            <td className="text-center" colSpan={8 - removedColumnTotal}>
-              There is no information
-            </td>
+            <th className="text-center align-middle" rowSpan={2}>
+              Username
+            </th>
+            <th className="text-center align-middle" rowSpan={2}>
+              Bet Count
+            </th>
+            <th className="text-center align-middle" rowSpan={2}>
+              Turnover
+            </th>
+            <th className="text-center" colSpan={5 - removedColumnTotal}>
+              Win/Loss
+            </th>
           </tr>
-        ) : (
-          records.map((record) => (
-            <tr key={`Row_${record.custId}`}>
-              <td>
-                <span
-                  className="text-link"
-                  onClick={() => handleUsernameClicked(record)}
-                >
-                  {record.username}
-                </span>
+          <tr>
+            <th className="text-center">Member</th>
+            <th className="text-center">Agent</th>
+            {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
+              <th className="text-center">Master</th>
+            )}
+            {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
+              <th className="text-center">Super</th>
+            )}
+            <th className="text-center">Company</th>
+          </tr>
+        </thead>
+        <tbody>
+          {records.length === 0 ? (
+            <tr>
+              <td className="text-center" colSpan={8 - removedColumnTotal}>
+                There is no information
               </td>
-              <td className="text-right">{formatInteger(record.betCount)}</td>
-              <td className="text-right">{formatDecimal(record.turnover)}</td>
+            </tr>
+          ) : (
+            records.map((record) => (
+              <tr key={`Row_${record.custId}`}>
+                <td>
+                  <span
+                    className="text-link"
+                    onClick={() => handleUsernameClicked(record)}
+                  >
+                    {record.username}
+                  </span>
+                </td>
+                <td className="text-right">{formatInteger(record.betCount)}</td>
+                <td className="text-right">{formatDecimal(record.turnover)}</td>
+                <td className="text-right">
+                  {formatDecimal(record.memberWinLoss)}
+                </td>
+                <td className="text-right">
+                  {formatDecimal(record.agentWinLoss)}
+                </td>
+                {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
+                  <td className="text-right">
+                    {formatDecimal(record.masterWinLoss)}
+                  </td>
+                )}
+                {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
+                  <td className="text-right">
+                    {formatDecimal(record.superWinLoss)}
+                  </td>
+                )}
+                <td className="text-right">
+                  {formatDecimal(record.companyWinLoss)}
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+        {records.length > 0 && total && (
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td className="text-right">{formatInteger(total.betCount)}</td>
+              <td className="text-right">{formatDecimal(total.turnover)}</td>
               <td className="text-right">
-                {formatDecimal(record.memberWinLoss)}
+                {formatDecimal(total.memberWinLoss)}
               </td>
               <td className="text-right">
-                {formatDecimal(record.agentWinLoss)}
+                {formatDecimal(total.agentWinLoss)}
               </td>
               {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
                 <td className="text-right">
-                  {formatDecimal(record.masterWinLoss)}
+                  {formatDecimal(total.masterWinLoss)}
                 </td>
               )}
               {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
                 <td className="text-right">
-                  {formatDecimal(record.superWinLoss)}
+                  {formatDecimal(total.superWinLoss)}
                 </td>
               )}
               <td className="text-right">
-                {formatDecimal(record.companyWinLoss)}
+                {formatDecimal(total.companyWinLoss)}
               </td>
             </tr>
-          ))
+          </tfoot>
         )}
-      </tbody>
-      {records.length > 0 && total && (
-        <tfoot>
-          <tr>
-            <td>Total</td>
-            <td className="text-right">{formatInteger(total.betCount)}</td>
-            <td className="text-right">{formatDecimal(total.turnover)}</td>
-            <td className="text-right">{formatDecimal(total.memberWinLoss)}</td>
-            <td className="text-right">{formatDecimal(total.agentWinLoss)}</td>
-            {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-              <td className="text-right">
-                {formatDecimal(total.masterWinLoss)}
-              </td>
-            )}
-            {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-              <td className="text-right">
-                {formatDecimal(total.superWinLoss)}
-              </td>
-            )}
-            <td className="text-right">
-              {formatDecimal(total.companyWinLoss)}
-            </td>
-          </tr>
-        </tfoot>
+      </Table>
+      {totalRecords > 0 && (
+        <Pagination
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          pageSizes={PageSizes}
+          total={totalRecords}
+          onPageChange={handlePageChange}
+        />
       )}
-    </Table>
+    </>
   );
 };
 

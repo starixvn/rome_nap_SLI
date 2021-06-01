@@ -1,11 +1,11 @@
-export const CustomerLevels = {
-  Member: 1,
-  Agent: 2,
-  Master: 3,
-  Super: 4,
-};
+export enum CustomerLevels {
+  Member = 1,
+  Agent = 2,
+  Master = 3,
+  Super = 4,
+}
 
-export const getLevelName = (levelId: number) => {
+export const getLevelName = (levelId: CustomerLevels) => {
   switch (levelId) {
     case CustomerLevels.Member:
       return 'Member';
