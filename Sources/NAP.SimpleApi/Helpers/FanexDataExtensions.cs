@@ -15,7 +15,7 @@
             return FetchMultipleAsync(dynamicRepository, criteria, default);
         }
 
-        public static Task<IEnumerable<IEnumerable<object>>> FetchMultipleAsync(this IDynamicRepository dynamicRepository, ICriteria criteria, CancellationToken cancellationToken)
+        public static Task<IEnumerable<IEnumerable<object>>> FetchMultipleAsync(this IDynamicRepository _, ICriteria criteria, CancellationToken cancellationToken)
         {
             if (criteria == null)
             {

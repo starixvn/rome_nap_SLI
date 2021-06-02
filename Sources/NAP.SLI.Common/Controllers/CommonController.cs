@@ -93,10 +93,10 @@
             return Ok(new
             {
                 CpuPercentage = await GetCpuUsageForProcess().ConfigureAwait(false),
-                WorkingSet = Environment.WorkingSet,
-                OSVersion = Environment.OSVersion,
-                Is64BitOperatingSystem = Environment.Is64BitOperatingSystem,
-                MachineName = Environment.MachineName,
+                Environment.WorkingSet,
+                Environment.OSVersion,
+                Environment.Is64BitOperatingSystem,
+                Environment.MachineName,
                 RemoteIpAddress = context.Connection.RemoteIpAddress.ToString()
             });
         }
