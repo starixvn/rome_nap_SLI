@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
-import { ReportType } from './reducer';
+import { getReportName, ReportType } from './reducer';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const TableComponent = () => {
@@ -31,14 +31,6 @@ const TableComponent = () => {
   };
 
   const removedColumnTotal = getRemovedColumnTotal();
-
-  const getReportName = (reportType: ReportType) => {
-    return reportType === ReportType.Sport
-      ? 'Sport'
-      : reportType == ReportType.Monthly
-      ? 'Monthly'
-      : 'Daily';
-  };
 
   return (
     <Table hover bordered striped>

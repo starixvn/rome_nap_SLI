@@ -35,6 +35,17 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
   const { queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
+  useEffect(() => {
+    if (!formikRef.current) {
+      return;
+    }
+
+    const { isSubmitting, handleSubmit } = formikRef.current;
+    if (!isSubmitting) {
+      handleSubmit();
+    }
+  }, [formikRef, queryCustomer]);
+
   const today = getToday();
   const initialValues = {
     fromDate: today,
@@ -49,16 +60,6 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
 
   const { custId, roleId } = queryCustomer;
   const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
-  useEffect(() => {
-    if (!formikRef.current) {
-      return;
-    }
-
-    const { isSubmitting, handleSubmit } = formikRef.current;
-    if (!isSubmitting) {
-      handleSubmit();
-    }
-  }, [custId]);
 
   const handleDropdownItemClick = (
     index: number,

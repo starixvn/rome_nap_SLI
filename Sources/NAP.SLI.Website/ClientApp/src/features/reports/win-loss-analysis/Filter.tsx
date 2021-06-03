@@ -10,11 +10,18 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  ButtonGroup,
 } from 'reactstrap';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import FormikDatePicker from 'components/date-picker/FormikDatePicker';
 import { formatDate, getToday, ReportDateRanges } from 'utils/DateUtils';
-import { query, excel } from './reducer';
+import {
+  query,
+  excel,
+  setReportType,
+  ReportType,
+  getReportName,
+} from './reducer';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
 import { useSelector } from 'react-redux';
@@ -35,20 +42,9 @@ const Filter = ({ minDate, maxDate }: Props) => {
   const { queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossAnalysis,
   );
-  const today = getToday();
-  const initialValues = {
-    fromDate: today,
-    toDate: today,
-  };
 
-  type FormikValues = typeof initialValues;
-
-  if (!queryCustomer) {
-    return <></>;
-  }
-
-  const { custId, roleId } = queryCustomer;
   const { reportType, fromDate, toDate } = queryArg;
+
   useEffect(() => {
     if (!formikRef.current) {
       return;
@@ -58,7 +54,20 @@ const Filter = ({ minDate, maxDate }: Props) => {
     if (!isSubmitting) {
       handleSubmit();
     }
-  }, [custId]);
+  }, [formikRef, queryCustomer]);
+
+  if (!queryCustomer) {
+    return <></>;
+  }
+
+  const { custId, roleId } = queryCustomer;
+  const today = getToday();
+  const initialValues = {
+    fromDate: today,
+    toDate: today,
+  };
+
+  type FormikValues = typeof initialValues;
 
   const handleDropdownItemClick = (
     index: number,
@@ -126,6 +135,7 @@ const Filter = ({ minDate, maxDate }: Props) => {
     await excel(excelPayload);
   };
 
+  const reportTypes = [ReportType.Daily, ReportType.Monthly, ReportType.Sport];
   return (
     <Formik
       innerRef={formikRef}
@@ -201,6 +211,21 @@ const Filter = ({ minDate, maxDate }: Props) => {
               </FormGroup>
             </fieldset>
           </Form>
+          <div>
+            <span>Report By</span>
+            <ButtonGroup className="mx-4">
+              {reportTypes.map((type, index) => (
+                <Button
+                  key={index}
+                  color="primary"
+                  onClick={() => dispatch(setReportType(type))}
+                  active={reportType === type}
+                >
+                  {getReportName(type)}
+                </Button>
+              ))}
+            </ButtonGroup>
+          </div>
         </Container>
       )}
     </Formik>

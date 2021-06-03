@@ -12,26 +12,29 @@ const Page = () => {
   const location = useLocation<Customer>();
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if (location.state) {
+      const { custId, roleId, username } = location.state;
+      dispatch(
+        selectCustomer({
+          custId,
+          roleId,
+          username,
+        }),
+      );
+    }
+  }, [dispatch, location.state]);
+
   if (!location.state) {
     history.push(RouteLinks.HOME);
     return <></>;
   }
 
-  const { custId, roleId, username } = location.state;
-
-  useEffect(() => {
-    dispatch(
-      selectCustomer({
-        custId,
-        roleId,
-        username,
-      }),
-    );
-  }, [location]);
-
   return (
     <div className="win-loss-analysis-page">
-      <div className="page-title">Win Loss Analysis ({username}</div>
+      <div className="page-title">
+        Win Loss Analysis ({location.state.username})
+      </div>
       <Filter minDate={minDate} maxDate={maxDate} />
       <Table />
     </div>

@@ -123,4 +123,12 @@ export const excel = async (payload: ExcelProps) => {
 
 export const { setReportType, selectCustomer } = slice.actions;
 
+export const getReportName = (reportType: ReportType) => {
+  return reportType === ReportType.Sport
+    ? 'Sport'
+    : reportType == ReportType.Monthly
+    ? 'Monthly'
+    : 'Daily';
+};
+
 export default slice.reducer;

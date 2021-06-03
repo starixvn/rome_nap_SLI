@@ -45,7 +45,7 @@ const SideBar = () => {
     if (!isSubmitting) {
       handleSubmit();
     }
-  }, [username]);
+  }, [typeaheadRef, formikRef, username]);
 
   const initialState = {
     username,

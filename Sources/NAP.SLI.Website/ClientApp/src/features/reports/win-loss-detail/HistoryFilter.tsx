@@ -28,6 +28,17 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
     (state: AppState) => state.winLossDetail,
   );
 
+  useEffect(() => {
+    if (!formikRef.current) {
+      return;
+    }
+
+    const { isSubmitting, handleSubmit } = formikRef.current;
+    if (!isSubmitting) {
+      handleSubmit();
+    }
+  }, [formikRef, queryCustomer]);
+
   if (!queryCustomer) {
     return <></>;
   }
@@ -48,17 +59,6 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
   };
 
   type FormikValues = typeof initialValues;
-
-  useEffect(() => {
-    if (!formikRef.current) {
-      return;
-    }
-
-    const { isSubmitting, handleSubmit } = formikRef.current;
-    if (!isSubmitting) {
-      handleSubmit();
-    }
-  }, [custId]);
 
   const handleMonthChange = (
     value: Moment,

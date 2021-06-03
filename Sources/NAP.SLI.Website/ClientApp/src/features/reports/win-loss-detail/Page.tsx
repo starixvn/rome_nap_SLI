@@ -15,31 +15,26 @@ const Page = () => {
   const history = useHistory();
   const location = useLocation<Customer>();
   const dispatch = useAppDispatch();
-  const { queryCustomer, queryArg } = useSelector(
-    (state: AppState) => state.winLossDetail,
-  );
+  const { queryArg } = useSelector((state: AppState) => state.winLossDetail);
+
+  useEffect(() => {
+    if (location.state) {
+      const { custId, roleId, username } = location.state;
+      dispatch(
+        selectCustomer({
+          customer: {
+            custId,
+            roleId,
+            username,
+          },
+          isReset: true,
+        }),
+      );
+    }
+  }, [dispatch, location.state]);
 
   if (!location.state) {
     history.push(RouteLinks.HOME);
-    return <></>;
-  }
-
-  const { custId, roleId, username } = location.state;
-
-  useEffect(() => {
-    dispatch(
-      selectCustomer({
-        customer: {
-          custId,
-          roleId,
-          username,
-        },
-        isReset: true,
-      }),
-    );
-  }, [location]);
-
-  if (!queryCustomer) {
     return <></>;
   }
 
