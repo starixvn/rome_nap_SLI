@@ -8,6 +8,6 @@
 
         public bool IsSuccess => ErrCode == ErrorCodes.OK;
 
-        public static ResultModel Success => new ResultModel { ErrCode = 0 };
+        public static ResultModel Success => new() { ErrCode = 0 };
     }
 }

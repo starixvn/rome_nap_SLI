@@ -187,7 +187,7 @@ namespace NAP.SLI.Website
             });
         }
 
-        private void AddJwtAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
+        private static void AddJwtAuthentication(IServiceCollection services, AuthenticationSettings authenticationSettings)
         {
             var secretKey = Encoding.ASCII.GetBytes(authenticationSettings.SecretKey);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -217,20 +217,20 @@ namespace NAP.SLI.Website
                 .AddWinLossAnalysisModule();
         }
 
-        private void AddAutoMapper(IServiceCollection services)
+        private static void AddAutoMapper(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Common.Models.AutoMapperProfile));
             services.AddAutoMapper(typeof(Account.Models.AutoMapperProfile));
         }
 
-        private void AddSimpleApi(IServiceCollection services)
+        private static void AddSimpleApi(IServiceCollection services)
         {
             services.AddSimpleApi(typeof(Account.Models.SimpleApiProfile));
             services.AddSimpleApi(typeof(Customer.Models.SimpleApiProfile));
             services.AddSimpleApi(typeof(UserManagement.Models.SimpleApiProfile));
         }
 
-        private void AddMediatR(IServiceCollection services)
+        private static void AddMediatR(IServiceCollection services)
         {
             services.AddMediatR(typeof(Account.Models.SimpleApiProfile));
             services.AddMediatR(typeof(Customer.Models.SimpleApiProfile));

@@ -61,7 +61,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
                 FromDate = request.FromDate,
                 ToDate = request.ToDate
             };
-            
+
             return await Query(criteria).ConfigureAwait(false);
         }
 
@@ -79,7 +79,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
             return workbook.ExportToBytes();
         }
 
-        private Mapper<AgentAnalysisModel> CreateViewAgentMapper(bool isBody = false)
+        private static Mapper<AgentAnalysisModel> CreateViewAgentMapper(bool isBody = false)
         {
             var mapper = new Mapper<AgentAnalysisModel>()
                             .Map(Column.B, x => x.BetCount)
@@ -109,7 +109,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
             return workbook.ExportToBytes();
         }
 
-        private Mapper<MasterAnalysisModel> CreateViewMasterMapper(bool isBody = false)
+        private static Mapper<MasterAnalysisModel> CreateViewMasterMapper(bool isBody = false)
         {
             var mapper = new Mapper<MasterAnalysisModel>()
                             .Map(Column.B, x => x.BetCount)
@@ -140,7 +140,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
             return workbook.ExportToBytes();
         }
 
-        private Mapper<SuperAnalysisModel> CreateViewSuperMapper(bool isBody = false)
+        private static Mapper<SuperAnalysisModel> CreateViewSuperMapper(bool isBody = false)
         {
             var mapper = new Mapper<SuperAnalysisModel>()
                             .Map(Column.B, x => x.BetCount)
@@ -174,26 +174,17 @@ namespace NAP.SLI.WinLossAnalysis.Services
 
         private async Task<QueryModel> Query(WinLossAnalysisQueryCriteria criteria)
         {
-            (IEnumerable<object> firstResultSet, IEnumerable<object> secondResultSet) result;
-            switch (criteria.RoleId)
+            var (firstResultSet, secondResultSet) = criteria.RoleId switch
             {
-                case (int)CustomerLevels.Super:
-                    result = await dynamicRepositoryEx.FetchMultipleAsync<SuperAnalysisModel, SuperAnalysisModel>(criteria).ConfigureAwait(false);
-                    break;
-                case (int)CustomerLevels.Master:
-                    result = await dynamicRepositoryEx.FetchMultipleAsync<MasterAnalysisModel, MasterAnalysisModel>(criteria).ConfigureAwait(false);
-                    break;
-                case (int)CustomerLevels.Agent:
-                    result = await dynamicRepositoryEx.FetchMultipleAsync<AgentAnalysisModel, AgentAnalysisModel>(criteria).ConfigureAwait(false);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
+                (int)CustomerLevels.Super => await dynamicRepositoryEx.FetchMultipleAsync<SuperAnalysisModel, SuperAnalysisModel>(criteria).ConfigureAwait(false),
+                (int)CustomerLevels.Master => await dynamicRepositoryEx.FetchMultipleAsync<MasterAnalysisModel, MasterAnalysisModel>(criteria).ConfigureAwait(false),
+                (int)CustomerLevels.Agent => await dynamicRepositoryEx.FetchMultipleAsync<AgentAnalysisModel, AgentAnalysisModel>(criteria).ConfigureAwait(false),
+                _ => throw new NotImplementedException(),
+            };
             return new QueryModel
             {
-                Records = result.firstResultSet,
-                Total = result.secondResultSet.First(),
+                Records = firstResultSet,
+                Total = secondResultSet.First(),
             };
         }
     }

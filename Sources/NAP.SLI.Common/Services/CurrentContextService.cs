@@ -62,13 +62,13 @@
             return regionInfo?.GeoId.ToString(CultureInfo.CurrentCulture);
         }
 
-        private RegionInfo ResolveCountry(HttpRequest request)
+        private static RegionInfo ResolveCountry(HttpRequest request)
         {
             var culture = ResolveCulture(request);
             return culture != null ? new RegionInfo(culture.LCID) : null;
         }
 
-        private CultureInfo ResolveCulture(HttpRequest request)
+        private static CultureInfo ResolveCulture(HttpRequest request)
         {
             var userLangs = request.Headers["Accept-Language"].ToString();
             var firstLang = userLangs.Split(',').FirstOrDefault();

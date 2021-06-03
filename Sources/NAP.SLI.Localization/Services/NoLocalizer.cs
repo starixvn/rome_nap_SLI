@@ -11,9 +11,9 @@ namespace NAP.SLI.Localization.Services
 
     public class NoLocalizer : INoLocalizer
     {
-        public LocalizedString this[string name, params object[] arguments] => new LocalizedString(name, name);
+        public LocalizedString this[string name, params object[] arguments] => new(name, name);
 
-        public LocalizedString this[string name] => new LocalizedString(name, name);
+        public LocalizedString this[string name] => new(name, name);
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {

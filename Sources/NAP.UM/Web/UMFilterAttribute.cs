@@ -32,7 +32,7 @@ namespace NAP.UM.Web
             await next().ConfigureAwait(false);
         }
 
-        private async Task<bool> IsCheckUM(ActionExecutingContext context, IMaintenanceService maintenanceService, UMConfig umConfig)
+        private static async Task<bool> IsCheckUM(ActionExecutingContext context, IMaintenanceService maintenanceService, UMConfig umConfig)
         {
             if (!maintenanceService.IsEnabled)
             {

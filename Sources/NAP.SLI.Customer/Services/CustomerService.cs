@@ -26,15 +26,15 @@
             {
                 Username = username
             };
-            var result = await dynamicRepositoryEx.FetchMultipleAsync<GeneralInformationModel, HeadlineModel>(criteria).ConfigureAwait(false);
+            var (firstResultSet, secondResultSet) = await dynamicRepositoryEx.FetchMultipleAsync<GeneralInformationModel, HeadlineModel>(criteria).ConfigureAwait(false);
             if (criteria.IsSuccess)
             {
                 return new CustomerModel
                 {
                     ErrCode = criteria.ErrCode,
                     ErrMsg = criteria.ErrMsg,
-                    GeneralInformation = result.firstResultSet.First(),
-                    Headline = result.secondResultSet.First()
+                    GeneralInformation = firstResultSet.First(),
+                    Headline = secondResultSet.First()
                 };
             }
 

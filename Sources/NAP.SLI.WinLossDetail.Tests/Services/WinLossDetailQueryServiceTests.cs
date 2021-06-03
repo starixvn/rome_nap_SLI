@@ -84,7 +84,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             Assert.Equal(fetchData.Item2.First(), result.Total);
         }
 
-        private bool IsMatch(WinLossDetailQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossDetailQueryRequest request)
+        private static bool IsMatch(WinLossDetailQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossDetailQueryRequest request)
         {
             return criteria.BalanceUpDay == balanceUpDayModel.BalanceUpDay &&
                 criteria.MoveBetsDay == balanceUpDayModel.MoveBetsDay &&

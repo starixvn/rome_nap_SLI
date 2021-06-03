@@ -83,7 +83,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             Assert.Equal(fetchData.Item2.First(), result.Total);
         }
 
-        
+
         [Theory]
         [AutoDomainData]
         public async Task TestMethod_QueryAgent(
@@ -148,7 +148,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             workbook.Received().Sheet(Arg.Is<string>(x => x == defaultSheetName));
         }
 
-        private bool IsMatch(Mapper<SuperAnalysisModel> mapper, SuperAnalysisModel superRecord, bool isBody)
+        private static bool IsMatch(Mapper<SuperAnalysisModel> mapper, SuperAnalysisModel superRecord, bool isBody)
         {
             var result = (int)mapper.Mappings[Column.B](superRecord) == superRecord.BetCount &&
                 (decimal)mapper.Mappings[Column.C](superRecord) == superRecord.Turnover &&
@@ -201,7 +201,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             workbook.Received().Sheet(Arg.Is<string>(x => x == defaultSheetName));
         }
 
-        private bool IsMatch(Mapper<MasterAnalysisModel> mapper, MasterAnalysisModel masterRecord, bool isBody)
+        private static bool IsMatch(Mapper<MasterAnalysisModel> mapper, MasterAnalysisModel masterRecord, bool isBody)
         {
             var result = (int)mapper.Mappings[Column.B](masterRecord) == masterRecord.BetCount &&
                 (decimal)mapper.Mappings[Column.C](masterRecord) == masterRecord.Turnover &&
@@ -253,7 +253,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             workbook.Received().Sheet(Arg.Is<string>(x => x == defaultSheetName));
         }
 
-        private bool IsMatch(Mapper<AgentAnalysisModel> mapper, AgentAnalysisModel agentRecord, bool isBody)
+        private static bool IsMatch(Mapper<AgentAnalysisModel> mapper, AgentAnalysisModel agentRecord, bool isBody)
         {
             var result = (int)mapper.Mappings[Column.B](agentRecord) == agentRecord.BetCount &&
                 (decimal)mapper.Mappings[Column.C](agentRecord) == agentRecord.Turnover &&
@@ -268,7 +268,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             return result;
         }
 
-        private bool IsMatch(WinLossAnalysisQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossAnalysisExcelRequest request)
+        private static bool IsMatch(WinLossAnalysisQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossAnalysisExcelRequest request)
         {
             return criteria.BalanceUpDay == balanceUpDayModel.BalanceUpDay &&
                 criteria.MoveBetsDay == balanceUpDayModel.MoveBetsDay &&
@@ -279,14 +279,14 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
                 criteria.ToDate == request.ToDate;
         }
 
-        private bool IsMatch(TemplateInfo templateInfo, string appDataPath, string fileName)
+        private static bool IsMatch(TemplateInfo templateInfo, string appDataPath, string fileName)
         {
             return templateInfo.TemplatePath == Path.Combine(appDataPath, "ExcelTemplates", "WinLossAnalysis", fileName) &&
                 templateInfo.FreezeRowIndex == 3 &&
                 templateInfo.FreezeColumnName == Column.B;
         }
 
-        private bool IsMatch(WinLossAnalysisQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossAnalysisQueryRequest request)
+        private static bool IsMatch(WinLossAnalysisQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossAnalysisQueryRequest request)
         {
             return criteria.BalanceUpDay == balanceUpDayModel.BalanceUpDay &&
                 criteria.MoveBetsDay == balanceUpDayModel.MoveBetsDay &&
@@ -297,7 +297,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
                 criteria.ToDate == request.ToDate;
         }
 
-        private WinLossAnalysisExcelRequest CreateExcelRequestByRole(CustomerLevels role)
+        private static WinLossAnalysisExcelRequest CreateExcelRequestByRole(CustomerLevels role)
         {
             var fixture = new Fixture();
             var request = fixture.Build<WinLossAnalysisExcelRequest>()
@@ -307,7 +307,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             return request;
         }
 
-        private WinLossAnalysisQueryRequest CreatQueryRequestByRole(CustomerLevels role)
+        private static WinLossAnalysisQueryRequest CreatQueryRequestByRole(CustomerLevels role)
         {
             var fixture = new Fixture();
             var request = fixture.Build<WinLossAnalysisQueryRequest>()

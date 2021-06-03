@@ -27,34 +27,34 @@ namespace NAP.SLI.WinLossDetail.Services
 
         public async Task<SuperData> QuerySuper(WinLossDetailQueryRequest request)
         {
-            var result = await Query<SuperRecord>(request).ConfigureAwait(false);
+            var (Records, Total, TotalRecords) = await Query<SuperRecord>(request).ConfigureAwait(false);
             return new SuperData
             {
-                Records = result.Records,
-                Total = result.Total,
-                TotalRecords = result.TotalRecords
+                Records = Records,
+                Total = Total,
+                TotalRecords = TotalRecords
             };
         }
 
         public async Task<MasterData> QueryMaster(WinLossDetailQueryRequest request)
         {
-            var result = await Query<MasterRecord>(request).ConfigureAwait(false);
+            var (Records, Total, TotalRecords) = await Query<MasterRecord>(request).ConfigureAwait(false);
             return new MasterData
             {
-                Records = result.Records,
-                Total = result.Total,
-                TotalRecords = result.TotalRecords
+                Records = Records,
+                Total = Total,
+                TotalRecords = TotalRecords
             };
         }
 
         public async Task<AgentData> QueryAgent(WinLossDetailQueryRequest request)
         {
-            var result = await Query<AgentRecord>(request).ConfigureAwait(false);
+            var (Records, Total, TotalRecords) = await Query<AgentRecord>(request).ConfigureAwait(false);
             return new AgentData
             {
-                Records = result.Records,
-                Total = result.Total,
-                TotalRecords = result.TotalRecords
+                Records = Records,
+                Total = Total,
+                TotalRecords = TotalRecords
             };
         }
 
@@ -71,8 +71,8 @@ namespace NAP.SLI.WinLossDetail.Services
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize
             };
-            var result = await dynamicRepositoryEx.FetchMultipleAsync<T, T>(criteria).ConfigureAwait(false);
-            return (result.firstResultSet, result.secondResultSet.First(), criteria.TotalRecords);
+            var (firstResultSet, secondResultSet) = await dynamicRepositoryEx.FetchMultipleAsync<T, T>(criteria).ConfigureAwait(false);
+            return (firstResultSet, secondResultSet.First(), criteria.TotalRecords);
         }
     }
 }

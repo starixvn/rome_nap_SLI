@@ -66,7 +66,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             workbook.Received().Sheet(Arg.Is<string>(x => x == defaultSheetName));
         }
 
-        private bool IsMatch(Mapper<SuperRecord> mapper, SuperRecord superRecord, bool isBody)
+        private static bool IsMatch(Mapper<SuperRecord> mapper, SuperRecord superRecord, bool isBody)
         {
             var a = (decimal)mapper.Mappings[Column.B](superRecord);
             var result = (decimal)mapper.Mappings[Column.B](superRecord) == superRecord.BetCount &&
@@ -120,7 +120,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             workbook.Received().Sheet(Arg.Is<string>(x => x == defaultSheetName));
         }
 
-        private bool IsMatch(Mapper<MasterRecord> mapper, MasterRecord superRecord, bool isBody)
+        private static bool IsMatch(Mapper<MasterRecord> mapper, MasterRecord superRecord, bool isBody)
         {
             var result = (decimal)mapper.Mappings[Column.B](superRecord) == superRecord.BetCount &&
                 (decimal)mapper.Mappings[Column.C](superRecord) == superRecord.Turnover &&
@@ -172,7 +172,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             workbook.Received().Sheet(Arg.Is<string>(x => x == defaultSheetName));
         }
 
-        private bool IsMatch(Mapper<AgentRecord> mapper, AgentRecord superRecord, bool isBody)
+        private static bool IsMatch(Mapper<AgentRecord> mapper, AgentRecord superRecord, bool isBody)
         {
             var result = (decimal)mapper.Mappings[Column.B](superRecord) == superRecord.BetCount &&
                 (decimal)mapper.Mappings[Column.C](superRecord) == superRecord.Turnover &&
@@ -187,7 +187,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             return result;
         }
 
-        private bool IsMatch(WinLossDetailQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossDetailExcelRequest request)
+        private static bool IsMatch(WinLossDetailQueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, WinLossDetailExcelRequest request)
         {
             return criteria.BalanceUpDay == balanceUpDayModel.BalanceUpDay &&
                 criteria.MoveBetsDay == balanceUpDayModel.MoveBetsDay &&
@@ -199,7 +199,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
                 criteria.IsHistory == request.IsHistory;
         }
 
-        private bool IsMatch(TemplateInfo templateInfo, string appDataPath, string fileName)
+        private static bool IsMatch(TemplateInfo templateInfo, string appDataPath, string fileName)
         {
             return templateInfo.TemplatePath == Path.Combine(appDataPath, "ExcelTemplates", "WinLossDetail", fileName) &&
                 templateInfo.FreezeRowIndex == 3 &&

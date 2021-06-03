@@ -95,7 +95,7 @@ namespace NAP.UM.Services
             catch (Exception ex)
             {
                 await ExceptionHandler.HandleAsync(ex, null).ConfigureAwait(false);
-                return default(T);
+                return default;
             }
         }
     }

@@ -101,7 +101,7 @@
             });
         }
 
-        private async Task<int> GetCpuUsageForProcess()
+        private static async Task<int> GetCpuUsageForProcess()
         {
             var startTime = DateTime.UtcNow;
             var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;

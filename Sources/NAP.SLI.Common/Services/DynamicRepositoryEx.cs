@@ -24,7 +24,7 @@
     {
         public Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria) => FetchAsync<T>(criteria, default);
 
-        public async Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria, CancellationToken cancellationToken)
+        public static async Task<IEnumerable<T>> FetchAsync<T>(ICriteria criteria, CancellationToken cancellationToken)
         {
             criteria.ThrowExceptionIfInvalid();
             using var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
@@ -36,7 +36,7 @@
         public Task<(IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet)> FetchMultipleAsync<TFirst, TSecond>(ICriteria criteria)
             => FetchMultipleAsync<TFirst, TSecond>(criteria, default);
 
-        public async Task<(IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet)> FetchMultipleAsync<TFirst, TSecond>(
+        public static async Task<(IEnumerable<TFirst> firstResultSet, IEnumerable<TSecond> secondResultSet)> FetchMultipleAsync<TFirst, TSecond>(
             ICriteria criteria,
             CancellationToken cancellationToken)
         {
@@ -52,7 +52,7 @@
             return FetchMultipleAsync(criteria, mappingTypes, default);
         }
 
-        private async Task<IEnumerable<object>[]> FetchMultipleAsync(
+        private static async Task<IEnumerable<object>[]> FetchMultipleAsync(
             ICriteria criteria,
             Type[] mappingTypes,
             CancellationToken cancellationToken)

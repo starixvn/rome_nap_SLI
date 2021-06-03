@@ -31,17 +31,13 @@ namespace NAP.SLI.WinLossAnalysis.Criteria
 
         public override string GetSettingKey()
         {
-            switch (RoleId)
+            return RoleId switch
             {
-                case (int)CustomerLevels.Super:
-                    return "SLI_Rpt_WinLossAnalysis_Master";
-                case (int)CustomerLevels.Master:
-                    return "SLI_Rpt_WinLossAnalysis_Agent";
-                case (int)CustomerLevels.Agent:
-                    return "SLI_Rpt_WinLossAnalysis_Member";
-                default:
-                    throw new NotImplementedException(nameof(RoleId));
-            }
+                (int)CustomerLevels.Super => "SLI_Rpt_WinLossAnalysis_Master",
+                (int)CustomerLevels.Master => "SLI_Rpt_WinLossAnalysis_Agent",
+                (int)CustomerLevels.Agent => "SLI_Rpt_WinLossAnalysis_Member",
+                _ => throw new NotImplementedException(nameof(RoleId)),
+            };
         }
 
         public override bool IsValid() => CustId > 0 && ReportType > 0;
