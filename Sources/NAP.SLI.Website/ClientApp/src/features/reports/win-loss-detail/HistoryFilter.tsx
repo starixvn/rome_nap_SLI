@@ -43,7 +43,7 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
     return <></>;
   }
 
-  const { custId, roleId } = queryCustomer;
+  const { custId, roleId, username } = queryCustomer;
   const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
 
   const month = getToday();
@@ -100,6 +100,7 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
       isHistory,
       custId,
       roleId,
+      username,
       fromDate,
       toDate,
     };

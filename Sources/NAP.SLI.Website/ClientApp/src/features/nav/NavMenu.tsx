@@ -29,15 +29,15 @@ const NavMenu = () => {
   const { account } = useSelector((state: AppState) => state.authentication);
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleToggle = useCallback(() => {
+    setIsOpen((isOpen) => !isOpen);
+  }, []);
+
   if (!account) {
     return <></>;
   }
 
   const { username, groupId } = account;
-  const handleToggle = useCallback(() => {
-    setIsOpen((isOpen) => !isOpen);
-  }, []);
-
   return (
     <Navbar className="navbar-expand border-bottom box-shadow">
       <Button

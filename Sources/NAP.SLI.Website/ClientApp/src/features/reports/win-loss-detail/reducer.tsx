@@ -37,6 +37,7 @@ type QueryProps = QueryArg & {
 type ExcelProps = {
   custId: number;
   roleId: number;
+  username: string;
   isHistory: boolean;
   fromDate: string;
   toDate: string;

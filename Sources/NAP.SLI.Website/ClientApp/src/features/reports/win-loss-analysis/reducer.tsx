@@ -13,6 +13,7 @@ type ExcelProps = {
   reportType: ReportType;
   custId: number;
   roleId: number;
+  username: string;
   fromDate: string;
   toDate: string;
 };

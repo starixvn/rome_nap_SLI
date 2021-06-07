@@ -60,7 +60,7 @@ const Filter = ({ minDate, maxDate }: Props) => {
     return <></>;
   }
 
-  const { custId, roleId } = queryCustomer;
+  const { custId, roleId, username } = queryCustomer;
   const today = getToday();
   const initialValues = {
     fromDate: today,
@@ -129,6 +129,7 @@ const Filter = ({ minDate, maxDate }: Props) => {
       reportType,
       custId,
       roleId,
+      username,
       fromDate,
       toDate,
     };
