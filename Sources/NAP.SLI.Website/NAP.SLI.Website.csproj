@@ -20,6 +20,7 @@
     <PackageReference Include="Fanex.Logging.Extensions.AspNetCore" Version="1.0.0" />
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
     <PackageReference Include="Fanex.Logging.Sentry" Version="1.0.6" />
+    <PackageReference Include="Fanex.RemotingRef" Version="1.5.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0" />
@@ -37,6 +38,7 @@
     <ProjectReference Include="..\NAP.SLI.WinLossAnalysis\NAP.SLI.WinLossAnalysis.csproj" />
     <ProjectReference Include="..\NAP.SLI.UserManagement\NAP.SLI.UserManagement.csproj" />
     <ProjectReference Include="..\NAP.UM\NAP.UM.csproj" />
+    <ProjectReference Include="..\NAP.SLI.MatchWinLossDetail\NAP.SLI.MatchWinLossDetail.csproj" />
   </ItemGroup>
   <ItemGroup> 
     <Content Include="App_Data\**"> 

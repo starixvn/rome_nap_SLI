@@ -3,10 +3,10 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Controller
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Tests;
     using NAP.SLI.WinLossAnalysis.Controllers;
-    using NAP.SLI.WinLossAnalysis.Models;
     using NAP.SLI.WinLossAnalysis.Requests;
     using NSubstitute;
     using Xunit;
@@ -15,7 +15,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Controller
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Query(IMediator mediator, WinLossAnalysisQueryRequest request, QueryModel sendResult)
+        public async Task TestMethod_Query(IMediator mediator, QueryRequest request, object sendResult)
         {
             // Arrange
             var controller = new WinLossAnalysisController(mediator);
@@ -32,7 +32,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Controller
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Excel(IMediator mediator, WinLossAnalysisExcelRequest request, byte[] sendResult)
+        public async Task TestMethod_Excel(IMediator mediator, ExcelRequest request, byte[] sendResult)
         {
             // Arrange
             var controller = new WinLossAnalysisController(mediator);
@@ -45,7 +45,8 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Controller
             var fileContentResult = Assert.IsType<FileContentResult>(result);
             Assert.Equal(sendResult, fileContentResult.FileContents);
             Assert.Equal(ContentTypes.Excel, fileContentResult.ContentType);
-            Assert.Equal(request.GetDownloadFileName(), fileContentResult.FileDownloadName);
+            var expectedFileDownloadName = $"{string.Join("-", "Win Loss Analysis", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls";
+            Assert.Equal(expectedFileDownloadName, fileContentResult.FileDownloadName);
         }
     }
 }

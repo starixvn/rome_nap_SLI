@@ -7,7 +7,7 @@ using System.Web;
 
 namespace NAP.UM.Extensions
 {
-    public static class HttpRequestMessageExtensions
+    static class HttpRequestMessageExtensions
     {
         public static HttpRequestMessage AddHMAC(this HttpRequestMessage request, string secretKey)
         {

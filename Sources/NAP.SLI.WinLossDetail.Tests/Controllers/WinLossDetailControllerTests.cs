@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Tests;
     using NAP.SLI.WinLossDetail.Controllers;
@@ -14,7 +15,7 @@
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Query(IMediator mediator, WinLossDetailQueryRequest request, object sendResult)
+        public async Task TestMethod_Query(IMediator mediator, QueryRequest request, object sendResult)
         {
             // Arrange
             var controller = new WinLossDetailController(mediator);
@@ -31,7 +32,7 @@
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Excel(IMediator mediator, WinLossDetailExcelRequest request, byte[] sendResult)
+        public async Task TestMethod_Excel(IMediator mediator, ExcelRequest request, byte[] sendResult)
         {
             // Arrange
             var controller = new WinLossDetailController(mediator);
@@ -45,7 +46,9 @@
             var fileContentResult = Assert.IsType<FileContentResult>(result);
             Assert.Equal(sendResult, fileContentResult.FileContents);
             Assert.Equal(ContentTypes.Excel, fileContentResult.ContentType);
-            Assert.Equal(request.GetDownloadFileName(), fileContentResult.FileDownloadName);
+
+            var expectedFileDownloadName = $"{string.Join("-", "Win Loss Detail", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls";
+            Assert.Equal(expectedFileDownloadName, fileContentResult.FileDownloadName);
         }
     }
 }

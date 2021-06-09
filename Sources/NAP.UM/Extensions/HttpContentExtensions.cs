@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace NAP.UM.Extensions
 {
-    public static class HttpContentExtensions
+    static class HttpContentExtensions
     {
         public static byte[] ComputeSha256Hash(this HttpContent content)
         {

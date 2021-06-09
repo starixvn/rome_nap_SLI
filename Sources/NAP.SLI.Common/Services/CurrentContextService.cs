@@ -17,6 +17,8 @@
         string GetPlatform();
 
         string GetCountryCode();
+
+        string GetLanguageCode();
     }
 
     public class CurrentContextService : ICurrentContextService
@@ -24,7 +26,7 @@
         private readonly HttpContext context;
 
         public CurrentContextService(IHttpContextAccessor httpContextAccessor)
-            => (context) = (httpContextAccessor.HttpContext);
+            => context = httpContextAccessor.HttpContext;
 
         public string GetIP()
         {
@@ -83,5 +85,7 @@
                 return null;
             }
         }
+
+        public string GetLanguageCode() => "en-US";
     }
 }

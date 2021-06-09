@@ -16,7 +16,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Criteria
             var balanceUpDayModel = fixture.Create<BalanceUpDayModel>();
 
             //Act
-            var criteria = new WinLossAnalysisQueryCriteria(balanceUpDayModel);
+            var criteria = new QueryCriteria(balanceUpDayModel);
 
             //Assert
             Assert.Equal(criteria.BalanceUpDay, balanceUpDayModel.BalanceUpDay);
@@ -28,7 +28,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Criteria
         {
             // Arrange
             var fixture = new Fixture();
-            var criteria = fixture.Build<WinLossAnalysisQueryCriteria>()
+            var criteria = fixture.Build<QueryCriteria>()
                 .With(c => c.RoleId, (int)CustomerLevels.Super)
                 .Create();
 
@@ -44,7 +44,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Criteria
         {
             // Arrange
             var fixture = new Fixture();
-            var criteria = fixture.Build<WinLossAnalysisQueryCriteria>()
+            var criteria = fixture.Build<QueryCriteria>()
                 .With(c => c.RoleId, (int)CustomerLevels.Master)
                 .Create();
 
@@ -60,7 +60,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Criteria
         {
             // Arrange
             var fixture = new Fixture();
-            var criteria = fixture.Build<WinLossAnalysisQueryCriteria>()
+            var criteria = fixture.Build<QueryCriteria>()
                 .With(c => c.RoleId, (int)CustomerLevels.Agent)
                 .Create();
 
@@ -76,7 +76,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Criteria
         {
             // Arrange
             var fixture = new Fixture();
-            var criteria = fixture.Build<WinLossAnalysisQueryCriteria>()
+            var criteria = fixture.Build<QueryCriteria>()
                 .With(c => c.RoleId, -1)
                 .Create();
 

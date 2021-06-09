@@ -1,7 +1,6 @@
 namespace NAP.SLI.Customer.Tests.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
-    using NAP.SLI.Customer.Extensions;
     using NAP.SLI.Customer.Services;
     using Xunit;
 

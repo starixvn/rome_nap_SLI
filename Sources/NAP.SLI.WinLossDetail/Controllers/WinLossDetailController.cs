@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Models;
     using NAP.SLI.WinLossDetail.Requests;
 
@@ -18,20 +19,20 @@
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Query([FromBody] WinLossDetailQueryRequest request)
+        public async Task<IActionResult> Query([FromBody] QueryRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Excel([FromBody] WinLossDetailExcelRequest request)
+        public async Task<IActionResult> Excel([FromBody] ExcelRequest request)
         {
             var fileContents = await mediator.Send(request).ConfigureAwait(false);
             return File(
                 fileContents: fileContents,
                 contentType: ContentTypes.Excel,
-                fileDownloadName: request.GetDownloadFileName()
+                fileDownloadName: $"{string.Join("-", "Win Loss Detail", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls"
             );
         }
     }

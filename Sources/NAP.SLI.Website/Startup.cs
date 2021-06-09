@@ -25,16 +25,12 @@ namespace NAP.SLI.Website
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Microsoft.IdentityModel.Tokens;
-    using NAP.SimpleApi.Extensions;
-    using NAP.SLI.Account.Extensions;
     using NAP.SLI.Account.Models;
     using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Services;
-    using NAP.SLI.Customer.Extensions;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Sentry;
-    using NAP.UM.Extensions;
     using NAP.UM.Models;
     using Microsoft.AspNetCore.StaticFiles;
     using Microsoft.AspNetCore.Authorization;
@@ -46,8 +42,14 @@ namespace NAP.SLI.Website
     using ONEbook.SpreadSheets.NPOI;
     using NAP.SLI.WinLossDetail.Controllers;
     using NAP.SLI.WinLossAnalysis.Controllers;
-    using NAP.SLI.WinLossDetail.Extensions;
-    using NAP.SLI.WinLossAnalysis.Extensions;
+    using Fanex.RemotingRef;
+    using NAP.SLI.Account;
+    using NAP.SLI.Customer;
+    using NAP.SimpleApi;
+    using NAP.UM;
+    using NAP.SLI.MatchWinLossDetail;
+    using NAP.SLI.WinLossAnalysis;
+    using NAP.SLI.WinLossDetail;
 
     public class Startup
     {
@@ -86,6 +88,12 @@ namespace NAP.SLI.Website
 
             Fanex.Caching.Memory.MemoryCacheServiceCollectionExtensions.AddMemoryCache(services, Configuration.GetSection("Fanex.Caching"));
             services.AddRedisCache(Configuration.GetSection("Fanex.Caching.Redis"));
+
+            RefDataTypeContainer
+                    .ConnectTo(new Uri(Configuration["Fanex.RemotingRef.Service.Url"]))
+                    .FromApplication("NAP.SLI");
+
+            services.AddSingleton<IRemotingRefService, RemotingRefService>();
 
             services
                 .AddControllersWithViews(config =>
@@ -213,27 +221,30 @@ namespace NAP.SLI.Website
                 .AddCommonModule(AppSettings)
                 .AddAccountModule()
                 .AddCustomerModule()
+                .AddMatchWinLossDetailModule()
                 .AddWinLossDetailModule()
                 .AddWinLossAnalysisModule();
         }
 
         private static void AddAutoMapper(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Common.Models.AutoMapperProfile));
-            services.AddAutoMapper(typeof(Account.Models.AutoMapperProfile));
+            services.AddAutoMapper(typeof(Common.AutoMapperProfile));
+            services.AddAutoMapper(typeof(Account.AutoMapperProfile));
+            services.AddAutoMapper(typeof(WinLossAnalysis.AutoMapperProfile));
+            services.AddAutoMapper(typeof(MatchWinLossDetail.AutoMapperProfile));
         }
 
         private static void AddSimpleApi(IServiceCollection services)
         {
-            services.AddSimpleApi(typeof(Account.Models.SimpleApiProfile));
-            services.AddSimpleApi(typeof(Customer.Models.SimpleApiProfile));
-            services.AddSimpleApi(typeof(UserManagement.Models.SimpleApiProfile));
+            services.AddSimpleApi(typeof(Account.SimpleApiProfile));
+            services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
+            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
         }
 
         private static void AddMediatR(IServiceCollection services)
         {
-            services.AddMediatR(typeof(Account.Models.SimpleApiProfile));
-            services.AddMediatR(typeof(Customer.Models.SimpleApiProfile));
+            services.AddMediatR(typeof(Account.SimpleApiProfile));
+            services.AddMediatR(typeof(Customer.SimpleApiProfile));
             services.AddMediatR(typeof(WinLossDetailController));
             services.AddMediatR(typeof(WinLossAnalysisController));
         }
