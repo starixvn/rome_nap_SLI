@@ -38,96 +38,44 @@
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
-            var workbook = npoiWorkbookFactory.Create<SuperRecord>();
-            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossDetail", "Master.xls");
-            workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
-            workbook.Title(GetTitle(request));
-            workbook.Header(noLocalizer.Localise);
-            workbook.Body(queryData.Records, CreateViewMasterMapper(true));
-            workbook.Footer(queryData.Total, CreateViewMasterMapper(false));
-            workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
+            var workbook = CreateWorkbook<SuperRecord>("Super.xls", GetTitle(request));
+            var workbookDef = new SuperWorkbookDef();
+            workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
+            workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
-        }
-
-        private static Mapper<SuperRecord> CreateViewMasterMapper(bool isBody)
-        {
-            var mapper = new Mapper<SuperRecord>()
-                .Map(Column.B, x => x.BetCount)
-                .Map(Column.C, x => x.Turnover)
-                .Map(Column.D, x => x.MemberWinLoss)
-                .Map(Column.E, x => x.AgentWinLoss)
-                .Map(Column.F, x => x.MasterWinLoss)
-                .Map(Column.G, x => x.SuperWinLoss)
-                .Map(Column.H, x => -x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss + x.SuperWinLoss);
-            if (isBody)
-            {
-                mapper.Map(Column.A, x => x.Username);
-            }
-
-            return mapper;
         }
 
         public async Task<byte[]> ExcelMaster(ExcelRequest request)
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryMaster(queryRequest).ConfigureAwait(false);
-            var workbook = npoiWorkbookFactory.Create<MasterRecord>();
-            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossDetail", "Agent.xls");
-            workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
-            workbook.Title(GetTitle(request));
-            workbook.Header(noLocalizer.Localise);
-            workbook.Body(queryData.Records, CreateViewAgentMapper(true));
-            workbook.Footer(queryData.Total, CreateViewAgentMapper(false));
-            workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
+            var workbook = CreateWorkbook<MasterRecord>("Master.xls", GetTitle(request));
+            var workbookDef = new MasterWorkbookDef();
+            workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
+            workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
         }
 
-        private static Mapper<MasterRecord> CreateViewAgentMapper(bool isBody)
+        private Workbook<T> CreateWorkbook<T>(string fileName, string title) where T : AgentRecord
         {
-            var mapper = new Mapper<MasterRecord>()
-                .Map(Column.B, x => x.BetCount)
-                .Map(Column.C, x => x.Turnover)
-                .Map(Column.D, x => x.MemberWinLoss)
-                .Map(Column.E, x => x.AgentWinLoss)
-                .Map(Column.F, x => x.MasterWinLoss)
-                .Map(Column.G, x => -x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss);
-            if (isBody)
-            {
-                mapper.Map(Column.A, x => x.Username);
-            }
-
-            return mapper;
+            var workbook = npoiWorkbookFactory.Create<T>();
+            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossDetail", fileName);
+            workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
+            workbook.Title(title);
+            workbook.Header(noLocalizer.Localise);
+            workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
+            return workbook;
         }
 
         public async Task<byte[]> ExcelAgent(ExcelRequest request)
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
-            var workbook = npoiWorkbookFactory.Create<AgentRecord>();
-            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossDetail", "Member.xls");
-            workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
-            workbook.Title(GetTitle(request));
-            workbook.Header(noLocalizer.Localise);
-            workbook.Body(queryData.Records, CreateViewMemberMapper(true));
-            workbook.Footer(queryData.Total, CreateViewMemberMapper(false));
-            workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
+            var workbook = CreateWorkbook<AgentRecord>("Agent.xls", GetTitle(request));
+            var workbookDef = new AgentWorkbookDef();
+            workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
+            workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
-        }
-
-        private static Mapper<AgentRecord> CreateViewMemberMapper(bool isBody)
-        {
-            var mapper = new Mapper<AgentRecord>()
-                .Map(Column.B, x => x.BetCount)
-                .Map(Column.C, x => x.Turnover)
-                .Map(Column.D, x => x.MemberWinLoss)
-                .Map(Column.E, x => x.AgentWinLoss)
-                .Map(Column.F, x => -x.MemberWinLoss + x.AgentWinLoss);
-            if (isBody)
-            {
-                mapper.Map(Column.A, x => x.Username);
-            }
-
-            return mapper;
         }
 
         public string GetTitle(ExcelRequest request)
