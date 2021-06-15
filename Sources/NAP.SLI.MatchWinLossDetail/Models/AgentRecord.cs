@@ -20,4 +20,9 @@
 
         public decimal AgentWinLoss { get; set; }
     }
+
+    public class AgentRecord2 : AgentRecord, IBetTypeNameRecord
+    {
+        public string BetTypeName { get; set; }
+    }
 }

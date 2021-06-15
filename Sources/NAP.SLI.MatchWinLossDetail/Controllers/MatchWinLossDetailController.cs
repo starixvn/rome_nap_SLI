@@ -32,7 +32,7 @@
             return File(
                 fileContents: fileContents,
                 contentType: ContentTypes.Excel,
-                fileDownloadName: $"{string.Join("-", "Win Loss Detail", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls"
+                fileDownloadName: $"{string.Join("-", "Match Win Loss Detail", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls"
             );
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Fanex.Data.Repository;
 using Fanex.RemotingRef;
 using NAP.SLI.Common.Services;
@@ -25,54 +26,54 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         private readonly IDynamicRepository dynamicRepository;
         private readonly IRemotingRefService remotingRefService;
         private readonly ICurrentContextService currentContextService;
+        private readonly IMapper mapper;
 
-        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository, IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
-            => (this.reportService, this.dynamicRepository, this.remotingRefService, this.currentContextService) = (reportService, dynamicRepository, remotingRefService, currentContextService);
+        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository, IRemotingRefService remotingRefService, ICurrentContextService currentContextService, IMapper mapper)
+            => (this.reportService, this.dynamicRepository, this.remotingRefService, this.currentContextService, this.mapper) = (reportService, dynamicRepository, remotingRefService, currentContextService, mapper);
 
         public async Task<SuperData> QuerySuper(QueryRequest request)
         {
             var records = await Query<SuperRecord>(request).ConfigureAwait(false);
+            var records2 = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecord2>>(records);
             return new SuperData
             {
-                Records = records,
-                Names = GetNames(records)
+                Data = Build(records2)
             };
         }
 
         public async Task<MasterData> QueryMaster(QueryRequest request)
         {
             var records = await Query<MasterRecord>(request).ConfigureAwait(false);
+            var records2 = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecord2>>(records);
             return new MasterData
             {
-                Records = records,
-                Names = GetNames(records)
+                Data = Build(records2)
             };
         }
 
         public async Task<AgentData> QueryAgent(QueryRequest request)
         {
             var records = await Query<AgentRecord>(request).ConfigureAwait(false);
+            var records2 = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecord2>>(records);
             return new AgentData
             {
-                Records = records,
-                Names = GetNames(records)
+                Data = Build(records2)
             };
         }
 
-        private NameData GetNames(IEnumerable<AgentRecord> records)
+        private IEnumerable<Data<T>> Build<T>(IEnumerable<T> records) where T : AgentRecord
         {
             var languageCode = currentContextService.GetLanguageCode();
-            var sportTypes = records.Select(x => x.SportType).Distinct().Select(x => KeyValuePair.Create(x, remotingRefService.GetSportName(x.ToString(), languageCode)));
-            var teams = records.Select(x => x.HomeId).Union(records.Select(x => x.AwayId)).Select(x => KeyValuePair.Create(x, remotingRefService.GetTeamName3rd(x.ToString(), languageCode)));
-            var leagues = records.Select(x => x.LeagueId).Distinct().Select(x => KeyValuePair.Create(x, remotingRefService.GetLeagueName(x.ToString(), languageCode)));
-            var betTypes = records.Select(x => x.BetType).Distinct().Select(x => KeyValuePair.Create(x, remotingRefService.GetBetTypeName(x.ToString(), languageCode)));
-            return new NameData
+            return records.GroupBy(r => new
             {
-                SportTypes = sportTypes,
-                Teams = teams,
-                Leagues = leagues,
-                BetTypes = betTypes
-            };
+                r.LeagueId,
+                r.MatchId
+            }).Select(gcs => new Data<T>
+            {
+                LeagueName = remotingRefService.GetLeagueName3rd(gcs.Key.LeagueId.ToString(), languageCode),
+                MatchName = $"No {gcs.Key.MatchId}",
+                Records = gcs
+            });
         }
 
         private async Task<IEnumerable<T>> Query<T>(QueryRequest request)

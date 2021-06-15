@@ -4,4 +4,9 @@
     {
         public decimal SuperWinLoss { get; set; }
     }
+
+    public class SuperRecord2 : SuperRecord, IBetTypeNameRecord
+    {
+        public string BetTypeName { get; set; }
+    }
 }
