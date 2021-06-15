@@ -1,6 +1,6 @@
 ﻿namespace NAP.SLI.MatchWinLossDetail.Models
 {
-    public class AgentRecord
+    public class AgentRecord : IRecord
     {
         public int MatchId { get; set; }
 
@@ -21,8 +21,15 @@
         public decimal AgentWinLoss { get; set; }
     }
 
-    public class AgentRecord2 : AgentRecord, IBetTypeNameRecord
+    public class AgentRecord2 : AgentRecord, IBetTypeNameRecord, ISumRecord<AgentRecord2>
     {
         public string BetTypeName { get; set; }
+
+        public void Sum(AgentRecord2 t)
+        {
+            Turnover += t.Turnover;
+            MemberWinLoss += t.MemberWinLoss;
+            AgentWinLoss += t.AgentWinLoss;
+        }
     }
 }

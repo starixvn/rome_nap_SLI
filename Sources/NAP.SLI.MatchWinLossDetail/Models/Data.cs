@@ -2,27 +2,62 @@ using System.Collections.Generic;
 
 namespace NAP.SLI.MatchWinLossDetail.Models
 {
-    public class Data<T>
+    public class MatchData<T> where T : new()
     {
-        public string LeagueName { get; set; }
+        public string LeagueName { get; }
 
-        public string MatchName { get; set; }
+        public string MatchName { get; }
 
-        public IEnumerable<T> Records { get; set; }
+        public IEnumerable<T> Records { get; }
+
+        public T Total { get; }
+
+        public MatchData(string leagueName, string matchName, IEnumerable<T> records)
+        {
+            LeagueName = leagueName;
+            MatchName = matchName;
+            Records = records;
+        }
     }
 
-    public class AgentData
+    public class Data<T> where T : ISumRecord<T>, new()
     {
-        public IEnumerable<Data<AgentRecord2>> Data { get; set; }
+        public IEnumerable<MatchData<T>> Matches { get; }
+
+        public T Total { get; }
+
+        public Data(IEnumerable<MatchData<T>> matches)
+        {
+            Matches = matches;
+            Total = new T();
+            foreach (var match in matches)
+            {
+                Total.Sum(match.Total);
+            }
+        }
     }
 
-    public class MasterData
+    public class AgentData : Data<AgentRecord2>
     {
-        public IEnumerable<Data<MasterRecord2>> Data { get; set; }
+        public AgentData(IEnumerable<MatchData<AgentRecord2>> matches)
+        : base(matches)
+        {
+        }
     }
 
-    public class SuperData
+    public class MasterData : Data<MasterRecord2>
     {
-        public IEnumerable<Data<SuperRecord2>> Data { get; set; }
+        public MasterData(IEnumerable<MatchData<MasterRecord2>> matches)
+        : base(matches)
+        {
+        }
+    }
+
+    public class SuperData : Data<SuperRecord2>
+    {
+        public SuperData(IEnumerable<MatchData<SuperRecord2>> matches)
+        : base(matches)
+        {
+        }
     }
 }

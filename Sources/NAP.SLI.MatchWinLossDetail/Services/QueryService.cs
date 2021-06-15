@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -35,44 +36,38 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         {
             var records = await Query<SuperRecord>(request).ConfigureAwait(false);
             var records2 = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecord2>>(records);
-            return new SuperData
-            {
-                Data = Build(records2)
-            };
+            return new SuperData(Build<SuperRecord2, MatchData<SuperRecord2>>(records2));
         }
 
         public async Task<MasterData> QueryMaster(QueryRequest request)
         {
             var records = await Query<MasterRecord>(request).ConfigureAwait(false);
             var records2 = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecord2>>(records);
-            return new MasterData
-            {
-                Data = Build(records2)
-            };
+            return new MasterData(Build<MasterRecord2, MatchData<MasterRecord2>>(records2));
         }
 
         public async Task<AgentData> QueryAgent(QueryRequest request)
         {
             var records = await Query<AgentRecord>(request).ConfigureAwait(false);
             var records2 = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecord2>>(records);
-            return new AgentData
-            {
-                Data = Build(records2)
-            };
+            return new AgentData(Build<AgentRecord2, MatchData<AgentRecord2>>(records2));
         }
 
-        private IEnumerable<Data<T>> Build<T>(IEnumerable<T> records) where T : AgentRecord
+        private IEnumerable<K> Build<T, K>(IEnumerable<T> records)
+        where T : IRecord, new()
+        where K : MatchData<T>
         {
             var languageCode = currentContextService.GetLanguageCode();
             return records.GroupBy(r => new
             {
                 r.LeagueId,
                 r.MatchId
-            }).Select(gcs => new Data<T>
+            }).Select(gcs =>
             {
-                LeagueName = remotingRefService.GetLeagueName3rd(gcs.Key.LeagueId.ToString(), languageCode),
-                MatchName = $"No {gcs.Key.MatchId}",
-                Records = gcs
+                var leagueName = remotingRefService.GetLeagueName3rd(gcs.Key.LeagueId.ToString(), languageCode);
+                var matchName = $"No {gcs.Key.MatchId}";
+                var records = gcs;
+                return (K)Activator.CreateInstance(typeof(K), new object[] { leagueName, matchName, records });
             });
         }
 
