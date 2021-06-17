@@ -8,6 +8,7 @@
         public static IServiceCollection AddWinLossAnalysisModule(this IServiceCollection services)
         {
             services.AddScoped<IQueryService, QueryService>();
+            services.AddScoped<IExcelService, ExcelService>();
             return services;
         }
     }

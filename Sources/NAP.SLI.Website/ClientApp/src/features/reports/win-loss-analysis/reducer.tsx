@@ -9,15 +9,6 @@ export enum ReportType {
   Sport = 3,
 }
 
-type ExcelProps = {
-  reportType: ReportType;
-  custId: number;
-  roleId: number;
-  username: string;
-  fromDate: string;
-  toDate: string;
-};
-
 type QueryArg = {
   reportType: ReportType;
   fromDate: string;
@@ -27,6 +18,10 @@ type QueryArg = {
 type QueryProps = QueryArg & {
   custId: number;
   roleId: number;
+};
+
+type ExcelProps = QueryProps & {
+  username: string;
 };
 
 type Record = {
@@ -63,14 +58,14 @@ const initialState: State = {
   },
 };
 
-const sliceName = 'win-loss-analysis';
+const actionName = 'win-loss-analysis';
 
 export const query = createAsyncThunk<QueryData, QueryProps>(
-  `${sliceName}/query`,
+  `${actionName}/query`,
   async (values, { rejectWithValue }) => {
     try {
       const { data } = await post<QueryData>(
-        '/api/win-loss-analysis/query',
+        `/api/${actionName}/query`,
         values,
       );
       const { records, total } = data;
@@ -84,8 +79,12 @@ export const query = createAsyncThunk<QueryData, QueryProps>(
   },
 );
 
+export const excel = async (payload: ExcelProps) => {
+  return await download(`/api/${actionName}/excel`, payload);
+};
+
 const slice = createSlice({
-  name: sliceName,
+  name: actionName,
   initialState,
   reducers: {
     setReportType: (state, action: PayloadAction<ReportType>) => {
@@ -116,10 +115,6 @@ const calculateCompanyWinLoss = (winLoss: Record) => {
     winLoss.agentWinLoss +
     (winLoss.masterWinLoss || 0) +
     (winLoss.superWinLoss || 0);
-};
-
-export const excel = async (payload: ExcelProps) => {
-  return await download('/api/win-loss-analysis/excel', payload);
 };
 
 export const { setReportType, selectCustomer } = slice.actions;

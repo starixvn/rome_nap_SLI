@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
-import { getReportName, ReportType } from './reducer';
+import { getReportName } from './reducer';
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const TableComponent = () => {

@@ -69,7 +69,7 @@ const initialState: State = {
     pageSize: PageSize,
   },
 };
-const sliceName = 'win-loss-detail';
+const actionName = 'win-loss-detail';
 
 const calculateCompanyWinLoss = (record: Record) => {
   record.companyWinLoss =
@@ -80,11 +80,11 @@ const calculateCompanyWinLoss = (record: Record) => {
 };
 
 export const query = createAsyncThunk<QueryData, QueryProps>(
-  `${sliceName}/query`,
+  `${actionName}/query`,
   async (values, { rejectWithValue }) => {
     try {
       const { data } = await post<QueryData>(
-        '/api/win-loss-detail/query',
+        `/api/${actionName}/query`,
         values,
       );
       const { records, total } = data;
@@ -99,11 +99,11 @@ export const query = createAsyncThunk<QueryData, QueryProps>(
 );
 
 export const excel = async (payload: ExcelProps) => {
-  return await download('/api/win-loss-detail/excel', payload);
+  return await download(`/api/${actionName}/excel`, payload);
 };
 
 const slice = createSlice({
-  name: sliceName,
+  name: actionName,
   initialState,
   reducers: {
     toggleMode: (state) => {
