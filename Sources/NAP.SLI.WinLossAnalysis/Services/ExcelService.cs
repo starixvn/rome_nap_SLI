@@ -45,14 +45,12 @@ namespace NAP.SLI.WinLossAnalysis.Services
             this.mapper = mapper;
         }
 
-        public string GetTitle(ExcelRequest request) => $"Win Loss Analysis {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}";
-
-        public async Task<byte[]> ExcelAgent(ExcelRequest request)
+        public async Task<byte[]> ExcelSuper(ExcelRequest request)
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
-            var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<AgentRecord>("Agent.xls", GetTitle(request));
-            var workbookDef = new AgentWorkbookDef();
+            var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
+            var workbook = CreateWorkbook<SuperRecord>("Master.xls", GetTitle(request));
+            var workbookDef = new SuperWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
@@ -62,22 +60,27 @@ namespace NAP.SLI.WinLossAnalysis.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryMaster(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<MasterRecord>("Master.xls", GetTitle(request));
+            var workbook = CreateWorkbook<MasterRecord>("Agent.xls", GetTitle(request));
             var workbookDef = new MasterWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
         }
 
-        public async Task<byte[]> ExcelSuper(ExcelRequest request)
+        public async Task<byte[]> ExcelAgent(ExcelRequest request)
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
-            var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<SuperRecord>("Super.xls", GetTitle(request));
-            var workbookDef = new SuperWorkbookDef();
+            var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
+            var workbook = CreateWorkbook<AgentRecord>("Member.xls", GetTitle(request));
+            var workbookDef = new AgentWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
+        }
+
+        private static string GetTitle(ExcelRequest request)
+        {
+            return $"Win Loss Analysis {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}";
         }
 
         private Workbook<T> CreateWorkbook<T>(string fileName, string title) where T : AgentRecord

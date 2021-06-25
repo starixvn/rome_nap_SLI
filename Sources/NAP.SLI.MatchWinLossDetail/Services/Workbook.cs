@@ -64,6 +64,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
                 throw new ArgumentNullException(nameof(sheet), "Sheet cannot be null");
             }
 
+            Workbook.RemoveSheetAt(TemplateInfo.SheetIndex);
             if (Data.Matches.Any())
             {
                 FillBodyRows(sheet);

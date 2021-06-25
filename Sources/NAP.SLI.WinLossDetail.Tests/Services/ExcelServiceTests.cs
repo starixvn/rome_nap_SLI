@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Localization;
+using NAP.SLI.Common.Extensions;
 using NAP.SLI.Common.Services;
 using NAP.SLI.Localization.Services;
 using NAP.SLI.Tests;
@@ -56,7 +57,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             // Assert
             await queryService.Received().QuerySuper(Arg.Any<QueryRequest>());
             workbook.Received().UseTemplate(Arg.Is<TemplateInfo>(templateInfo => IsMatch(templateInfo, appDataPath, "Master.xls")));
-            workbook.Received().Title(Arg.Is<string>(x => x == excelService.GetTitle(request)));
+            workbook.Received().Title(Arg.Is<string>(x => x == $"Win Loss Detail {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}"));
             workbook.Received().Header(Arg.Is<Func<string, string>>(x => x == noLocalizer.Localise));
             workbook.Received().Body(Arg.Is<IEnumerable<SuperRecord>>(x => x == superData.Records), Arg.Is<Mapper<SuperRecord>>(mapper => IsMatch(mapper, superData.Records.First(), true)));
             workbook.Received().Footer(Arg.Is<SuperRecord>(x => x == superData.Total), Arg.Is<Mapper<SuperRecord>>(mapper => IsMatch(mapper, superData.Total, false)));
@@ -108,7 +109,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             // Assert
             await queryService.Received().QuerySuper(Arg.Any<QueryRequest>());
             workbook.Received().UseTemplate(Arg.Is<TemplateInfo>(templateInfo => IsMatch(templateInfo, appDataPath, "Agent.xls")));
-            workbook.Received().Title(Arg.Is<string>(x => x == excelService.GetTitle(request)));
+            workbook.Received().Title(Arg.Is<string>(x => x == $"Win Loss Detail {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}"));
             workbook.Received().Header(Arg.Is<Func<string, string>>(x => x == noLocalizer.Localise));
             workbook.Received().Body(Arg.Is<IEnumerable<MasterRecord>>(x => x == masterData.Records), Arg.Is<Mapper<MasterRecord>>(mapper => IsMatch(mapper, masterData.Records.First(), true)));
             workbook.Received().Footer(Arg.Is<MasterRecord>(x => x == masterData.Total), Arg.Is<Mapper<MasterRecord>>(mapper => IsMatch(mapper, masterData.Total, false)));
@@ -158,7 +159,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
             // Assert
             await queryService.Received().QuerySuper(Arg.Any<QueryRequest>());
             workbook.Received().UseTemplate(Arg.Is<TemplateInfo>(templateInfo => IsMatch(templateInfo, appDataPath, "Member.xls")));
-            workbook.Received().Title(Arg.Is<string>(x => x == excelService.GetTitle(request)));
+            workbook.Received().Title(Arg.Is<string>(x => x == $"Win Loss Detail {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}"));
             workbook.Received().Header(Arg.Is<Func<string, string>>(x => x == noLocalizer.Localise));
             workbook.Received().Body(Arg.Is<IEnumerable<AgentRecord>>(x => x == agentData.Records), Arg.Is<Mapper<AgentRecord>>(mapper => IsMatch(mapper, agentData.Records.First(), true)));
             workbook.Received().Footer(Arg.Is<AgentRecord>(x => x == agentData.Total), Arg.Is<Mapper<AgentRecord>>(mapper => IsMatch(mapper, agentData.Total, false)));

@@ -50,11 +50,6 @@
             return workbook.ExportToBytes();
         }
 
-        private static string GetTitle(ExcelRequest request)
-        {
-            return $"Match Win Loss Detail {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}";
-        }
-
         public async Task<byte[]> ExcelAgent(ExcelRequest request)
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
@@ -63,6 +58,11 @@
             var workbookInfo = new WorkbookInfo(new TemplateInfo(filePath).FreezePanel(4, Column.B), GetTitle(request), noLocalizer.Localise, sharedLocalizer["DefaultSheetName"]);
             var workbook = new AgentWorkbook(workbookInfo, queryData);
             return workbook.ExportToBytes();
+        }
+
+        private static string GetTitle(ExcelRequest request)
+        {
+            return $"Match Win Loss Detail {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}";
         }
     }
 }

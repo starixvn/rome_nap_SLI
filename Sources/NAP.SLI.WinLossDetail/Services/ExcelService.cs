@@ -18,8 +18,6 @@
         Task<byte[]> ExcelMaster(ExcelRequest request);
 
         Task<byte[]> ExcelAgent(ExcelRequest request);
-
-        string GetTitle(ExcelRequest request);
     }
 
     public class ExcelService : IExcelService
@@ -38,7 +36,7 @@
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<SuperRecord>("Super.xls", GetTitle(request));
+            var workbook = CreateWorkbook<SuperRecord>("Master.xls", GetTitle(request));
             var workbookDef = new SuperWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -49,8 +47,19 @@
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryMaster(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<MasterRecord>("Master.xls", GetTitle(request));
+            var workbook = CreateWorkbook<MasterRecord>("Agent.xls", GetTitle(request));
             var workbookDef = new MasterWorkbookDef();
+            workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
+            workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
+            return workbook.ExportToBytes();
+        }
+
+        public async Task<byte[]> ExcelAgent(ExcelRequest request)
+        {
+            var queryRequest = mapper.Map<QueryRequest>(request);
+            var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
+            var workbook = CreateWorkbook<AgentRecord>("Member.xls", GetTitle(request));
+            var workbookDef = new AgentWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
@@ -67,18 +76,7 @@
             return workbook;
         }
 
-        public async Task<byte[]> ExcelAgent(ExcelRequest request)
-        {
-            var queryRequest = mapper.Map<QueryRequest>(request);
-            var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<AgentRecord>("Agent.xls", GetTitle(request));
-            var workbookDef = new AgentWorkbookDef();
-            workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
-            workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
-            return workbook.ExportToBytes();
-        }
-
-        public string GetTitle(ExcelRequest request)
+        private static string GetTitle(ExcelRequest request)
         {
             return $"Win Loss Detail {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}";
         }
