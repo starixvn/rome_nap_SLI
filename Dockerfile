@@ -12,6 +12,7 @@ COPY ./Sources/NAP.SLI.UserManagement ./NAP.SLI.UserManagement
 COPY ./Sources/NAP.SLI.WinLossAnalysis ./NAP.SLI.WinLossAnalysis
 COPY ./Sources/NAP.SLI.WinLossDetail ./NAP.SLI.WinLossDetail
 COPY ./Sources/NAP.UM ./NAP.UM
+COPY ./Sources/NAP.SLI.WinLossByBetType ./NAP.SLI.WinLossByBetType
 COPY ./Sources/NAP.SLI.Website/NAP.SLI.Website.csproj ./NAP.SLI.Website/NAP.SLI.Website.csproj
 
 WORKDIR /src/NAP.SLI.Website
