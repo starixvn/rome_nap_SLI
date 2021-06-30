@@ -2,16 +2,16 @@ FROM registry.nexdev.net:5050/docker/dotnet/core/sdk:5.0.102-ca-patch-buster-sli
 WORKDIR /src
 ENV TZ="America/New_York"
 
-COPY ./Sources/NAP.SimpleApi ./NAP.SimpleApi
-COPY ./Sources/NAP.SLI.Account ./NAP.SLI.Account
-COPY ./Sources/NAP.SLI.Common ./NAP.SLI.Common
-COPY ./Sources/NAP.SLI.Customer ./NAP.SLI.Customer
-COPY ./Sources/NAP.SLI.Localization ./NAP.SLI.Localization
-COPY ./Sources/NAP.SLI.MatchWinLossDetail ./NAP.SLI.MatchWinLossDetail
-COPY ./Sources/NAP.SLI.UserManagement ./NAP.SLI.UserManagement
-COPY ./Sources/NAP.SLI.WinLossAnalysis ./NAP.SLI.WinLossAnalysis
-COPY ./Sources/NAP.SLI.WinLossDetail ./NAP.SLI.WinLossDetail
-COPY ./Sources/NAP.UM ./NAP.UM
+COPY ./Sources/NAP.SimpleApi/NAP.SimpleApi ./NAP.SimpleApi
+COPY ./Sources/NAP.SLI.Account/NAP.SLI.Account ./NAP.SLI.Account
+COPY ./Sources/NAP.SLI.Common/NAP.SLI.Common ./NAP.SLI.Common
+COPY ./Sources/NAP.SLI.Customer/NAP.SLI.Customer ./NAP.SLI.Customer
+COPY ./Sources/NAP.SLI.Localization/NAP.SLI.Localization ./NAP.SLI.Localization
+COPY ./Sources/NAP.SLI.MatchWinLossDetail/NAP.SLI.MatchWinLossDetail ./NAP.SLI.MatchWinLossDetail
+COPY ./Sources/NAP.SLI.UserManagement/NAP.SLI.UserManagement ./NAP.SLI.UserManagement
+COPY ./Sources/NAP.SLI.WinLossAnalysis/NAP.SLI.WinLossAnalysis ./NAP.SLI.WinLossAnalysis
+COPY ./Sources/NAP.SLI.WinLossDetail/NAP.SLI.WinLossDetail ./NAP.SLI.WinLossDetail
+COPY ./Sources/NAP.UM/NAP.UM ./NAP.UM
 COPY ./Sources/NAP.SLI.Website/NAP.SLI.Website.csproj ./NAP.SLI.Website/NAP.SLI.Website.csproj
 
 WORKDIR /src/NAP.SLI.Website
