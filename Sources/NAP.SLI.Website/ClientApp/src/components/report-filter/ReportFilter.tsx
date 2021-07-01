@@ -1,4 +1,4 @@
-import React, { useState, createRef, useEffect, ReactNode } from 'react';
+import React, { useState, createRef, useEffect } from 'react';
 import {
   Label,
   Form,
@@ -13,45 +13,31 @@ import {
 } from 'reactstrap';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import FormikDatePicker from 'components/date-picker/FormikDatePicker';
-import { getToday, ReportDateRanges } from 'utils/DateUtils';
+import { ReportDateRanges } from 'utils/DateUtils';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
 import moment, { Moment } from 'moment';
 
-/* eslint-disable @typescript-eslint/no-explicit-any*/
 type Props = {
   minDate: Moment;
   maxDate: Moment;
-  queryCustomer: any;
-  queryArg: any;
-  component?: ReactNode;
-  onQuery: (
-    values: FormikFilterValues,
-    helpers: FormikHelpers<FormikFilterValues>,
-  ) => Promise<void>;
-  onExcel: () => Promise<void>;
-};
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-export type FormikFilterValues = {
   fromDate: Moment;
   toDate: Moment;
+  onQuery: (fromDate: Moment, toDate: Moment) => void;
+  onExcel: () => void;
 };
 
 const ReportFilter = ({
   minDate,
   maxDate,
-  queryCustomer,
-  queryArg,
-  component,
+  fromDate,
+  toDate,
   onQuery,
   onExcel,
 }: Props) => {
   const formikRef = createRef<FormikProps<FormikFilterValues>>();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
-
-  const { fromDate, toDate } = queryArg;
 
   useEffect(() => {
     if (!formikRef.current) {
@@ -62,17 +48,14 @@ const ReportFilter = ({
     if (!isSubmitting) {
       handleSubmit();
     }
-  }, [formikRef, queryCustomer]);
+  }, [formikRef]);
 
-  if (!queryCustomer) {
-    return <></>;
-  }
-
-  const today = getToday();
   const initialValues = {
-    fromDate: today,
-    toDate: today,
+    fromDate,
+    toDate,
   };
+
+  type FormikFilterValues = typeof initialValues;
 
   const handleDropdownItemClick = (
     index: number,
@@ -94,7 +77,7 @@ const ReportFilter = ({
     setFieldValue: Formik.SetFieldValueFunc,
   ) => {
     const selectedFromDate = moment(selectedDate);
-    if (selectedFromDate.isAfter(toDate)) {
+    if (selectedFromDate.isAfter(formikRef.current?.values.toDate)) {
       setFieldValue('toDate', selectedFromDate);
     }
 
@@ -106,18 +89,27 @@ const ReportFilter = ({
     setFieldValue: Formik.SetFieldValueFunc,
   ) => {
     const selectedToDate = moment(selectedDate);
-    if (selectedToDate.isBefore(fromDate)) {
+    if (selectedToDate.isBefore(formikRef.current?.values.fromDate)) {
       setFieldValue('fromDate', selectedToDate);
     }
 
     setDropdownIndex(ReportDateRanges.length - 1);
   };
 
+  const handleQuery = async (
+    { fromDate, toDate }: FormikFilterValues,
+    { setSubmitting }: FormikHelpers<FormikFilterValues>,
+  ) => {
+    // setSubmitting(true);
+    await onQuery(fromDate, toDate);
+    // setSubmitting(false);
+  };
+
   return (
     <Formik
       innerRef={formikRef}
       initialValues={initialValues}
-      onSubmit={onQuery}
+      onSubmit={handleQuery}
     >
       {({ handleSubmit, isSubmitting, setFieldValue }) => (
         <Container fluid className="filter">
@@ -188,7 +180,6 @@ const ReportFilter = ({
               </FormGroup>
             </fieldset>
           </Form>
-          {component}
         </Container>
       )}
     </Formik>

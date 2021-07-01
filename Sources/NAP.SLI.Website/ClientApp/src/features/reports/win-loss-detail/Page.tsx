@@ -10,10 +10,9 @@ import { excel, query, selectCustomer, toggleMode } from './reducer';
 import { RouteLinks } from 'utils/RouteUtils';
 import { useAppDispatch } from 'app/store';
 import Title from './Title';
-import ReportFilter, {
-  FormikFilterValues,
-} from 'components/report-filter/ReportFilter';
-import { FormikHelpers } from 'formik';
+import ReportFilter from 'components/report-filter/ReportFilter';
+import ReportFilterHookForm from 'components/report-filter/ReportFilterHookForm';
+import moment, { Moment } from 'moment';
 
 const Page = () => {
   const history = useHistory();
@@ -51,22 +50,17 @@ const Page = () => {
   const { custId, roleId, username } = queryCustomer;
   const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
 
-  const handleQuery = async (
-    values: FormikFilterValues,
-    { setSubmitting }: FormikHelpers<FormikFilterValues>,
-  ) => {
-    setSubmitting(true);
+  const handleQuery = async (fromDate: Moment, toDate: Moment) => {
     const queryPayload = {
       isHistory,
       custId,
       roleId,
-      fromDate: formatDate(values.fromDate),
-      toDate: formatDate(values.toDate),
+      fromDate: formatDate(fromDate),
+      toDate: formatDate(toDate),
       pageIndex,
       pageSize,
     };
     await dispatch(query(queryPayload));
-    setSubmitting(false);
   };
 
   const handleExcel = async () => {
@@ -88,27 +82,33 @@ const Page = () => {
         <HistoryFilter minDate={minDate} maxDate={maxDate} />
       ) : (
         // <NormalFilter minDate={minDate} maxDate={maxDate} />
-        <ReportFilter
-          minDate={minDate}
-          maxDate={maxDate}
-          queryArg={queryArg}
-          queryCustomer={queryCustomer}
-          onQuery={handleQuery}
-          onExcel={handleExcel}
-          component={
-            <div>
-              You can view the report data from 09/01/2019. For more historic
-              data, please click to{' '}
-              <span
-                className="text-link"
-                onClick={() => dispatch(toggleMode())}
-              >
-                View History Report
-              </span>
-            </div>
-          }
-        />
+        <>
+          {/* <ReportFilter
+            minDate={minDate}
+            maxDate={maxDate}
+            fromDate={moment(fromDate)}
+            toDate={moment(toDate)}
+            onQuery={handleQuery}
+            onExcel={handleExcel}
+          /> */}
+          <ReportFilterHookForm
+            minDate={minDate}
+            maxDate={maxDate}
+            fromDate={moment(fromDate)}
+            toDate={moment(toDate)}
+            onQuery={handleQuery}
+            onExcel={handleExcel}
+          />
+          <div>
+            You can view the report data from 09/01/2019. For more historic
+            data, please click to{' '}
+            <span className="text-link" onClick={() => dispatch(toggleMode())}>
+              View History Report
+            </span>
+          </div>
+        </>
       )}
+
       <Table />
     </div>
   );

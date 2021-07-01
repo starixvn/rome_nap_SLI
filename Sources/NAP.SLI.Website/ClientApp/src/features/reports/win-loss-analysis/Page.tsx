@@ -1,13 +1,17 @@
 import { useAppDispatch } from 'app/store';
-import ReportFilter, {
-  FormikFilterValues,
-} from 'components/report-filter/ReportFilter';
-import { FormikHelpers } from 'formik';
+import ReportFilter from 'components/report-filter/ReportFilter';
+import ReportFilterHookForm from 'components/report-filter/ReportFilterHookForm';
+import moment, { Moment } from 'moment';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ButtonGroup, Button } from 'reactstrap';
-import { minDate, maxDate, formatDate } from 'utils/DateUtils';
+import { ButtonGroup, Button, Container } from 'reactstrap';
+import {
+  minDate,
+  maxDate,
+  formatDate,
+  stringDateToMoment,
+} from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
 import {
@@ -53,20 +57,15 @@ const Page = () => {
   const { custId, roleId, username } = queryCustomer;
   const { reportType, fromDate, toDate } = queryArg;
 
-  const handleQuery = async (
-    values: FormikFilterValues,
-    { setSubmitting }: FormikHelpers<FormikFilterValues>,
-  ) => {
-    setSubmitting(true);
+  const handleQuery = async (fromDate: Moment, toDate: Moment) => {
     const queryPayload = {
       reportType,
       custId,
       roleId,
-      fromDate: formatDate(values.fromDate),
-      toDate: formatDate(values.toDate),
+      fromDate: formatDate(fromDate),
+      toDate: formatDate(toDate),
     };
     await dispatch(query(queryPayload));
-    setSubmitting(false);
   };
 
   const handleExcel = async () => {
@@ -88,31 +87,37 @@ const Page = () => {
         Win Loss Analysis ({location.state.username})
       </div>
       {/* <Filter minDate={minDate} maxDate={maxDate} /> */}
-      <ReportFilter
+      {/* <ReportFilter
         minDate={minDate}
         maxDate={maxDate}
-        queryArg={queryArg}
-        queryCustomer={queryCustomer}
+        fromDate={moment(fromDate)}
+        toDate={moment(toDate)}
         onQuery={handleQuery}
         onExcel={handleExcel}
-        component={
-          <div>
-            <span>Report By</span>
-            <ButtonGroup className="mx-4">
-              {reportTypes.map((type, index) => (
-                <Button
-                  key={index}
-                  color="primary"
-                  onClick={() => dispatch(setReportType(type))}
-                  active={reportType === type}
-                >
-                  {getReportName(type)}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </div>
-        }
+      /> */}
+      <ReportFilterHookForm
+        minDate={minDate}
+        maxDate={maxDate}
+        fromDate={moment(fromDate)}
+        toDate={moment(toDate)}
+        onQuery={handleQuery}
+        onExcel={handleExcel}
       />
+      <div>
+        <span>Report By</span>
+        <ButtonGroup className="mx-4">
+          {reportTypes.map((type, index) => (
+            <Button
+              key={index}
+              color="primary"
+              onClick={() => dispatch(setReportType(type))}
+              active={reportType === type}
+            >
+              {getReportName(type)}
+            </Button>
+          ))}
+        </ButtonGroup>
+      </div>
       <Table />
     </div>
   );
