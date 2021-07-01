@@ -51,6 +51,8 @@ namespace NAP.SLI.Website
     using NAP.SLI.WinLossAnalysis;
     using NAP.SLI.WinLossDetail;
     using NAP.SLI.MatchWinLossDetail.Controllers;
+    using NAP.SLI.WinLossByBetType;
+    using NAP.SLI.WinLossByBetType.Controllers;
 
     public class Startup
     {
@@ -224,7 +226,8 @@ namespace NAP.SLI.Website
                 .AddCustomerModule()
                 .AddMatchWinLossDetailModule()
                 .AddWinLossDetailModule()
-                .AddWinLossAnalysisModule();
+                .AddWinLossAnalysisModule()
+                .AddWinLossByBetTypeModule();
         }
 
         private static void AddAutoMapper(IServiceCollection services)
@@ -250,6 +253,7 @@ namespace NAP.SLI.Website
             services.AddMediatR(typeof(WinLossDetailController));
             services.AddMediatR(typeof(WinLossAnalysisController));
             services.AddMediatR(typeof(MatchWinLossDetailController));
+            services.AddMediatR(typeof(WinLossByBetTypeController));
         }
 
         private void UseFanexDataWithSqlServer()

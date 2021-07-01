@@ -1,0 +1,4 @@
+include:
+    - project: "ci/repos-ci/rome_nap_u3"
+      ref: master
+      file: "gitlab-ci.yml"
