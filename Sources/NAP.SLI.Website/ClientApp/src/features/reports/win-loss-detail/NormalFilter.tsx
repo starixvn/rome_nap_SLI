@@ -5,6 +5,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { formatDate } from 'utils/DateUtils';
 import { excel, query, toggleMode } from './reducer';
+import { Container } from 'reactstrap';
 
 type Props = {
   minDate: Moment;
@@ -51,23 +52,23 @@ const NormalFilter = ({ minDate, maxDate }: Props) => {
   };
 
   return (
-    <ReportFilter
-      minDate={minDate}
-      maxDate={maxDate}
-      fromDate={moment(fromDate)}
-      toDate={moment(toDate)}
-      onQuery={handleQuery}
-      onExcel={handleExcel}
-      component={
-        <div>
-          You can view the report data from 09/01/2019. For more historic data,
-          please click to{' '}
-          <span className="text-link" onClick={() => dispatch(toggleMode())}>
-            View History Report
-          </span>
-        </div>
-      }
-    />
+    <Container fluid className="filter">
+      <ReportFilter
+        minDate={minDate}
+        maxDate={maxDate}
+        fromDate={moment(fromDate)}
+        toDate={moment(toDate)}
+        onQuery={handleQuery}
+        onExcel={handleExcel}
+      />
+      <div>
+        You can view the report data from 09/01/2019. For more historic data,
+        please click to{' '}
+        <span className="text-link" onClick={() => dispatch(toggleMode())}>
+          View History Report
+        </span>
+      </div>
+    </Container>
   );
 };
 

@@ -12,6 +12,7 @@ import {
 import { useAppDispatch } from 'app/store';
 import ReportFilter from 'components/report-filter/ReportFilter';
 import { ButtonGroup, Button } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 type Props = {
   minDate: Moment;
@@ -56,31 +57,31 @@ const Filter = ({ minDate, maxDate }: Props) => {
 
   const reportTypes = [ReportType.Daily, ReportType.Monthly, ReportType.Sport];
   return (
-    <ReportFilter
-      minDate={minDate}
-      maxDate={maxDate}
-      fromDate={moment(fromDate)}
-      toDate={moment(toDate)}
-      onQuery={handleQuery}
-      onExcel={handleExcel}
-      component={
-        <div>
-          <span>Report By</span>
-          <ButtonGroup className="mx-4">
-            {reportTypes.map((type, index) => (
-              <Button
-                key={index}
-                color="primary"
-                onClick={() => dispatch(setReportType(type))}
-                active={reportType === type}
-              >
-                {getReportName(type)}
-              </Button>
-            ))}
-          </ButtonGroup>
-        </div>
-      }
-    />
+    <Container fluid className="filter">
+      <ReportFilter
+        minDate={minDate}
+        maxDate={maxDate}
+        fromDate={moment(fromDate)}
+        toDate={moment(toDate)}
+        onQuery={handleQuery}
+        onExcel={handleExcel}
+      />
+      <div>
+        <span>Report By</span>
+        <ButtonGroup className="mx-4">
+          {reportTypes.map((type, index) => (
+            <Button
+              key={index}
+              color="primary"
+              onClick={() => dispatch(setReportType(type))}
+              active={reportType === type}
+            >
+              {getReportName(type)}
+            </Button>
+          ))}
+        </ButtonGroup>
+      </div>
+    </Container>
   );
 };
 

@@ -4,7 +4,6 @@ import {
   Form,
   Button,
   FormGroup,
-  Container,
   Spinner,
   Dropdown,
   DropdownToggle,
@@ -28,7 +27,7 @@ type Props = {
   onExcel: () => Promise<void>;
 };
 
-const ReportFilter = ({
+const ReportFilterHookForm = ({
   minDate,
   maxDate,
   fromDate,
@@ -100,7 +99,7 @@ const ReportFilter = ({
   };
 
   return (
-    <Container fluid className="filter">
+    <>
       <Form inline className="mb-3" onSubmit={handleSubmit(onSubmit)}>
         <fieldset disabled={isSubmitting} className="form-inline">
           <FormGroup className="mr-5">
@@ -173,8 +172,8 @@ const ReportFilter = ({
         </fieldset>
       </Form>
       {component}
-    </Container>
+    </>
   );
 };
 
-export default ReportFilter;
+export default ReportFilterHookForm;
