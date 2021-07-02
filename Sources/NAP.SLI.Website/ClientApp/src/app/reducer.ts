@@ -10,6 +10,7 @@ import editUserReducer from 'features/user-management/edit-user/reducer';
 import resetUserPasswordReducer from 'features/user-management/reset-user-password/reducer';
 import winLossDetailReducer from 'features/reports/win-loss-detail/reducer';
 import winLossAnalysisReducer from 'features/reports/win-loss-analysis/reducer';
+import winLossByBetTypeReducer from 'features/reports/win-loss-by-bet-type/reducer';
 import matchWinLossDetailReducer from 'features/reports/match-win-loss-detail/reducer';
 import umReducer from 'features/error/UM/reducer';
 
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
   resetUserPassword: resetUserPasswordReducer,
   winLossDetail: winLossDetailReducer,
   winLossAnalysis: winLossAnalysisReducer,
+  winLossByBetType: winLossByBetTypeReducer,
   matchWinLossDetail: matchWinLossDetailReducer,
   um: umReducer,
 });
