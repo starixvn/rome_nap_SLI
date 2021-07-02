@@ -10,7 +10,11 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap';
-import { formatDate, ReportDateRanges } from 'utils/DateUtils';
+import {
+  formatDate,
+  ReportDateRanges,
+  stringDateToMoment,
+} from 'utils/DateUtils';
 import Icon from '@mdi/react';
 import { mdiFileExcelOutline } from '@mdi/js';
 import moment, { Moment } from 'moment';
@@ -27,7 +31,7 @@ type Props = {
   onExcel: () => Promise<void>;
 };
 
-const ReportFilterHookForm = ({
+const ReportFilter = ({
   minDate,
   maxDate,
   fromDate,
@@ -75,7 +79,7 @@ const ReportFilterHookForm = ({
   const handleFromDateChange = (selectedDate: string | Moment) => {
     const selectedFromDate = moment(selectedDate);
     const { toDate } = getValues();
-    if (selectedFromDate.isAfter(toDate)) {
+    if (selectedFromDate.isAfter(stringDateToMoment(toDate))) {
       setValue('toDate', formatDate(selectedFromDate));
     }
 
@@ -86,7 +90,7 @@ const ReportFilterHookForm = ({
   const handleToDateChange = (selectedDate: string | Moment) => {
     const selectedToDate = moment(selectedDate);
     const { fromDate } = getValues();
-    if (selectedToDate.isBefore(fromDate)) {
+    if (selectedToDate.isBefore(stringDateToMoment(fromDate))) {
       setValue('fromDate', formatDate(selectedToDate));
     }
 
@@ -95,7 +99,7 @@ const ReportFilterHookForm = ({
   };
 
   const onSubmit = async ({ fromDate, toDate }: FilterValues) => {
-    await onQuery(moment(fromDate), moment(toDate));
+    await onQuery(stringDateToMoment(fromDate), stringDateToMoment(toDate));
   };
 
   return (
@@ -134,7 +138,9 @@ const ReportFilterHookForm = ({
           </FormGroup>
           <FormGroup className="mr-5">
             <Button type="submit" color="primary">
-              {isSubmitting && <Spinner className="mr-3" />}
+              {isSubmitting && (
+                <Spinner data-testid="loading" className="mr-3" />
+              )}
               Submit
             </Button>
           </FormGroup>
@@ -176,4 +182,4 @@ const ReportFilterHookForm = ({
   );
 };
 
-export default ReportFilterHookForm;
+export default ReportFilter;

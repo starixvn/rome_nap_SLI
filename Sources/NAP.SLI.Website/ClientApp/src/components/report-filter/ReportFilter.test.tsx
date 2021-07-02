@@ -17,10 +17,12 @@ import {
   act,
   cleanup,
   fireEvent,
-  render,
   screen,
+  render,
   waitFor,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Moment } from 'moment';
 
 describe('ReportFilter', () => {
   const handleExcel = jest.fn();
@@ -38,257 +40,254 @@ describe('ReportFilter', () => {
   let fromDateInput: HTMLInputElement;
   let toDateInput: HTMLInputElement;
   let dropdownBtn: HTMLButtonElement;
-  // let toDayBtn: HTMLButtonElement;
-  // let yesterdayBtn: HTMLButtonElement;
-  // let thisWeekBtn: HTMLButtonElement;
-  // let lastWeekBtn: HTMLButtonElement;
-  // let thisMonthBtn: HTMLButtonElement;
-  // let lastMonthBtn: HTMLButtonElement;
-  // let sinceLastMonthBtn: HTMLButtonElement;
-  // let specificDatesBtn: HTMLButtonElement;
-  // let excelBtn: HTMLButtonElement;
-  // let submitBtn: HTMLButtonElement;
+  let toDayBtn: HTMLButtonElement;
+  let yesterdayBtn: HTMLButtonElement;
+  let thisWeekBtn: HTMLButtonElement;
+  let lastWeekBtn: HTMLButtonElement;
+  let thisMonthBtn: HTMLButtonElement;
+  let lastMonthBtn: HTMLButtonElement;
+  let sinceLastMonthBtn: HTMLButtonElement;
+  let specificDatesBtn: HTMLButtonElement;
+  let excelBtn: HTMLButtonElement;
+  let submitBtn: HTMLButtonElement;
 
-  beforeEach(() => {
-    const { container } = render(<ReportFilter {...props} />);
+  beforeEach(async () => {
+    await act(async () => {
+      const { container } = render(<ReportFilter {...props} />);
 
-    const inputs = container.querySelectorAll('input');
-    fromDateInput = inputs[0];
-    toDateInput = inputs[1];
-    dropdownBtn = container.querySelector(
-      'button.dropdown-toggle',
-    ) as HTMLButtonElement;
+      const inputs = container.querySelectorAll('input');
+      fromDateInput = inputs[0];
+      toDateInput = inputs[1];
+      dropdownBtn = container.querySelector(
+        'button.dropdown-toggle',
+      ) as HTMLButtonElement;
 
-    // const buttons = container.querySelectorAll('button.dropdown-item');
-    // toDayBtn = buttons[0] as HTMLButtonElement;
-    // yesterdayBtn = buttons[1] as HTMLButtonElement;
-    // thisWeekBtn = buttons[2] as HTMLButtonElement;
-    // lastWeekBtn = buttons[3] as HTMLButtonElement;
-    // thisMonthBtn = buttons[4] as HTMLButtonElement;
-    // lastMonthBtn = buttons[5] as HTMLButtonElement;
-    // sinceLastMonthBtn = buttons[6] as HTMLButtonElement;
-    // specificDatesBtn = buttons[7] as HTMLButtonElement;
-    // excelBtn = container.querySelector('button.btn-excel') as HTMLButtonElement;
-    // submitBtn = container.querySelector(
-    //   'button[type="submit"]',
-    // ) as HTMLButtonElement;
+      const buttons = container.querySelectorAll('button.dropdown-item');
+      toDayBtn = buttons[0] as HTMLButtonElement;
+      yesterdayBtn = buttons[1] as HTMLButtonElement;
+      thisWeekBtn = buttons[2] as HTMLButtonElement;
+      lastWeekBtn = buttons[3] as HTMLButtonElement;
+      thisMonthBtn = buttons[4] as HTMLButtonElement;
+      lastMonthBtn = buttons[5] as HTMLButtonElement;
+      sinceLastMonthBtn = buttons[6] as HTMLButtonElement;
+      specificDatesBtn = buttons[7] as HTMLButtonElement;
+
+      excelBtn = container.querySelector(
+        'button.btn-excel',
+      ) as HTMLButtonElement;
+      submitBtn = container.querySelector(
+        'button[type="submit"]',
+      ) as HTMLButtonElement;
+    });
   });
   afterEach(cleanup);
 
-  it('should update fromDate on change', async () => {
+  const expectDropdownWorkingWithExpectedDate = (
+    expectedFromDate: Moment,
+    expecteToDate: Moment,
+  ) => {
+    const fromDateVal = fromDateInput.value;
+    const toDateVal = toDateInput.value;
+
+    expect(fromDateVal).toBe(formatDate(expectedFromDate));
+    expect(toDateVal).toBe(formatDate(expecteToDate));
+    expect(handleQuery).toBeCalledWith(
+      stringDateToMoment(fromDateVal),
+      stringDateToMoment(toDateVal),
+    );
+  };
+
+  it('should update fromDate on change', () => {
+    // Arange
+    const expectedValue = '07/01/2021';
+
     // Act
-    await waitFor(() => {
-      fireEvent.change(fromDateInput, {
-        target: {
-          value: '07/01/2021',
-        },
-      });
+    fireEvent.change(fromDateInput, {
+      target: {
+        value: expectedValue,
+      },
     });
 
     // Assert
-    expect(fromDateInput.value).toBe('07/01/2021');
+    expect(fromDateInput.value).toBe(expectedValue);
     expect(dropdownBtn.textContent).toBe('Specific Dates');
   });
 
-  // it('should update toDate on change', async () => {
-  //   // Act
-  //   await waitFor(() =>
-  //     fireEvent.change(toDateInput, {
-  //       target: {
-  //         value: '07/01/2021',
-  //       },
-  //     }),
-  //   );
+  it('should update toDate on change', () => {
+    // Arange
+    const expectedValue = '07/01/2021';
 
-  //   // Assert
-  //   expect(toDateInput.value).toBe('07/01/2021');
-  //   expect(dropdownBtn.textContent).toBe('Specific Dates');
-  // });
+    // Act
+    fireEvent.change(toDateInput, {
+      target: {
+        value: expectedValue,
+      },
+    });
 
-  // it('should update fromDate equal to toDate when toDate is before fromDate', async () => {
-  //   // Act
-  //   await waitFor(() =>
-  //     fireEvent.change(toDateInput, {
-  //       target: {
-  //         value: '06/29/2021',
-  //       },
-  //     }),
-  //   );
+    // Assert
+    expect(toDateInput.value).toBe(expectedValue);
+    expect(dropdownBtn.textContent).toBe('Specific Dates');
+  });
 
-  //   // Assert
-  //   expect(toDateInput.value).toBe('06/29/2021');
-  //   expect(fromDateInput.value).toBe('06/29/2021');
-  //   expect(dropdownBtn.textContent).toBe('Specific Dates');
-  // });
+  it('should update fromDate equal to toDate when toDate is before fromDate', () => {
+    // Arange
+    const expectedValue = '06/29/2021';
 
-  // it('should update toDate equal to fromDate when fromDate is after toDate', async () => {
-  //   // Act
-  //   await waitFor(() =>
-  //     fireEvent.change(fromDateInput, {
-  //       target: {
-  //         value: '07/01/2021',
-  //       },
-  //     }),
-  //   );
+    // Act
+    fireEvent.change(toDateInput, {
+      target: {
+        value: expectedValue,
+      },
+    });
 
-  //   // Assert
-  //   expect(fromDateInput.value).toBe('07/01/2021');
-  //   expect(toDateInput.value).toBe('07/01/2021');
-  //   expect(dropdownBtn.textContent).toBe('Specific Dates');
-  // });
+    // Assert
+    expect(toDateInput.value).toBe(expectedValue);
+    expect(fromDateInput.value).toBe(expectedValue);
+    expect(dropdownBtn.textContent).toBe('Specific Dates');
+  });
 
-  // it('should update dropdown button when clicked Today button', async () => {
-  //   // Arrange
-  //   const expectedDate = getToday();
+  it('should update toDate equal to fromDate when fromDate is after toDate', () => {
+    // Arange
+    const expectedValue = '07/01/2021';
 
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(toDayBtn);
-  //   });
+    // Act
+    fireEvent.change(fromDateInput, {
+      target: {
+        value: expectedValue,
+      },
+    }),
+      // Assert
+      expect(fromDateInput.value).toBe(expectedValue);
+    expect(toDateInput.value).toBe(expectedValue);
+    expect(dropdownBtn.textContent).toBe('Specific Dates');
+  });
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('Today');
-  //   expect(fromDateInput.value).toBe(formatDate(expectedDate));
-  //   expect(toDateInput.value).toBe(formatDate(expectedDate));
-  //   expect(handleQuery).toBeCalledWith(expectedDate, expectedDate);
-  // });
+  it('should update dropdown button when clicked Today button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(toDayBtn);
+    });
 
-  // it('should update dropdown button when clicked Yesterday button', async () => {
-  //   // Arrange
-  //   const expectedDate = getYesterday();
+    // Assert
+    const expectedDate = getToday();
+    expect(dropdownBtn.textContent).toBe('Today');
+    expectDropdownWorkingWithExpectedDate(expectedDate, expectedDate);
+  });
 
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(yesterdayBtn);
-  //   });
+  it('should update dropdown button when clicked Yesterday button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(yesterdayBtn);
+    });
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('Yesterday');
-  //   expect(fromDateInput.value).toBe(formatDate(expectedDate));
-  //   expect(toDateInput.value).toBe(formatDate(expectedDate));
-  //   expect(handleQuery).toBeCalledWith(expectedDate, expectedDate);
-  // });
+    // Assert
+    const expectedDate = getYesterday();
+    expect(dropdownBtn.textContent).toBe('Yesterday');
+    expectDropdownWorkingWithExpectedDate(expectedDate, expectedDate);
+  });
 
-  // it('should update dropdown button when clicked This Week button', async () => {
-  //   // Arrange
-  //   const expectedFromDate = getThisWeekRange().from;
-  //   const expectedToDate = getThisWeekRange().to;
+  it('should update dropdown button when clicked This Week button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(thisWeekBtn);
+    });
 
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(thisWeekBtn);
-  //   });
+    // Assert
+    const { from: expectedFromDate, to: expectedToDate } = getThisWeekRange();
+    expect(dropdownBtn.textContent).toBe('This Week');
+    expectDropdownWorkingWithExpectedDate(expectedFromDate, expectedToDate);
+  });
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('This Week');
-  //   expect(fromDateInput.value).toBe(formatDate(expectedFromDate));
-  //   expect(toDateInput.value).toBe(formatDate(expectedToDate));
-  //   expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
-  // });
+  it('should update dropdown button when clicked Last Week button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(lastWeekBtn);
+    });
 
-  // it('should update dropdown button when clicked Last Week button', async () => {
-  //   // Arrange
-  //   const expectedFromDate = getLastWeekRange().from;
-  //   const expectedToDate = getLastWeekRange().to;
+    // Assert
+    const { from: expectedFromDate, to: expectedToDate } = getLastWeekRange();
+    expect(dropdownBtn.textContent).toBe('Last Week');
+    expectDropdownWorkingWithExpectedDate(expectedFromDate, expectedToDate);
+  });
 
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(lastWeekBtn);
-  //   });
+  it('should update dropdown button when clicked This Month button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(thisMonthBtn);
+    });
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('Last Week');
-  //   expect(fromDateInput.value).toBe(formatDate(expectedFromDate));
-  //   expect(toDateInput.value).toBe(formatDate(expectedToDate));
-  //   expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
-  // });
+    // Assert
+    const { from: expectedFromDate, to: expectedToDate } = getThisMonthRange();
+    expect(dropdownBtn.textContent).toBe('This Month');
+    expectDropdownWorkingWithExpectedDate(expectedFromDate, expectedToDate);
+  });
 
-  // it('should update dropdown button when clicked This Month button', async () => {
-  //   // Arrange
-  //   const expectedFromDate = getThisMonthRange().from;
-  //   const expectedToDate = getThisMonthRange().to;
+  it('should update dropdown button when clicked Last Month button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(lastMonthBtn);
+    });
 
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(thisMonthBtn);
-  //   });
+    // Assert
+    const { from: expectedFromDate, to: expectedToDate } = getLastMonthRange();
+    expect(dropdownBtn.textContent).toBe('Last Month');
+    expectDropdownWorkingWithExpectedDate(expectedFromDate, expectedToDate);
+  });
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('This Month');
-  //   expect(fromDateInput.value).toBe(formatDate(expectedFromDate));
-  //   expect(toDateInput.value).toBe(formatDate(expectedToDate));
-  //   expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
-  // });
+  it('should update dropdown button when clicked Since Last Month button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(sinceLastMonthBtn);
+    });
 
-  // it('should update dropdown button when clicked Last Month button', async () => {
-  //   // Arrange
-  //   const expectedFromDate = getLastMonthRange().from;
-  //   const expectedToDate = getLastMonthRange().to;
+    // Assert
+    const {
+      from: expectedFromDate,
+      to: expectedToDate,
+    } = getSinceLastMonthRange();
+    expect(dropdownBtn.textContent).toBe('Since Last Month');
+    expectDropdownWorkingWithExpectedDate(expectedFromDate, expectedToDate);
+  });
 
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(lastMonthBtn);
-  //   });
+  it('should update dropdown button when clicked Specific Dates button', async () => {
+    // Act
+    await waitFor(() => {
+      userEvent.click(dropdownBtn);
+      userEvent.click(specificDatesBtn);
+    });
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('Last Month');
-  //   expect(fromDateInput.value).toBe(formatDate(expectedFromDate));
-  //   expect(toDateInput.value).toBe(formatDate(expectedToDate));
-  //   expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
-  // });
+    // Assert
+    expect(dropdownBtn.textContent).toBe('Specific Dates');
+  });
 
-  // it('should update dropdown button when clicked Since Last Month button', async () => {
-  //   // Arrange
-  //   const expectedFromDate = getSinceLastMonthRange().from;
-  //   const expectedToDate = getSinceLastMonthRange().to;
+  it('should call onExcel props when clicked Excel button', () => {
+    // Act
+    userEvent.click(excelBtn);
 
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(sinceLastMonthBtn);
-  //   });
+    // Assert
+    expect(handleExcel).toBeCalledTimes(1);
+  });
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('Since Last Month');
-  //   expect(fromDateInput.value).toBe(formatDate(expectedFromDate));
-  //   expect(toDateInput.value).toBe(formatDate(expectedToDate));
-  //   expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
-  // });
+  it('should call onQuery props when clicked Submit button', async () => {
+    // Arrange
+    const expectedFromDate = stringDateToMoment(fromDateInput.value);
+    const expectedToDate = stringDateToMoment(toDateInput.value);
 
-  // it('should update dropdown button when clicked Specific Dates button', async () => {
-  //   // Act
-  //   await waitFor(() => {
-  //     userEvent.click(dropdownBtn);
-  //     userEvent.click(specificDatesBtn);
-  //   });
+    await waitFor(async () => {
+      // Act
+      userEvent.click(submitBtn);
 
-  //   // Assert
-  //   expect(dropdownBtn.textContent).toBe('Specific Dates');
-  // });
-
-  // it('should call onExcel props when clicked Excel button', () => {
-  //   // Act
-  //   userEvent.click(excelBtn);
-
-  //   // Assert
-  //   expect(handleExcel).toBeCalledTimes(1);
-  // });
-
-  // it('should call onQuery props when clicked Submit button', () => {
-  //   // Arrange
-  //   const expectedFromDate = stringDateToMoment(fromDateInput.value);
-  //   const expectedToDate = stringDateToMoment(toDateInput.value);
-
-  //   // Act
-  //   userEvent.click(submitBtn);
-
-  //   // Assert
-  //   expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
-  // });
+      // Assert
+      expect(screen.queryByTestId('loading')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('loading')).toBeNull();
+    expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
+  });
 });
