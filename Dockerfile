@@ -18,6 +18,8 @@ COPY ./Sources/NAP.SLI.Website/NAP.SLI.Website.csproj ./NAP.SLI.Website/NAP.SLI.
 WORKDIR /src/NAP.SLI.Website
 RUN dotnet nuget add source http://nuget.nexdev.net/api/v2
 RUN dotnet restore -v n
+RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+RUN apt-get install -y nodejs
 
 COPY ./Sources/NAP.SLI.Website .
 
