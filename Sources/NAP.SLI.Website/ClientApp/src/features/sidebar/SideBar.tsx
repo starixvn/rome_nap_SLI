@@ -53,22 +53,16 @@ const SideBar = () => {
   };
   type State = typeof initialState;
 
-  const handleSearch = (value: string) => {
+  const handleSearch = (
+    value: string,
+    setFieldValue: Formik.SetFieldValueFunc,
+  ) => {
+    setFieldValue('username', value);
     setIsLoading(true);
     queryUsernameSuggestion(value).then((items) => {
       setOptions(items);
       setIsLoading(false);
     });
-  };
-
-  const handleInputChange = (
-    value: string,
-    setFieldValue: Formik.SetFieldValueFunc,
-  ) => {
-    setFieldValue('username', value);
-    if (value.length >= 2) {
-      handleSearch(value);
-    }
   };
 
   const handleChange = (
@@ -116,13 +110,10 @@ const SideBar = () => {
                   options={options}
                   placeholder="Input an username"
                   labelKey="username"
-                  onInputChange={(value) =>
-                    handleInputChange(value, setFieldValue)
-                  }
                   onChange={(selectedOptions) =>
                     handleChange(selectedOptions, setFieldValue)
                   }
-                  onSearch={(value) => handleSearch(value)}
+                  onSearch={(value) => handleSearch(value, setFieldValue)}
                   renderMenuItemChildren={(option) => (
                     <span>{option.username}</span>
                   )}
