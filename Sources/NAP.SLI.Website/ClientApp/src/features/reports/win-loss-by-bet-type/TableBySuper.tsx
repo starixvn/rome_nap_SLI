@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatDecimal, formatInteger } from 'utils/NumberUtils';
-import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
 
 const TableComponent = () => {
   const { queryData, queryCustomer } = useSelector(
@@ -14,20 +13,6 @@ const TableComponent = () => {
   }
 
   const { records, total } = queryData;
-  const { roleId } = queryCustomer;
-
-  const getRemovedColumnTotal = () => {
-    switch (roleId) {
-      case CustomerLevels.Master:
-        return 1;
-      case CustomerLevels.Agent:
-        return 2;
-      default:
-        return 0;
-    }
-  };
-
-  const removedColumnTotal = getRemovedColumnTotal();
 
   return (
     <Table hover bordered striped>
@@ -50,12 +35,8 @@ const TableComponent = () => {
           </th>
         </tr>
         <tr>
-          {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-            <th className="text-center">Super</th>
-          )}
-          {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-            <th className="text-center">Company</th>
-          )}
+          <th className="text-center">Super</th>
+          <th className="text-center">Company</th>
         </tr>
       </thead>
       <tbody>

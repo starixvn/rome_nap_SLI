@@ -5,7 +5,10 @@ import { minDate, maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
 import { selectCustomer } from './reducer';
-import Table from './Table';
+import TableBySuper from './TableBySuper';
+import TableByMaster from './TableByMaster';
+import TableByAgent from './TableByAgent';
+import { CustomerLevels } from 'utils/CustomerLevelUtils';
 
 const WinLossByBetTypePage = () => {
   const history = useHistory();
@@ -30,13 +33,28 @@ const WinLossByBetTypePage = () => {
     return <></>;
   }
 
+  const { roleId } = location.state;
+
+  const renderTable = () => {
+    switch (roleId) {
+      case CustomerLevels.Super:
+        return <TableBySuper />;
+      case CustomerLevels.Master:
+        return <TableByMaster />;
+      case CustomerLevels.Agent:
+        return <TableByAgent />;
+    }
+
+    return <></>;
+  };
+
   return (
     <div className="win-loss-by-bet-type-page">
       <div className="page-title">
         Win Loss By Bet Type ({location.state.username})
       </div>
       <Filter minDate={minDate} maxDate={maxDate} />
-      <Table />
+      {renderTable()}
     </div>
   );
 };
