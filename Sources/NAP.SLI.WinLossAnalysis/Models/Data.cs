@@ -9,15 +9,15 @@
         public T Total { get; set; }
     }
 
-    public class AgentData : Data<AgentRecord>
+    public class AgentData : Data<AgentRecordEx>
     {
     }
 
-    public class MasterData : Data<MasterRecord>
+    public class MasterData : Data<MasterRecordEx>
     {
     }
 
-    public class SuperData : Data<SuperRecord>
+    public class SuperData : Data<SuperRecordEx>
     {
     }
 }

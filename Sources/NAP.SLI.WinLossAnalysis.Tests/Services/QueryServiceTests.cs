@@ -4,6 +4,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
     using System.Linq;
     using System.Threading.Tasks;
     using AutoFixture;
+    using AutoMapper;
     using Microsoft.Extensions.Localization;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
@@ -31,11 +32,12 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
         public async Task TestMethod_QuerySuper(
             IReportService reportService,
             IDynamicRepositoryEx dynamicRepositoryEx,
+            IMapper mapper,
             BalanceUpDayModel balanceUpDayModel,
             (IEnumerable<SuperRecord>, IEnumerable<SuperRecord>) fetchData)
         {
             // Arrange
-            var queryService = new QueryService(reportService, dynamicRepositoryEx);
+            var queryService = new QueryService(reportService, dynamicRepositoryEx, mapper);
             var request = CreateQueryRequestByRole(CustomerLevels.Super);
             reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
             dynamicRepositoryEx.FetchMultipleAsync<SuperRecord, SuperRecord>(Arg.Any<QueryCriteria>()).Returns(Task.FromResult(fetchData));
@@ -54,11 +56,12 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
         public async Task TestMethod_QueryMaster(
             IReportService reportService,
             IDynamicRepositoryEx dynamicRepositoryEx,
+            IMapper mapper,
             BalanceUpDayModel balanceUpDayModel,
             (IEnumerable<MasterRecord>, IEnumerable<MasterRecord>) fetchData)
         {
             // Arrange
-            var queryService = new QueryService(reportService, dynamicRepositoryEx);
+            var queryService = new QueryService(reportService, dynamicRepositoryEx, mapper);
             var request = CreateQueryRequestByRole(CustomerLevels.Master);
             reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
             dynamicRepositoryEx.FetchMultipleAsync<MasterRecord, MasterRecord>(Arg.Any<QueryCriteria>()).Returns(Task.FromResult(fetchData));
@@ -78,11 +81,12 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
         public async Task TestMethod_QueryAgent(
             IReportService reportService,
             IDynamicRepositoryEx dynamicRepositoryEx,
+            IMapper mapper,
             BalanceUpDayModel balanceUpDayModel,
             (IEnumerable<AgentRecord>, IEnumerable<AgentRecord>) fetchData)
         {
             // Arrange
-            var queryService = new QueryService(reportService, dynamicRepositoryEx);
+            var queryService = new QueryService(reportService, dynamicRepositoryEx, mapper);
             var request = CreateQueryRequestByRole(CustomerLevels.Agent);
             reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
             dynamicRepositoryEx.FetchMultipleAsync<AgentRecord, AgentRecord>(Arg.Any<QueryCriteria>()).Returns(Task.FromResult(fetchData));

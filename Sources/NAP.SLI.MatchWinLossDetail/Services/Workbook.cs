@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NAP.SLI.MatchWinLossDetail.Models;
@@ -8,7 +7,7 @@ using ONEbook.SpreadSheets.NPOI;
 
 namespace NAP.SLI.MatchWinLossDetail.Services
 {
-    public abstract class Workbook<T> : NpoiWorkbook<T> where T : class, ISumRecord<T>, new()
+    public abstract class Workbook<T> : NpoiWorkbook<T> where T : class, IRecordEx<T>, new()
     {
         private int currentRowIndex = 0;
         private const int ReportSheetIndex = 1;
@@ -129,20 +128,20 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         }
     }
 
-    public class AgentWorkbook : Workbook<AgentRecord2>
+    public class AgentWorkbook : Workbook<AgentRecordEx>
     {
         public AgentWorkbook(WorkbookInfo workbookInfo, AgentData data)
         : base(workbookInfo, data)
         {
         }
 
-        protected override Mapper<AgentRecord2> CreateMapper(bool isBody)
+        protected override Mapper<AgentRecordEx> CreateMapper(bool isBody)
         {
-            var mapper = new Mapper<AgentRecord2>()
+            var mapper = new Mapper<AgentRecordEx>()
                             .Map(Column.B, x => x.Turnover)
                             .Map(Column.C, x => x.MemberWinLoss)
                             .Map(Column.D, x => x.AgentWinLoss)
-                            .Map(Column.E, x => -x.MemberWinLoss + x.AgentWinLoss);
+                            .Map(Column.E, x => x.CompanyWinLoss);
             if (isBody)
             {
                 mapper.Map(Column.A, x => x.BetTypeName);
@@ -152,21 +151,21 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         }
     }
 
-    public class MasterWorkbook : Workbook<MasterRecord2>
+    public class MasterWorkbook : Workbook<MasterRecordEx>
     {
         public MasterWorkbook(WorkbookInfo workbookInfo, MasterData data)
         : base(workbookInfo, data)
         {
         }
 
-        protected override Mapper<MasterRecord2> CreateMapper(bool isBody)
+        protected override Mapper<MasterRecordEx> CreateMapper(bool isBody)
         {
-            var mapper = new Mapper<MasterRecord2>()
+            var mapper = new Mapper<MasterRecordEx>()
                             .Map(Column.B, x => x.Turnover)
                             .Map(Column.C, x => x.MemberWinLoss)
                             .Map(Column.D, x => x.AgentWinLoss)
                             .Map(Column.E, x => x.MasterWinLoss)
-                            .Map(Column.F, x => -x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss);
+                            .Map(Column.F, x => x.CompanyWinLoss);
             if (isBody)
             {
                 mapper.Map(Column.A, x => x.BetTypeName);
@@ -176,21 +175,21 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         }
     }
 
-    public class SuperWorkbook : Workbook<SuperRecord2>
+    public class SuperWorkbook : Workbook<SuperRecordEx>
     {
         public SuperWorkbook(WorkbookInfo workbookInfo, SuperData data)
         : base(workbookInfo, data)
         {
         }
 
-        protected override Mapper<SuperRecord2> CreateMapper(bool isBody)
+        protected override Mapper<SuperRecordEx> CreateMapper(bool isBody)
         {
-            var mapper = new Mapper<SuperRecord2>()
+            var mapper = new Mapper<SuperRecordEx>()
                             .Map(Column.B, x => x.Turnover)
                             .Map(Column.C, x => x.MemberWinLoss)
                             .Map(Column.D, x => x.AgentWinLoss)
                             .Map(Column.E, x => x.MasterWinLoss)
-                            .Map(Column.F, x => -x.MemberWinLoss + x.AgentWinLoss + x.MasterWinLoss);
+                            .Map(Column.F, x => x.CompanyWinLoss);
             if (isBody)
             {
                 mapper.Map(Column.A, x => x.BetTypeName);

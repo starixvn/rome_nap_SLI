@@ -36,7 +36,7 @@
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<SuperRecord>("Master.xls", GetTitle(request));
+            var workbook = CreateWorkbook<SuperRecordEx>("Master.xls", GetTitle(request));
             var workbookDef = new SuperWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -47,7 +47,7 @@
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryMaster(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<MasterRecord>("Agent.xls", GetTitle(request));
+            var workbook = CreateWorkbook<MasterRecordEx>("Agent.xls", GetTitle(request));
             var workbookDef = new MasterWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -58,14 +58,14 @@
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<AgentRecord>("Member.xls", GetTitle(request));
+            var workbook = CreateWorkbook<AgentRecordEx>("Member.xls", GetTitle(request));
             var workbookDef = new AgentWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
         }
 
-        private Workbook<T> CreateWorkbook<T>(string fileName, string title) where T : AgentRecord
+        private Workbook<T> CreateWorkbook<T>(string fileName, string title) where T : class
         {
             var workbook = npoiWorkbookFactory.Create<T>();
             var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossDetail", fileName);

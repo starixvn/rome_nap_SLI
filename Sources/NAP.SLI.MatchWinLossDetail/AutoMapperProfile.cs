@@ -11,20 +11,20 @@
         public AutoMapperProfile()
         {
             CreateMap<ExcelRequest, QueryRequest>();
-            CreateMap<AgentRecord, AgentRecord2>().AfterMap<SetBetTypeNameAgentRecordMappingAction>();
-            CreateMap<MasterRecord, MasterRecord2>().AfterMap<SetBetTypeNameMasterRecordMappingAction>();
-            CreateMap<SuperRecord, SuperRecord2>().AfterMap<SetBetTypeNameSuperRecordMappingAction>();
+            CreateMap<AgentRecord, AgentRecordEx>().AfterMap<AgentRecordExMappingAction>();
+            CreateMap<MasterRecord, MasterRecordEx>().AfterMap<MasterRecordExMappingAction>();
+            CreateMap<SuperRecord, SuperRecordEx>().AfterMap<SuperRecordExMappingAction>();
         }
     }
 
-    public class SetBetTypeNameMappingAction<S, D> : IMappingAction<S, D>
-    where S : AgentRecord
-    where D : IBetTypeNameRecord
+    public abstract class RecordExMappingAction<S, D> : IMappingAction<S, D>
+    where S : IRecord
+    where D : IRecordEx<D>
     {
         private readonly IRemotingRefService remotingRefService;
         private readonly ICurrentContextService currentContextService;
 
-        public SetBetTypeNameMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
+        public RecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
         {
             this.remotingRefService = remotingRefService;
             this.currentContextService = currentContextService;
@@ -34,30 +34,48 @@
         {
             var languageCode = currentContextService.GetLanguageCode();
             destination.BetTypeName = remotingRefService.GetBetTypeName(source.BetType.ToString(), languageCode);
+            CalculateCompanyWinLoss(source, destination);
         }
+
+        public abstract void CalculateCompanyWinLoss(S source, D destination);
     }
 
-    public class SetBetTypeNameAgentRecordMappingAction : SetBetTypeNameMappingAction<AgentRecord, AgentRecord2>
+    public class AgentRecordExMappingAction : RecordExMappingAction<AgentRecord, AgentRecordEx>
     {
-        public SetBetTypeNameAgentRecordMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
+        public AgentRecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
         : base(remotingRefService, currentContextService)
         {
         }
-    }
 
-    public class SetBetTypeNameMasterRecordMappingAction : SetBetTypeNameMappingAction<MasterRecord, MasterRecord2>
-    {
-        public SetBetTypeNameMasterRecordMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
-        : base(remotingRefService, currentContextService)
+        public override void CalculateCompanyWinLoss(AgentRecord source, AgentRecordEx destination)
         {
+            destination.CompanyWinLoss = -source.MemberWinLoss + source.AgentWinLoss;
         }
     }
 
-    public class SetBetTypeNameSuperRecordMappingAction : SetBetTypeNameMappingAction<SuperRecord, SuperRecord2>
+    public class MasterRecordExMappingAction : RecordExMappingAction<MasterRecord, MasterRecordEx>
     {
-        public SetBetTypeNameSuperRecordMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
+        public MasterRecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
         : base(remotingRefService, currentContextService)
         {
+        }
+
+        public override void CalculateCompanyWinLoss(MasterRecord source, MasterRecordEx destination)
+        {
+            destination.CompanyWinLoss = -source.MemberWinLoss + source.AgentWinLoss + source.MasterWinLoss;
+        }
+    }
+
+    public class SuperRecordExMappingAction : RecordExMappingAction<SuperRecord, SuperRecordEx>
+    {
+        public SuperRecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
+        : base(remotingRefService, currentContextService)
+        {
+        }
+
+        public override void CalculateCompanyWinLoss(SuperRecord source, SuperRecordEx destination)
+        {
+            destination.CompanyWinLoss = -source.MemberWinLoss + source.AgentWinLoss + source.MasterWinLoss + source.SuperWinLoss;
         }
     }
 }

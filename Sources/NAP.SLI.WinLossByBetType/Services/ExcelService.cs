@@ -86,7 +86,7 @@ namespace NAP.SLI.WinLossByBetType.Services
         private Workbook<T> CreateWorkbook<T>(string fileName, string title) where T : RecordBase
         {
             var workbook = npoiWorkbookFactory.Create<T>();
-            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossAnalysis", fileName);
+            var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossByBetType", fileName);
             workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
             workbook.Title(title);
             workbook.Header(noLocalizer.Localise);

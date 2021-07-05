@@ -236,6 +236,7 @@ namespace NAP.SLI.Website
             services.AddAutoMapper(typeof(Account.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossDetail.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossAnalysis.AutoMapperProfile));
+            services.AddAutoMapper(typeof(WinLossByBetType.AutoMapperProfile));
             services.AddAutoMapper(typeof(MatchWinLossDetail.AutoMapperProfile));
         }
 

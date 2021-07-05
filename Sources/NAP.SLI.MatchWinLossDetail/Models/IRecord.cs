@@ -5,5 +5,7 @@ namespace NAP.SLI.MatchWinLossDetail.Models
         int MatchId { get; set; }
 
         int LeagueId { get; set; }
+
+        int BetType { get; set; }
     }
 }

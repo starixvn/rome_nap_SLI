@@ -71,14 +71,6 @@ const initialState: State = {
 };
 const actionName = 'win-loss-detail';
 
-const calculateCompanyWinLoss = (record: Record) => {
-  record.companyWinLoss =
-    -record.memberWinLoss +
-    record.agentWinLoss +
-    (record.masterWinLoss || 0) +
-    (record.superWinLoss || 0);
-};
-
 export const query = createAsyncThunk<QueryData, QueryProps>(
   `${actionName}/query`,
   async (values, { rejectWithValue }) => {
@@ -87,9 +79,7 @@ export const query = createAsyncThunk<QueryData, QueryProps>(
         `/api/${actionName}/query`,
         values,
       );
-      const { records, total } = data;
-      records.forEach((record) => calculateCompanyWinLoss(record));
-      calculateCompanyWinLoss(total);
+
       return data;
     } catch (err) {
       handleException(err);

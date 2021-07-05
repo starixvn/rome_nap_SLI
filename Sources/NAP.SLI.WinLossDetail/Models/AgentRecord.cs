@@ -14,4 +14,9 @@
 
         public decimal AgentWinLoss { get; set; }
     }
+
+    public class AgentRecordEx : AgentRecord, IRecordEx
+    {
+        public decimal CompanyWinLoss { get; set; }
+    }
 }

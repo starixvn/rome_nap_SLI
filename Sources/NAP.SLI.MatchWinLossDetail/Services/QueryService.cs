@@ -35,22 +35,19 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         public async Task<SuperData> QuerySuper(QueryRequest request)
         {
             var records = await Query<SuperRecord>(request).ConfigureAwait(false);
-            var records2 = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecord2>>(records);
-            return new SuperData(Build<SuperRecord2, MatchData<SuperRecord2>>(records2));
+            return new SuperData(Build<SuperRecordEx, MatchData<SuperRecordEx>>(mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(records)));
         }
 
         public async Task<MasterData> QueryMaster(QueryRequest request)
         {
             var records = await Query<MasterRecord>(request).ConfigureAwait(false);
-            var records2 = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecord2>>(records);
-            return new MasterData(Build<MasterRecord2, MatchData<MasterRecord2>>(records2));
+            return new MasterData(Build<MasterRecordEx, MatchData<MasterRecordEx>>(mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(records)));
         }
 
         public async Task<AgentData> QueryAgent(QueryRequest request)
         {
             var records = await Query<AgentRecord>(request).ConfigureAwait(false);
-            var records2 = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecord2>>(records);
-            return new AgentData(Build<AgentRecord2, MatchData<AgentRecord2>>(records2));
+            return new AgentData(Build<AgentRecordEx, MatchData<AgentRecordEx>>(mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(records)));
         }
 
         private IEnumerable<K> Build<T, K>(IEnumerable<T> records)

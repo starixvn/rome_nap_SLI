@@ -21,15 +21,18 @@
         public decimal AgentWinLoss { get; set; }
     }
 
-    public class AgentRecord2 : AgentRecord, IBetTypeNameRecord, ISumRecord<AgentRecord2>
+    public class AgentRecordEx : AgentRecord, IRecordEx<AgentRecordEx>
     {
         public string BetTypeName { get; set; }
 
-        public void Sum(AgentRecord2 t)
+        public decimal CompanyWinLoss { get; set; }
+
+        public void Sum(AgentRecordEx t)
         {
             Turnover += t.Turnover;
             MemberWinLoss += t.MemberWinLoss;
             AgentWinLoss += t.AgentWinLoss;
+            CompanyWinLoss += t.CompanyWinLoss;
         }
     }
 }

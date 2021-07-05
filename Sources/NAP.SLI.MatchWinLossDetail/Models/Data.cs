@@ -20,7 +20,7 @@ namespace NAP.SLI.MatchWinLossDetail.Models
         }
     }
 
-    public class Data<T> where T : ISumRecord<T>, new()
+    public class Data<T> where T : IRecordEx<T>, new()
     {
         public IEnumerable<MatchData<T>> Matches { get; }
 
@@ -37,25 +37,25 @@ namespace NAP.SLI.MatchWinLossDetail.Models
         }
     }
 
-    public class AgentData : Data<AgentRecord2>
+    public class AgentData : Data<AgentRecordEx>
     {
-        public AgentData(IEnumerable<MatchData<AgentRecord2>> matches)
+        public AgentData(IEnumerable<MatchData<AgentRecordEx>> matches)
         : base(matches)
         {
         }
     }
 
-    public class MasterData : Data<MasterRecord2>
+    public class MasterData : Data<MasterRecordEx>
     {
-        public MasterData(IEnumerable<MatchData<MasterRecord2>> matches)
+        public MasterData(IEnumerable<MatchData<MasterRecordEx>> matches)
         : base(matches)
         {
         }
     }
 
-    public class SuperData : Data<SuperRecord2>
+    public class SuperData : Data<SuperRecordEx>
     {
-        public SuperData(IEnumerable<MatchData<SuperRecord2>> matches)
+        public SuperData(IEnumerable<MatchData<SuperRecordEx>> matches)
         : base(matches)
         {
         }

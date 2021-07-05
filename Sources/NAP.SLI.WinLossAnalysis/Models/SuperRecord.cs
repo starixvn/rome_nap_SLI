@@ -4,4 +4,9 @@ namespace NAP.SLI.WinLossAnalysis.Models
     {
         public decimal SuperWinLoss { get; set; }
     }
+
+    public class SuperRecordEx : SuperRecord, IRecordEx
+    {
+        public decimal CompanyWinLoss { get; set; }
+    }
 }

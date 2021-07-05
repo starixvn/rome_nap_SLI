@@ -4,6 +4,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using AutoMapper;
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using NAP.SLI.WinLossAnalysis.Criteria;
@@ -23,13 +24,16 @@ namespace NAP.SLI.WinLossAnalysis.Services
     {
         private readonly IReportService reportService;
         private readonly IDynamicRepositoryEx dynamicRepositoryEx;
+        private readonly IMapper mapper;
 
         public QueryService(
             IReportService reportService,
-            IDynamicRepositoryEx dynamicRepositoryEx)
+            IDynamicRepositoryEx dynamicRepositoryEx,
+            IMapper mapper)
         {
             this.reportService = reportService;
             this.dynamicRepositoryEx = dynamicRepositoryEx;
+            this.mapper = mapper;
         }
 
         public async Task<SuperData> QuerySuper(QueryRequest request)
@@ -37,8 +41,8 @@ namespace NAP.SLI.WinLossAnalysis.Services
             var (Records, Total) = await Query<SuperRecord>(request).ConfigureAwait(false);
             return new SuperData
             {
-                Records = Records,
-                Total = Total
+                Records = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(Records),
+                Total = mapper.Map<SuperRecord, SuperRecordEx>(Total)
             };
         }
 
@@ -47,8 +51,8 @@ namespace NAP.SLI.WinLossAnalysis.Services
             var (Records, Total) = await Query<MasterRecord>(request).ConfigureAwait(false);
             return new MasterData
             {
-                Records = Records,
-                Total = Total
+                Records = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(Records),
+                Total = mapper.Map<MasterRecord, MasterRecordEx>(Total)
             };
         }
 
@@ -57,8 +61,8 @@ namespace NAP.SLI.WinLossAnalysis.Services
             var (Records, Total) = await Query<AgentRecord>(request).ConfigureAwait(false);
             return new AgentData
             {
-                Records = Records,
-                Total = Total
+                Records = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(Records),
+                Total = mapper.Map<AgentRecord, AgentRecordEx>(Total)
             };
         }
 
