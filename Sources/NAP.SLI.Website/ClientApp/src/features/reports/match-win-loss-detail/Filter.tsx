@@ -1,11 +1,11 @@
 import { useAppDispatch } from 'app/store';
 import ReportFilter from 'components/report-filter/ReportFilter';
-import moment, { Moment } from 'moment';
+import { Moment } from 'moment';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { formatDate } from 'utils/DateUtils';
-import { excel, query } from './reducer';
 import { Container } from 'reactstrap';
+import { formatDate, stringDateToMoment } from 'utils/DateUtils';
+import { excel, query } from './reducer';
 
 type Props = {
   minDate: Moment;
@@ -52,8 +52,8 @@ const Filter = ({ minDate, maxDate }: Props) => {
       <ReportFilter
         minDate={minDate}
         maxDate={maxDate}
-        fromDate={moment(fromDate)}
-        toDate={moment(toDate)}
+        fromDate={stringDateToMoment(fromDate)}
+        toDate={stringDateToMoment(toDate)}
         onQuery={handleQuery}
         onExcel={handleExcel}
       />

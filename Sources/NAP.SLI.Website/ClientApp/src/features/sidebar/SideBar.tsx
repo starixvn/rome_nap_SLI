@@ -45,7 +45,8 @@ const SideBar = () => {
     if (!isSubmitting) {
       handleSubmit();
     }
-  }, [typeaheadRef, formikRef, username]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const initialState = {
     username,
