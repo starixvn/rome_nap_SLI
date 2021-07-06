@@ -5,6 +5,7 @@ namespace NAP.SLI.WinLossAnalysis.Controllers
     using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Models;
+    using NAP.SLI.WinLossAnalysis.Extensions;
     using NAP.SLI.WinLossAnalysis.Requests;
 
     [ApiController]
@@ -32,7 +33,7 @@ namespace NAP.SLI.WinLossAnalysis.Controllers
             return File(
                 fileContents: fileContents,
                 contentType: ContentTypes.Excel,
-                fileDownloadName: $"{string.Join("-", "Win Loss Analysis", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls"
+                fileDownloadName: $"{string.Join("-", $"{request.GetReportName()} Win Loss Analysis", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls"
             );
         }
     }

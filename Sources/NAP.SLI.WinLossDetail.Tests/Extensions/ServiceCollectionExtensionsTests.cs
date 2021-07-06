@@ -1,7 +1,8 @@
-﻿namespace NAP.SLI.WinLossDetail.Tests
+﻿namespace NAP.SLI.WinLossDetail.Tests.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
     using Xunit;
+    using NAP.SLI.WinLossDetail.Extensions;
     using NAP.SLI.WinLossDetail.Services;
 
     public class ServiceCollectionExtensionsTests

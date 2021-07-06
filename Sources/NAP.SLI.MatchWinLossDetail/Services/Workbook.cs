@@ -9,8 +9,10 @@ namespace NAP.SLI.MatchWinLossDetail.Services
 {
     public abstract class Workbook<T> : NpoiWorkbook<T> where T : class, IRecordEx<T>, new()
     {
+        private const int ReportSheetIndex = 0;
+        private const int TemplateSheetIndex = 1;
         private int currentRowIndex = 0;
-        private const int ReportSheetIndex = 1;
+
         internal Data<T> Data { get; }
         internal Row MatchTitleRowTemplate { get; private set; }
         internal Row OddRowTemplate { get; private set; }
@@ -27,13 +29,14 @@ namespace NAP.SLI.MatchWinLossDetail.Services
 
         protected override Sheet LoadTemplateSheet()
         {
-            var sheet = GetSheetAt(TemplateInfo.SheetIndex);
+            var sheet = GetSheetAt(TemplateSheetIndex);
             currentRowIndex = TemplateInfo.BodyStartIndex + 1;
             MatchTitleRowTemplate = sheet.GetRow(currentRowIndex++);
             OddRowTemplate = sheet.GetRow(currentRowIndex++);
             EvenRowTemplate = sheet.GetRow(currentRowIndex++);
             SubTotalRowTemplate = sheet.GetRow(currentRowIndex++);
             TotalRowTemplate = sheet.GetRow(currentRowIndex++);
+
             return GetSheetAt(ReportSheetIndex);
         }
 
@@ -63,7 +66,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
                 throw new ArgumentNullException(nameof(sheet), "Sheet cannot be null");
             }
 
-            Workbook.RemoveSheetAt(TemplateInfo.SheetIndex);
+            Workbook.RemoveSheetAt(TemplateSheetIndex);
             if (Data.Matches.Any())
             {
                 FillBodyRows(sheet);

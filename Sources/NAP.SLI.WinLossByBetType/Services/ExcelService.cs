@@ -3,9 +3,9 @@ namespace NAP.SLI.WinLossByBetType.Services
     using System.IO;
     using System.Threading.Tasks;
     using AutoMapper;
-    using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Localization.Services;
+    using NAP.SLI.WinLossByBetType.Extensions;
     using NAP.SLI.WinLossByBetType.Models;
     using NAP.SLI.WinLossByBetType.Requests;
     using ONEbook.SpreadSheets;
@@ -25,7 +25,7 @@ namespace NAP.SLI.WinLossByBetType.Services
         private readonly IQueryService queryService;
         private readonly IAppSettings appSettings;
         private readonly ISharedLocalizer sharedLocalizer;
-        private readonly INoLocalizer noLocalizer;
+        private readonly ILocalizeService localizeService;
         private readonly INpoiWorkbookFactory npoiWorkbookFactory;
         private readonly IMapper mapper;
 
@@ -41,15 +41,15 @@ namespace NAP.SLI.WinLossByBetType.Services
             this.appSettings = appSettings;
             this.sharedLocalizer = sharedLocalizer;
             this.npoiWorkbookFactory = npoiWorkbookFactory;
-            this.noLocalizer = noLocalizer;
             this.mapper = mapper;
+            localizeService = new LocalizeService(noLocalizer);
         }
 
         public async Task<byte[]> ExcelSuper(ExcelRequest request)
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<SuperRecord>("Master.xls", GetTitle(request));
+            var workbook = CreateWorkbook<SuperRecord>("Master.xls", request.GetTitle());
             var workbookDef = new SuperWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -60,7 +60,7 @@ namespace NAP.SLI.WinLossByBetType.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryMaster(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<MasterRecord>("Agent.xls", GetTitle(request));
+            var workbook = CreateWorkbook<MasterRecord>("Agent.xls", request.GetTitle());
             var workbookDef = new MasterWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -71,16 +71,11 @@ namespace NAP.SLI.WinLossByBetType.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<AgentRecord>("Member.xls", GetTitle(request));
+            var workbook = CreateWorkbook<AgentRecord>("Member.xls", request.GetTitle());
             var workbookDef = new AgentWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
-        }
-
-        private static string GetTitle(ExcelRequest request)
-        {
-            return $"Win Loss Analysis {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}";
         }
 
         private Workbook<T> CreateWorkbook<T>(string fileName, string title) where T : RecordBase
@@ -89,7 +84,7 @@ namespace NAP.SLI.WinLossByBetType.Services
             var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossByBetType", fileName);
             workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
             workbook.Title(title);
-            workbook.Header(noLocalizer.Localise);
+            workbook.Header(localizeService.Localize);
             workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
             return workbook;
         }

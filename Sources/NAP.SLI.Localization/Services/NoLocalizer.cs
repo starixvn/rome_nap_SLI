@@ -6,7 +6,6 @@ namespace NAP.SLI.Localization.Services
 {
     public interface INoLocalizer : IStringLocalizer
     {
-        string Localise(string name);
     }
 
     public class NoLocalizer : INoLocalizer
@@ -19,7 +18,5 @@ namespace NAP.SLI.Localization.Services
         {
             return Enumerable.Empty<LocalizedString>();
         }
-
-        public string Localise(string name) => name;
     }
 }

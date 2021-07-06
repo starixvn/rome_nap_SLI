@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.WinLossDetail
+﻿namespace NAP.SLI.WinLossDetail.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
     using NAP.SLI.WinLossDetail.Services;

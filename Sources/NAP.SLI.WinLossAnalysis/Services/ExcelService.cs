@@ -3,9 +3,9 @@ namespace NAP.SLI.WinLossAnalysis.Services
     using System.IO;
     using System.Threading.Tasks;
     using AutoMapper;
-    using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Localization.Services;
+    using NAP.SLI.WinLossAnalysis.Extensions;
     using NAP.SLI.WinLossAnalysis.Models;
     using NAP.SLI.WinLossAnalysis.Requests;
     using ONEbook.SpreadSheets;
@@ -49,7 +49,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<SuperRecordEx>("Master.xls", GetTitle(request));
+            var workbook = CreateWorkbook<SuperRecordEx>("Master.xls", request.GetTitle(), request.GetReportName());
             var workbookDef = new SuperWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -60,7 +60,7 @@ namespace NAP.SLI.WinLossAnalysis.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryMaster(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<MasterRecordEx>("Agent.xls", GetTitle(request));
+            var workbook = CreateWorkbook<MasterRecordEx>("Agent.xls", request.GetTitle(), request.GetReportName());
             var workbookDef = new MasterWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -71,25 +71,21 @@ namespace NAP.SLI.WinLossAnalysis.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<AgentRecordEx>("Member.xls", GetTitle(request));
+            var workbook = CreateWorkbook<AgentRecordEx>("Member.xls", request.GetTitle(), request.GetReportName());
             var workbookDef = new AgentWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
             return workbook.ExportToBytes();
         }
 
-        private static string GetTitle(ExcelRequest request)
+        private Workbook<T> CreateWorkbook<T>(string fileName, string title, string reportName) where T : class
         {
-            return $"Win Loss Analysis {request.FromDate.ToDateString()} {request.ToDate.ToDateString()}";
-        }
-
-        private Workbook<T> CreateWorkbook<T>(string fileName, string title) where T : class
-        {
+            var localizeService = new LocalizeService(noLocalizer, reportName);
             var workbook = npoiWorkbookFactory.Create<T>();
             var filePath = Path.Combine(appSettings.AppDataPath, "ExcelTemplates", "WinLossAnalysis", fileName);
             workbook.UseTemplate(new TemplateInfo(filePath).FreezePanel(4, Column.B));
             workbook.Title(title);
-            workbook.Header(noLocalizer.Localise);
+            workbook.Header(localizeService.Localize);
             workbook.Sheet(sharedLocalizer["DefaultSheetName"]);
             return workbook;
         }

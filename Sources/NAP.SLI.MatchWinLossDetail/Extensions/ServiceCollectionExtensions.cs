@@ -1,11 +1,11 @@
-﻿namespace NAP.SLI.WinLossAnalysis
+﻿namespace NAP.SLI.MatchWinLossDetail.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
-    using NAP.SLI.WinLossAnalysis.Services;
+    using NAP.SLI.MatchWinLossDetail.Services;
 
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddWinLossAnalysisModule(this IServiceCollection services)
+        public static IServiceCollection AddMatchWinLossDetailModule(this IServiceCollection services)
         {
             services.AddScoped<IQueryService, QueryService>();
             services.AddScoped<IExcelService, ExcelService>();

@@ -47,12 +47,12 @@ namespace NAP.SLI.Website
     using NAP.SLI.Customer;
     using NAP.SimpleApi;
     using NAP.UM;
-    using NAP.SLI.MatchWinLossDetail;
-    using NAP.SLI.WinLossAnalysis;
-    using NAP.SLI.WinLossDetail;
+    using NAP.SLI.WinLossAnalysis.Extensions;
+    using NAP.SLI.WinLossDetail.Extensions;
     using NAP.SLI.MatchWinLossDetail.Controllers;
-    using NAP.SLI.WinLossByBetType;
+    using NAP.SLI.MatchWinLossDetail.Extensions;
     using NAP.SLI.WinLossByBetType.Controllers;
+    using NAP.SLI.WinLossByBetType.Extensions;
 
     public class Startup
     {

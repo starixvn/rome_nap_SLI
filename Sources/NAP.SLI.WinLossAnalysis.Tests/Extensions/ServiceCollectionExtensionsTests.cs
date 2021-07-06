@@ -1,6 +1,7 @@
-namespace NAP.SLI.WinLossAnalysis.Tests
+namespace NAP.SLI.WinLossAnalysis.Tests.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
+    using NAP.SLI.WinLossAnalysis.Extensions;
     using NAP.SLI.WinLossAnalysis.Services;
     using Xunit;
 

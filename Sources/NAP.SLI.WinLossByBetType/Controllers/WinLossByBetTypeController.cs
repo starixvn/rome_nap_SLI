@@ -32,7 +32,7 @@ namespace NAP.SLI.WinLossByBetType.Controllers
             return File(
                 fileContents: fileContents,
                 contentType: ContentTypes.Excel,
-                fileDownloadName: $"{string.Join("-", "Win Loss By Bettype", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls"
+                fileDownloadName: $"{string.Join("-", "Win Loss By Bet Type", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls"
             );
         }
     }

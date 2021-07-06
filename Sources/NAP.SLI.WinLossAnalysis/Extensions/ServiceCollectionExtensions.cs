@@ -1,11 +1,11 @@
-﻿namespace NAP.SLI.WinLossByBetType
+﻿namespace NAP.SLI.WinLossAnalysis.Extensions
 {
     using Microsoft.Extensions.DependencyInjection;
-    using NAP.SLI.WinLossByBetType.Services;
+    using NAP.SLI.WinLossAnalysis.Services;
 
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddWinLossByBetTypeModule(this IServiceCollection services)
+        public static IServiceCollection AddWinLossAnalysisModule(this IServiceCollection services)
         {
             services.AddScoped<IQueryService, QueryService>();
             services.AddScoped<IExcelService, ExcelService>();
