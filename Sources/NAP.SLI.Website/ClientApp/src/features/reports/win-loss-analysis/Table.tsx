@@ -3,9 +3,41 @@ import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
-import { getReportName } from './reducer';
+import { getReportName, Record } from './reducer';
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
+type RowProps = {
+  roleId: number;
+  record: Record;
+  isFooter: boolean;
+};
+
+const RowComponent = ({ roleId, record, isFooter }: RowProps) => {
+  return (
+    <tr>
+      <td>
+        {isFooter ? (
+          <span>Total</span>
+        ) : (
+          <span className="text-right">{record.rollupKey})</span>
+        )}
+      </td>
+      <td className="text-right">{formatInteger(record.betCount)}</td>
+      <td className="text-right">{formatDecimal(record.turnover)}</td>
+      <td className="text-right">{formatDecimal(record.memberWinLoss)}</td>
+      <td className="text-right">{formatDecimal(record.agentWinLoss)}</td>
+      {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
+        <td className="text-right">{formatDecimal(record.masterWinLoss)}</td>
+      )}
+      {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
+        <td className="text-right">{formatDecimal(record.superWinLoss)}</td>
+      )}
+      {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
+        <td className="text-right">{formatDecimal(record.companyWinLoss)}</td>
+      )}
+    </tr>
+  );
+};
+
 const TableComponent = () => {
   const { queryData, queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossAnalysis,
@@ -72,62 +104,18 @@ const TableComponent = () => {
           </tr>
         ) : (
           records.map((record) => (
-            <tr key={record.rollupKey}>
-              <td>
-                <span className="text-right">{record.rollupKey}</span>
-              </td>
-
-              <td className="text-right">{formatInteger(record.betCount)}</td>
-              <td className="text-right">{formatDecimal(record.turnover)}</td>
-              <td className="text-right">
-                {formatDecimal(record.memberWinLoss)}
-              </td>
-              <td className="text-right">
-                {formatDecimal(record.agentWinLoss)}
-              </td>
-              {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-                <td className="text-right">
-                  {formatDecimal(record.masterWinLoss)}
-                </td>
-              )}
-              {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                <td className="text-right">
-                  {formatDecimal(record.superWinLoss)}
-                </td>
-              )}
-              {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                <td className="text-right">
-                  {formatDecimal(record.companyWinLoss)}
-                </td>
-              )}
-            </tr>
+            <RowComponent
+              key={record.rollupKey}
+              roleId={roleId}
+              record={record}
+              isFooter={false}
+            />
           ))
         )}
       </tbody>
       {records.length > 0 && total && (
         <tfoot>
-          <tr>
-            <td>Total</td>
-            <td className="text-right">{formatInteger(total.betCount)}</td>
-            <td className="text-right">{formatDecimal(total.turnover)}</td>
-            <td className="text-right">{formatDecimal(total.memberWinLoss)}</td>
-            <td className="text-right">{formatDecimal(total.agentWinLoss)}</td>
-            {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-              <td className="text-right">
-                {formatDecimal(total.masterWinLoss)}
-              </td>
-            )}
-            {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-              <td className="text-right">
-                {formatDecimal(total.superWinLoss)}
-              </td>
-            )}
-            {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-              <td className="text-right">
-                {formatDecimal(total.companyWinLoss)}
-              </td>
-            )}
-          </tr>
+          <RowComponent roleId={roleId} record={total} isFooter={true} />
         </tfoot>
       )}
     </Table>

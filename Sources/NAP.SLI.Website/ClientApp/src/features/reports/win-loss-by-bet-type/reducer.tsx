@@ -17,7 +17,7 @@ type ExcelProps = QueryProps & {
   username: string;
 };
 
-type Record = {
+export type Record = {
   betTypeName: string;
   betCount: number;
   turnover: number;

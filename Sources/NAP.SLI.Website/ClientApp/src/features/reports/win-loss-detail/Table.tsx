@@ -14,6 +14,48 @@ import { useAppDispatch } from 'app/store';
 import { PageSizes } from 'utils/ReportUtils';
 import Pagination from 'components/pagination/Component';
 
+type RowProps = {
+  roleId: number;
+  record: Record;
+  isFooter: boolean;
+  usernameClick?: (record: Record) => void;
+};
+
+const RowComponent = ({
+  roleId,
+  record,
+  isFooter,
+  usernameClick,
+}: RowProps) => {
+  return (
+    <tr>
+      <td>
+        {isFooter ? (
+          <span>Total</span>
+        ) : (
+          <span
+            className="text-link"
+            onClick={() => usernameClick && usernameClick(record)}
+          >
+            {record.username}
+          </span>
+        )}
+      </td>
+      <td className="text-right">{formatInteger(record.betCount)}</td>
+      <td className="text-right">{formatDecimal(record.turnover)}</td>
+      <td className="text-right">{formatDecimal(record.memberWinLoss)}</td>
+      <td className="text-right">{formatDecimal(record.agentWinLoss)}</td>
+      {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
+        <td className="text-right">{formatDecimal(record.masterWinLoss)}</td>
+      )}
+      {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
+        <td className="text-right">{formatDecimal(record.superWinLoss)}</td>
+      )}
+      <td className="text-right">{formatDecimal(record.companyWinLoss)}</td>
+    </tr>
+  );
+};
+
 const TableComponent = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -42,7 +84,7 @@ const TableComponent = () => {
 
   const removedColumnTotal = getRemovedColumnTotal();
 
-  const handleUsernameClicked = (record: Record) => {
+  const handleUsernameClick = (record: Record) => {
     const customer = {
       custId: record.custId,
       roleId: getDownlineLevel(roleId),
@@ -115,66 +157,19 @@ const TableComponent = () => {
             </tr>
           ) : (
             records.map((record) => (
-              <tr key={`Row_${record.custId}`}>
-                <td>
-                  <span
-                    className="text-link"
-                    onClick={() => handleUsernameClicked(record)}
-                  >
-                    {record.username}
-                  </span>
-                </td>
-                <td className="text-right">{formatInteger(record.betCount)}</td>
-                <td className="text-right">{formatDecimal(record.turnover)}</td>
-                <td className="text-right">
-                  {formatDecimal(record.memberWinLoss)}
-                </td>
-                <td className="text-right">
-                  {formatDecimal(record.agentWinLoss)}
-                </td>
-                {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-                  <td className="text-right">
-                    {formatDecimal(record.masterWinLoss)}
-                  </td>
-                )}
-                {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                  <td className="text-right">
-                    {formatDecimal(record.superWinLoss)}
-                  </td>
-                )}
-                <td className="text-right">
-                  {formatDecimal(record.companyWinLoss)}
-                </td>
-              </tr>
+              <RowComponent
+                key={`Row_${record.custId}`}
+                roleId={roleId}
+                record={record}
+                isFooter={false}
+                usernameClick={handleUsernameClick}
+              />
             ))
           )}
         </tbody>
         {records.length > 0 && total && (
           <tfoot>
-            <tr>
-              <td>Total</td>
-              <td className="text-right">{formatInteger(total.betCount)}</td>
-              <td className="text-right">{formatDecimal(total.turnover)}</td>
-              <td className="text-right">
-                {formatDecimal(total.memberWinLoss)}
-              </td>
-              <td className="text-right">
-                {formatDecimal(total.agentWinLoss)}
-              </td>
-              {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-                <td className="text-right">
-                  {formatDecimal(total.masterWinLoss)}
-                </td>
-              )}
-              {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                <td className="text-right">
-                  {formatDecimal(total.superWinLoss)}
-                </td>
-              )}
-              <td className="text-right">
-                {formatDecimal(total.companyWinLoss)}
-              </td>
-            </tr>
+            <RowComponent roleId={roleId} record={total} isFooter={true} />
           </tfoot>
         )}
       </Table>

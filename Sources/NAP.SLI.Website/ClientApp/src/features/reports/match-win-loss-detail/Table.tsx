@@ -3,8 +3,46 @@ import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
+import { Record } from './reducer';
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
+enum RowType {
+  Normal = 0,
+  SubTotal = 1,
+  Total = 2,
+}
+
+type RowProps = {
+  roleId: number;
+  record: Record;
+  type: RowType;
+};
+
+const RowComponent = ({ roleId, record, type }: RowProps) => {
+  return (
+    <tr>
+      <td>
+        {type === RowType.Normal
+          ? record.betTypeName
+          : type === RowType.SubTotal
+          ? 'Sub Total'
+          : 'Total'}
+      </td>
+      <td className="text-right">{formatDecimal(record.turnover)}</td>
+      <td className="text-right">{formatDecimal(record.memberWinLoss)}</td>
+      <td className="text-right">{formatDecimal(record.agentWinLoss)}</td>
+      {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
+        <td className="text-right">{formatDecimal(record.masterWinLoss)}</td>
+      )}
+      {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
+        <td className="text-right">{formatDecimal(record.superWinLoss)}</td>
+      )}
+      {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
+        <td className="text-right">{formatDecimal(record.companyWinLoss)}</td>
+      )}
+    </tr>
+  );
+};
+
 const TableComponent = () => {
   const { queryData, queryCustomer } = useSelector(
     (state: AppState) => state.matchWinLossDetail,
@@ -69,62 +107,20 @@ const TableComponent = () => {
           matches.map(
             (match) => (
               match.records.map((record) => (
-                <tr key={match.matchName}>
-                  <td>{record.betTypeName}</td>
-                  <td className="text-right">
-                    {formatDecimal(record.turnover)}
-                  </td>
-                  <td className="text-right">
-                    {formatDecimal(record.memberWinLoss)}
-                  </td>
-                  <td className="text-right">
-                    {formatDecimal(record.agentWinLoss)}
-                  </td>
-                  {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-                    <td className="text-right">
-                      {formatDecimal(record.masterWinLoss)}
-                    </td>
-                  )}
-                  {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                    <td className="text-right">
-                      {formatDecimal(record.superWinLoss)}
-                    </td>
-                  )}
-                  {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                    <td className="text-right">
-                      {formatDecimal(record.companyWinLoss)}
-                    </td>
-                  )}
-                </tr>
+                <RowComponent
+                  key={match.matchName}
+                  roleId={roleId}
+                  record={record}
+                  type={RowType.Normal}
+                />
               )),
               (
-                <tr>
-                  <td>Sub Total</td>
-                  <td className="text-right">
-                    {formatDecimal(match.total.turnover)}
-                  </td>
-                  <td className="text-right">
-                    {formatDecimal(match.total.memberWinLoss)}
-                  </td>
-                  <td className="text-right">
-                    {formatDecimal(match.total.agentWinLoss)}
-                  </td>
-                  {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-                    <td className="text-right">
-                      {formatDecimal(match.total.masterWinLoss)}
-                    </td>
-                  )}
-                  {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                    <td className="text-right">
-                      {formatDecimal(match.total.superWinLoss)}
-                    </td>
-                  )}
-                  {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-                    <td className="text-right">
-                      {formatDecimal(match.total.companyWinLoss)}
-                    </td>
-                  )}
-                </tr>
+                <RowComponent
+                  key={match.matchName}
+                  roleId={roleId}
+                  record={match.total}
+                  type={RowType.SubTotal}
+                />
               )
             ),
           )
@@ -132,27 +128,7 @@ const TableComponent = () => {
       </tbody>
       {matches.length > 0 && total && (
         <tfoot>
-          <tr>
-            <td>Total</td>
-            <td className="text-right">{formatDecimal(total.turnover)}</td>
-            <td className="text-right">{formatDecimal(total.memberWinLoss)}</td>
-            <td className="text-right">{formatDecimal(total.agentWinLoss)}</td>
-            {isUplineOrSameLevel(roleId, CustomerLevels.Master) && (
-              <td className="text-right">
-                {formatDecimal(total.masterWinLoss)}
-              </td>
-            )}
-            {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-              <td className="text-right">
-                {formatDecimal(total.superWinLoss)}
-              </td>
-            )}
-            {isUplineOrSameLevel(roleId, CustomerLevels.Super) && (
-              <td className="text-right">
-                {formatDecimal(total.companyWinLoss)}
-              </td>
-            )}
-          </tr>
+          <RowComponent roleId={roleId} record={total} type={RowType.Total} />
         </tfoot>
       )}
     </Table>

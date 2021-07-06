@@ -2,6 +2,25 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatDecimal, formatInteger } from 'utils/NumberUtils';
+import { Record } from './reducer';
+
+type RowProps = {
+  record: Record;
+  isFooter: boolean;
+};
+
+const RowComponent = ({ record, isFooter }: RowProps) => {
+  return (
+    <tr>
+      <td>{isFooter ? 'Total' : record.betTypeName}</td>
+      <td className="text-right">{formatInteger(record.betCount)}</td>
+      <td className="text-right">{formatDecimal(record.turnover)}</td>
+      <td className="text-right">{formatDecimal(record.agentTotal)}</td>
+      <td className="text-right">{formatDecimal(record.masterWinLoss)}</td>
+      <td className="text-right">{formatDecimal(record.companyWinLoss)}</td>
+    </tr>
+  );
+};
 
 const TableComponent = () => {
   const { queryData, queryCustomer } = useSelector(
@@ -48,33 +67,17 @@ const TableComponent = () => {
           </tr>
         ) : (
           records.map((record) => (
-            <tr key={record.betTypeName}>
-              <td>{record.betTypeName}</td>
-              <td className="text-right">{formatInteger(record.betCount)}</td>
-              <td className="text-right">{formatDecimal(record.turnover)}</td>
-              <td className="text-right">{formatDecimal(record.agentTotal)}</td>
-              <td className="text-right">
-                {formatDecimal(record.masterWinLoss)}
-              </td>
-              <td className="text-right">
-                {formatDecimal(record.companyWinLoss)}
-              </td>
-            </tr>
+            <RowComponent
+              key={record.betTypeName}
+              record={record}
+              isFooter={false}
+            />
           ))
         )}
       </tbody>
       {records.length > 0 && (
         <tfoot>
-          <tr>
-            <td>Total</td>
-            <td className="text-right">{formatInteger(total.betCount)}</td>
-            <td className="text-right">{formatDecimal(total.turnover)}</td>
-            <td className="text-right">{formatDecimal(total.agentTotal)}</td>
-            <td className="text-right">{formatDecimal(total.masterWinLoss)}</td>
-            <td className="text-right">
-              {formatDecimal(total.companyWinLoss)}
-            </td>
-          </tr>
+          <RowComponent record={total} isFooter={true} />
         </tfoot>
       )}
     </Table>

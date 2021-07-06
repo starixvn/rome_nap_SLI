@@ -24,7 +24,7 @@ type MatchData = {
   records: Record[];
 };
 
-type Record = {
+export type Record = {
   betTypeName: string;
   turnover: number;
   memberWinLoss: number;
