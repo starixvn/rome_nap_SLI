@@ -91,10 +91,6 @@ describe('ReportFilter', () => {
 
     expect(fromDateVal).toBe(formatDate(expectedFromDate));
     expect(toDateVal).toBe(formatDate(expecteToDate));
-    expect(handleQuery).toBeCalledWith(
-      stringDateToMoment(fromDateVal),
-      stringDateToMoment(toDateVal),
-    );
   };
 
   it('should update fromDate on change', () => {
@@ -267,12 +263,17 @@ describe('ReportFilter', () => {
     expect(dropdownBtn.textContent).toBe('Specific Dates');
   });
 
-  it('should call onExcel props when clicked Excel button', () => {
-    // Act
-    userEvent.click(excelBtn);
+  it('should call onExcel props when clicked Excel button', async () => {
+    await waitFor(() => {
+      // Act
+      userEvent.click(excelBtn);
 
-    // Assert
-    expect(handleExcel).toBeCalledTimes(1);
+      // Assert
+      expect(screen.queryByTestId('excel-loading')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('excel-loading')).toBeNull();
+    expect(handleExcel).toBeCalled();
   });
 
   it('should call onQuery props when clicked Submit button', async () => {
@@ -280,7 +281,7 @@ describe('ReportFilter', () => {
     const expectedFromDate = stringDateToMoment(fromDateInput.value);
     const expectedToDate = stringDateToMoment(toDateInput.value);
 
-    await waitFor(async () => {
+    await waitFor(() => {
       // Act
       userEvent.click(submitBtn);
 

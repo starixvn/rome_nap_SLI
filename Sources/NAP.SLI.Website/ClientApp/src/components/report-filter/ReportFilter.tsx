@@ -48,6 +48,7 @@ const ReportFilter = ({
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     getValues,
     setValue,
@@ -72,7 +73,6 @@ const ReportFilter = ({
       const { from, to } = range;
       setValue('fromDate', formatDate(from));
       setValue('toDate', formatDate(to));
-      handleSubmit(onSubmit)();
     }
   };
 
@@ -100,6 +100,12 @@ const ReportFilter = ({
 
   const onSubmit = async ({ fromDate, toDate }: FilterValues) => {
     await onQuery(stringDateToMoment(fromDate), stringDateToMoment(toDate));
+  };
+
+  const handleExcel = async () => {
+    setIsLoading(true);
+    await onExcel();
+    setIsLoading(false);
   };
 
   return (
@@ -170,9 +176,14 @@ const ReportFilter = ({
               color="success"
               className="btn-excel"
               title="Export to Excel"
-              onClick={onExcel}
+              onClick={handleExcel}
+              disabled={isLoading}
             >
-              <Icon path={mdiFileExcelOutline} />
+              {isLoading ? (
+                <Spinner data-testid="excel-loading" />
+              ) : (
+                <Icon path={mdiFileExcelOutline} />
+              )}
             </Button>
           </FormGroup>
         </fieldset>
