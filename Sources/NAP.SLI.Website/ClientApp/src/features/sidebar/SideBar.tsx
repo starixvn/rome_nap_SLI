@@ -38,15 +38,14 @@ const SideBar = () => {
       return;
     }
 
-    const { clear } = typeaheadRef.current;
-    clear();
-
-    const { isSubmitting, handleSubmit } = formikRef.current;
+    const { isSubmitting, handleSubmit, setFieldValue } = formikRef.current;
     if (!isSubmitting) {
+      handleSearch(username, setFieldValue);
       handleSubmit();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [username]);
 
   const initialState = {
     username,
@@ -97,6 +96,8 @@ const SideBar = () => {
             <Form inline className="form-search" onSubmit={handleSubmit}>
               <div className="username mr-3">
                 <AsyncTypeahead
+                  key={username}
+                  defaultInputValue={username}
                   ref={typeaheadRef}
                   id="username-suggestion"
                   inputProps={{
