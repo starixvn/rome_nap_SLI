@@ -40,6 +40,7 @@
     <ProjectReference Include="..\NAP.UM\NAP.UM.csproj" />
     <ProjectReference Include="..\NAP.SLI.MatchWinLossDetail\NAP.SLI.MatchWinLossDetail.csproj" />
     <ProjectReference Include="..\NAP.SLI.WinLossByBetType\NAP.SLI.WinLossByBetType.csproj" />
+    <ProjectReference Include="..\NAP.SLI.CustomerSetting\NAP.SLI.CustomerSetting.csproj" />
   </ItemGroup>
   <ItemGroup> 
     <Content Include="App_Data\**"> 

@@ -245,6 +245,7 @@ namespace NAP.SLI.Website
             services.AddSimpleApi(typeof(Account.SimpleApiProfile));
             services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
             services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
+            services.AddSimpleApi(typeof(CustomerSetting.SimpleApiProfile));
         }
 
         private static void AddMediatR(IServiceCollection services)
