@@ -9,6 +9,9 @@ namespace NAP.SLI.CustomerSetting
             : base("customer-setting")
         {
             AddQuery<QuerySuperCriteria>("query-super");
+            AddQuery<QueryMasterCriteria>("query-master");
+            AddQuery<QueryAgentCriteria>("query-agent");
+            AddQuery<QueryMemberCriteria>("query-member");
         }
     }
 }
