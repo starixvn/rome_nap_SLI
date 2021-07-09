@@ -1,5 +1,6 @@
 ﻿namespace NAP.SimpleApi.Controllers
 {
+    using System;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
@@ -26,79 +27,54 @@
             this.authorizationService = authorizationService;
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> Get()
-        {
-            var requestOption = requestOptionContext.GetRequestOption(HttpContext.Request.Query, ActionTypes.Query);
-            if (requestOption == null)
-            {
-                return BadRequest();
-            }
-
-            if (!await IsRequestAuthorized(requestOption).ConfigureAwait(false))
-            {
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
-
-            var criteria = requestOptionContext.CreateCriteria(HttpContext.Request.Query, requestOption);
-            var data = await dynamicRepository.GetAsync<object>(criteria).ConfigureAwait(false);
-            return Ok(data);
-        }
-
         [HttpPost("[action]")]
         public async Task<IActionResult> Query([FromBody] SimpleApiRequest request)
         {
-            var requestOption = requestOptionContext.GetRequestOption(request, ActionTypes.Query);
-            if (requestOption == null)
-            {
-                return BadRequest();
-            }
-
-            if (!await IsRequestAuthorized(requestOption).ConfigureAwait(false))
-            {
-                return StatusCode(StatusCodes.Status403Forbidden);
-            }
-
-            var criteria = requestOptionContext.CreateCriteria(request, requestOption);
-            var data = await dynamicRepository.FetchMultipleAsync(criteria).ConfigureAwait(false);
-            if (data.Count() == 1)
-            {
-                return Ok(data.First());
-            }
-            else
-            {
-                return Ok(data);
-            }
+            return await Handle(request, ActionTypes.Query).ConfigureAwait(false);
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Command([FromBody] SimpleApiRequest request)
         {
-            var requestOption = requestOptionContext.GetRequestOption(request, ActionTypes.Command);
+            return await Handle(request, ActionTypes.Command).ConfigureAwait(false);
+        }
+
+        private async Task<IActionResult> Handle(SimpleApiRequest request, ActionTypes actionType)
+        {
+            var requestOption = requestOptionContext.GetRequestOption(request, actionType);
             if (requestOption == null)
             {
                 return BadRequest();
             }
 
-            if (!await IsRequestAuthorized(requestOption).ConfigureAwait(false))
+            if (requestOption.Extra != null && requestOption.Extra.Policy != null)
             {
-                return StatusCode(StatusCodes.Status403Forbidden);
+                var result = await authorizationService.AuthorizeAsync(HttpContext.User, null, requestOption.Extra.Policy).ConfigureAwait(false);
+                if (result.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden);
+                }
             }
 
             var criteria = requestOptionContext.CreateCriteria(request, requestOption);
-            await dynamicRepository.ExecuteAsync((INonQueryCommand)criteria).ConfigureAwait(false);
-            return Ok(criteria);
-        }
-
-        private async Task<bool> IsRequestAuthorized(RequestOption requestOption)
-        {
-            if (requestOption.Policy != null)
+            if (actionType == ActionTypes.Query)
             {
-                var result = await authorizationService.AuthorizeAsync(HttpContext.User, null, requestOption.Policy).ConfigureAwait(false);
-                return result.Succeeded;
+                var data = await dynamicRepository.FetchMultipleAsync(criteria).ConfigureAwait(false);
+                var queryStrategy = requestOption.Extra != null ? requestOption.Extra.QueryStrategy : QueryStrategies.SingleAndMultiple;
+                var queryData = queryStrategy switch
+                {
+                    QueryStrategies.SingleAndSingle => data.First().First(),
+                    QueryStrategies.SingleAndMultiple => data.First(),
+                    QueryStrategies.MultipleAndMultiple => data,
+                    _ => throw new ArgumentException(nameof(queryStrategy))
+                };
+                return Ok(queryData);
             }
-
-            return true;
+            else
+            {
+                await dynamicRepository.ExecuteAsync((INonQueryCommand)criteria).ConfigureAwait(false);
+                return Ok(criteria);
+            }
         }
     }
 }

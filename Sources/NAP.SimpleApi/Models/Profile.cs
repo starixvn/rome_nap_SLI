@@ -27,24 +27,36 @@
             AddQuery<T>(apiKey, null);
         }
 
-        public void AddQuery<T>(string apiKey, AuthorizationPolicy policy) where T : ICriteria
+        public void AddQuery<T>(string apiKey, OptionExtra extra) where T : ICriteria
         {
-            Add(apiKey, typeof(T), ActionTypes.Query, policy);
+            Add(new RequestOption
+            {
+                ApiKey = apiKey,
+                CriteriaType = typeof(T),
+                ActionType = ActionTypes.Query,
+                Extra = extra
+            });
         }
 
-        public void AddCommand<T>(string apiKey) where T : ICriteria
+        public void AddCommand<T>(string apiKey) where T : INonQueryCommand
         {
             AddCommand<T>(apiKey, null);
         }
 
-        public void AddCommand<T>(string apiKey, AuthorizationPolicy policy) where T : ICriteria
+        public void AddCommand<T>(string apiKey, OptionExtra extra) where T : INonQueryCommand
         {
-            Add(apiKey, typeof(T), ActionTypes.Command, policy);
+            Add(new RequestOption
+            {
+                ApiKey = apiKey,
+                CriteriaType = typeof(T),
+                ActionType = ActionTypes.Command,
+                Extra = extra
+            });
         }
 
-        private void Add(string apiKey, Type criteriaType, ActionTypes actionType, AuthorizationPolicy policy)
+        private void Add(RequestOption requestOption)
         {
-            RequestOptions.Add(new RequestOption(apiKey, criteriaType, actionType, policy));
+            RequestOptions.Add(requestOption);
         }
     }
 }

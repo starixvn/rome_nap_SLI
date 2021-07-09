@@ -8,7 +8,10 @@ namespace NAP.SLI.Customer
         public SimpleApiProfile()
             : base("customer")
         {
-            AddQuery<QueryUsernameSuggestionCriteria>("query-username-suggestion");
+            AddQuery<QueryUsernameSuggestionCriteria>("query-username-suggestion", new OptionExtra
+            {
+                QueryStrategy = QueryStrategies.SingleAndMultiple
+            });
         }
     }
 }

@@ -8,10 +8,14 @@ namespace NAP.SLI.CustomerSetting
         public SimpleApiProfile()
             : base("customer-setting")
         {
-            AddQuery<QuerySuperCriteria>("query-super");
-            AddQuery<QueryMasterCriteria>("query-master");
-            AddQuery<QueryAgentCriteria>("query-agent");
-            AddQuery<QueryMemberCriteria>("query-member");
+            var optionExtra = new OptionExtra
+            {
+                QueryStrategy = QueryStrategies.SingleAndSingle
+            };
+            AddQuery<QuerySuperCriteria>("query-super", optionExtra);
+            AddQuery<QueryMasterCriteria>("query-master", optionExtra);
+            AddQuery<QueryAgentCriteria>("query-agent", optionExtra);
+            AddQuery<QueryMemberCriteria>("query-member", optionExtra);
         }
     }
 }

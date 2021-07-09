@@ -10,11 +10,15 @@
         public SimpleApiProfile()
             : base("user-management")
         {
-            AddQuery<QueryUserCriteria>("query-user", AuthorizationPolicies.AdministrationPolicy);
-            AddCommand<UpdateUserStatusCommand>("update-user-status", AuthorizationPolicies.AdministrationPolicy);
-            AddCommand<ChangeUserPasswordCommand>("change-user-password", AuthorizationPolicies.AdministrationPolicy);
-            AddCommand<AddNewUserCommnad>("add-new-user", AuthorizationPolicies.AdministrationPolicy);
-            AddCommand<UpdateUserCommand>("update-user", AuthorizationPolicies.AdministrationPolicy);
+            var optionExtra = new OptionExtra
+            {
+                Policy = AuthorizationPolicies.AdministrationPolicy
+            };
+            AddQuery<QueryUserCriteria>("query-user", optionExtra);
+            AddCommand<UpdateUserStatusCommand>("update-user-status", optionExtra);
+            AddCommand<ChangeUserPasswordCommand>("change-user-password", optionExtra);
+            AddCommand<AddNewUserCommnad>("add-new-user", optionExtra);
+            AddCommand<UpdateUserCommand>("update-user", optionExtra);
         }
     }
 }
