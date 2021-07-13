@@ -31,12 +31,12 @@ export const query = createAsyncThunk<
   {
     rejectValue: string;
   }
->(`${sliceName}`, async (values, { rejectWithValue }) => {
+>(`${sliceName}`, async ({ custId }, { rejectWithValue }) => {
   try {
     const payload = {
       apiKey: 'customer-setting:query-super',
       data: {
-        custId: values.custId,
+        custId,
       },
     };
     const { data } = await post<QueryData>('/simple-api/query', payload);

@@ -14,6 +14,9 @@ import winLossByBetTypeReducer from 'features/reports/win-loss-by-bet-type/reduc
 import matchWinLossDetailReducer from 'features/reports/match-win-loss-detail/reducer';
 import umReducer from 'features/error/UM/reducer';
 import customerSettingViewSuperReducer from 'features/customer-setting/view-super/reducer';
+import customerSettingViewMasterReducer from 'features/customer-setting/view-master/reducer';
+import customerSettingViewAgentReducer from 'features/customer-setting/view-agent/reducer';
+import customerSettingViewMemberReducer from 'features/customer-setting/view-member/reducer';
 
 const appReducer = combineReducers({
   toast: toastReducer,
@@ -31,6 +34,9 @@ const appReducer = combineReducers({
   matchWinLossDetail: matchWinLossDetailReducer,
   um: umReducer,
   customerSettingViewSuper: customerSettingViewSuperReducer,
+  customerSettingViewMaster: customerSettingViewMasterReducer,
+  customerSettingViewAgent: customerSettingViewAgentReducer,
+  customerSettingViewMember: customerSettingViewMemberReducer,
 });
 
 export type AppState = ReturnType<typeof appReducer>;
