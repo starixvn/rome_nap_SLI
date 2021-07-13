@@ -18,6 +18,7 @@ type ExcelProps = QueryProps & {
 };
 
 export type Record = {
+  betType: number;
   betTypeName: string;
   betCount: number;
   turnover: number;

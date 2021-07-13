@@ -51,7 +51,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         }
 
         private IEnumerable<K> Build<T, K>(IEnumerable<T> records)
-        where T : IRecord, new()
+        where T : IRecordEx<T>, new()
         where K : MatchData<T>
         {
             var languageCode = currentContextService.GetLanguageCode();

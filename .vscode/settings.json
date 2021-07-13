@@ -5,5 +5,11 @@
         "**/bin": true,
         "**/obj": true,
         "**/libs/*.js": true
-    }
+    },
+    "cSpell.words": [
+        "Cust",
+        "Fanex",
+        "NPOI",
+        "Xunit"
+    ]
 }

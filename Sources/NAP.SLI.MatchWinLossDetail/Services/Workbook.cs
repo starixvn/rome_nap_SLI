@@ -30,7 +30,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         protected override Sheet LoadTemplateSheet()
         {
             var sheet = GetSheetAt(TemplateSheetIndex);
-            currentRowIndex = TemplateInfo.BodyStartIndex + 1;
+            currentRowIndex = TemplateInfo.BodyStartIndex;
             MatchTitleRowTemplate = sheet.GetRow(currentRowIndex++);
             OddRowTemplate = sheet.GetRow(currentRowIndex++);
             EvenRowTemplate = sheet.GetRow(currentRowIndex++);
@@ -112,9 +112,9 @@ namespace NAP.SLI.MatchWinLossDetail.Services
             var row = sheet.GetRow(rowIndex);
             row.CopyCellsFrom(MatchTitleRowTemplate);
 
-            var title = (dataRecord.LeagueName + (string.IsNullOrEmpty(dataRecord.MatchName) ? string.Empty : $" >> {dataRecord.MatchName}"))
+            var title = (dataRecord.LeagueName + (string.IsNullOrEmpty(dataRecord.MatchName) ? string.Empty : $" >>> {dataRecord.MatchName}"))
                 .ToUpper(CultureInfo.InvariantCulture);
-            sheet.SetCellRangeValue(rowIndex, row.FirstCellIndex, rowIndex, row.LastCellIndex - 1, title);
+            row.SetCellValue(row.FirstCellIndex, title);
         }
 
         protected override void FillFooterRows(Sheet sheet)

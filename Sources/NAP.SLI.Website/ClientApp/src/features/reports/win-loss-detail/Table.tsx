@@ -158,7 +158,7 @@ const TableComponent = () => {
           ) : (
             records.map((record) => (
               <RowComponent
-                key={`Row_${record.custId}`}
+                key={`record_${record.custId}`}
                 roleId={roleId}
                 record={record}
                 isFooter={false}

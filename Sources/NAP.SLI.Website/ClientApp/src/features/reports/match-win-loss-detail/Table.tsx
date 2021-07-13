@@ -104,26 +104,29 @@ const TableComponent = () => {
             </td>
           </tr>
         ) : (
-          matches.map(
-            (match) => (
-              match.records.map((record) => (
+          matches.map((match) => (
+            <>
+              <tr>
+                <td colSpan={7 - removedColumnTotal}>
+                  {match.leagueName} &#62;&#62;&#62; {match.matchName}
+                </td>
+              </tr>
+              {match.records.map((record, index) => (
                 <RowComponent
-                  key={match.matchName}
+                  key={`record_${match.matchName}_${index}`}
                   roleId={roleId}
                   record={record}
                   type={RowType.Normal}
                 />
-              )),
-              (
-                <RowComponent
-                  key={match.matchName}
-                  roleId={roleId}
-                  record={match.total}
-                  type={RowType.SubTotal}
-                />
-              )
-            ),
-          )
+              ))}
+              <RowComponent
+                key={`match_${match.matchName}`}
+                roleId={roleId}
+                record={match.total}
+                type={RowType.SubTotal}
+              />
+            </>
+          ))
         )}
       </tbody>
       {matches.length > 0 && total && (

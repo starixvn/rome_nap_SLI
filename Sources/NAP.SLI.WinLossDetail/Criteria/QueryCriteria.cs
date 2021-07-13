@@ -7,6 +7,7 @@
 
     public class QueryCriteria : CriteriaBase
     {
+        private readonly string productIds = ((int)Common.Models.ProductIds.NumberGame).ToString();
         private readonly BalanceUpDayModel balanceUpDayModel;
 
         public QueryCriteria(BalanceUpDayModel balanceUpDayModel)
@@ -30,7 +31,7 @@
 
         public DateTime MoveBetsDay => balanceUpDayModel.MoveBetsDay;
 
-        public string ProductIds => ((int)Common.Models.ProductIds.NumberGame).ToString();
+        public string ProductIds => productIds;
 
         public int PageSize { get; set; }
 

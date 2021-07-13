@@ -66,7 +66,7 @@ const TableComponent = () => {
         ) : (
           records.map((record) => (
             <RowComponent
-              key={record.betTypeName}
+              key={`record_${record.betType}`}
               record={record}
               isFooter={false}
             />

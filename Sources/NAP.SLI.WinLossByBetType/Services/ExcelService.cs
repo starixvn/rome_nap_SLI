@@ -49,7 +49,7 @@ namespace NAP.SLI.WinLossByBetType.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QuerySuper(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<SuperRecord>("Master.xls", request.GetTitle());
+            var workbook = CreateWorkbook<SuperRecordEx>("Master.xls", request.GetTitle());
             var workbookDef = new SuperWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -60,7 +60,7 @@ namespace NAP.SLI.WinLossByBetType.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryMaster(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<MasterRecord>("Agent.xls", request.GetTitle());
+            var workbook = CreateWorkbook<MasterRecordEx>("Agent.xls", request.GetTitle());
             var workbookDef = new MasterWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));
@@ -71,7 +71,7 @@ namespace NAP.SLI.WinLossByBetType.Services
         {
             var queryRequest = mapper.Map<QueryRequest>(request);
             var queryData = await queryService.QueryAgent(queryRequest).ConfigureAwait(false);
-            var workbook = CreateWorkbook<AgentRecord>("Member.xls", request.GetTitle());
+            var workbook = CreateWorkbook<AgentRecordEx>("Member.xls", request.GetTitle());
             var workbookDef = new AgentWorkbookDef();
             workbook.Body(queryData.Records, workbookDef.CreateMapper(true));
             workbook.Footer(queryData.Total, workbookDef.CreateMapper(false));

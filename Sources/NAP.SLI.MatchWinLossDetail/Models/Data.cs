@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace NAP.SLI.MatchWinLossDetail.Models
 {
-    public class MatchData<T> where T : new()
+    public class MatchData<T> where T : IRecordEx<T>, new()
     {
         public string LeagueName { get; }
 
@@ -17,6 +17,11 @@ namespace NAP.SLI.MatchWinLossDetail.Models
             LeagueName = leagueName;
             MatchName = matchName;
             Records = records;
+            Total = new T();
+            foreach (var record in Records)
+            {
+                Total.Sum(record);
+            }
         }
     }
 

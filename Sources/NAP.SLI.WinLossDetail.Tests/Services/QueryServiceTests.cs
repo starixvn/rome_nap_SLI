@@ -96,7 +96,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Services
                 criteria.RoleId == request.RoleId &&
                 criteria.FromDate == request.FromDate &&
                 criteria.ToDate == request.ToDate &&
-                criteria.ProductIds == ((int)Common.Models.ProductIds.NumberGame).ToString() &&
+                criteria.ProductIds == ((int)ProductIds.NumberGame).ToString() &&
                 criteria.PageSize == request.PageSize &&
                 criteria.PageIndex == request.PageIndex &&
                 criteria.IsHistory == request.IsHistory;

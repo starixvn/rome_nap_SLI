@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Fanex.Data.Repository;
 using NAP.SLI.Common.Services;
 using NAP.SLI.WinLossByBetType.Criteria;
@@ -21,26 +22,27 @@ namespace NAP.SLI.WinLossByBetType.Services
     {
         private readonly IReportService reportService;
         private readonly IDynamicRepository dynamicRepository;
+        private readonly IMapper mapper;
 
-        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository)
-            => (this.reportService, this.dynamicRepository) = (reportService, dynamicRepository);
+        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository, IMapper mapper)
+            => (this.reportService, this.dynamicRepository, this.mapper) = (reportService, dynamicRepository, mapper);
 
         public async Task<SuperData> QuerySuper(QueryRequest request)
         {
             var records = await Query<SuperRecord>(request).ConfigureAwait(false);
-            return new SuperData(records);
+            return new SuperData(mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(records));
         }
 
         public async Task<MasterData> QueryMaster(QueryRequest request)
         {
             var records = await Query<MasterRecord>(request).ConfigureAwait(false);
-            return new MasterData(records);
+            return new MasterData(mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(records));
         }
 
         public async Task<AgentData> QueryAgent(QueryRequest request)
         {
             var records = await Query<AgentRecord>(request).ConfigureAwait(false);
-            return new AgentData(records);
+            return new AgentData(mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(records));
         }
 
         private async Task<IEnumerable<T>> Query<T>(QueryRequest request)

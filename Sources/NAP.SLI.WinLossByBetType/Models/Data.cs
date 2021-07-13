@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace NAP.SLI.WinLossByBetType.Models
 {
-    public class Data<T> where T : RecordBase, new()
+    public class Data<T> where T : IRecordEx<T>, new()
     {
         public IEnumerable<T> Records { get; }
 
@@ -19,25 +19,25 @@ namespace NAP.SLI.WinLossByBetType.Models
         }
     }
 
-    public class AgentData : Data<AgentRecord>
+    public class AgentData : Data<AgentRecordEx>
     {
-        public AgentData(IEnumerable<AgentRecord> records)
+        public AgentData(IEnumerable<AgentRecordEx> records)
         : base(records)
         {
         }
     }
 
-    public class MasterData : Data<MasterRecord>
+    public class MasterData : Data<MasterRecordEx>
     {
-        public MasterData(IEnumerable<MasterRecord> records)
+        public MasterData(IEnumerable<MasterRecordEx> records)
         : base(records)
         {
         }
     }
 
-    public class SuperData : Data<SuperRecord>
+    public class SuperData : Data<SuperRecordEx>
     {
-        public SuperData(IEnumerable<SuperRecord> records)
+        public SuperData(IEnumerable<SuperRecordEx> records)
         : base(records)
         {
         }

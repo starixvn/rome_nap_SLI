@@ -105,7 +105,7 @@ const TableComponent = () => {
         ) : (
           records.map((record) => (
             <RowComponent
-              key={record.rollupKey}
+              key={`record_${record.rollupKey}`}
               roleId={roleId}
               record={record}
               isFooter={false}

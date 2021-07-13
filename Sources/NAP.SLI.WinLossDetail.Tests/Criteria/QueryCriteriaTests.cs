@@ -20,7 +20,7 @@ namespace NAP.SLI.WinLossDetail.Tests.Criteria
             // Assert
             Assert.Equal(criteria.BalanceUpDay, balanceUpDayModel.BalanceUpDay);
             Assert.Equal(criteria.MoveBetsDay, balanceUpDayModel.MoveBetsDay);
-            Assert.Equal(criteria.ProductIds, ((int)Common.Models.ProductIds.NumberGame).ToString());
+            Assert.Equal(criteria.ProductIds, ((int)ProductIds.NumberGame).ToString());
         }
 
         [Fact]
