@@ -13,6 +13,15 @@ export type QueryData = {
   phone: string;
   mobilephone: string;
   fax: string;
+  disableNumber: boolean;
+  // Bet Setting
+  minBetv161: number;
+  maxBetv161: number;
+  maxpermatchv161: number;
+  maxperballv161: number;
+  minBetv164: number;
+  maxBetv164: number;
+  maxpermatch164: number;
 };
 
 type State = {

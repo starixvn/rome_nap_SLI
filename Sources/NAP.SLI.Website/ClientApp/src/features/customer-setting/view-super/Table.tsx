@@ -73,7 +73,7 @@ const TableComponent = () => {
   } = data;
 
   return (
-    <div className="table">
+    <div className="table-super">
       <Table hover bordered striped>
         <thead>
           <tr>

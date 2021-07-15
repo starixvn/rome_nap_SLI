@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Input, Label, Table } from 'reactstrap';
 import { formatDecimal, formatInteger } from 'utils/NumberUtils';
+import './Table.scss';
 
 const TableComponent = () => {
   const { data } = useSelector(
@@ -91,7 +92,7 @@ const TableComponent = () => {
   } = data;
 
   return (
-    <div className="table">
+    <div className="table-agent">
       <Table hover bordered striped>
         <thead>
           <tr>
