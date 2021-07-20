@@ -6,6 +6,7 @@ COPY ./Sources/NAP.SimpleApi ./NAP.SimpleApi
 COPY ./Sources/NAP.SLI.Account ./NAP.SLI.Account
 COPY ./Sources/NAP.SLI.Common ./NAP.SLI.Common
 COPY ./Sources/NAP.SLI.Customer ./NAP.SLI.Customer
+COPY ./Sources/NAP.SLI.CustomerSetting ./NAP.SLI.CustomerSetting
 COPY ./Sources/NAP.SLI.Localization ./NAP.SLI.Localization
 COPY ./Sources/NAP.SLI.MatchWinLossDetail ./NAP.SLI.MatchWinLossDetail
 COPY ./Sources/NAP.SLI.UserManagement ./NAP.SLI.UserManagement
