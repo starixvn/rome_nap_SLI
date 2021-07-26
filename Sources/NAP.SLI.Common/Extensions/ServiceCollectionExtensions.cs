@@ -7,12 +7,12 @@
     {
         public static IServiceCollection AddCommonModule(this IServiceCollection services, IAppSettings appSettings)
         {
-            services.AddSingleton<IAppSettings>(appSettings);
+            services.AddSingleton(appSettings);
+            services.AddSingleton<ICacheContainer, CacheContainer>();
             services.AddScoped<ICurrentContextService, CurrentContextService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IDynamicRepositoryEx, DynamicRepositoryEx>();
-            services.AddSingleton<ICacheContainer, CacheContainer>();
-            services.AddSingleton<IReportService, ReportService>();
+            services.AddScoped<IReportService, ReportService>();
             return services;
         }
     }
