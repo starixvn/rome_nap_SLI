@@ -28,7 +28,7 @@ const TableComponent = () => {
     maxperballv161,
     minbetv164,
     maxbetv164,
-    maxpermatch164,
+    maxpermatchv164,
     // Position Taking
     // Master Preset
     v161mpositiontaking_81,
@@ -166,7 +166,7 @@ const TableComponent = () => {
             <td className="label text-left">Happy 5</td>
             <td>{formatInteger(minbetv164)}</td>
             <td>{formatInteger(maxbetv164)}</td>
-            <td>{formatInteger(maxpermatch164)}</td>
+            <td>{formatInteger(maxpermatchv164)}</td>
             <td></td>
           </tr>
         </tbody>

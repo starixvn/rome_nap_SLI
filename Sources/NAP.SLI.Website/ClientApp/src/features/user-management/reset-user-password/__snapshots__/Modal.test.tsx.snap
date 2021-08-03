@@ -1,0 +1,856 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal not open modal 1`] = `
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <ResetUserPasswordModal />
+</Provider>
+`;
+
+exports[`Modal open modal 1`] = `
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <ResetUserPasswordModal>
+    <Modal
+      autoFocus={true}
+      backdrop={true}
+      backdropTransition={
+        Object {
+          "mountOnEnter": true,
+          "timeout": 150,
+        }
+      }
+      centered={false}
+      container="body"
+      fade={true}
+      isOpen={true}
+      keyboard={true}
+      modalTransition={
+        Object {
+          "timeout": 300,
+        }
+      }
+      onClosed={[Function]}
+      onOpened={[Function]}
+      returnFocusAfterClose={true}
+      role="dialog"
+      scrollable={false}
+      unmountOnClose={true}
+      zIndex={1050}
+    >
+      <Portal
+        node={
+          <div
+            style="position: relative; z-index: 1050; display: block;"
+            tabindex="-1"
+          >
+            <div
+              class=""
+            >
+              <div
+                class="modal fade"
+                role="dialog"
+                style="display: block;"
+                tabindex="-1"
+              >
+                <div
+                  class="modal-dialog"
+                  role="document"
+                >
+                  <div
+                    class="modal-content"
+                  >
+                    <form
+                      class=""
+                    >
+                      <fieldset>
+                        <div
+                          class="modal-header"
+                        >
+                          <h5
+                            class="modal-title"
+                          >
+                            Reset Password
+                          </h5>
+                          <button
+                            aria-label="Close"
+                            class="close"
+                            type="button"
+                          >
+                            <span
+                              aria-hidden="true"
+                            >
+                              ×
+                            </span>
+                          </button>
+                        </div>
+                        <div
+                          class="modal-body"
+                        >
+                          <div
+                            class="row form-group"
+                          >
+                            <label
+                              class="col-sm-4 col-form-label"
+                            >
+                              User Name
+                            </label>
+                            <label
+                              class="col-sm-8 col-form-label"
+                            />
+                          </div>
+                          <div
+                            class="row form-group"
+                          >
+                            <label
+                              class="col-sm-4 col-form-label"
+                            >
+                              Password
+                            </label>
+                            <div
+                              class="col-sm-8"
+                            >
+                              <input
+                                aria-invalid="false"
+                                autocomplete="off"
+                                class="form-control"
+                                name="password"
+                                type="password"
+                                value=""
+                              />
+                              <div
+                                class="invalid-feedback"
+                              />
+                            </div>
+                          </div>
+                          <div
+                            class="row form-group"
+                          >
+                            <label
+                              class="col-sm-4 col-form-label"
+                            >
+                              Confirm Password
+                            </label>
+                            <div
+                              class="col-sm-8"
+                            >
+                              <input
+                                aria-invalid="false"
+                                autocomplete="off"
+                                class="form-control"
+                                name="confirmPassword"
+                                type="password"
+                                value=""
+                              />
+                              <div
+                                class="invalid-feedback"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="modal-footer"
+                        >
+                          <button
+                            class="btn btn-primary"
+                            type="submit"
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </fieldset>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="modal-backdrop fade"
+              />
+            </div>
+          </div>
+        }
+      >
+        <Portal
+          containerInfo={
+            <div
+              style="position: relative; z-index: 1050; display: block;"
+              tabindex="-1"
+            >
+              <div
+                class=""
+              >
+                <div
+                  class="modal fade"
+                  role="dialog"
+                  style="display: block;"
+                  tabindex="-1"
+                >
+                  <div
+                    class="modal-dialog"
+                    role="document"
+                  >
+                    <div
+                      class="modal-content"
+                    >
+                      <form
+                        class=""
+                      >
+                        <fieldset>
+                          <div
+                            class="modal-header"
+                          >
+                            <h5
+                              class="modal-title"
+                            >
+                              Reset Password
+                            </h5>
+                            <button
+                              aria-label="Close"
+                              class="close"
+                              type="button"
+                            >
+                              <span
+                                aria-hidden="true"
+                              >
+                                ×
+                              </span>
+                            </button>
+                          </div>
+                          <div
+                            class="modal-body"
+                          >
+                            <div
+                              class="row form-group"
+                            >
+                              <label
+                                class="col-sm-4 col-form-label"
+                              >
+                                User Name
+                              </label>
+                              <label
+                                class="col-sm-8 col-form-label"
+                              />
+                            </div>
+                            <div
+                              class="row form-group"
+                            >
+                              <label
+                                class="col-sm-4 col-form-label"
+                              >
+                                Password
+                              </label>
+                              <div
+                                class="col-sm-8"
+                              >
+                                <input
+                                  aria-invalid="false"
+                                  autocomplete="off"
+                                  class="form-control"
+                                  name="password"
+                                  type="password"
+                                  value=""
+                                />
+                                <div
+                                  class="invalid-feedback"
+                                />
+                              </div>
+                            </div>
+                            <div
+                              class="row form-group"
+                            >
+                              <label
+                                class="col-sm-4 col-form-label"
+                              >
+                                Confirm Password
+                              </label>
+                              <div
+                                class="col-sm-8"
+                              >
+                                <input
+                                  aria-invalid="false"
+                                  autocomplete="off"
+                                  class="form-control"
+                                  name="confirmPassword"
+                                  type="password"
+                                  value=""
+                                />
+                                <div
+                                  class="invalid-feedback"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="modal-footer"
+                          >
+                            <button
+                              class="btn btn-primary"
+                              type="submit"
+                            >
+                              Submit
+                            </button>
+                          </div>
+                        </fieldset>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="modal-backdrop fade"
+                />
+              </div>
+            </div>
+          }
+        >
+          <div
+            className=""
+          >
+            <Fade
+              appear={true}
+              baseClass="fade"
+              baseClassActive="show"
+              className="modal"
+              enter={true}
+              exit={true}
+              in={true}
+              mountOnEnter={false}
+              onClick={[Function]}
+              onEnter={[Function]}
+              onEntered={[Function]}
+              onEntering={[Function]}
+              onExit={[Function]}
+              onExited={[Function]}
+              onExiting={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              role="dialog"
+              style={
+                Object {
+                  "display": "block",
+                }
+              }
+              tabIndex="-1"
+              tag="div"
+              timeout={300}
+              unmountOnExit={false}
+            >
+              <Transition
+                appear={true}
+                enter={true}
+                exit={true}
+                in={true}
+                mountOnEnter={false}
+                onEnter={[Function]}
+                onEntered={[Function]}
+                onEntering={[Function]}
+                onExit={[Function]}
+                onExited={[Function]}
+                onExiting={[Function]}
+                timeout={300}
+                unmountOnExit={false}
+              >
+                <div
+                  className="modal fade"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  onMouseDown={[Function]}
+                  role="dialog"
+                  style={
+                    Object {
+                      "display": "block",
+                    }
+                  }
+                  tabIndex="-1"
+                >
+                  <div
+                    className="modal-dialog"
+                    role="document"
+                  >
+                    <div
+                      className="modal-content"
+                    >
+                      <Formik
+                        initialValues={
+                          Object {
+                            "confirmPassword": "",
+                            "custId": 1,
+                            "password": "",
+                          }
+                        }
+                        onSubmit={[Function]}
+                        validationSchema={
+                          ObjectSchema {
+                            "_blacklist": ReferenceSet {
+                              "list": Set {},
+                              "refs": Map {},
+                            },
+                            "_blacklistError": undefined,
+                            "_excludedEdges": Array [],
+                            "_nodes": Array [
+                              "confirmPassword",
+                              "password",
+                            ],
+                            "_sortErrors": [Function],
+                            "_typeError": [Function],
+                            "_whitelist": ReferenceSet {
+                              "list": Set {},
+                              "refs": Map {},
+                            },
+                            "_whitelistError": undefined,
+                            "conditions": Array [],
+                            "deps": Array [],
+                            "exclusiveTests": Object {},
+                            "fields": Object {
+                              "confirmPassword": StringSchema {
+                                "_blacklist": ReferenceSet {
+                                  "list": Set {},
+                                  "refs": Map {},
+                                },
+                                "_blacklistError": undefined,
+                                "_mutate": undefined,
+                                "_typeError": [Function],
+                                "_whitelist": ReferenceSet {
+                                  "list": Set {
+                                    null,
+                                  },
+                                  "refs": Map {
+                                    "password" => Reference {
+                                      "getter": [Function],
+                                      "isContext": false,
+                                      "isSibling": true,
+                                      "isValue": false,
+                                      "key": "password",
+                                      "map": undefined,
+                                      "path": "password",
+                                    },
+                                  },
+                                },
+                                "_whitelistError": [Function],
+                                "conditions": Array [],
+                                "deps": Array [],
+                                "exclusiveTests": Object {
+                                  "required": true,
+                                },
+                                "spec": Object {
+                                  "abortEarly": true,
+                                  "label": undefined,
+                                  "meta": undefined,
+                                  "nullable": false,
+                                  "presence": "required",
+                                  "recursive": true,
+                                  "strict": false,
+                                  "strip": false,
+                                },
+                                "tests": Array [
+                                  [Function],
+                                ],
+                                "transforms": Array [
+                                  [Function],
+                                ],
+                                "type": "string",
+                              },
+                              "password": StringSchema {
+                                "_blacklist": ReferenceSet {
+                                  "list": Set {},
+                                  "refs": Map {},
+                                },
+                                "_blacklistError": undefined,
+                                "_mutate": undefined,
+                                "_typeError": [Function],
+                                "_whitelist": ReferenceSet {
+                                  "list": Set {},
+                                  "refs": Map {},
+                                },
+                                "_whitelistError": undefined,
+                                "conditions": Array [],
+                                "deps": Array [],
+                                "exclusiveTests": Object {
+                                  "required": true,
+                                },
+                                "spec": Object {
+                                  "abortEarly": true,
+                                  "label": undefined,
+                                  "meta": undefined,
+                                  "nullable": false,
+                                  "presence": "required",
+                                  "recursive": true,
+                                  "strict": false,
+                                  "strip": false,
+                                },
+                                "tests": Array [
+                                  [Function],
+                                ],
+                                "transforms": Array [
+                                  [Function],
+                                ],
+                                "type": "string",
+                              },
+                            },
+                            "spec": Object {
+                              "abortEarly": true,
+                              "label": undefined,
+                              "meta": undefined,
+                              "nullable": false,
+                              "presence": "optional",
+                              "recursive": true,
+                              "strict": false,
+                              "strip": false,
+                            },
+                            "tests": Array [],
+                            "transforms": Array [
+                              [Function],
+                            ],
+                            "type": "object",
+                          }
+                        }
+                      >
+                        <Form
+                          onSubmit={[Function]}
+                          tag="form"
+                        >
+                          <form
+                            className=""
+                            onSubmit={[Function]}
+                          >
+                            <fieldset
+                              disabled={false}
+                            >
+                              <ModalHeader
+                                charCode={215}
+                                closeAriaLabel="Close"
+                                tag="h5"
+                                toggle={[Function]}
+                                wrapTag="div"
+                              >
+                                <div
+                                  className="modal-header"
+                                >
+                                  <h5
+                                    className="modal-title"
+                                  >
+                                    Reset Password
+                                  </h5>
+                                  <button
+                                    aria-label="Close"
+                                    className="close"
+                                    onClick={[Function]}
+                                    type="button"
+                                  >
+                                    <span
+                                      aria-hidden="true"
+                                    >
+                                      ×
+                                    </span>
+                                  </button>
+                                </div>
+                              </ModalHeader>
+                              <ModalBody
+                                tag="div"
+                              >
+                                <div
+                                  className="modal-body"
+                                >
+                                  <FormGroup
+                                    row={true}
+                                    tag="div"
+                                  >
+                                    <div
+                                      className="row form-group"
+                                    >
+                                      <Label
+                                        sm={4}
+                                        tag="label"
+                                        widths={
+                                          Array [
+                                            "xs",
+                                            "sm",
+                                            "md",
+                                            "lg",
+                                            "xl",
+                                          ]
+                                        }
+                                      >
+                                        <label
+                                          className="col-sm-4 col-form-label"
+                                        >
+                                          User Name
+                                        </label>
+                                      </Label>
+                                      <Label
+                                        sm={8}
+                                        tag="label"
+                                        widths={
+                                          Array [
+                                            "xs",
+                                            "sm",
+                                            "md",
+                                            "lg",
+                                            "xl",
+                                          ]
+                                        }
+                                      >
+                                        <label
+                                          className="col-sm-8 col-form-label"
+                                        />
+                                      </Label>
+                                    </div>
+                                  </FormGroup>
+                                  <FormGroup
+                                    row={true}
+                                    tag="div"
+                                  >
+                                    <div
+                                      className="row form-group"
+                                    >
+                                      <Label
+                                        sm={4}
+                                        tag="label"
+                                        widths={
+                                          Array [
+                                            "xs",
+                                            "sm",
+                                            "md",
+                                            "lg",
+                                            "xl",
+                                          ]
+                                        }
+                                      >
+                                        <label
+                                          className="col-sm-4 col-form-label"
+                                        >
+                                          Password
+                                        </label>
+                                      </Label>
+                                      <Col
+                                        sm={8}
+                                        tag="div"
+                                        widths={
+                                          Array [
+                                            "xs",
+                                            "sm",
+                                            "md",
+                                            "lg",
+                                            "xl",
+                                          ]
+                                        }
+                                      >
+                                        <div
+                                          className="col-sm-8"
+                                        >
+                                          <Input
+                                            autoComplete="off"
+                                            invalid={false}
+                                            name="password"
+                                            tag={[Function]}
+                                            type="password"
+                                          >
+                                            <Field
+                                              aria-invalid={false}
+                                              autoComplete="off"
+                                              className="form-control"
+                                              name="password"
+                                              type="password"
+                                            >
+                                              <input
+                                                aria-invalid={false}
+                                                autoComplete="off"
+                                                className="form-control"
+                                                name="password"
+                                                onBlur={[Function]}
+                                                onChange={[Function]}
+                                                type="password"
+                                                value=""
+                                              />
+                                            </Field>
+                                          </Input>
+                                          <FormFeedback
+                                            tag="div"
+                                          >
+                                            <div
+                                              className="invalid-feedback"
+                                            />
+                                          </FormFeedback>
+                                        </div>
+                                      </Col>
+                                    </div>
+                                  </FormGroup>
+                                  <FormGroup
+                                    row={true}
+                                    tag="div"
+                                  >
+                                    <div
+                                      className="row form-group"
+                                    >
+                                      <Label
+                                        sm={4}
+                                        tag="label"
+                                        widths={
+                                          Array [
+                                            "xs",
+                                            "sm",
+                                            "md",
+                                            "lg",
+                                            "xl",
+                                          ]
+                                        }
+                                      >
+                                        <label
+                                          className="col-sm-4 col-form-label"
+                                        >
+                                          Confirm Password
+                                        </label>
+                                      </Label>
+                                      <Col
+                                        sm={8}
+                                        tag="div"
+                                        widths={
+                                          Array [
+                                            "xs",
+                                            "sm",
+                                            "md",
+                                            "lg",
+                                            "xl",
+                                          ]
+                                        }
+                                      >
+                                        <div
+                                          className="col-sm-8"
+                                        >
+                                          <Input
+                                            autoComplete="off"
+                                            invalid={false}
+                                            name="confirmPassword"
+                                            tag={[Function]}
+                                            type="password"
+                                          >
+                                            <Field
+                                              aria-invalid={false}
+                                              autoComplete="off"
+                                              className="form-control"
+                                              name="confirmPassword"
+                                              type="password"
+                                            >
+                                              <input
+                                                aria-invalid={false}
+                                                autoComplete="off"
+                                                className="form-control"
+                                                name="confirmPassword"
+                                                onBlur={[Function]}
+                                                onChange={[Function]}
+                                                type="password"
+                                                value=""
+                                              />
+                                            </Field>
+                                          </Input>
+                                          <FormFeedback
+                                            tag="div"
+                                          >
+                                            <div
+                                              className="invalid-feedback"
+                                            />
+                                          </FormFeedback>
+                                        </div>
+                                      </Col>
+                                    </div>
+                                  </FormGroup>
+                                </div>
+                              </ModalBody>
+                              <ModalFooter
+                                tag="div"
+                              >
+                                <div
+                                  className="modal-footer"
+                                >
+                                  <Button
+                                    color="primary"
+                                    tag="button"
+                                    type="submit"
+                                  >
+                                    <button
+                                      aria-label={null}
+                                      className="btn btn-primary"
+                                      onClick={[Function]}
+                                      type="submit"
+                                    >
+                                      Submit
+                                    </button>
+                                  </Button>
+                                </div>
+                              </ModalFooter>
+                            </fieldset>
+                          </form>
+                        </Form>
+                      </Formik>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
+            </Fade>
+            <Fade
+              appear={true}
+              baseClass="fade"
+              baseClassActive="show"
+              className="modal-backdrop"
+              enter={true}
+              exit={true}
+              in={true}
+              mountOnEnter={true}
+              onEnter={[Function]}
+              onEntered={[Function]}
+              onEntering={[Function]}
+              onExit={[Function]}
+              onExited={[Function]}
+              onExiting={[Function]}
+              tag="div"
+              timeout={150}
+              unmountOnExit={false}
+            >
+              <Transition
+                appear={true}
+                enter={true}
+                exit={true}
+                in={true}
+                mountOnEnter={true}
+                onEnter={[Function]}
+                onEntered={[Function]}
+                onEntering={[Function]}
+                onExit={[Function]}
+                onExited={[Function]}
+                onExiting={[Function]}
+                timeout={150}
+                unmountOnExit={false}
+              >
+                <div
+                  className="modal-backdrop fade"
+                />
+              </Transition>
+            </Fade>
+          </div>
+        </Portal>
+      </Portal>
+    </Modal>
+  </ResetUserPasswordModal>
+</Provider>
+`;

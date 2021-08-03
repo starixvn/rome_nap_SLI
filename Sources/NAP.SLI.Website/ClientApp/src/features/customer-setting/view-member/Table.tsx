@@ -22,13 +22,13 @@ const TableComponent = () => {
     fax,
     disableNumber,
     // Bet Setting
-    minBetv161,
-    maxBetv161,
+    minbetv161,
+    maxbetv161,
     maxpermatchv161,
     maxperballv161,
-    minBetv164,
-    maxBetv164,
-    maxpermatch164,
+    minbetv164,
+    maxbetv164,
+    maxpermatchv164,
     // Position Taking
     // Agent
     v161apositiontaking_81,
@@ -166,16 +166,16 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td className="label text-left">Number Game</td>
-            <td>{formatInteger(minBetv161)}</td>
-            <td>{formatInteger(maxBetv161)}</td>
+            <td>{formatInteger(minbetv161)}</td>
+            <td>{formatInteger(maxbetv161)}</td>
             <td>{formatInteger(maxpermatchv161)}</td>
             <td>{formatInteger(maxperballv161)}</td>
           </tr>
           <tr>
             <td className="label text-left">Happy 5</td>
-            <td>{formatInteger(minBetv164)}</td>
-            <td>{formatInteger(maxBetv164)}</td>
-            <td>{formatInteger(maxpermatch164)}</td>
+            <td>{formatInteger(minbetv164)}</td>
+            <td>{formatInteger(maxbetv164)}</td>
+            <td>{formatInteger(maxpermatchv164)}</td>
             <td></td>
           </tr>
         </tbody>

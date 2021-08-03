@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SentryFallback render SetryFallBack 1`] = `
+<SentryFallback>
+  <div>
+    An error has occurred
+  </div>
+</SentryFallback>
+`;
