@@ -46,11 +46,11 @@ declare global {
     [key: string]: any;
   };
 
-  type GernericKeyValueObject<T> = {
+  type GenericKeyValueObject<T> = {
     [key: string]: T;
   };
 
-  type InputValue = string | ReadonlyArray<string> | number | undefined;
+  type InputValue = string | readonly string[] | number | undefined;
 
   type InputKeyValueObject = {
     [key: string]: InputValue;

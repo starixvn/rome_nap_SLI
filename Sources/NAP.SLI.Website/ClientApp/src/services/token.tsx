@@ -1,4 +1,3 @@
-import { handleException } from 'utils/ExceptionUtils';
 import store from 'app/store';
 import { logout } from 'features/account/authentication/reducer';
 import storage from './storage';
@@ -48,6 +47,6 @@ export const refreshToken = async () => {
       }
     }
   } catch (e) {
-    handleException(e);
+    // not do anything
   }
 };

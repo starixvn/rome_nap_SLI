@@ -1,6 +1,5 @@
 import storage from 'services/storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { handleException } from 'utils/ExceptionUtils';
 import { stopRefreshToken, refreshToken } from 'services/token';
 import { stopCheckin, checkin } from 'services/connection';
 import { post } from 'services/http';
@@ -62,7 +61,6 @@ export const login = createAsyncThunk<
       return rejectWithValue(errMsg);
     }
   } catch (err) {
-    handleException(err);
     const error: AxiosError<string> = err;
     if (!error.response) {
       throw err;

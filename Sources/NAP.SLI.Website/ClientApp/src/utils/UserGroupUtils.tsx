@@ -21,6 +21,6 @@ export const UserGroupSelectOptions = generateSelectOptions(
   getGroupName,
 );
 
-export const UserGroupSelectOptionsWithAll: Array<SelectOption<InputValue>> = [
+export const UserGroupSelectOptionsWithAll: SelectOption<InputValue>[] = [
   { label: 'All Groups', value: undefined } as SelectOption<InputValue>,
 ].concat(UserGroupSelectOptions);

@@ -4,7 +4,7 @@ import { Nav, NavLink, NavItem, TabContent, TabPane } from 'reactstrap';
 import classNames from 'classnames';
 
 type Props = {
-  tabList: Array<TabProps>;
+  tabList: TabProps[];
   activeIndex: number;
   className: string;
 };

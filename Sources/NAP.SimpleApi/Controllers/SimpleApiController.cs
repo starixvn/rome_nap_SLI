@@ -50,7 +50,7 @@
             if (requestOption.Extra != null && requestOption.Extra.Policy != null)
             {
                 var result = await authorizationService.AuthorizeAsync(HttpContext.User, null, requestOption.Extra.Policy).ConfigureAwait(false);
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
                     return StatusCode(StatusCodes.Status403Forbidden);
                 }

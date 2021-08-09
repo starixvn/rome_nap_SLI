@@ -26,9 +26,7 @@ const SideBar = () => {
   > = createRef();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [options, setOptions] = useState<Array<QueryUsernameSuggestionRecord>>(
-    [],
-  );
+  const [options, setOptions] = useState<QueryUsernameSuggestionRecord[]>([]);
   const { customer, message, username } = useSelector(
     (state: AppState) => state.sidebar,
   );
@@ -65,7 +63,7 @@ const SideBar = () => {
   };
 
   const handleChange = (
-    selectedOptions: Array<QueryUsernameSuggestionRecord>,
+    selectedOptions: QueryUsernameSuggestionRecord[],
     setFieldValue: Formik.SetFieldValueFunc,
   ) => {
     selectedOptions &&

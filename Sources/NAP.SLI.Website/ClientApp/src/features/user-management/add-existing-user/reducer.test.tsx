@@ -1,5 +1,4 @@
 import * as http from 'services/http';
-import * as ExceptionUtils from 'utils/ExceptionUtils';
 import reducer, { toggleModal, addExisting } from './reducer';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -10,15 +9,8 @@ jest.mock('services/http');
 jest.mock('utils/ExceptionUtils');
 
 const mockHttp = http as jest.Mocked<typeof http>;
-const mockExceptionUtils = ExceptionUtils as jest.Mocked<typeof ExceptionUtils>;
 
 describe('reducer', () => {
-  const mockHandleException = mockExceptionUtils.handleException.mockImplementation();
-
-  beforeEach(() => {
-    mockHandleException.mockClear();
-  });
-
   test('initialState', () => {
     // Act
     const state = store.getState().addExistingUser;
@@ -87,9 +79,6 @@ describe('reducer', () => {
       await store.dispatch(addExisting(props));
 
       // Assert
-      expect(mockHandleException).toHaveBeenCalledTimes(1);
-      expect(mockHandleException.mock.calls[0][0]).toEqual(err);
-
       const actions = store.getActions();
       expect(actions[0].type).toEqual(addExisting.pending.type);
       expect(actions[1].type).toEqual(addExisting.rejected.type);

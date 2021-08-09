@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Input, InputProps } from 'reactstrap';
 
 type Props<T> = {
-  options: Array<SelectOption<T>>;
+  options: SelectOption<T>[];
   value?: T;
   onChange: (selectedOption: SelectOption<T>) => void;
   inputProps?: InputProps;

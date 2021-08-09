@@ -4,7 +4,7 @@ import Select from './Select';
 
 type Props<T> = {
   name: string;
-  options: Array<SelectOption<T>>;
+  options: SelectOption<T>[];
 };
 
 const FormikSelect = ({ options, ...props }: Props<InputValue>) => {

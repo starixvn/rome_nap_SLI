@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { formatDate, getToday } from 'utils/DateUtils';
-import { handleException } from 'utils/ExceptionUtils';
 import { post, download } from 'services/http';
 
 export enum ReportType {
@@ -37,7 +36,7 @@ export type Record = {
 };
 
 export type QueryData = {
-  records: Array<Record>;
+  records: Record[];
   total: Record;
 };
 
@@ -70,7 +69,6 @@ export const query = createAsyncThunk<QueryData, QueryProps>(
       );
       return data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },

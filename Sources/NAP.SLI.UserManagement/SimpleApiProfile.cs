@@ -12,7 +12,8 @@
         {
             var optionExtra = new OptionExtra
             {
-                Policy = AuthorizationPolicies.AdministrationPolicy
+                Policy = AuthorizationPolicies.AdministrationPolicy,
+                QueryStrategy = QueryStrategies.SingleAndMultiple
             };
             AddQuery<QueryUserCriteria>("query-user", optionExtra);
             AddCommand<UpdateUserStatusCommand>("update-user-status", optionExtra);

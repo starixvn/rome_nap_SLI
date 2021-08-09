@@ -9,6 +9,7 @@ import { updateUM, UMTime } from 'features/error/UM/reducer';
 import { RouteLinks } from 'utils/RouteUtils';
 import { history } from 'app/App';
 import { isNullOrWhiteSpaces } from 'utils/StringUtils';
+import { handleException } from 'utils/ExceptionUtils';
 
 const getConfig = (): AxiosRequestConfig => {
   const headers: KeyValueObject = {};
@@ -27,20 +28,20 @@ const getConfig = (): AxiosRequestConfig => {
   };
 };
 
-const handleError = (e: AxiosError) => {
+const handleError = (e: AxiosError): AxiosError | undefined => {
   if (e.response) {
     switch (e.response.status) {
       case 401:
         store.dispatch(logout());
-        return new Error('Handled');
+        return;
       case 403:
         store.dispatch(error('You are not authorized to use this function'));
-        return new Error('Handled');
+        return;
       case 503: {
         const umTime = e.response.data as UMTime;
         store.dispatch(updateUM(umTime));
         history.push(RouteLinks.ERROR_UM);
-        return new Error('Handled');
+        return;
       }
       default:
         store.dispatch(error(e.message));
@@ -49,6 +50,7 @@ const handleError = (e: AxiosError) => {
     store.dispatch(error(e.message));
   }
 
+  handleException(e);
   return e;
 };
 

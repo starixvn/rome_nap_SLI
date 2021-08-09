@@ -1,7 +1,7 @@
 export const generateSelectOptions = function _<T>(
-  obj: GernericKeyValueObject<T>,
+  obj: GenericKeyValueObject<T>,
   getNameCallback: (val: T) => string,
-): Array<SelectOption<T>> {
+): SelectOption<T>[] {
   return Object.keys(obj).map((key) => {
     const value = obj[key];
     return {
@@ -12,9 +12,9 @@ export const generateSelectOptions = function _<T>(
 };
 
 export const generateSelectOptionsFromList = function _<T>(
-  list: Array<T>,
+  list: T[],
   getNameCallback: (val: T) => string,
-): Array<SelectOption<T>> {
+): SelectOption<T>[] {
   return list.map((value) => {
     return {
       label: getNameCallback(value),
@@ -26,7 +26,7 @@ export const generateSelectOptionsFromList = function _<T>(
 export const generateRangeSelectOptions = (
   from: number,
   to: number,
-): Array<SelectOption<number>> => {
+): SelectOption<number>[] => {
   const options = [];
   for (let value = from; value <= to; value++) {
     options.push({

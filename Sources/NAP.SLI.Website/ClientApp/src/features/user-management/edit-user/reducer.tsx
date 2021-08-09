@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UserModel } from '../reducer';
 import { post } from 'services/http';
-import { handleException } from 'utils/ExceptionUtils';
 
 type State = {
   user?: UserModel;
@@ -33,7 +32,6 @@ export const update = createAsyncThunk<UpdateData, UpdateProps>(
       const response = await post<UpdateData>('/simple-api/command', payload);
       return response.data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },

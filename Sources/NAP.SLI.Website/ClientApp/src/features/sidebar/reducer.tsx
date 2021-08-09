@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 
 export type Customer = {
@@ -73,7 +72,6 @@ export const getCustomerInformation = createAsyncThunk<
 
       return rejectWithValue(errMsg);
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err.message);
     }
   },
@@ -124,7 +122,7 @@ export const queryUsernameSuggestion = async (value: string) => {
     },
   };
 
-  const response = await post<Array<QueryUsernameSuggestionRecord>>(
+  const response = await post<QueryUsernameSuggestionRecord[]>(
     '/simple-api/query',
     payload,
   );

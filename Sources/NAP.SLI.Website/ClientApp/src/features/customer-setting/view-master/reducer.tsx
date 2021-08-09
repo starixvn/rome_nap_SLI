@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 import {
   CustomerInfo,
@@ -87,7 +86,6 @@ export const query = createAsyncThunk<
     const { data } = await post<QueryData>('/simple-api/query', payload);
     return data;
   } catch (err) {
-    handleException(err);
     return rejectWithValue(err);
   }
 });

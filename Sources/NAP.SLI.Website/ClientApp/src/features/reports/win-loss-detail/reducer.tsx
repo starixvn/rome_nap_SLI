@@ -5,7 +5,6 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { PageSize } from 'utils/ReportUtils';
-import { handleException } from 'utils/ExceptionUtils';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { download, post } from 'services/http';
 
@@ -44,7 +43,7 @@ type ExcelProps = {
 };
 
 type State = {
-  uplineCustomers: Array<Customer>;
+  uplineCustomers: Customer[];
   queryCustomer?: Customer;
   queryArg: QueryArg;
   queryData?: QueryData;
@@ -82,7 +81,6 @@ export const query = createAsyncThunk<QueryData, QueryProps>(
 
       return data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },

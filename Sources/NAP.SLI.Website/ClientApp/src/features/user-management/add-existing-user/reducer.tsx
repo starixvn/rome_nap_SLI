@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { post } from 'services/http';
-import { handleException } from 'utils/ExceptionUtils';
 
 export type AddExistingUserProps = {
   username: string;
@@ -31,7 +30,6 @@ export const addExisting = createAsyncThunk<ResultData, AddExistingUserProps>(
       const response = await post<ResultData>('/simple-api/command', payload);
       return response.data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },

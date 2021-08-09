@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 import { UserModel } from '../reducer';
 import { CryptoJS } from 'utils/FunctionUtils';
@@ -31,7 +30,6 @@ export const resetPassword = createAsyncThunk<ResultData, ResetPasswordProps>(
       const response = await post<ResultData>('/simple-api/command', payload);
       return response.data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },

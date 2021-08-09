@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 import { CryptoJS } from 'utils/FunctionUtils';
 
@@ -38,7 +37,6 @@ export const addNew = createAsyncThunk<ResultData, AddNewUserProps>(
       const response = await post<ResultData>('/simple-api/command', payload);
       return response.data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },

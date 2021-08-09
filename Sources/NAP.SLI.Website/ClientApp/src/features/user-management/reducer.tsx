@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import produce from 'immer';
-import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 
 export type UserModel = {
@@ -16,7 +15,7 @@ export type UserModel = {
 
 type State = {
   queryArg: QueryProps;
-  users?: Array<UserModel>;
+  users?: UserModel[];
 };
 
 export type QueryProps = {
@@ -44,7 +43,7 @@ const initialState: State = {
 };
 const sliceName = 'user-management';
 
-export const query = createAsyncThunk<Array<UserModel>, QueryProps>(
+export const query = createAsyncThunk<UserModel[], QueryProps>(
   `${sliceName}/query`,
   async (values, { rejectWithValue }) => {
     try {
@@ -52,13 +51,9 @@ export const query = createAsyncThunk<Array<UserModel>, QueryProps>(
         apiKey: 'user-management:query-user',
         data: values,
       };
-      const response = await post<Array<UserModel>>(
-        '/simple-api/query',
-        payload,
-      );
+      const response = await post<UserModel[]>('/simple-api/query', payload);
       return response.data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },
@@ -77,7 +72,6 @@ export const updateUserStatus = createAsyncThunk<
     const response = await post<ResultData>('/simple-api/command', payload);
     return response.data;
   } catch (err) {
-    handleException(err);
     return rejectWithValue(err);
   }
 });

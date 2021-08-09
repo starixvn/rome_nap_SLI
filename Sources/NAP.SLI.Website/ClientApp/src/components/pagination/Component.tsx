@@ -13,7 +13,7 @@ import { Input, Button, Form } from 'reactstrap';
 import { Formik, Field } from 'formik';
 
 type Props = {
-  pageSizes: Array<number>;
+  pageSizes: number[];
   pageSize: number;
   pageIndex: number;
   onPageChange: (pageIndex: number, pageSize: number, callback: Func) => void;

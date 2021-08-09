@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { handleException } from 'utils/ExceptionUtils';
 import { post } from 'services/http';
 
 export type UMTime = {
@@ -22,7 +21,6 @@ export const checkUM = createAsyncThunk<UMTime>(
       const { data } = await post<UMTime>('/api/common/umtime');
       return data;
     } catch (err) {
-      handleException(err);
       return rejectWithValue(err);
     }
   },

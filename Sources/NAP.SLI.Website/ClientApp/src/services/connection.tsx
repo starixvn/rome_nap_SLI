@@ -1,4 +1,3 @@
-import { handleException } from 'utils/ExceptionUtils';
 import storage from './storage';
 import { logout } from 'features/account/authentication/reducer';
 import store from 'app/store';
@@ -45,6 +44,6 @@ export const checkin = async () => {
       store.dispatch(logout());
     }
   } catch (e) {
-    handleException(e);
+    // not do anything
   }
 };
