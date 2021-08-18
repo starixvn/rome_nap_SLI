@@ -17,25 +17,25 @@ export type QueryData = CustomerInfo &
   MasterPtSetting & {
     // Position Taking
     // Super Max
-    v161spositiontaking_81_max: number;
-    v161spositiontaking_83_max: number;
-    v161spositiontaking_86_max: number;
-    v161spositiontaking_88_max: number;
-    v161slivepositiontaking_85_max: number;
-    v161slivepositiontaking_86_max: number;
-    v161slivepositiontaking_87_max: number;
-    v161slivepositiontaking_89_max: number;
-    v161slivepositiontaking_90_max: number;
+    v161sPositionTaking_81_Max: number;
+    v161sPositionTaking_83_Max: number;
+    v161sPositionTaking_86_Max: number;
+    v161sPositionTaking_88_Max: number;
+    v161sLivePositionTaking_85_Max: number;
+    v161sLivePositionTaking_86_Max: number;
+    v161sLivePositionTaking_87_Max: number;
+    v161sLivePositionTaking_89_Max: number;
+    v161sLivePositionTaking_90_Max: number;
     // Super Min
-    v161spositiontaking_81_min: number;
-    v161spositiontaking_83_min: number;
-    v161spositiontaking_86_min: number;
-    v161spositiontaking_88_min: number;
-    v161slivepositiontaking_85_min: number;
-    v161slivepositiontaking_86_min: number;
-    v161slivepositiontaking_87_min: number;
-    v161slivepositiontaking_89_min: number;
-    v161slivepositiontaking_90_min: number;
+    v161sPositionTaking_81_Min: number;
+    v161sPositionTaking_83_Min: number;
+    v161sPositionTaking_86_Min: number;
+    v161sPositionTaking_88_Min: number;
+    v161sLivePositionTaking_85_Min: number;
+    v161sLivePositionTaking_86_Min: number;
+    v161sLivePositionTaking_87_Min: number;
+    v161sLivePositionTaking_89_Min: number;
+    v161sLivePositionTaking_90_Min: number;
   };
 
 type State = {

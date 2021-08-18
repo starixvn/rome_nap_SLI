@@ -198,16 +198,16 @@ exports[`TableComponent render with data 1`] = `
                 Number Game
               </td>
               <td>
-                0
+                100
               </td>
               <td>
-                0
+                200
               </td>
               <td>
-                0
+                300
               </td>
               <td>
-                0
+                400
               </td>
             </tr>
             <tr>
@@ -217,13 +217,13 @@ exports[`TableComponent render with data 1`] = `
                 Happy 5
               </td>
               <td>
-                0
+                500
               </td>
               <td>
-                0
+                600
               </td>
               <td>
-                0
+                700
               </td>
               <td />
             </tr>
@@ -318,13 +318,13 @@ exports[`TableComponent render with data 1`] = `
                 0.01
               </td>
               <td>
-                0.01
+                0.02
               </td>
               <td>
-                0.01
+                0.04
               </td>
               <td>
-                0.01
+                0.03
               </td>
             </tr>
             <tr>
@@ -334,16 +334,16 @@ exports[`TableComponent render with data 1`] = `
                 Master Max Position
               </td>
               <td>
-                0.01
+                0.10
               </td>
               <td>
-                0.01
+                0.11
               </td>
               <td>
-                0.01
+                0.13
               </td>
               <td>
-                0.01
+                0.12
               </td>
             </tr>
             <tr>
@@ -353,16 +353,16 @@ exports[`TableComponent render with data 1`] = `
                 Agent Max Position
               </td>
               <td>
-                0.01
+                0.19
               </td>
               <td>
-                0.01
+                0.20
               </td>
               <td>
-                0.01
+                0.22
               </td>
               <td>
-                0.01
+                0.21
               </td>
             </tr>
             <tr>
@@ -372,16 +372,16 @@ exports[`TableComponent render with data 1`] = `
                 Super Min Position
               </td>
               <td>
-                0.01
+                0.28
               </td>
               <td>
-                0.01
+                0.29
               </td>
               <td>
-                0.01
+                0.31
               </td>
               <td>
-                0.01
+                0.30
               </td>
             </tr>
           </tbody>
@@ -443,19 +443,19 @@ exports[`TableComponent render with data 1`] = `
                 Super Max Position
               </td>
               <td>
-                0.01
+                0.05
               </td>
               <td>
-                0.01
+                0.06
               </td>
               <td>
-                0.01
+                0.07
               </td>
               <td>
-                0.01
+                0.08
               </td>
               <td>
-                0.01
+                0.09
               </td>
             </tr>
             <tr>
@@ -465,19 +465,19 @@ exports[`TableComponent render with data 1`] = `
                 Master Max Position
               </td>
               <td>
-                0.01
+                0.14
               </td>
               <td>
-                0.01
+                0.15
               </td>
               <td>
-                0.01
+                0.16
               </td>
               <td>
-                0.01
+                0.17
               </td>
               <td>
-                0.01
+                0.18
               </td>
             </tr>
             <tr>
@@ -487,19 +487,19 @@ exports[`TableComponent render with data 1`] = `
                 Agent Max Position
               </td>
               <td>
-                0.01
+                0.23
               </td>
               <td>
-                0.01
+                0.24
               </td>
               <td>
-                0.01
+                0.25
               </td>
               <td>
-                0.01
+                0.26
               </td>
               <td>
-                0.01
+                0.27
               </td>
             </tr>
             <tr>
@@ -509,19 +509,19 @@ exports[`TableComponent render with data 1`] = `
                 Super Min Position
               </td>
               <td>
-                0.01
+                0.32
               </td>
               <td>
-                0.01
+                0.33
               </td>
               <td>
-                0.01
+                0.34
               </td>
               <td>
-                0.01
+                0.35
               </td>
               <td>
-                0.01
+                0.36
               </td>
             </tr>
           </tbody>

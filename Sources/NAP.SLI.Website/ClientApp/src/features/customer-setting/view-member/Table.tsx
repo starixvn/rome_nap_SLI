@@ -14,90 +14,90 @@ const TableComponent = () => {
   }
 
   const {
-    username,
-    firstname,
-    lastname,
+    userName,
+    firstName,
+    lastName,
     phone,
-    mobilephone,
+    mobilePhone,
     fax,
     disableNumber,
     // Bet Setting
-    minbetv161,
-    maxbetv161,
-    maxpermatchv161,
-    maxperballv161,
-    minbetv164,
-    maxbetv164,
-    maxpermatchv164,
+    v161MinBet,
+    v161MaxBet,
+    v161MaxPerMatch,
+    v161MaxPerBall,
+    v164MinBet,
+    v164MaxBet,
+    v164MaxPerMatch,
     // Position Taking
     // Agent
-    v161apositiontaking_81,
-    v161apositiontaking_83,
-    v161apositiontaking_88,
-    v161apositiontaking_86,
-    v161alivepositiontaking_85,
-    v161alivepositiontaking_86,
-    v161alivepositiontaking_87,
-    v161alivepositiontaking_89,
-    v161alivepositiontaking_90,
+    v161aPositionTaking_81,
+    v161aPositionTaking_83,
+    v161aPositionTaking_88,
+    v161aPositionTaking_86,
+    v161aLivePositionTaking_85,
+    v161aLivePositionTaking_86,
+    v161aLivePositionTaking_87,
+    v161aLivePositionTaking_89,
+    v161aLivePositionTaking_90,
     // Master
-    v161mpositiontaking_81,
-    v161mpositiontaking_83,
-    v161mpositiontaking_88,
-    v161mpositiontaking_86,
-    v161mlivepositiontaking_85,
-    v161mlivepositiontaking_86,
-    v161mlivepositiontaking_87,
-    v161mlivepositiontaking_89,
-    v161mlivepositiontaking_90,
+    v161mPositionTaking_81,
+    v161mPositionTaking_83,
+    v161mPositionTaking_88,
+    v161mPositionTaking_86,
+    v161mLivePositionTaking_85,
+    v161mLivePositionTaking_86,
+    v161mLivePositionTaking_87,
+    v161mLivePositionTaking_89,
+    v161mLivePositionTaking_90,
     // Super
-    v161spositiontaking_81,
-    v161spositiontaking_83,
-    v161spositiontaking_88,
-    v161spositiontaking_86,
-    v161slivepositiontaking_85,
-    v161slivepositiontaking_86,
-    v161slivepositiontaking_87,
-    v161slivepositiontaking_89,
-    v161slivepositiontaking_90,
+    v161sPositionTaking_81,
+    v161sPositionTaking_83,
+    v161sPositionTaking_88,
+    v161sPositionTaking_86,
+    v161sLivePositionTaking_85,
+    v161sLivePositionTaking_86,
+    v161sLivePositionTaking_87,
+    v161sLivePositionTaking_89,
+    v161sLivePositionTaking_90,
     // Master Auto
-    isauto_v161mpositiontaking_mem_81,
-    isauto_v161mpositiontaking_mem_83,
-    isauto_v161mpositiontaking_mem_88,
-    isauto_v161mpositiontaking_mem_86,
-    auto_v161mpositiontaking_mem_81,
-    auto_v161mpositiontaking_mem_83,
-    auto_v161mpositiontaking_mem_88,
-    auto_v161mpositiontaking_mem_86,
-    isauto_v161mlivepositiontaking_mem_85,
-    isauto_v161mlivepositiontaking_mem_86,
-    isauto_v161mlivepositiontaking_mem_87,
-    isauto_v161mlivepositiontaking_mem_89,
-    isauto_v161mlivepositiontaking_mem_90,
-    auto_v161mlivepositiontaking_mem_85,
-    auto_v161mlivepositiontaking_mem_86,
-    auto_v161mlivepositiontaking_mem_87,
-    auto_v161mlivepositiontaking_mem_89,
-    auto_v161mlivepositiontaking_mem_90,
+    isAuto_v161mPositionTaking_81,
+    isAuto_v161mPositionTaking_83,
+    isAuto_v161mPositionTaking_88,
+    isAuto_v161mPositionTaking_86,
+    auto_v161mPositionTaking_81,
+    auto_v161mPositionTaking_83,
+    auto_v161mPositionTaking_88,
+    auto_v161mPositionTaking_86,
+    isAuto_v161mLivePositionTaking_85,
+    isAuto_v161mLivePositionTaking_86,
+    isAuto_v161mLivePositionTaking_87,
+    isAuto_v161mLivePositionTaking_89,
+    isAuto_v161mLivePositionTaking_90,
+    auto_v161mLivePositionTaking_85,
+    auto_v161mLivePositionTaking_86,
+    auto_v161mLivePositionTaking_87,
+    auto_v161mLivePositionTaking_89,
+    auto_v161mLivePositionTaking_90,
     // Super Auto
-    auto_v161spositiontaking_81,
-    auto_v161spositiontaking_83,
-    auto_v161spositiontaking_86,
-    auto_v161spositiontaking_88,
-    isauto_v161spositiontaking_mem_81,
-    isauto_v161spositiontaking_mem_83,
-    isauto_v161spositiontaking_mem_88,
-    isauto_v161spositiontaking_mem_86,
-    auto_v161slivepositiontaking_85,
-    auto_v161slivepositiontaking_86,
-    auto_v161slivepositiontaking_87,
-    auto_v161slivepositiontaking_89,
-    auto_v161slivepositiontaking_90,
-    isauto_v161slivepositiontaking_mem_85,
-    isauto_v161slivepositiontaking_mem_86,
-    isauto_v161slivepositiontaking_mem_87,
-    isauto_v161slivepositiontaking_mem_89,
-    isauto_v161slivepositiontaking_mem_90,
+    auto_v161sPositionTaking_81,
+    auto_v161sPositionTaking_83,
+    auto_v161sPositionTaking_86,
+    auto_v161sPositionTaking_88,
+    isAuto_v161sPositionTaking_81,
+    isAuto_v161sPositionTaking_83,
+    isAuto_v161sPositionTaking_88,
+    isAuto_v161sPositionTaking_86,
+    auto_v161sLivePositionTaking_85,
+    auto_v161sLivePositionTaking_86,
+    auto_v161sLivePositionTaking_87,
+    auto_v161sLivePositionTaking_89,
+    auto_v161sLivePositionTaking_90,
+    isAuto_v161sLivePositionTaking_85,
+    isAuto_v161sLivePositionTaking_86,
+    isAuto_v161sLivePositionTaking_87,
+    isAuto_v161sLivePositionTaking_89,
+    isAuto_v161sLivePositionTaking_90,
   } = data;
 
   return (
@@ -106,22 +106,22 @@ const TableComponent = () => {
         <thead>
           <tr>
             <th colSpan={4} className="text-center">
-              Member: {username}
+              Member: {userName}
             </th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td className="label">First Name</td>
-            <td>{firstname}</td>
+            <td>{firstName}</td>
             <td className="label">Last Name</td>
-            <td>{lastname}</td>
+            <td>{lastName}</td>
           </tr>
           <tr>
             <td>Phone</td>
             <td>{phone}</td>
             <td>Mobile Phone</td>
-            <td>{mobilephone}</td>
+            <td>{mobilePhone}</td>
           </tr>
           <tr>
             <td>Fax</td>
@@ -166,16 +166,16 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td className="label text-left">Number Game</td>
-            <td>{formatInteger(minbetv161)}</td>
-            <td>{formatInteger(maxbetv161)}</td>
-            <td>{formatInteger(maxpermatchv161)}</td>
-            <td>{formatInteger(maxperballv161)}</td>
+            <td>{formatInteger(v161MinBet)}</td>
+            <td>{formatInteger(v161MaxBet)}</td>
+            <td>{formatInteger(v161MaxPerMatch)}</td>
+            <td>{formatInteger(v161MaxPerBall)}</td>
           </tr>
           <tr>
             <td className="label text-left">Happy 5</td>
-            <td>{formatInteger(minbetv164)}</td>
-            <td>{formatInteger(maxbetv164)}</td>
-            <td>{formatInteger(maxpermatchv164)}</td>
+            <td>{formatInteger(v164MinBet)}</td>
+            <td>{formatInteger(v164MaxBet)}</td>
+            <td>{formatInteger(v164MaxPerMatch)}</td>
             <td></td>
           </tr>
         </tbody>
@@ -194,24 +194,24 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td className="text-right">Agent</td>
-            <td>{formatDecimal(v161apositiontaking_81)}</td>
-            <td>{formatDecimal(v161apositiontaking_83)}</td>
-            <td>{formatDecimal(v161apositiontaking_88)}</td>
-            <td>{formatDecimal(v161apositiontaking_86)}</td>
+            <td>{formatDecimal(v161aPositionTaking_81)}</td>
+            <td>{formatDecimal(v161aPositionTaking_83)}</td>
+            <td>{formatDecimal(v161aPositionTaking_88)}</td>
+            <td>{formatDecimal(v161aPositionTaking_86)}</td>
           </tr>
           <tr>
             <td className="text-right">Master</td>
-            <td>{formatDecimal(v161mpositiontaking_81)}</td>
-            <td>{formatDecimal(v161mpositiontaking_83)}</td>
-            <td>{formatDecimal(v161mpositiontaking_88)}</td>
-            <td>{formatDecimal(v161mpositiontaking_86)}</td>
+            <td>{formatDecimal(v161mPositionTaking_81)}</td>
+            <td>{formatDecimal(v161mPositionTaking_83)}</td>
+            <td>{formatDecimal(v161mPositionTaking_88)}</td>
+            <td>{formatDecimal(v161mPositionTaking_86)}</td>
           </tr>
           <tr>
             <td className="text-right">Super</td>
-            <td>{formatDecimal(v161spositiontaking_81)}</td>
-            <td>{formatDecimal(v161spositiontaking_83)}</td>
-            <td>{formatDecimal(v161spositiontaking_88)}</td>
-            <td>{formatDecimal(v161spositiontaking_86)}</td>
+            <td>{formatDecimal(v161sPositionTaking_81)}</td>
+            <td>{formatDecimal(v161sPositionTaking_83)}</td>
+            <td>{formatDecimal(v161sPositionTaking_88)}</td>
+            <td>{formatDecimal(v161sPositionTaking_86)}</td>
           </tr>
           <tr>
             <td className="text-right">Master Auto</td>
@@ -219,40 +219,40 @@ const TableComponent = () => {
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mpositiontaking_mem_81)}
+                  checked={Boolean(isAuto_v161mPositionTaking_81)}
                   disabled
                 />
-                {formatDecimal(auto_v161mpositiontaking_mem_81)}
+                {formatDecimal(auto_v161mPositionTaking_81)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mpositiontaking_mem_83)}
+                  checked={Boolean(isAuto_v161mPositionTaking_83)}
                   disabled
                 />
-                {formatDecimal(auto_v161mpositiontaking_mem_83)}
+                {formatDecimal(auto_v161mPositionTaking_83)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mpositiontaking_mem_88)}
+                  checked={Boolean(isAuto_v161mPositionTaking_88)}
                   disabled
                 />
-                {formatDecimal(auto_v161mpositiontaking_mem_88)}
+                {formatDecimal(auto_v161mPositionTaking_88)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mpositiontaking_mem_86)}
+                  checked={Boolean(isAuto_v161mPositionTaking_86)}
                   disabled
                 />
-                {formatDecimal(auto_v161mpositiontaking_mem_86)}
+                {formatDecimal(auto_v161mPositionTaking_86)}
               </Label>
             </td>
           </tr>
@@ -261,34 +261,34 @@ const TableComponent = () => {
             <td>
               <Input
                 type="checkbox"
-                checked={Boolean(isauto_v161spositiontaking_mem_81)}
+                checked={Boolean(isAuto_v161sPositionTaking_81)}
                 disabled
               />
-              {formatDecimal(auto_v161spositiontaking_81)}
+              {formatDecimal(auto_v161sPositionTaking_81)}
             </td>
             <td>
               <Input
                 type="checkbox"
-                checked={Boolean(isauto_v161spositiontaking_mem_83)}
+                checked={Boolean(isAuto_v161sPositionTaking_83)}
                 disabled
               />
-              {formatDecimal(auto_v161spositiontaking_83)}
+              {formatDecimal(auto_v161sPositionTaking_83)}
             </td>
             <td>
               <Input
                 type="checkbox"
-                checked={Boolean(isauto_v161spositiontaking_mem_88)}
+                checked={Boolean(isAuto_v161sPositionTaking_88)}
                 disabled
               />
-              {formatDecimal(auto_v161spositiontaking_88)}
+              {formatDecimal(auto_v161sPositionTaking_88)}
             </td>
             <td>
               <Input
                 type="checkbox"
-                checked={Boolean(isauto_v161spositiontaking_mem_86)}
+                checked={Boolean(isAuto_v161sPositionTaking_86)}
                 disabled
               />
-              {formatDecimal(auto_v161spositiontaking_86)}
+              {formatDecimal(auto_v161sPositionTaking_86)}
             </td>
           </tr>
         </tbody>
@@ -308,27 +308,27 @@ const TableComponent = () => {
           </tr>
           <tr>
             <td className="text-right">Agent</td>
-            <td>{formatDecimal(v161alivepositiontaking_85)}</td>
-            <td>{formatDecimal(v161alivepositiontaking_86)}</td>
-            <td>{formatDecimal(v161alivepositiontaking_87)}</td>
-            <td>{formatDecimal(v161alivepositiontaking_89)}</td>
-            <td>{formatDecimal(v161alivepositiontaking_90)}</td>
+            <td>{formatDecimal(v161aLivePositionTaking_85)}</td>
+            <td>{formatDecimal(v161aLivePositionTaking_86)}</td>
+            <td>{formatDecimal(v161aLivePositionTaking_87)}</td>
+            <td>{formatDecimal(v161aLivePositionTaking_89)}</td>
+            <td>{formatDecimal(v161aLivePositionTaking_90)}</td>
           </tr>
           <tr>
             <td className="text-right">Master</td>
-            <td>{formatDecimal(v161mlivepositiontaking_85)}</td>
-            <td>{formatDecimal(v161mlivepositiontaking_86)}</td>
-            <td>{formatDecimal(v161mlivepositiontaking_87)}</td>
-            <td>{formatDecimal(v161mlivepositiontaking_89)}</td>
-            <td>{formatDecimal(v161mlivepositiontaking_90)}</td>
+            <td>{formatDecimal(v161mLivePositionTaking_85)}</td>
+            <td>{formatDecimal(v161mLivePositionTaking_86)}</td>
+            <td>{formatDecimal(v161mLivePositionTaking_87)}</td>
+            <td>{formatDecimal(v161mLivePositionTaking_89)}</td>
+            <td>{formatDecimal(v161mLivePositionTaking_90)}</td>
           </tr>
           <tr>
             <td className="text-right">Super</td>
-            <td>{formatDecimal(v161slivepositiontaking_85)}</td>
-            <td>{formatDecimal(v161slivepositiontaking_86)}</td>
-            <td>{formatDecimal(v161slivepositiontaking_87)}</td>
-            <td>{formatDecimal(v161slivepositiontaking_89)}</td>
-            <td>{formatDecimal(v161slivepositiontaking_90)}</td>
+            <td>{formatDecimal(v161sLivePositionTaking_85)}</td>
+            <td>{formatDecimal(v161sLivePositionTaking_86)}</td>
+            <td>{formatDecimal(v161sLivePositionTaking_87)}</td>
+            <td>{formatDecimal(v161sLivePositionTaking_89)}</td>
+            <td>{formatDecimal(v161sLivePositionTaking_90)}</td>
           </tr>
           <tr>
             <td className="text-right">Master Auto</td>
@@ -336,50 +336,50 @@ const TableComponent = () => {
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mlivepositiontaking_mem_85)}
+                  checked={Boolean(isAuto_v161mLivePositionTaking_85)}
                   disabled
                 />
-                {formatDecimal(auto_v161mlivepositiontaking_mem_85)}
+                {formatDecimal(auto_v161mLivePositionTaking_85)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mlivepositiontaking_mem_86)}
+                  checked={Boolean(isAuto_v161mLivePositionTaking_86)}
                   disabled
                 />
-                {formatDecimal(auto_v161mlivepositiontaking_mem_86)}
+                {formatDecimal(auto_v161mLivePositionTaking_86)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mlivepositiontaking_mem_87)}
+                  checked={Boolean(isAuto_v161mLivePositionTaking_87)}
                   disabled
                 />
-                {formatDecimal(auto_v161mlivepositiontaking_mem_87)}
+                {formatDecimal(auto_v161mLivePositionTaking_87)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mlivepositiontaking_mem_89)}
+                  checked={Boolean(isAuto_v161mLivePositionTaking_89)}
                   disabled
                 />
-                {formatDecimal(auto_v161mlivepositiontaking_mem_89)}
+                {formatDecimal(auto_v161mLivePositionTaking_89)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161mlivepositiontaking_mem_90)}
+                  checked={Boolean(isAuto_v161mLivePositionTaking_90)}
                   disabled
                 />
-                {formatDecimal(auto_v161mlivepositiontaking_mem_90)}
+                {formatDecimal(auto_v161mLivePositionTaking_90)}
               </Label>
             </td>
           </tr>
@@ -389,50 +389,50 @@ const TableComponent = () => {
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161slivepositiontaking_mem_85)}
+                  checked={Boolean(isAuto_v161sLivePositionTaking_85)}
                   disabled
                 />
-                {formatDecimal(auto_v161slivepositiontaking_85)}
+                {formatDecimal(auto_v161sLivePositionTaking_85)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161slivepositiontaking_mem_86)}
+                  checked={Boolean(isAuto_v161sLivePositionTaking_86)}
                   disabled
                 />
-                {formatDecimal(auto_v161slivepositiontaking_86)}
+                {formatDecimal(auto_v161sLivePositionTaking_86)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161slivepositiontaking_mem_87)}
+                  checked={Boolean(isAuto_v161sLivePositionTaking_87)}
                   disabled
                 />
-                {formatDecimal(auto_v161slivepositiontaking_87)}
+                {formatDecimal(auto_v161sLivePositionTaking_87)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161slivepositiontaking_mem_89)}
+                  checked={Boolean(isAuto_v161sLivePositionTaking_89)}
                   disabled
                 />
-                {formatDecimal(auto_v161slivepositiontaking_89)}
+                {formatDecimal(auto_v161sLivePositionTaking_89)}
               </Label>
             </td>
             <td>
               <Label check>
                 <Input
                   type="checkbox"
-                  checked={Boolean(isauto_v161slivepositiontaking_mem_90)}
+                  checked={Boolean(isAuto_v161sLivePositionTaking_90)}
                   disabled
                 />
-                {formatDecimal(auto_v161slivepositiontaking_90)}
+                {formatDecimal(auto_v161sLivePositionTaking_90)}
               </Label>
             </td>
           </tr>
