@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Input, Label, Table } from 'reactstrap';
-import { formatDecimal, formatInteger } from 'utils/NumberUtils';
-import './Table.scss';
+import { formatDecimal } from 'utils/NumberUtils';
+import '../Table.scss';
+import TableGroup from '../table-group/TableGroup';
 
 const TableComponent = () => {
   const { data } = useSelector(
@@ -101,89 +102,31 @@ const TableComponent = () => {
   } = data;
 
   return (
-    <div className="table-member">
-      <Table hover bordered striped>
-        <thead>
-          <tr>
-            <th colSpan={4} className="text-center">
-              Member: {userName}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="label">First Name</td>
-            <td>{firstName}</td>
-            <td className="label">Last Name</td>
-            <td>{lastName}</td>
-          </tr>
-          <tr>
-            <td>Phone</td>
-            <td>{phone}</td>
-            <td>Mobile Phone</td>
-            <td>{mobilePhone}</td>
-          </tr>
-          <tr>
-            <td>Fax</td>
-            <td>{fax}</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover bordered striped>
-        <thead>
-          <tr>
-            <th className="text-center">Product Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="text-center">
-              <Label check>
-                <Input type="checkbox" checked={!disableNumber} disabled />
-                Enable Number Game
-              </Label>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover bordered striped>
-        <thead>
-          <tr>
-            <th colSpan={5} className="text-center">
-              Bet Setting
-            </th>
-          </tr>
-        </thead>
-        <tbody className="text-center">
-          <tr>
-            <td></td>
-            <td className="font-weight-bold">Min Bet</td>
-            <td className="font-weight-bold">Max Bet</td>
-            <td className="font-weight-bold">Max Per Match</td>
-            <td className="font-weight-bold">Max Per Ball</td>
-          </tr>
-          <tr>
-            <td className="label text-left">Number Game</td>
-            <td>{formatInteger(v161MinBet)}</td>
-            <td>{formatInteger(v161MaxBet)}</td>
-            <td>{formatInteger(v161MaxPerMatch)}</td>
-            <td>{formatInteger(v161MaxPerBall)}</td>
-          </tr>
-          <tr>
-            <td className="label text-left">Happy 5</td>
-            <td>{formatInteger(v164MinBet)}</td>
-            <td>{formatInteger(v164MaxBet)}</td>
-            <td>{formatInteger(v164MaxPerMatch)}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover bordered striped className="mb-0">
-        <tbody className="text-center table-position-taking">
-          <tr>
-            <td rowSpan={7} className="label text-right align-middle">
+    <div className="table">
+      <TableGroup
+        level="Member"
+        userName={userName}
+        firstName={firstName}
+        lastName={lastName}
+        phone={phone}
+        mobilePhone={mobilePhone}
+        fax={fax}
+        disableNumber={disableNumber}
+        v161MinBet={v161MinBet}
+        v161MaxBet={v161MaxBet}
+        v161MaxPerMatch={v161MaxPerMatch}
+        v161MaxPerBall={v161MaxPerBall}
+        v164MinBet={v164MinBet}
+        v164MaxBet={v164MaxBet}
+        v164MaxPerMatch={v164MaxPerMatch}
+      />
+      <Table bordered className="mb-0">
+        <tbody className="text-center table-position-taking-member">
+          <tr className="table-sub-header">
+            <td
+              rowSpan={7}
+              className="label text-right align-middle table-header"
+            >
               Deadball
             </td>
             <td className="position-label"></td>
@@ -193,28 +136,28 @@ const TableComponent = () => {
             <td className="font-weight-bold">Odd/Even</td>
           </tr>
           <tr>
-            <td className="text-right">Agent</td>
+            <td className="text-right table-sub-header">Agent</td>
             <td>{formatDecimal(v161aPositionTaking_81)}</td>
             <td>{formatDecimal(v161aPositionTaking_83)}</td>
             <td>{formatDecimal(v161aPositionTaking_88)}</td>
             <td>{formatDecimal(v161aPositionTaking_86)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master</td>
+            <td className="text-right table-sub-header">Master</td>
             <td>{formatDecimal(v161mPositionTaking_81)}</td>
             <td>{formatDecimal(v161mPositionTaking_83)}</td>
             <td>{formatDecimal(v161mPositionTaking_88)}</td>
             <td>{formatDecimal(v161mPositionTaking_86)}</td>
           </tr>
           <tr>
-            <td className="text-right">Super</td>
+            <td className="text-right table-sub-header">Super</td>
             <td>{formatDecimal(v161sPositionTaking_81)}</td>
             <td>{formatDecimal(v161sPositionTaking_83)}</td>
             <td>{formatDecimal(v161sPositionTaking_88)}</td>
             <td>{formatDecimal(v161sPositionTaking_86)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master Auto</td>
+            <td className="text-right table-sub-header">Master Auto</td>
             <td>
               <Label check>
                 <Input
@@ -257,7 +200,7 @@ const TableComponent = () => {
             </td>
           </tr>
           <tr>
-            <td className="text-right">Super Auto</td>
+            <td className="text-right table-sub-header">Super Auto</td>
             <td>
               <Input
                 type="checkbox"
@@ -293,10 +236,13 @@ const TableComponent = () => {
           </tr>
         </tbody>
       </Table>
-      <Table hover bordered striped>
-        <tbody className="text-center table-position-taking">
-          <tr>
-            <td rowSpan={7} className="label text-right align-middle">
+      <Table bordered>
+        <tbody className="text-center table-position-taking-member">
+          <tr className="table-sub-header">
+            <td
+              rowSpan={7}
+              className="label text-right align-middle table-header"
+            >
               Live!
             </td>
             <td className="position-label"></td>
@@ -307,7 +253,7 @@ const TableComponent = () => {
             <td className="font-weight-bold">Number Wheel</td>
           </tr>
           <tr>
-            <td className="text-right">Agent</td>
+            <td className="text-right table-sub-header">Agent</td>
             <td>{formatDecimal(v161aLivePositionTaking_85)}</td>
             <td>{formatDecimal(v161aLivePositionTaking_86)}</td>
             <td>{formatDecimal(v161aLivePositionTaking_87)}</td>
@@ -315,7 +261,7 @@ const TableComponent = () => {
             <td>{formatDecimal(v161aLivePositionTaking_90)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master</td>
+            <td className="text-right table-sub-header">Master</td>
             <td>{formatDecimal(v161mLivePositionTaking_85)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_86)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_87)}</td>
@@ -323,7 +269,7 @@ const TableComponent = () => {
             <td>{formatDecimal(v161mLivePositionTaking_90)}</td>
           </tr>
           <tr>
-            <td className="text-right">Super</td>
+            <td className="text-right table-sub-header">Super</td>
             <td>{formatDecimal(v161sLivePositionTaking_85)}</td>
             <td>{formatDecimal(v161sLivePositionTaking_86)}</td>
             <td>{formatDecimal(v161sLivePositionTaking_87)}</td>
@@ -331,7 +277,7 @@ const TableComponent = () => {
             <td>{formatDecimal(v161sLivePositionTaking_90)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master Auto</td>
+            <td className="text-right table-sub-header">Master Auto</td>
             <td>
               <Label check>
                 <Input
@@ -384,7 +330,7 @@ const TableComponent = () => {
             </td>
           </tr>
           <tr>
-            <td className="text-right">Super Auto</td>
+            <td className="text-right table-sub-header">Super Auto</td>
             <td>
               <Label check>
                 <Input

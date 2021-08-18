@@ -1,0 +1,271 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TableGroup render with data 1`] = `
+<TableGroup
+  disableNumber={true}
+  fax="fax"
+  firstName="firstname"
+  lastName="lastname"
+  level="Test"
+  mobilePhone="mobilephone"
+  phone="phone"
+  userName="username"
+  v161MaxBet={200}
+  v161MaxPerBall={400}
+  v161MaxPerMatch={300}
+  v161MinBet={100}
+  v164MaxBet={600}
+  v164MaxPerMatch={700}
+  v164MinBet={500}
+>
+  <Table
+    bordered={true}
+    responsiveTag="div"
+    tag="table"
+  >
+    <table
+      className="table table-bordered"
+    >
+      <thead>
+        <tr>
+          <th
+            className="text-center"
+            colSpan={4}
+          >
+            Test
+            : 
+            username
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td
+            className="label"
+          >
+            First Name
+          </td>
+          <td>
+            firstname
+          </td>
+          <td
+            className="label"
+          >
+            Last Name
+          </td>
+          <td>
+            lastname
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Phone
+          </td>
+          <td>
+            phone
+          </td>
+          <td>
+            Mobile Phone
+          </td>
+          <td>
+            mobilephone
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Fax
+          </td>
+          <td>
+            fax
+          </td>
+          <td />
+          <td />
+        </tr>
+      </tbody>
+    </table>
+  </Table>
+  <Table
+    bordered={true}
+    responsiveTag="div"
+    tag="table"
+  >
+    <table
+      className="table table-bordered"
+    >
+      <thead>
+        <tr>
+          <th
+            className="text-center"
+          >
+            Product Status
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          className="table-content"
+        >
+          <td
+            className="text-center"
+          >
+            <Label
+              check={true}
+              tag="label"
+              widths={
+                Array [
+                  "xs",
+                  "sm",
+                  "md",
+                  "lg",
+                  "xl",
+                ]
+              }
+            >
+              <label
+                className="form-check-label"
+              >
+                <Input
+                  checked={false}
+                  disabled={true}
+                  type="checkbox"
+                >
+                  <input
+                    checked={false}
+                    className="form-check-input"
+                    disabled={true}
+                    type="checkbox"
+                  />
+                </Input>
+                 
+                Enable Number Game
+              </label>
+            </Label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </Table>
+  <Table
+    bordered={true}
+    responsiveTag="div"
+    tag="table"
+  >
+    <table
+      className="table table-bordered"
+    >
+      <thead>
+        <tr>
+          <th
+            className="text-center"
+            colSpan={5}
+          >
+            Bet Setting
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="text-center"
+      >
+        <tr
+          className="table-header"
+        >
+          <td />
+          <td
+            className="font-weight-bold"
+          >
+            Min Bet
+          </td>
+          <td
+            className="font-weight-bold"
+          >
+            Max Bet
+          </td>
+          <td
+            className="font-weight-bold"
+          >
+            Max Per Match
+          </td>
+          <td
+            className="font-weight-bold"
+          >
+            Max Per Ball
+          </td>
+        </tr>
+        <tr
+          className="table-content"
+        >
+          <td
+            className="label text-left table-header"
+          >
+            Number Game
+          </td>
+          <td>
+            100
+          </td>
+          <td>
+            200
+          </td>
+          <td>
+            300
+          </td>
+          <td>
+            400
+          </td>
+        </tr>
+        <tr
+          className="table-content"
+        >
+          <td
+            className="label text-left table-header"
+          >
+            Happy 5
+          </td>
+          <td>
+            500
+          </td>
+          <td>
+            600
+          </td>
+          <td>
+            700
+          </td>
+          <td />
+        </tr>
+      </tbody>
+    </table>
+  </Table>
+  <Table
+    bordered={true}
+    className="mb-0"
+    responsiveTag="div"
+    tag="table"
+  >
+    <table
+      className="mb-0 table table-bordered"
+    >
+      <thead>
+        <tr>
+          <th
+            className="text-center"
+            colSpan={7}
+          >
+            Position Taking
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          className="table-header"
+        >
+          <td
+            className="font-weight-bold"
+            colSpan={7}
+          >
+            Number Game
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </Table>
+</TableGroup>
+`;

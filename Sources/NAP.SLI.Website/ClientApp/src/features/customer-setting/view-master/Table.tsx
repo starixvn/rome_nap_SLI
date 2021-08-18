@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Input, Label, Table } from 'reactstrap';
-import { formatDecimal, formatInteger } from 'utils/NumberUtils';
-import './Table.scss';
+import { Input, Table } from 'reactstrap';
+import { formatDecimal } from 'utils/NumberUtils';
+import '../Table.scss';
+import TableGroup from '../table-group/TableGroup';
 
 const TableComponent = () => {
   const { data } = useSelector(
@@ -92,105 +93,31 @@ const TableComponent = () => {
   } = data;
 
   return (
-    <div className="table-master">
-      <Table hover bordered striped>
-        <thead>
-          <tr>
-            <th colSpan={4} className="text-center">
-              Master: {userName}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="label">First Name</td>
-            <td>{firstName}</td>
-            <td className="label">Last Name</td>
-            <td>{lastName}</td>
-          </tr>
-          <tr>
-            <td>Phone</td>
-            <td>{phone}</td>
-            <td>Mobile Phone</td>
-            <td>{mobilePhone}</td>
-          </tr>
-          <tr>
-            <td>Fax</td>
-            <td>{fax}</td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover bordered striped>
-        <thead>
-          <tr>
-            <th className="text-center">Product Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="text-center">
-              <Label check>
-                <Input type="checkbox" checked={!disableNumber} disabled />{' '}
-                Enable Number Game
-              </Label>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover bordered striped>
-        <thead>
-          <tr>
-            <th colSpan={5} className="text-center">
-              Bet Setting
-            </th>
-          </tr>
-        </thead>
-        <tbody className="text-center">
-          <tr>
-            <td></td>
-            <td className="font-weight-bold">Min Bet</td>
-            <td className="font-weight-bold">Max Bet</td>
-            <td className="font-weight-bold">Max Per Match</td>
-            <td className="font-weight-bold">Max Per Ball</td>
-          </tr>
-          <tr>
-            <td className="label text-left">Number Game</td>
-            <td>{formatInteger(v161MinBet)}</td>
-            <td>{formatInteger(v161MaxBet)}</td>
-            <td>{formatInteger(v161MaxPerMatch)}</td>
-            <td>{formatInteger(v161MaxPerBall)}</td>
-          </tr>
-          <tr>
-            <td className="label text-left">Happy 5</td>
-            <td>{formatInteger(v164MinBet)}</td>
-            <td>{formatInteger(v164MaxBet)}</td>
-            <td>{formatInteger(v164MaxPerMatch)}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover bordered striped className="mb-0">
-        <thead>
-          <tr>
-            <th colSpan={7} className="text-center">
-              Position Taking
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td colSpan={7} className="font-weight-bold">
-              Number Game
-            </td>
-          </tr>
-        </tbody>
-      </Table>
-      <Table hover bordered striped className="mb-0">
+    <div className="table">
+      <TableGroup
+        level="Master"
+        userName={userName}
+        firstName={firstName}
+        lastName={lastName}
+        phone={phone}
+        mobilePhone={mobilePhone}
+        fax={fax}
+        disableNumber={disableNumber}
+        v161MinBet={v161MinBet}
+        v161MaxBet={v161MaxBet}
+        v161MaxPerMatch={v161MaxPerMatch}
+        v161MaxPerBall={v161MaxPerBall}
+        v164MinBet={v164MinBet}
+        v164MaxBet={v164MaxBet}
+        v164MaxPerMatch={v164MaxPerMatch}
+      />
+      <Table bordered className="mb-0">
         <tbody className="text-center table-position-taking">
-          <tr>
-            <td rowSpan={7} className="label text-right align-middle">
+          <tr className="table-sub-header">
+            <td
+              rowSpan={7}
+              className="label text-right align-middle table-header"
+            >
               Deadball
             </td>
             <td className="position-label"></td>
@@ -200,21 +127,24 @@ const TableComponent = () => {
             <td className="font-weight-bold">Odd/Even</td>
           </tr>
           <tr>
-            <td className="text-right">Master Preset</td>
+            <td className="text-right table-sub-header">Master Preset</td>
             <td>{formatDecimal(v161mPositionTaking_81)}</td>
             <td>{formatDecimal(v161mPositionTaking_83)}</td>
             <td>{formatDecimal(v161mPositionTaking_88)}</td>
             <td>{formatDecimal(v161mPositionTaking_86)}</td>
           </tr>
           <tr>
-            <td className="text-right">Super Preset</td>
+            <td className="text-right table-sub-header">Super Preset</td>
             <td>{formatDecimal(v161sPositionTaking_81)}</td>
             <td>{formatDecimal(v161sPositionTaking_83)}</td>
             <td>{formatDecimal(v161sPositionTaking_88)}</td>
             <td>{formatDecimal(v161sPositionTaking_86)}</td>
           </tr>
           <tr>
-            <td rowSpan={2} className="text-right align-middle">
+            <td
+              rowSpan={2}
+              className="text-right table-sub-header align-middle"
+            >
               Auto Super Preset
             </td>
             <td>
@@ -253,14 +183,14 @@ const TableComponent = () => {
             <td>{formatDecimal(auto_v161sPositionTaking_86)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master Max Position</td>
+            <td className="text-right table-sub-header">Master Max Position</td>
             <td>{formatDecimal(v161mPositionTaking_81_Max)}</td>
             <td>{formatDecimal(v161mPositionTaking_83_Max)}</td>
             <td>{formatDecimal(v161mPositionTaking_88_Max)}</td>
             <td>{formatDecimal(v161mPositionTaking_86_Max)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master Min Position</td>
+            <td className="text-right table-sub-header">Master Min Position</td>
             <td>{formatDecimal(v161mPositionTaking_81_Min)}</td>
             <td>{formatDecimal(v161mPositionTaking_83_Min)}</td>
             <td>{formatDecimal(v161mPositionTaking_88_Min)}</td>
@@ -268,10 +198,13 @@ const TableComponent = () => {
           </tr>
         </tbody>
       </Table>
-      <Table hover bordered striped>
+      <Table bordered>
         <tbody className="text-center table-position-taking">
-          <tr>
-            <td rowSpan={7} className="label text-right align-middle">
+          <tr className="table-sub-header">
+            <td
+              rowSpan={7}
+              className="label text-right align-middle table-header"
+            >
               Live!
             </td>
             <td className="position-label"></td>
@@ -282,7 +215,7 @@ const TableComponent = () => {
             <td className="font-weight-bold">Number Wheel</td>
           </tr>
           <tr>
-            <td className="text-right">Master Preset</td>
+            <td className="text-right table-sub-header">Master Preset</td>
             <td>{formatDecimal(v161mLivePositionTaking_85)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_86)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_87)}</td>
@@ -290,7 +223,7 @@ const TableComponent = () => {
             <td>{formatDecimal(v161mLivePositionTaking_90)}</td>
           </tr>
           <tr>
-            <td className="text-right">Super Preset</td>
+            <td className="text-right table-sub-header">Super Preset</td>
             <td>{formatDecimal(v161sLivePositionTaking_85)}</td>
             <td>{formatDecimal(v161sLivePositionTaking_86)}</td>
             <td>{formatDecimal(v161sLivePositionTaking_87)}</td>
@@ -298,7 +231,10 @@ const TableComponent = () => {
             <td>{formatDecimal(v161sLivePositionTaking_90)}</td>
           </tr>
           <tr>
-            <td rowSpan={2} className="text-right align-middle">
+            <td
+              rowSpan={2}
+              className="text-right table-sub-header align-middle"
+            >
               Auto Super Preset
             </td>
             <td>
@@ -345,7 +281,7 @@ const TableComponent = () => {
             <td>{formatDecimal(auto_v161sLivePositionTaking_90)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master Max Position</td>
+            <td className="text-right table-sub-header">Master Max Position</td>
             <td>{formatDecimal(v161mLivePositionTaking_85_Max)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_86_Max)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_87_Max)}</td>
@@ -353,7 +289,7 @@ const TableComponent = () => {
             <td>{formatDecimal(v161mLivePositionTaking_90_Max)}</td>
           </tr>
           <tr>
-            <td className="text-right">Master Min Position</td>
+            <td className="text-right table-sub-header">Master Min Position</td>
             <td>{formatDecimal(v161mLivePositionTaking_85_Min)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_86_Min)}</td>
             <td>{formatDecimal(v161mLivePositionTaking_87_Min)}</td>

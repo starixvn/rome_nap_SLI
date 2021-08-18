@@ -15,271 +15,292 @@ exports[`TableComponent render with data 1`] = `
 >
   <TableComponent>
     <div
-      className="table-super"
+      className="table"
     >
-      <Table
-        bordered={true}
-        hover={true}
-        responsiveTag="div"
-        striped={true}
-        tag="table"
+      <TableGroup
+        disableNumber={true}
+        fax="fax"
+        firstName="firstname"
+        lastName="lastname"
+        level="Super"
+        mobilePhone="mobilephone"
+        phone="phone"
+        userName="username"
+        v161MaxBet={200}
+        v161MaxPerBall={400}
+        v161MaxPerMatch={300}
+        v161MinBet={100}
+        v164MaxBet={600}
+        v164MaxPerMatch={700}
+        v164MinBet={500}
       >
-        <table
-          className="table table-bordered table-striped table-hover"
+        <Table
+          bordered={true}
+          responsiveTag="div"
+          tag="table"
         >
-          <thead>
-            <tr>
-              <th
-                className="text-center"
-                colSpan={4}
-              >
-                Super: 
-                username
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                className="label"
-              >
-                First Name
-              </td>
-              <td>
-                firstname
-              </td>
-              <td
-                className="label"
-              >
-                Last Name
-              </td>
-              <td>
-                lastname
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Phone
-              </td>
-              <td>
-                phone
-              </td>
-              <td>
-                Mobile Phone
-              </td>
-              <td>
-                mobilephone
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Fax
-              </td>
-              <td>
-                fax
-              </td>
-              <td />
-              <td />
-            </tr>
-          </tbody>
-        </table>
-      </Table>
-      <Table
-        bordered={true}
-        hover={true}
-        responsiveTag="div"
-        striped={true}
-        tag="table"
-      >
-        <table
-          className="table table-bordered table-striped table-hover"
-        >
-          <thead>
-            <tr>
-              <th
-                className="text-center"
-              >
-                Product Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                className="text-center"
-              >
-                <Label
-                  check={true}
-                  tag="label"
-                  widths={
-                    Array [
-                      "xs",
-                      "sm",
-                      "md",
-                      "lg",
-                      "xl",
-                    ]
-                  }
+          <table
+            className="table table-bordered"
+          >
+            <thead>
+              <tr>
+                <th
+                  className="text-center"
+                  colSpan={4}
                 >
-                  <label
-                    className="form-check-label"
+                  Super
+                  : 
+                  username
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  className="label"
+                >
+                  First Name
+                </td>
+                <td>
+                  firstname
+                </td>
+                <td
+                  className="label"
+                >
+                  Last Name
+                </td>
+                <td>
+                  lastname
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Phone
+                </td>
+                <td>
+                  phone
+                </td>
+                <td>
+                  Mobile Phone
+                </td>
+                <td>
+                  mobilephone
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Fax
+                </td>
+                <td>
+                  fax
+                </td>
+                <td />
+                <td />
+              </tr>
+            </tbody>
+          </table>
+        </Table>
+        <Table
+          bordered={true}
+          responsiveTag="div"
+          tag="table"
+        >
+          <table
+            className="table table-bordered"
+          >
+            <thead>
+              <tr>
+                <th
+                  className="text-center"
+                >
+                  Product Status
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                className="table-content"
+              >
+                <td
+                  className="text-center"
+                >
+                  <Label
+                    check={true}
+                    tag="label"
+                    widths={
+                      Array [
+                        "xs",
+                        "sm",
+                        "md",
+                        "lg",
+                        "xl",
+                      ]
+                    }
                   >
-                    <Input
-                      checked={false}
-                      disabled={true}
-                      type="checkbox"
+                    <label
+                      className="form-check-label"
                     >
-                      <input
+                      <Input
                         checked={false}
-                        className="form-check-input"
                         disabled={true}
                         type="checkbox"
-                      />
-                    </Input>
-                     
-                    Enable Number Game
-                  </label>
-                </Label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </Table>
-      <Table
-        bordered={true}
-        hover={true}
-        responsiveTag="div"
-        striped={true}
-        tag="table"
-      >
-        <table
-          className="table table-bordered table-striped table-hover"
+                      >
+                        <input
+                          checked={false}
+                          className="form-check-input"
+                          disabled={true}
+                          type="checkbox"
+                        />
+                      </Input>
+                       
+                      Enable Number Game
+                    </label>
+                  </Label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Table>
+        <Table
+          bordered={true}
+          responsiveTag="div"
+          tag="table"
         >
-          <thead>
-            <tr>
-              <th
-                className="text-center"
-                colSpan={5}
-              >
-                Bet Setting
-              </th>
-            </tr>
-          </thead>
-          <tbody
-            className="text-center"
+          <table
+            className="table table-bordered"
           >
-            <tr>
-              <td />
-              <td
-                className="font-weight-bold"
+            <thead>
+              <tr>
+                <th
+                  className="text-center"
+                  colSpan={5}
+                >
+                  Bet Setting
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              className="text-center"
+            >
+              <tr
+                className="table-header"
               >
-                Min Bet
-              </td>
-              <td
-                className="font-weight-bold"
+                <td />
+                <td
+                  className="font-weight-bold"
+                >
+                  Min Bet
+                </td>
+                <td
+                  className="font-weight-bold"
+                >
+                  Max Bet
+                </td>
+                <td
+                  className="font-weight-bold"
+                >
+                  Max Per Match
+                </td>
+                <td
+                  className="font-weight-bold"
+                >
+                  Max Per Ball
+                </td>
+              </tr>
+              <tr
+                className="table-content"
               >
-                Max Bet
-              </td>
-              <td
-                className="font-weight-bold"
+                <td
+                  className="label text-left table-header"
+                >
+                  Number Game
+                </td>
+                <td>
+                  100
+                </td>
+                <td>
+                  200
+                </td>
+                <td>
+                  300
+                </td>
+                <td>
+                  400
+                </td>
+              </tr>
+              <tr
+                className="table-content"
               >
-                Max Per Match
-              </td>
-              <td
-                className="font-weight-bold"
+                <td
+                  className="label text-left table-header"
+                >
+                  Happy 5
+                </td>
+                <td>
+                  500
+                </td>
+                <td>
+                  600
+                </td>
+                <td>
+                  700
+                </td>
+                <td />
+              </tr>
+            </tbody>
+          </table>
+        </Table>
+        <Table
+          bordered={true}
+          className="mb-0"
+          responsiveTag="div"
+          tag="table"
+        >
+          <table
+            className="mb-0 table table-bordered"
+          >
+            <thead>
+              <tr>
+                <th
+                  className="text-center"
+                  colSpan={7}
+                >
+                  Position Taking
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                className="table-header"
               >
-                Max Per Ball
-              </td>
-            </tr>
-            <tr>
-              <td
-                className="label text-left"
-              >
-                Number Game
-              </td>
-              <td>
-                100
-              </td>
-              <td>
-                200
-              </td>
-              <td>
-                300
-              </td>
-              <td>
-                400
-              </td>
-            </tr>
-            <tr>
-              <td
-                className="label text-left"
-              >
-                Happy 5
-              </td>
-              <td>
-                500
-              </td>
-              <td>
-                600
-              </td>
-              <td>
-                700
-              </td>
-              <td />
-            </tr>
-          </tbody>
-        </table>
-      </Table>
+                <td
+                  className="font-weight-bold"
+                  colSpan={7}
+                >
+                  Number Game
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Table>
+      </TableGroup>
       <Table
         bordered={true}
         className="mb-0"
-        hover={true}
         responsiveTag="div"
-        striped={true}
         tag="table"
       >
         <table
-          className="mb-0 table table-bordered table-striped table-hover"
-        >
-          <thead>
-            <tr>
-              <th
-                className="text-center"
-                colSpan={7}
-              >
-                Position Taking
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td
-                className="font-weight-bold"
-                colSpan={7}
-              >
-                Number Game
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </Table>
-      <Table
-        bordered={true}
-        className="mb-0"
-        hover={true}
-        responsiveTag="div"
-        striped={true}
-        tag="table"
-      >
-        <table
-          className="mb-0 table table-bordered table-striped table-hover"
+          className="mb-0 table table-bordered"
         >
           <tbody
             className="text-center"
           >
-            <tr>
+            <tr
+              className="table-sub-header"
+            >
               <td
-                className="label text-right align-middle"
+                className="label text-right align-middle table-header"
                 rowSpan={5}
               >
                 Deadball
@@ -310,7 +331,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Super Max Position
               </td>
@@ -329,7 +350,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Master Max Position
               </td>
@@ -348,7 +369,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Agent Max Position
               </td>
@@ -367,7 +388,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Super Min Position
               </td>
@@ -389,20 +410,20 @@ exports[`TableComponent render with data 1`] = `
       </Table>
       <Table
         bordered={true}
-        hover={true}
         responsiveTag="div"
-        striped={true}
         tag="table"
       >
         <table
-          className="table table-bordered table-striped table-hover"
+          className="table table-bordered"
         >
           <tbody
             className="text-center"
           >
-            <tr>
+            <tr
+              className="table-sub-header"
+            >
               <td
-                className="label text-right align-middle"
+                className="label text-right align-middle table-header"
                 rowSpan={5}
               >
                 Live!
@@ -438,7 +459,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Super Max Position
               </td>
@@ -460,7 +481,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Master Max Position
               </td>
@@ -482,7 +503,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Agent Max Position
               </td>
@@ -504,7 +525,7 @@ exports[`TableComponent render with data 1`] = `
             </tr>
             <tr>
               <td
-                className="text-right"
+                className="text-right table-sub-header"
               >
                 Super Min Position
               </td>
