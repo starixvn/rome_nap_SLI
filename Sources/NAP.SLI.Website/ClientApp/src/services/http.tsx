@@ -64,6 +64,16 @@ export const post = async function <T>(url: string, data?: unknown) {
   }
 };
 
+export const get = async function <T>(url: string) {
+  try {
+    store.dispatch(hide());
+    const config = getConfig();
+    return await axios.get<T>(url, config);
+  } catch (e) {
+    return Promise.reject(handleError(e));
+  }
+};
+
 export const download = async (url: string, data?: unknown) => {
   try {
     store.dispatch(hide());

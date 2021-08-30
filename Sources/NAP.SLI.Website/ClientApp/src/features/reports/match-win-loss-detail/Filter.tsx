@@ -8,11 +8,10 @@ import { formatDate, stringDateToMoment } from 'utils/DateUtils';
 import { excel, query } from './reducer';
 
 type Props = {
-  minDate: Moment;
   maxDate: Moment;
 };
 
-const Filter = ({ minDate, maxDate }: Props) => {
+const Filter = ({ maxDate }: Props) => {
   const dispatch = useAppDispatch();
 
   const { queryCustomer, queryArg } = useSelector(
@@ -50,7 +49,6 @@ const Filter = ({ minDate, maxDate }: Props) => {
   return (
     <Container fluid className="filter">
       <ReportFilter
-        minDate={minDate}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}
         toDate={stringDateToMoment(toDate)}

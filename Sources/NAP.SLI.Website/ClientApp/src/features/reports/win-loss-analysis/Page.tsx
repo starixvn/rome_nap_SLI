@@ -1,7 +1,7 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { maxDate, minDate } from 'utils/DateUtils';
+import { maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
 import { selectCustomer } from './reducer';
@@ -35,7 +35,7 @@ const Page = () => {
       <div className="page-title">
         Win Loss Analysis ({location.state.username})
       </div>
-      <Filter minDate={minDate} maxDate={maxDate} />
+      <Filter maxDate={maxDate} />
       <Table />
     </div>
   );

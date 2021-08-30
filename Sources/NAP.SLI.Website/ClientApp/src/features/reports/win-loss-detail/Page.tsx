@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
-import { minDate, maxDate } from 'utils/DateUtils';
+import { maxDate } from 'utils/DateUtils';
 import { useSelector } from 'react-redux';
 import Table from './Table';
 import { selectCustomer } from './reducer';
@@ -44,9 +44,9 @@ const Page = () => {
     <div className="win-loss-detail-page">
       <Title />
       {isHistory ? (
-        <HistoryFilter minDate={minDate} maxDate={maxDate} />
+        <HistoryFilter maxDate={maxDate} />
       ) : (
-        <NormalFilter minDate={minDate} maxDate={maxDate} />
+        <NormalFilter maxDate={maxDate} />
       )}
       <Table />
     </div>

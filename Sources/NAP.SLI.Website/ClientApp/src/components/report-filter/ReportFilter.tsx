@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode, useMemo } from 'react';
 import {
   Label,
   Form,
@@ -20,9 +20,11 @@ import { mdiFileExcelOutline } from '@mdi/js';
 import moment, { Moment } from 'moment';
 import { Controller, useForm } from 'react-hook-form';
 import RHFDatePicker from '../date-picker/RHFDatePicker';
+import { useAppDispatch } from 'app/store';
+import { getMinDate } from './reducer';
+import { useSelector } from 'react-redux';
 
 type Props = {
-  minDate: Moment;
   maxDate: Moment;
   fromDate: Moment;
   toDate: Moment;
@@ -31,8 +33,17 @@ type Props = {
   onExcel: () => Promise<void>;
 };
 
+const getReportDateRanges = (minDate: string) => {
+  return minDate !== ''
+    ? ReportDateRanges.filter(
+        (el) =>
+          el.getRange()?.from.isAfter(moment(minDate)) ||
+          el.label === 'Specific Dates',
+      )
+    : ReportDateRanges;
+};
+
 const ReportFilter = ({
-  minDate,
   maxDate,
   fromDate,
   toDate,
@@ -46,6 +57,8 @@ const ReportFilter = ({
   };
   type FilterValues = typeof initialValues;
 
+  const dispatch = useAppDispatch();
+  const { minDate } = useSelector((state: AppState) => state.reportFilter);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,16 +72,21 @@ const ReportFilter = ({
     defaultValues: initialValues,
   });
 
+  const reportDateRanges = useMemo(() => getReportDateRanges(minDate), [
+    minDate,
+  ]);
+
   useEffect(() => {
     if (!isSubmitting) {
       handleSubmit(onSubmit)();
+      dispatch(getMinDate());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDropdownItemClick = (index: number) => {
     setDropdownIndex(index);
-    const range = ReportDateRanges[index].getRange();
+    const range = reportDateRanges[index].getRange();
     if (range) {
       const { from, to } = range;
       setValue('fromDate', formatDate(from));
@@ -84,7 +102,7 @@ const ReportFilter = ({
     }
 
     setValue('fromDate', formatDate(selectedFromDate));
-    setDropdownIndex(ReportDateRanges.length - 1);
+    setDropdownIndex(reportDateRanges.length - 1);
   };
 
   const handleToDateChange = (selectedDate: string | Moment) => {
@@ -95,7 +113,7 @@ const ReportFilter = ({
     }
 
     setValue('toDate', formatDate(selectedToDate));
-    setDropdownIndex(ReportDateRanges.length - 1);
+    setDropdownIndex(reportDateRanges.length - 1);
   };
 
   const onSubmit = async ({ fromDate, toDate }: FilterValues) => {
@@ -121,7 +139,8 @@ const ReportFilter = ({
                 <RHFDatePicker
                   {...field}
                   onChange={(value) => handleFromDateChange(value)}
-                  minDate={minDate}
+                  minDate={moment(minDate)}
+                  maxDate={maxDate}
                   disabled={isSubmitting}
                 />
               )}
@@ -136,6 +155,7 @@ const ReportFilter = ({
                 <RHFDatePicker
                   {...field}
                   onChange={(value) => handleToDateChange(value)}
+                  minDate={moment(minDate)}
                   maxDate={maxDate}
                   disabled={isSubmitting}
                 />
@@ -156,10 +176,10 @@ const ReportFilter = ({
               toggle={() => setDropdownOpen(!dropdownOpen)}
             >
               <DropdownToggle color="primary" caret>
-                {ReportDateRanges[dropdownIndex].label}
+                {reportDateRanges[dropdownIndex].label}
               </DropdownToggle>
               <DropdownMenu>
-                {ReportDateRanges.map((option, index) => (
+                {reportDateRanges.map((option, index) => (
                   <DropdownItem
                     key={index}
                     onClick={() => handleDropdownItemClick(index)}

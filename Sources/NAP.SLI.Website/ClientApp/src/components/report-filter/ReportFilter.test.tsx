@@ -9,7 +9,6 @@ import {
   getToday,
   getYesterday,
   maxDate,
-  minDate,
   stringDateToMoment,
 } from 'utils/DateUtils';
 import ReportFilter from './ReportFilter';
@@ -23,19 +22,33 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Moment } from 'moment';
+import { Provider } from 'react-redux';
+import { Action, DeepPartial, ThunkDispatch } from '@reduxjs/toolkit';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
 
 describe('ReportFilter', () => {
   const handleExcel = jest.fn();
   const handleQuery = jest.fn();
 
   const props = {
-    minDate,
     maxDate,
     fromDate: stringDateToMoment('06/30/2021'),
     toDate: stringDateToMoment('06/30/2021'),
     onQuery: handleQuery,
     onExcel: handleExcel,
   };
+
+  const mockStore = configureStore<
+    DeepPartial<AppState>,
+    ThunkDispatch<DeepPartial<AppState>, unknown, Action<string>>
+  >([thunk]);
+
+  const defaultStore = mockStore({
+    reportFilter: {
+      minDate: '2021-01-01T00:00:00',
+    },
+  });
 
   let fromDateInput: HTMLInputElement;
   let toDateInput: HTMLInputElement;
@@ -51,9 +64,14 @@ describe('ReportFilter', () => {
   let excelBtn: HTMLButtonElement;
   let submitBtn: HTMLButtonElement;
 
-  beforeEach(async () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderComponent = async (store: any) => {
     await act(async () => {
-      const { container } = render(<ReportFilter {...props} />);
+      const { container } = render(
+        <Provider store={store}>
+          <ReportFilter {...props} />
+        </Provider>,
+      );
 
       const inputs = container.querySelectorAll('input');
       fromDateInput = inputs[0];
@@ -79,7 +97,8 @@ describe('ReportFilter', () => {
         'button[type="submit"]',
       ) as HTMLButtonElement;
     });
-  });
+  };
+
   afterEach(cleanup);
 
   const expectDropdownWorkingWithExpectedDate = (
@@ -93,8 +112,9 @@ describe('ReportFilter', () => {
     expect(toDateVal).toBe(formatDate(expecteToDate));
   };
 
-  it('should update fromDate on change', () => {
-    // Arange
+  it('should update fromDate on change', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
     const expectedValue = '07/01/2021';
 
     // Act
@@ -109,8 +129,9 @@ describe('ReportFilter', () => {
     expect(dropdownBtn.textContent).toBe('Specific Dates');
   });
 
-  it('should update toDate on change', () => {
-    // Arange
+  it('should update toDate on change', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
     const expectedValue = '07/01/2021';
 
     // Act
@@ -125,8 +146,9 @@ describe('ReportFilter', () => {
     expect(dropdownBtn.textContent).toBe('Specific Dates');
   });
 
-  it('should update fromDate equal to toDate when toDate is before fromDate', () => {
-    // Arange
+  it('should update fromDate equal to toDate when toDate is before fromDate', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
     const expectedValue = '06/29/2021';
 
     // Act
@@ -142,8 +164,9 @@ describe('ReportFilter', () => {
     expect(dropdownBtn.textContent).toBe('Specific Dates');
   });
 
-  it('should update toDate equal to fromDate when fromDate is after toDate', () => {
-    // Arange
+  it('should update toDate equal to fromDate when fromDate is after toDate', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
     const expectedValue = '07/01/2021';
 
     // Act
@@ -159,6 +182,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked Today button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -172,6 +198,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked Yesterday button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -185,6 +214,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked This Week button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -198,6 +230,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked Last Week button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -211,6 +246,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked This Month button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -224,6 +262,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked Last Month button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -237,6 +278,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked Since Last Month button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -253,6 +297,9 @@ describe('ReportFilter', () => {
   });
 
   it('should update dropdown button when clicked Specific Dates button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     // Act
     await waitFor(() => {
       userEvent.click(dropdownBtn);
@@ -264,6 +311,9 @@ describe('ReportFilter', () => {
   });
 
   it('should call onExcel props when clicked Excel button', async () => {
+    // Arrange
+    await renderComponent(defaultStore);
+
     await waitFor(() => {
       // Act
       userEvent.click(excelBtn);
@@ -278,6 +328,7 @@ describe('ReportFilter', () => {
 
   it('should call onQuery props when clicked Submit button', async () => {
     // Arrange
+    await renderComponent(defaultStore);
     const expectedFromDate = stringDateToMoment(fromDateInput.value);
     const expectedToDate = stringDateToMoment(toDateInput.value);
 
@@ -290,5 +341,58 @@ describe('ReportFilter', () => {
     });
     expect(screen.queryByTestId('loading')).toBeNull();
     expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
+  });
+
+  it('should disable last month and since last month button when its fromdate are before mindate', async () => {
+    // Arrange, Act
+    const store = mockStore({
+      reportFilter: {
+        minDate: getToday()
+          .subtract(1, 'months')
+          .startOf('month')
+          .add(1, 'days')
+          .toISOString(),
+      },
+    });
+    await renderComponent(store);
+
+    // Assert
+    expect(screen.queryByText('Last Month')).toBeNull();
+    expect(screen.queryByText('Since Last Month')).toBeNull();
+  });
+
+  it('should disable last week, last month and since last month button when its fromdate are before mindate', async () => {
+    // Arrange, Act
+    const store = mockStore({
+      reportFilter: {
+        minDate: getToday()
+          .subtract(1, 'weeks')
+          .startOf('isoWeek')
+          .add(1, 'days')
+          .toISOString(),
+      },
+    });
+    await renderComponent(store);
+
+    // Assert
+    expect(screen.queryByText('Last Week')).toBeNull();
+    expect(screen.queryByText('Last Month')).toBeNull();
+    expect(screen.queryByText('Since Last Month')).toBeNull();
+  });
+
+  it('should disable this week, last week, last month and since last month button when its fromdate are before mindate', async () => {
+    // Arrange, Act
+    const store = mockStore({
+      reportFilter: {
+        minDate: getToday().startOf('isoWeek').add(1, 'days').toISOString(),
+      },
+    });
+    await renderComponent(store);
+
+    // Assert
+    expect(screen.queryByText('This Week')).toBeNull();
+    expect(screen.queryByText('Last Week')).toBeNull();
+    expect(screen.queryByText('Last Month')).toBeNull();
+    expect(screen.queryByText('Since Last Month')).toBeNull();
   });
 });

@@ -17,11 +17,10 @@ const generateDateOptions = (date: Moment) => {
 };
 
 type Props = {
-  minDate: Moment;
   maxDate: Moment;
 };
 
-const HistoryFilter = ({ minDate, maxDate }: Props) => {
+const HistoryFilter = ({ maxDate }: Props) => {
   const formikRef = createRef<FormikProps<FormikValues>>();
   const dispatch = useAppDispatch();
   const { queryCustomer, queryArg } = useSelector(
@@ -122,7 +121,6 @@ const HistoryFilter = ({ minDate, maxDate }: Props) => {
                 <FormikMonthPicker
                   disabled={isSubmitting}
                   name="month"
-                  minDate={minDate}
                   maxDate={maxDate}
                   onChange={(value) =>
                     handleMonthChange(moment(value), setFieldValue)

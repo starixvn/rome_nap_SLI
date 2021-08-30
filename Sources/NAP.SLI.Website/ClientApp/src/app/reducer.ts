@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import toastReducer from 'components/toast/reducer';
+import reportFilterReducer from 'components/report-filter/reducer';
 import sidebarReducer from 'features/sidebar/reducer';
 import authenticationReducer from 'features/account/authentication/reducer';
 import changePasswordReducer from 'features/account/change-password/reducer';
@@ -37,6 +38,7 @@ const appReducer = combineReducers({
   customerSettingViewMaster: customerSettingViewMasterReducer,
   customerSettingViewAgent: customerSettingViewAgentReducer,
   customerSettingViewMember: customerSettingViewMemberReducer,
+  reportFilter: reportFilterReducer,
 });
 
 export type AppState = ReturnType<typeof appReducer>;
