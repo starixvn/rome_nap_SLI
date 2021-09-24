@@ -35,6 +35,7 @@ const CustomerPage = () => {
 
   const { generalInformation, headline } = customer;
   const {
+    custId,
     roleId,
     username,
     firstName,
@@ -219,7 +220,17 @@ const CustomerPage = () => {
               {roleId === CustomerLevels.Member && (
                 <>
                   <NavItem>
-                    <NavLink tag={RRNavLink} to={RouteLinks.BET_LIST}>
+                    <NavLink
+                      tag={RRNavLink}
+                      to={{
+                        pathname: RouteLinks.BET_LIST,
+                        state: {
+                          custId,
+                          roleId,
+                          username,
+                        },
+                      }}
+                    >
                       Bet List
                     </NavLink>
                   </NavItem>

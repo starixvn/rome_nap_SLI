@@ -1,18 +1,19 @@
+import { useAppDispatch } from 'app/store';
+import Pagination from 'components/pagination/Component';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { Table } from 'reactstrap';
-import { formatInteger, formatDecimal } from 'utils/NumberUtils';
 import {
   CustomerLevels,
-  isUplineOrSameLevel,
   getDownlineLevel,
+  isUplineOrSameLevel,
 } from 'utils/CustomerLevelUtils';
-import { RouteLinks } from 'utils/RouteUtils';
-import { selectCustomer, Record, query } from './reducer';
-import { useAppDispatch } from 'app/store';
+import { formatDecimal, formatInteger } from 'utils/NumberUtils';
 import { PageSizes } from 'utils/ReportUtils';
-import Pagination from 'components/pagination/Component';
+import { RouteLinks } from 'utils/RouteUtils';
+import { selectArg } from '../bet-list/reducer';
+import { query, Record, selectCustomer } from './reducer';
 
 type RowProps = {
   roleId: number;
@@ -91,6 +92,7 @@ const TableComponent = () => {
       username: record.username,
     };
     if (roleId === CustomerLevels.Agent) {
+      dispatch(selectArg({ fromDate, toDate }));
       history.push(RouteLinks.BET_LIST, customer);
       return;
     }

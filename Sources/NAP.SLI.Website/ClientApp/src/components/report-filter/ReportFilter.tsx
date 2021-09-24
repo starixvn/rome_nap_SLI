@@ -12,6 +12,7 @@ import {
 } from 'reactstrap';
 import {
   formatDate,
+  getToday,
   ReportDateRanges,
   stringDateToMoment,
 } from 'utils/DateUtils';
@@ -81,6 +82,14 @@ const ReportFilter = ({
       handleSubmit(onSubmit)();
       dispatch(getMinDate());
     }
+
+    if (
+      initialValues.fromDate !== formatDate(getToday()) ||
+      initialValues.toDate !== formatDate(getToday())
+    ) {
+      setDropdownIndex(reportDateRanges.length - 1);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
