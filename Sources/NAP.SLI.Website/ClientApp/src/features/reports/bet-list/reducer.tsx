@@ -1,15 +1,49 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { download, post } from 'services/http';
+import { getMinDate } from 'components/report-filter/reducer';
 
-type QueryData = any;
+export type Ticket = {
+  AgentPTComHtml: string;
+  ChoiceHtml: string;
+  MasterPTComHtml: string;
+  OddHtml: string;
+  PlayerComm: number;
+  StakeHtml: string;
+  Status: string;
+  StatusHtml: string;
+  SuperPTComHtml: string;
+  TransDateHtml: string;
+  WinLossHtml: string;
+  Winlost: number;
+};
 
-type QueryArg = {
+type QueryData = {
+  Tickets: Ticket[];
+  SumCommHtml: string;
+  SumWinLossHtml: string;
+  TotalHtml: string;
+};
+
+export type QueryArg = {
   fromDate: string;
   toDate: string;
 };
 
-type QueryProps = QueryArg & {
+export type QueryByDateProps = QueryArg & {
+  custId: number;
+};
+
+export type QueryByMatchProps = {
+  matchId: number;
+  bettype: number;
+  liveIndicator: number;
+  custId: number;
+  roleId: number;
+};
+
+export type QueryByBettypeProps = QueryArg & {
+  bettype: number;
   custId: number;
   roleId: number;
 };
@@ -26,6 +60,7 @@ type State = {
   queryCustomer?: Customer;
   queryData?: QueryData;
   queryArg: QueryArg;
+  minDate: string;
 };
 
 const actionName = 'bet-list';
@@ -38,22 +73,48 @@ const initialState: State = {
     fromDate: formatDate(today),
     toDate: formatDate(today),
   },
+  minDate: '',
 };
 
-export const query = createAsyncThunk<QueryData, QueryProps>(
-  `${actionName}/query`,
+export const getByDate = createAsyncThunk<QueryData, QueryByDateProps>(
+  `${actionName}/getbydate`,
   async (values, { rejectWithValue }) => {
     try {
-      // const { data } = await post<QueryData>(
-      //   `/api/${actionName}/query`,
-      //   values,
-      // );
-      // return data;
-      return await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ data: 'test' });
-        }, 1000);
-      });
+      const { data } = await post<QueryData>(
+        `/api/${actionName}/getbydate`,
+        values,
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
+export const getByMatch = createAsyncThunk<QueryData, QueryByMatchProps>(
+  `${actionName}/getbymatch`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await post<QueryData>(
+        `/api/${actionName}/getbymatch`,
+        values,
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
+export const getByBettype = createAsyncThunk<QueryData, QueryByBettypeProps>(
+  `${actionName}/getbybettype`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await post<QueryData>(
+        `/api/${actionName}/getbybettype`,
+        values,
+      );
+      return data;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -74,27 +135,30 @@ const slice = createSlice({
     selectArg: (state, action: PayloadAction<QueryArg>) => {
       state.queryArg = action.payload;
     },
-    resetArg: (state) => {
-      state.queryArg = {
-        fromDate: formatDate(today),
-        toDate: formatDate(today),
-      };
+    resetState: (state) => {
+      return { ...initialState, minDate: state.minDate };
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(query.pending, (state, { meta }) => {
+    builder.addCase(getByDate.pending, (state, { meta }) => {
       const { fromDate, toDate } = meta.arg;
       state.queryArg = {
         fromDate,
         toDate,
       };
     });
-    builder.addCase(query.fulfilled, (state, { payload }) => {
+    builder.addCase(getByDate.fulfilled, (state, { payload }) => {
       state.queryData = payload;
+    });
+    builder.addCase(getByMatch.fulfilled, (state, { payload }) => {
+      state.queryData = payload;
+    });
+    builder.addCase(getMinDate.fulfilled, (state, { payload }) => {
+      state.minDate = payload.balanceUpDay;
     });
   },
 });
 
-export const { selectCustomer, selectArg, resetArg } = slice.actions;
+export const { selectCustomer, selectArg, resetState } = slice.actions;
 
 export default slice.reducer;

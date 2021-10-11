@@ -92,8 +92,13 @@ const TableComponent = () => {
       username: record.username,
     };
     if (roleId === CustomerLevels.Agent) {
-      dispatch(selectArg({ fromDate, toDate }));
-      history.push(RouteLinks.BET_LIST, customer);
+      history.push(RouteLinks.BET_LIST, {
+        ...customer,
+        winLossDetail: {
+          fromDate,
+          toDate,
+        },
+      });
       return;
     }
 

@@ -116,6 +116,7 @@ const SideBar = () => {
                   renderMenuItemChildren={(option) => (
                     <span>{option.username}</span>
                   )}
+                  useCache={false}
                 />
                 {<FormFeedback tooltip>{errors.username}</FormFeedback>}
               </div>

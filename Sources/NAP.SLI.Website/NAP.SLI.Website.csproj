@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NAP.SimpleApi\NAP.SimpleApi.csproj" />
     <ProjectReference Include="..\NAP.SLI.Account\NAP.SLI.Account.csproj" />
+    <ProjectReference Include="..\NAP.SLI.BetList\NAP.SLI.BetList.csproj" />
     <ProjectReference Include="..\NAP.SLI.Common\NAP.SLI.Common.csproj" />
 	<ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
 	<ProjectReference Include="..\NAP.SLI.Localization\NAP.SLI.Localization.csproj" />

@@ -31,6 +31,8 @@ export type Record = {
   masterWinLoss: number;
   superWinLoss: number;
   companyWinLoss: number;
+  betType: number;
+  matchId: number;
 };
 
 export type QueryData = {

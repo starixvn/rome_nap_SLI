@@ -4,6 +4,9 @@ import { Table } from 'reactstrap';
 import { formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
 import { Record } from './reducer';
+import { useAppDispatch } from 'app/store';
+import { useHistory } from 'react-router';
+import { RouteLinks } from 'utils/RouteUtils';
 
 enum RowType {
   Normal = 0,
@@ -15,17 +18,25 @@ type RowProps = {
   roleId: number;
   record: Record;
   type: RowType;
+  typeClick?: (record: Record) => void;
 };
 
-const RowComponent = ({ roleId, record, type }: RowProps) => {
+const RowComponent = ({ roleId, record, type, typeClick }: RowProps) => {
   return (
     <tr>
       <td>
-        {type === RowType.Normal
-          ? record.betTypeName
-          : type === RowType.SubTotal
-          ? 'Sub Total'
-          : 'Total'}
+        {type === RowType.Normal ? (
+          <span
+            className="text-link"
+            onClick={() => typeClick && typeClick(record)}
+          >
+            {record.betTypeName}
+          </span>
+        ) : type === RowType.SubTotal ? (
+          'Sub Total'
+        ) : (
+          'Total'
+        )}
       </td>
       <td className="text-right">{formatDecimal(record.turnover)}</td>
       <td className="text-right">{formatDecimal(record.memberWinLoss)}</td>
@@ -44,6 +55,7 @@ const RowComponent = ({ roleId, record, type }: RowProps) => {
 };
 
 const TableComponent = () => {
+  const history = useHistory();
   const { queryData, queryCustomer } = useSelector(
     (state: AppState) => state.matchWinLossDetail,
   );
@@ -67,6 +79,18 @@ const TableComponent = () => {
   };
 
   const removedColumnTotal = getRemovedColumnTotal();
+
+  const handleTypeClick = (record: Record) => {
+    const { matchId, betType } = record;
+
+    history.push(RouteLinks.BET_LIST, {
+      ...queryCustomer,
+      matchWinLossDetail: {
+        matchId,
+        bettype: betType,
+      },
+    });
+  };
 
   return (
     <Table hover bordered striped>
@@ -117,6 +141,7 @@ const TableComponent = () => {
                   roleId={roleId}
                   record={record}
                   type={RowType.Normal}
+                  typeClick={handleTypeClick}
                 />
               ))}
               <RowComponent

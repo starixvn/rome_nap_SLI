@@ -1,0 +1,64 @@
+.bet-list-table {
+  .col-number {
+    width: 50px;
+  }
+
+  .col-date {
+    width: 200px;
+  }
+
+  .col-odds,
+  .col-state,
+  .col-winloss {
+    width: 80px;
+  }
+
+  .col-status {
+    width: 110px;
+  }
+
+  .col-pt {
+    width: 110px;
+  }
+
+  .favorite,
+  .underdog,
+  .stake,
+  .oddstype,
+  .pt-value,
+  .pt-winloss {
+    font-weight: bold;
+  }
+
+  .favorite {
+    color: #b50000;
+  }
+
+  .sport,
+  .result {
+    color: #5db3ed;
+  }
+
+  .result:hover {
+    cursor: pointer;
+    color: #0177c5;
+  }
+
+  .bettype {
+    font-weight: bold;
+    color: #366092;
+  }
+
+  .position-taking {
+    background-color: #f5e3e3;
+  }
+
+  .bg-gray {
+    background-color: #f2f2f2;
+  }
+
+  .total {
+    font-weight: bold;
+    background-color: #e8dfca;
+  }
+}
