@@ -30,6 +30,7 @@ type Props = {
   fromDate: Moment;
   toDate: Moment;
   component?: ReactNode;
+  customKey?: number;
   onQuery: (fromDate: Moment, toDate: Moment) => Promise<void>;
   onExcel: () => Promise<void>;
 };
@@ -49,6 +50,7 @@ const ReportFilter = ({
   fromDate,
   toDate,
   component,
+  customKey = 0,
   onQuery,
   onExcel,
 }: Props) => {
@@ -83,15 +85,8 @@ const ReportFilter = ({
       dispatch(getMinDate());
     }
 
-    if (
-      initialValues.fromDate !== formatDate(getToday()) ||
-      initialValues.toDate !== formatDate(getToday())
-    ) {
-      setDropdownIndex(reportDateRanges.length - 1);
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [customKey]);
 
   const handleDropdownItemClick = (index: number) => {
     setDropdownIndex(index);

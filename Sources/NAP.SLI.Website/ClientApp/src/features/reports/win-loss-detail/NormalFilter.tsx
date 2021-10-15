@@ -1,7 +1,7 @@
 import { useAppDispatch } from 'app/store';
 import ReportFilter from 'components/report-filter/ReportFilter';
 import { Moment } from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Container } from 'reactstrap';
 import { formatDate, stringDateToMoment } from 'utils/DateUtils';
@@ -13,10 +13,17 @@ type Props = {
 
 const NormalFilter = ({ maxDate }: Props) => {
   const dispatch = useAppDispatch();
+  const [key, setKey] = useState(0);
 
   const { queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
+
+  useEffect(() => {
+    if (queryCustomer) {
+      setKey((prev) => prev + 1);
+    }
+  }, [queryCustomer]);
 
   if (!queryCustomer) {
     return <></>;
@@ -58,6 +65,7 @@ const NormalFilter = ({ maxDate }: Props) => {
         toDate={stringDateToMoment(toDate)}
         onQuery={handleQuery}
         onExcel={handleExcel}
+        customKey={key}
       />
       <div>
         You can view the report data from 09/01/2019. For more historic data,
