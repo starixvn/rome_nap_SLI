@@ -6,6 +6,7 @@ using AutoMapper;
 using Fanex.Data.Repository;
 using Fanex.RemotingRef;
 using NAP.SLI.Common.Services;
+using NAP.SLI.MatchWinLossDetail.Constants;
 using NAP.SLI.MatchWinLossDetail.Criteria;
 using NAP.SLI.MatchWinLossDetail.Models;
 using NAP.SLI.MatchWinLossDetail.Requests;
@@ -35,19 +36,25 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         public async Task<SuperData> QuerySuper(QueryRequest request)
         {
             var records = await Query<SuperRecord>(request).ConfigureAwait(false);
-            return new SuperData(Build<SuperRecordEx, MatchData<SuperRecordEx>>(mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(records)));
+            var recordExs = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(records);
+            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype<SuperRecordEx>(recordExs);
+            return new SuperData(Build<SuperRecordEx, MatchData<SuperRecordEx>>(numberGameAndHappy5Records), happy5LinkedGameRecords);
         }
 
         public async Task<MasterData> QueryMaster(QueryRequest request)
         {
             var records = await Query<MasterRecord>(request).ConfigureAwait(false);
-            return new MasterData(Build<MasterRecordEx, MatchData<MasterRecordEx>>(mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(records)));
+            var recordExs = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(records);
+            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype<MasterRecordEx>(recordExs);
+            return new MasterData(Build<MasterRecordEx, MatchData<MasterRecordEx>>(numberGameAndHappy5Records), happy5LinkedGameRecords);
         }
 
         public async Task<AgentData> QueryAgent(QueryRequest request)
         {
             var records = await Query<AgentRecord>(request).ConfigureAwait(false);
-            return new AgentData(Build<AgentRecordEx, MatchData<AgentRecordEx>>(mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(records)));
+            var recordExs = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(records);
+            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype<AgentRecordEx>(recordExs);
+            return new AgentData(Build<AgentRecordEx, MatchData<AgentRecordEx>>(numberGameAndHappy5Records), happy5LinkedGameRecords);
         }
 
         private IEnumerable<K> Build<T, K>(IEnumerable<T> records)
@@ -67,6 +74,15 @@ namespace NAP.SLI.MatchWinLossDetail.Services
                 return (K)Activator.CreateInstance(typeof(K), new object[] { leagueName, matchName, records });
             });
         }
+
+        private static (IEnumerable<T>, IEnumerable<T>) SplitRecordsByBettype<T>(IEnumerable<T> records) where T : IRecordEx<T>, new()
+        {
+            var numberGameAndHappy5Records = records.Where(record => !IsHappy5LinkedGame(record.BetType));
+            var happy5LinkedGameRecords = records.Where(record => IsHappy5LinkedGame(record.BetType));
+            return (numberGameAndHappy5Records, happy5LinkedGameRecords);
+        }
+
+        private static bool IsHappy5LinkedGame(int betType) => (BetTypeIdConstants.Happy5LinkedGamesMin <= betType && betType <= BetTypeIdConstants.Happy5LinkedGamesMax);
 
         private async Task<IEnumerable<T>> Query<T>(QueryRequest request)
         {

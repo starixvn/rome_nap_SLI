@@ -57,29 +57,15 @@ const Filter = ({ maxDate }: Props) => {
     },
   });
 
-  const handleQuery = async (values: FilterValues) => {
-    // const queryPayload = {
-    //   custId,
-    //   fromDate: formatDate(fromDate),
-    //   toDate: formatDate(toDate),
-    // };
-    console.log(values);
-    await dispatch(
-      getByDate({
-        custId: 46755897,
-        fromDate: '2021-08-31',
-        toDate: '2021-09-30',
-      }),
-    );
-  };
-
   useEffect(() => {
-    if (!isSubmitting) {
-      handleSubmit(handleQuery)();
+    if (!isSubmitting && queryCustomer?.custId) {
+      const { custId } = queryCustomer;
+      handleSubmit(() => dispatch(getByDate({ fromDate, toDate, custId })))();
       dispatch(getMinDate());
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [queryCustomer?.custId]);
 
   if (!queryCustomer) return <></>;
   const { custId, roleId, username } = queryCustomer;
@@ -102,6 +88,16 @@ const Filter = ({ maxDate }: Props) => {
     }
 
     setValue('toDate', formatDate(selectedToDate));
+  };
+
+  const handleQuery = async (values: FilterValues) => {
+    const { fromDate, toDate } = values;
+    const queryPayload = {
+      custId,
+      fromDate,
+      toDate,
+    };
+    await dispatch(getByDate(queryPayload));
   };
 
   const handleExcel = async () => {

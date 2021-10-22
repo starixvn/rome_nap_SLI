@@ -12,30 +12,48 @@ enum RowType {
   Normal = 0,
   SubTotal = 1,
   Total = 2,
+  Happy5LinkedGame = 3,
+  GrandTotal = 4,
 }
 
 type RowProps = {
   roleId: number;
   record: Record;
   type: RowType;
-  typeClick?: (record: Record) => void;
+  normalTypeClick?: (record: Record) => void;
+  linkedGameTypeClick?: (record: Record) => void;
 };
 
-const RowComponent = ({ roleId, record, type, typeClick }: RowProps) => {
+const RowComponent = ({
+  roleId,
+  record,
+  type,
+  normalTypeClick,
+  linkedGameTypeClick,
+}: RowProps) => {
   return (
     <tr>
       <td>
         {type === RowType.Normal ? (
           <span
             className="text-link"
-            onClick={() => typeClick && typeClick(record)}
+            onClick={() => normalTypeClick && normalTypeClick(record)}
+          >
+            {record.betTypeName}
+          </span>
+        ) : type === RowType.Happy5LinkedGame ? (
+          <span
+            className="text-link"
+            onClick={() => linkedGameTypeClick && linkedGameTypeClick(record)}
           >
             {record.betTypeName}
           </span>
         ) : type === RowType.SubTotal ? (
           'Sub Total'
-        ) : (
+        ) : type === RowType.Total ? (
           'Total'
+        ) : (
+          'Grand Total'
         )}
       </td>
       <td className="text-right">{formatDecimal(record.turnover)}</td>
@@ -56,7 +74,7 @@ const RowComponent = ({ roleId, record, type, typeClick }: RowProps) => {
 
 const TableComponent = () => {
   const history = useHistory();
-  const { queryData, queryCustomer } = useSelector(
+  const { queryData, queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.matchWinLossDetail,
   );
 
@@ -64,8 +82,9 @@ const TableComponent = () => {
     return <></>;
   }
 
-  const { matches, total } = queryData;
+  const { matches, total, grandTotal, happy5LinkedGames } = queryData;
   const { roleId } = queryCustomer;
+  const { fromDate, toDate } = queryArg;
 
   const getRemovedColumnTotal = () => {
     switch (roleId) {
@@ -80,14 +99,28 @@ const TableComponent = () => {
 
   const removedColumnTotal = getRemovedColumnTotal();
 
-  const handleTypeClick = (record: Record) => {
-    const { matchId, betType } = record;
+  const handleNormalTypeClick = (record: Record) => {
+    const { matchId, betType, liveIndicator } = record;
 
     history.push(RouteLinks.BET_LIST, {
       ...queryCustomer,
-      matchWinLossDetail: {
+      queryByMatch: {
         matchId,
+        liveIndicator,
         bettype: betType,
+      },
+    });
+  };
+
+  const handleLinkedGameTypeClick = (record: Record) => {
+    const { betType } = record;
+
+    history.push(RouteLinks.BET_LIST, {
+      ...queryCustomer,
+      queryByBetType: {
+        betType,
+        fromDate,
+        toDate,
       },
     });
   };
@@ -141,7 +174,7 @@ const TableComponent = () => {
                   roleId={roleId}
                   record={record}
                   type={RowType.Normal}
-                  typeClick={handleTypeClick}
+                  normalTypeClick={handleNormalTypeClick}
                 />
               ))}
               <RowComponent
@@ -153,12 +186,29 @@ const TableComponent = () => {
             </>
           ))
         )}
-      </tbody>
-      {matches.length > 0 && total && (
-        <tfoot>
+        {matches.length > 0 && total && (
           <RowComponent roleId={roleId} record={total} type={RowType.Total} />
-        </tfoot>
-      )}
+        )}
+        {happy5LinkedGames &&
+          happy5LinkedGames.map((record, index) => (
+            <RowComponent
+              key={`record_happy5LinkedGame_${index}`}
+              roleId={roleId}
+              record={record}
+              type={RowType.Normal}
+              linkedGameTypeClick={handleLinkedGameTypeClick}
+            />
+          ))}
+      </tbody>
+      <tfoot>
+        {happy5LinkedGames.length > 0 && grandTotal && (
+          <RowComponent
+            roleId={roleId}
+            record={grandTotal}
+            type={RowType.GrandTotal}
+          />
+        )}
+      </tfoot>
     </Table>
   );
 };

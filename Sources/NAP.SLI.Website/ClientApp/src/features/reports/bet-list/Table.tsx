@@ -34,86 +34,88 @@ const TableComponent = () => {
       <tbody>
         {Tickets.length === 0 ? (
           <tr>
-            <td className="text-center" colSpan={7}>
+            <td className="text-center" colSpan={10}>
               There is no information
             </td>
           </tr>
         ) : (
-          Tickets.map((ticket: Ticket, index: number) => (
-            <tr key={index}>
-              <td className="text-right">{index + 1}</td>
-              <td
-                className="text-center"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.TransDateHtml,
-                }}
-              />
-              <td
-                className="text-right"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.ChoiceHtml,
-                }}
-              />
-              <td
-                className="text-right"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.OddHtml,
-                }}
-              />
-              <td
-                className="text-right"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.StakeHtml,
-                }}
-              />
-              <td
-                className="text-right font-weight-bold"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.WinLossHtml,
-                }}
-              />
-              <td
-                className="text-center"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.StatusHtml,
-                }}
-              />
-              <td
-                className="text-right bg-gray"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.SuperPTComHtml,
-                }}
-              />
-              <td
-                className="text-right bg-gray"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.MasterPTComHtml,
-                }}
-              />
-              <td
-                className="text-right bg-gray"
-                dangerouslySetInnerHTML={{
-                  __html: ticket.AgentPTComHtml,
-                }}
-              />
+          <>
+            {Tickets.map((ticket: Ticket, index: number) => (
+              <tr key={index}>
+                <td className="text-right">{index + 1}</td>
+                <td
+                  className="text-center"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.TransDateHtml,
+                  }}
+                />
+                <td
+                  className="text-right"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.ChoiceHtml,
+                  }}
+                />
+                <td
+                  className="text-right"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.OddHtml,
+                  }}
+                />
+                <td
+                  className="text-right"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.StakeHtml,
+                  }}
+                />
+                <td
+                  className="text-right font-weight-bold"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.WinLossHtml,
+                  }}
+                />
+                <td
+                  className="text-center"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.StatusHtml,
+                  }}
+                />
+                <td
+                  className="text-right bg-gray"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.SuperPTComHtml,
+                  }}
+                />
+                <td
+                  className="text-right bg-gray"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.MasterPTComHtml,
+                  }}
+                />
+                <td
+                  className="text-right bg-gray"
+                  dangerouslySetInnerHTML={{
+                    __html: ticket.AgentPTComHtml,
+                  }}
+                />
+              </tr>
+            ))}
+            <tr className="total text-right">
+              <td colSpan={5}>Subtotal(winlost):</td>
+              <td dangerouslySetInnerHTML={{ __html: SumWinLossHtml }} />
+              <td colSpan={4} />
             </tr>
-          ))
+            <tr className="total text-right">
+              <td colSpan={5}>Subtotal(Com.):</td>
+              <td dangerouslySetInnerHTML={{ __html: SumCommHtml }} />
+              <td colSpan={4} />
+            </tr>
+            <tr className="total text-right">
+              <td colSpan={5}>Total:</td>
+              <td dangerouslySetInnerHTML={{ __html: TotalHtml }} />
+              <td colSpan={4} />
+            </tr>
+          </>
         )}
-        <tr className="total text-right">
-          <td colSpan={5}>Subtotal(winlost):</td>
-          <td dangerouslySetInnerHTML={{ __html: SumWinLossHtml }} />
-          <td colSpan={4} />
-        </tr>
-        <tr className="total text-right">
-          <td colSpan={5}>Subtotal(Com.):</td>
-          <td dangerouslySetInnerHTML={{ __html: SumCommHtml }} />
-          <td colSpan={4} />
-        </tr>
-        <tr className="total text-right">
-          <td colSpan={5}>Total:</td>
-          <td dangerouslySetInnerHTML={{ __html: TotalHtml }} />
-          <td colSpan={4} />
-        </tr>
       </tbody>
     </Table>
   );

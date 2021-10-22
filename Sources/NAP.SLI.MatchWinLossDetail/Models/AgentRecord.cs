@@ -14,6 +14,8 @@
 
         public int BetType { get; set; }
 
+        public int LiveIndicator { get; set; }
+
         public decimal Turnover { get; set; }
 
         public decimal MemberWinLoss { get; set; }

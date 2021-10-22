@@ -15,27 +15,27 @@ import {
 } from './reducer';
 import Table from './Table';
 
-type WinLossDetail = {
+type QueryByDate = {
   fromDate: string;
   toDate: string;
 };
 
-type MatchWinLossDetail = {
+type QueryByMatch = {
   matchId: number;
   bettype: number;
   liveIndicator: number;
 };
 
-type WinLossByBetType = {
+type QueryByBetType = {
   bettype: number;
   fromDate: string;
   toDate: string;
 };
 
 type LocationState = Customer & {
-  winLossDetail?: WinLossDetail;
-  matchWinLossDetail?: MatchWinLossDetail;
-  winLossByBetType?: WinLossByBetType;
+  queryByDate?: QueryByDate;
+  queryByMatch?: QueryByMatch;
+  queryByBetType?: QueryByBetType;
 };
 
 const BetListPage = () => {
@@ -47,47 +47,48 @@ const BetListPage = () => {
 
   const getDataFromReport = useCallback(async () => {
     setIsLoading(true);
-    if (location.state?.winLossDetail) {
-      // const { custId, fromDate, toDate } = location.state.winLossDetail;
+
+    if (location.state?.queryByDate) {
+      const { fromDate, toDate } = location.state.queryByDate;
+      const { custId } = location.state;
       await dispatch(
         getByDate({
-          custId: 46755897,
-          fromDate: '2021-08-31',
-          toDate: '2021-09-30',
+          custId,
+          fromDate,
+          toDate,
         }),
       );
     }
 
-    if (location.state?.matchWinLossDetail) {
+    if (location.state?.queryByMatch) {
+      const { matchId, bettype, liveIndicator } = location.state.queryByMatch;
+      const { custId, roleId } = location.state;
       await dispatch(
         getByMatch({
-          matchId: 99000074,
-          bettype: 85,
-          liveIndicator: 1,
-          custId: 1015419,
-          roleId: 4,
+          matchId,
+          bettype,
+          liveIndicator,
+          custId,
+          roleId,
         }),
       );
     }
 
-    if (location.state?.winLossByBetType) {
+    if (location.state?.queryByBetType) {
+      const { fromDate, toDate, bettype } = location.state.queryByBetType;
+      const { custId, roleId } = location.state;
       await dispatch(
         getByBettype({
-          bettype: 3601,
-          fromDate: '2021-09-03',
-          toDate: '2021-09-30',
-          custId: 1015419,
-          roleId: 4,
+          bettype,
+          fromDate,
+          toDate,
+          custId,
+          roleId,
         }),
       );
     }
     setIsLoading(false);
-  }, [
-    dispatch,
-    location.state?.matchWinLossDetail,
-    location.state?.winLossByBetType,
-    location.state?.winLossDetail,
-  ]);
+  }, [location.state, dispatch]);
 
   useEffect(() => {
     if (location.state) {
@@ -115,9 +116,9 @@ const BetListPage = () => {
   const { username } = location.state;
   const { fromDate, toDate } = queryArg;
   const isFromReport =
-    location.state?.matchWinLossDetail ||
-    location.state?.winLossDetail ||
-    location.state?.winLossByBetType;
+    location.state?.queryByMatch ||
+    location.state?.queryByDate ||
+    location.state?.queryByBetType;
 
   return (
     <div className="bet-list-page">

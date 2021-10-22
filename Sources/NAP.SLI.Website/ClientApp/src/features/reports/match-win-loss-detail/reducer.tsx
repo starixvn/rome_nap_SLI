@@ -33,10 +33,13 @@ export type Record = {
   companyWinLoss: number;
   betType: number;
   matchId: number;
+  liveIndicator: number;
 };
 
 export type QueryData = {
   total: Record;
+  grandTotal: Record;
+  happy5LinkedGames: Record[];
   matches: MatchData[];
 };
 

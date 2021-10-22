@@ -12,7 +12,6 @@ import {
 import { formatDecimal, formatInteger } from 'utils/NumberUtils';
 import { PageSizes } from 'utils/ReportUtils';
 import { RouteLinks } from 'utils/RouteUtils';
-import { selectArg } from '../bet-list/reducer';
 import { query, Record, selectCustomer } from './reducer';
 
 type RowProps = {
@@ -94,7 +93,7 @@ const TableComponent = () => {
     if (roleId === CustomerLevels.Agent) {
       history.push(RouteLinks.BET_LIST, {
         ...customer,
-        winLossDetail: {
+        queryByDate: {
           fromDate,
           toDate,
         },

@@ -31,37 +31,48 @@ namespace NAP.SLI.MatchWinLossDetail.Models
 
         public T Total { get; }
 
-        public Data(IEnumerable<MatchData<T>> matches)
+        public T GrandTotal { get; }
+
+        public IEnumerable<T> Happy5LinkedGames { get; }
+
+        public Data(IEnumerable<MatchData<T>> matches, IEnumerable<T> happy5LinkedGames)
         {
             Matches = matches;
+            Happy5LinkedGames = happy5LinkedGames;
             Total = new T();
             foreach (var match in matches)
             {
                 Total.Sum(match.Total);
+            }
+            GrandTotal = new T();
+            GrandTotal.Sum(Total);
+            foreach (var happy5LinkedGame in happy5LinkedGames)
+            {
+                GrandTotal.Sum(happy5LinkedGame);
             }
         }
     }
 
     public class AgentData : Data<AgentRecordEx>
     {
-        public AgentData(IEnumerable<MatchData<AgentRecordEx>> matches)
-        : base(matches)
+        public AgentData(IEnumerable<MatchData<AgentRecordEx>> matches, IEnumerable<AgentRecordEx> happy5LinkedGames)
+        : base(matches, happy5LinkedGames)
         {
         }
     }
 
     public class MasterData : Data<MasterRecordEx>
     {
-        public MasterData(IEnumerable<MatchData<MasterRecordEx>> matches)
-        : base(matches)
+        public MasterData(IEnumerable<MatchData<MasterRecordEx>> matches, IEnumerable<MasterRecordEx> happy5LinkedGames)
+        : base(matches, happy5LinkedGames)
         {
         }
     }
 
     public class SuperData : Data<SuperRecordEx>
     {
-        public SuperData(IEnumerable<MatchData<SuperRecordEx>> matches)
-        : base(matches)
+        public SuperData(IEnumerable<MatchData<SuperRecordEx>> matches, IEnumerable<SuperRecordEx> happy5LinkedGames)
+        : base(matches, happy5LinkedGames)
         {
         }
     }
