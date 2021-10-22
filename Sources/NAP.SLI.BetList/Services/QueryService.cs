@@ -3,6 +3,7 @@ namespace NAP.SLI.BetList.Services
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.Configuration;
     using NAP.SLI.BetList.Requests;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -16,21 +17,28 @@ namespace NAP.SLI.BetList.Services
 
     public class QueryService : IQueryService
     {
+        private readonly string baseURL;
+
+        public QueryService(IConfiguration configuration)
+        {
+            baseURL = configuration.GetValue<string>("BetListAPI:URL");
+        }
+
         public async Task<object> QueryByDate(QueryByDateRequest request)
         {
-            var response = await Query(request, "http://ha.nexdev.net:7400/Local05/BetListSLIApi/GetByDate");
+            var response = await Query(request, baseURL + "/BetListSLIApi/GetByDate");
             return response;
         }
 
         public async Task<object> QueryByMatch(QueryByMatchRequest request)
         {
-            var response = await Query(request, "http://ha.nexdev.net:7400/Local05/BetListSLIApi/GetByMatch");
+            var response = await Query(request, baseURL + "/BetListSLIApi/GetByMatch");
             return response;
         }
 
         public async Task<object> QueryByBettype(QueryByBettypeRequest request)
         {
-            var response = await Query(request, "http://ha.nexdev.net:7400/Local05/BetListSLIApi/GetByBettype");
+            var response = await Query(request, baseURL + "/BetListSLIApi/GetByBettype");
             return response;
         }
 
