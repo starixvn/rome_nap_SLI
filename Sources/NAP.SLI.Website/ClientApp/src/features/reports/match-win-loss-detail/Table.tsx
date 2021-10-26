@@ -4,9 +4,9 @@ import { Table } from 'reactstrap';
 import { formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
 import { Record } from './reducer';
-import { useAppDispatch } from 'app/store';
 import { useHistory } from 'react-router';
 import { RouteLinks } from 'utils/RouteUtils';
+import './Table.scss';
 
 enum RowType {
   Normal = 0,
@@ -24,6 +24,17 @@ type RowProps = {
   linkedGameTypeClick?: (record: Record) => void;
 };
 
+const getRowClassName = (type: RowType) => {
+  switch (type) {
+    case RowType.SubTotal:
+      return 'sub-total-row';
+    case RowType.Total:
+      return 'total-row';
+    case RowType.GrandTotal:
+      return 'grand-total-row';
+  }
+};
+
 const RowComponent = ({
   roleId,
   record,
@@ -32,7 +43,7 @@ const RowComponent = ({
   linkedGameTypeClick,
 }: RowProps) => {
   return (
-    <tr>
+    <tr className={getRowClassName(type)}>
       <td>
         {type === RowType.Normal ? (
           <span
@@ -164,8 +175,9 @@ const TableComponent = () => {
           matches.map((match) => (
             <>
               <tr>
-                <td colSpan={7 - removedColumnTotal}>
-                  {match.leagueName} &#62;&#62;&#62; {match.matchName}
+                <td className="match-row" colSpan={7 - removedColumnTotal}>
+                  <span className="league-title">{match.leagueName}</span>
+                  <span className="match-title">{match.matchName}</span>
                 </td>
               </tr>
               {match.records.map((record, index) => (

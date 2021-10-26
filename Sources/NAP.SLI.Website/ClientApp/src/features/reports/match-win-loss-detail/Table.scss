@@ -1,0 +1,40 @@
+.match-row {
+  background-color: #f3f5e0;
+  text-transform: uppercase;
+  font-weight: bold;
+
+  .league-title {
+    color: #333;
+    width: 300px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .match-title {
+    color: #f38130;
+
+    &:before {
+      content: '>>';
+      color: #f38130;
+      padding: 0 10px 0 50px;
+    }
+  }
+}
+
+.sub-total-row {
+  background-color: #eae9ee !important;
+  color: #394e6e !important;
+  font-weight: bold !important;
+}
+
+.total-row {
+  background-color: #7f3d1d !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+}
+
+.grand-total-row {
+  background-color: #7f3d1d !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+}

@@ -1,0 +1,41 @@
+{
+  // Version of the setting file.  Always 0.2
+  "version": "0.2",
+  // language - current active spelling language
+  "language": "en",
+  "enabled": true,
+  "enabledLanguageIds": [
+    "csharp",
+    "javascript",
+    "javascriptreact",
+    "markdown",
+    "plaintext",
+    "typescript",
+    "typescriptreact",
+    "yml"
+  ],
+  // words - list of words to be always considered correct
+  "words": [
+    "bettype",
+    "checkin",
+    "cust",
+    "Datetimepicker",
+    "downline",
+    "formik",
+    "immer",
+    "reduxjs",
+    "sonarjs",
+    "testid",
+    "typeahead",
+    "umtime",
+    "unmount",
+    "upline"
+  ],
+  "ignorePaths": [
+    "node_modules", // this will ignore anything the node_modules directory
+    "**/node_modules", // the same for this one
+    "**/node_modules/**", // the same for this one
+    "node_modules/**", // Doesn't currently work due to how the current working directory is determined.
+    ".git" // Ignore the .git directory
+  ]
+}

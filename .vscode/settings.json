@@ -1,17 +1,9 @@
 {
-    "dotnet-test-explorer.testProjectPath": "Sources/**/*Tests.@(csproj)",
-    "typescript.tsdk": "Sources\\NAP.SLI.Website\\ClientApp\\node_modules\\typescript\\lib",
-    "search.exclude": {
-        "**/bin": true,
-        "**/obj": true,
-        "**/libs/*.js": true
-    },
-    "cSpell.words": [
-        "Cust",
-        "Fanex",
-        "Hsts",
-        "Mediat",
-        "NPOI",
-        "Xunit"
-    ]
+  "dotnet-test-explorer.testProjectPath": "Sources/**/*Tests.@(csproj)",
+  "typescript.tsdk": "Sources\\NAP.SLI.Website\\ClientApp\\node_modules\\typescript\\lib",
+  "search.exclude": {
+    "**/bin": true,
+    "**/obj": true,
+    "**/libs/*.js": true
+  }
 }

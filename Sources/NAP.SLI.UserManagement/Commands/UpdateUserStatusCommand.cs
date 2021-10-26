@@ -25,7 +25,7 @@ namespace NAP.SLI.UserManagement.Commands
 
         public string System { get; set; }
 
-        public override string GetSettingKey() => "AdminUpdClosed";
+        public override string GetSettingKey() => "Acc_Con_AdminUpdClosed";
 
         public override bool IsValid() => CustId > 0;
     }

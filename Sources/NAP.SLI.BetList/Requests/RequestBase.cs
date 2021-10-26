@@ -5,7 +5,9 @@ namespace NAP.SLI.BetList.Requests
     public class RequestBase
     {
         public int CustId { get; set; }
+
         public DateTime FromDate { get; set; }
+
         public DateTime ToDate { get; set; }
     }
 }

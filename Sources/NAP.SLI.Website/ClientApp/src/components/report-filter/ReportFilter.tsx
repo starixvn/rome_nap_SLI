@@ -12,7 +12,6 @@ import {
 } from 'reactstrap';
 import {
   formatDate,
-  getToday,
   ReportDateRanges,
   stringDateToMoment,
 } from 'utils/DateUtils';
@@ -95,6 +94,7 @@ const ReportFilter = ({
       const { from, to } = range;
       setValue('fromDate', formatDate(from));
       setValue('toDate', formatDate(to));
+      handleSubmit(onSubmit)();
     }
   };
 

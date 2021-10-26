@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import React from 'react';
 import {
   formatDate,
@@ -103,13 +104,13 @@ describe('ReportFilter', () => {
 
   const expectDropdownWorkingWithExpectedDate = (
     expectedFromDate: Moment,
-    expecteToDate: Moment,
+    expectedToDate: Moment,
   ) => {
     const fromDateVal = fromDateInput.value;
     const toDateVal = toDateInput.value;
 
     expect(fromDateVal).toBe(formatDate(expectedFromDate));
-    expect(toDateVal).toBe(formatDate(expecteToDate));
+    expect(toDateVal).toBe(formatDate(expectedToDate));
   };
 
   it('should update fromDate on change', async () => {
@@ -343,7 +344,7 @@ describe('ReportFilter', () => {
     expect(handleQuery).toBeCalledWith(expectedFromDate, expectedToDate);
   });
 
-  it('should disable last month and since last month button when its fromdate are before mindate', async () => {
+  it('should disable last month and since last month button when its fromDate are before minDate', async () => {
     // Arrange, Act
     const store = mockStore({
       reportFilter: {
@@ -361,7 +362,7 @@ describe('ReportFilter', () => {
     expect(screen.queryByText('Since Last Month')).toBeNull();
   });
 
-  it('should disable last week, last month and since last month button when its fromdate are before mindate', async () => {
+  it('should disable last week, last month and since last month button when its fromDate are before minDate', async () => {
     // Arrange, Act
     const store = mockStore({
       reportFilter: {
@@ -380,7 +381,7 @@ describe('ReportFilter', () => {
     expect(screen.queryByText('Since Last Month')).toBeNull();
   });
 
-  it('should disable this week, last week, last month and since last month button when its fromdate are before mindate', async () => {
+  it('should disable this week, last week, last month and since last month button when its fromDate are before minDate', async () => {
     // Arrange, Act
     const store = mockStore({
       reportFilter: {

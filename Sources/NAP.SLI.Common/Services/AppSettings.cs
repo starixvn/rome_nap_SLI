@@ -12,6 +12,8 @@ namespace NAP.SLI.Common.Services
         string SentryDefaultCategory { get; }
 
         string AppDataPath { get; }
+
+        string BetListApiUrl { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -28,6 +30,8 @@ namespace NAP.SLI.Common.Services
         public string SentryDsn => configuration.GetValue<string>("Sentry:Dsn");
 
         public string SentryDefaultCategory => configuration.GetValue<string>("Sentry:DefaultCategory");
+
+        public string BetListApiUrl => configuration.GetValue<string>("BetListAPI:URL");
 
         public string AppDataPath => AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
     }
