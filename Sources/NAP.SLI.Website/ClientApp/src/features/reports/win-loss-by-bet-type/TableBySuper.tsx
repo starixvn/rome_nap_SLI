@@ -3,15 +3,22 @@ import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatDecimal, formatInteger } from 'utils/NumberUtils';
 import { Record } from './reducer';
+import './Table.scss';
 
 type RowProps = {
   record: Record;
   isFooter: boolean;
 };
 
+const getRowClassName = (isFooter: boolean) => {
+  if (isFooter) {
+    return 'total-row';
+  }
+};
+
 const RowComponent = ({ record, isFooter }: RowProps) => {
   return (
-    <tr>
+    <tr className={getRowClassName(isFooter)}>
       <td>{isFooter ? 'Total' : record.betTypeName}</td>
       <td className="text-right">{formatInteger(record.betCount)}</td>
       <td className="text-right">{formatDecimal(record.turnover)}</td>
@@ -66,9 +73,9 @@ const TableComponent = () => {
             </td>
           </tr>
         ) : (
-          records.map((record) => (
+          records.map((record, index) => (
             <RowComponent
-              key={`record_${record.betType}`}
+              key={`record_${index}`}
               record={record}
               isFooter={false}
             />

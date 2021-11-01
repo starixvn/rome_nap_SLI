@@ -1,9 +1,9 @@
+import React from 'react';
 import { useAppDispatch } from 'app/store';
 import ReportFilter from 'components/report-filter/ReportFilter';
 import { Moment } from 'moment';
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { Button, ButtonGroup, Container } from 'reactstrap';
+import { Container, FormGroup, Input, Label } from 'reactstrap';
 import { formatDate, stringDateToMoment } from 'utils/DateUtils';
 import {
   excel,
@@ -57,6 +57,7 @@ const Filter = ({ maxDate }: Props) => {
   return (
     <Container fluid className="filter">
       <ReportFilter
+        customKey={reportType}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}
         toDate={stringDateToMoment(toDate)}
@@ -64,19 +65,21 @@ const Filter = ({ maxDate }: Props) => {
         onExcel={handleExcel}
       />
       <div>
-        <span>Report By</span>
-        <ButtonGroup className="mx-4">
-          {reportTypes.map((type, index) => (
-            <Button
-              key={index}
-              color="primary"
-              onClick={() => dispatch(setReportType(type))}
-              active={reportType === type}
-            >
+        <span className="mr-4">Report By</span>
+        {reportTypes.map((type, index) => (
+          <FormGroup check inline key={`option_${index}`}>
+            <Input
+              id={`option_${index}`}
+              checked={type === reportType}
+              onChange={() => dispatch(setReportType(type))}
+              name="radioReportType"
+              type="radio"
+            />
+            <Label for={`option_${index}`} check>
               {getReportName(type)}
-            </Button>
-          ))}
-        </ButtonGroup>
+            </Label>
+          </FormGroup>
+        ))}
       </div>
     </Container>
   );

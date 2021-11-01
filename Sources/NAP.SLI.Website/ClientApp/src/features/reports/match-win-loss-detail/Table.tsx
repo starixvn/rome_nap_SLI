@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatDecimal } from 'utils/NumberUtils';
@@ -172,8 +172,8 @@ const TableComponent = () => {
             </td>
           </tr>
         ) : (
-          matches.map((match) => (
-            <>
+          matches.map((match, index) => (
+            <Fragment key={`match_${match.matchName}_${index}`}>
               <tr>
                 <td className="match-row" colSpan={7 - removedColumnTotal}>
                   <span className="league-title">{match.leagueName}</span>
@@ -195,7 +195,7 @@ const TableComponent = () => {
                 record={match.total}
                 type={RowType.SubTotal}
               />
-            </>
+            </Fragment>
           ))
         )}
         {matches.length > 0 && total && (

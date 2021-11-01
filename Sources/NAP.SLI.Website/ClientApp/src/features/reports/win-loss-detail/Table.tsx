@@ -13,12 +13,19 @@ import { formatDecimal, formatInteger } from 'utils/NumberUtils';
 import { PageSizes } from 'utils/ReportUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import { query, Record, selectCustomer } from './reducer';
+import './Table.scss';
 
 type RowProps = {
   roleId: number;
   record: Record;
   isFooter: boolean;
   usernameClick?: (record: Record) => void;
+};
+
+const getRowClassName = (isFooter: boolean) => {
+  if (isFooter) {
+    return 'total-row';
+  }
 };
 
 const RowComponent = ({
@@ -28,7 +35,7 @@ const RowComponent = ({
   usernameClick,
 }: RowProps) => {
   return (
-    <tr>
+    <tr className={getRowClassName(isFooter)}>
       <td>
         {isFooter ? (
           <span>Total</span>
