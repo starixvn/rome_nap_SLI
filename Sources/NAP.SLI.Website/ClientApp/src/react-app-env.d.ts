@@ -55,4 +55,8 @@ declare global {
   type InputKeyValueObject = {
     [key: string]: InputValue;
   };
+
+  interface Window {
+    ViewResult: () => void;
+  }
 }

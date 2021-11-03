@@ -4,6 +4,10 @@ import { Table } from 'reactstrap';
 import { Ticket } from './reducer';
 import './Table.scss';
 
+window.ViewResult = (...args: any) => {
+  console.log(args);
+};
+
 const TableComponent = () => {
   const { queryData, queryCustomer } = useSelector(
     (state: AppState) => state.betList,

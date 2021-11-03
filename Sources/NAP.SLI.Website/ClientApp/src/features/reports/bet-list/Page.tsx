@@ -1,6 +1,5 @@
 import { useAppDispatch } from 'app/store';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Redirect, useLocation } from 'react-router-dom';
 import { Spinner } from 'reactstrap';
 import { maxDate } from 'utils/DateUtils';
@@ -14,6 +13,7 @@ import {
   selectCustomer,
 } from './reducer';
 import Table from './Table';
+import Title from './Title';
 
 type QueryByDate = {
   fromDate: string;
@@ -43,7 +43,6 @@ const BetListPage = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [key, setKey] = useState(0);
-  const { queryArg } = useSelector((state: AppState) => state.betList);
 
   const getDataFromReport = useCallback(async () => {
     setIsLoading(true);
@@ -113,8 +112,7 @@ const BetListPage = () => {
   if (!location.state) {
     return <Redirect to={RouteLinks.HOME} />;
   }
-  const { username } = location.state;
-  const { fromDate, toDate } = queryArg;
+
   const isFromReport =
     location.state?.queryByMatch ||
     location.state?.queryByDate ||
@@ -122,14 +120,7 @@ const BetListPage = () => {
 
   return (
     <div className="bet-list-page">
-      {isFromReport ? (
-        <div className="page-title">
-          MEMBER BET LIST {fromDate} --&gt; {toDate} - {username}
-        </div>
-      ) : (
-        <Filter key={key} maxDate={maxDate} />
-      )}
-
+      {isFromReport ? <Title /> : <Filter key={key} maxDate={maxDate} />}
       {isLoading ? <Spinner color="primary" /> : <Table />}
     </div>
   );
