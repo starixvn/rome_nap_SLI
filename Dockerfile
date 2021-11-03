@@ -4,6 +4,7 @@ ENV TZ="America/New_York"
 
 COPY ./Sources/NAP.SimpleApi ./NAP.SimpleApi
 COPY ./Sources/NAP.SLI.Account ./NAP.SLI.Account
+COPY ./Sources/NAP.SLI.BetList ./NAP.SLI.BetList
 COPY ./Sources/NAP.SLI.Common ./NAP.SLI.Common
 COPY ./Sources/NAP.SLI.Customer ./NAP.SLI.Customer
 COPY ./Sources/NAP.SLI.CustomerSetting ./NAP.SLI.CustomerSetting
