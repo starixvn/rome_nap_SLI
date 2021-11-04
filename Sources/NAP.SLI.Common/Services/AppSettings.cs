@@ -7,9 +7,11 @@ namespace NAP.SLI.Common.Services
     {
         string Environment { get; }
 
+        string DefaultCategory { get; }
+
         string SentryDsn { get; }
 
-        string SentryDefaultCategory { get; }
+        string RabbitMQConnectionString { get; }
 
         string AppDataPath { get; }
 
@@ -27,9 +29,11 @@ namespace NAP.SLI.Common.Services
 
         public string Environment => configuration.GetValue<string>("Environment");
 
-        public string SentryDsn => configuration.GetValue<string>("Sentry:Dsn");
+        public string DefaultCategory => configuration.GetValue<string>("Fanex.Logging:DefaultCategory");
 
-        public string SentryDefaultCategory => configuration.GetValue<string>("Sentry:DefaultCategory");
+        public string SentryDsn => configuration.GetValue<string>("Fanex.Logging:SentryDsn");
+
+        public string RabbitMQConnectionString => configuration.GetValue<string>("Fanex.Logging:RabbitMQConnectionString");
 
         public string BetListApiUrl => configuration.GetValue<string>("BetListAPI:URL");
 

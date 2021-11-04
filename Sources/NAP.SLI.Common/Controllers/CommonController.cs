@@ -26,8 +26,6 @@
         private readonly HttpContext context;
         private readonly IAppSettings appSettings;
         private readonly ICacheService memoryCacheService;
-        private readonly UMConfig umConfig;
-        private readonly IMaintenanceService maintenanceService;
         private readonly IMapper mapper;
         private readonly ISharedLocalizer sharedLocalizer;
 
@@ -35,16 +33,12 @@
             IHttpContextAccessor httpContextAccessor,
             IAppSettings appSettings,
             ICacheContainer cacheContainer,
-            UMConfig umConfig,
-            IMaintenanceService maintenanceService,
             IMapper mapper,
             ISharedLocalizer sharedLocalizer)
         {
             context = httpContextAccessor.HttpContext;
             this.appSettings = appSettings;
             memoryCacheService = cacheContainer.MemoryCacheService;
-            this.umConfig = umConfig;
-            this.maintenanceService = maintenanceService;
             this.mapper = mapper;
             this.sharedLocalizer = sharedLocalizer;
         }
@@ -54,12 +48,6 @@
         {
             var title = sharedLocalizer["Title"];
             throw new NotSupportedException(title);
-        }
-
-        [HttpPost("[action]")]
-        public void ToggleUM()
-        {
-            umConfig.UnscheduleEnabled = !umConfig.UnscheduleEnabled;
         }
 
         [HttpGet("[action]")]
@@ -79,12 +67,6 @@
                 return content;
             }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
             return Content(content, "application/javascript", Encoding.UTF8);
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> UMTime()
-        {
-            return Ok(await maintenanceService.GetUMTimeAsync().ConfigureAwait(false));
         }
 
         [HttpGet("[action]")]

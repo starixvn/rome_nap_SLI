@@ -55,6 +55,7 @@ namespace NAP.SLI.Website
     using NAP.SLI.WinLossByBetType.Extensions;
     using NAP.SLI.BetList.Controller;
     using NAP.SLI.BetList.Extensions;
+    using Fanex.Logging.RabbitMQ;
 
     public class Startup
     {
@@ -71,9 +72,10 @@ namespace NAP.SLI.Website
         public void ConfigureServices(IServiceCollection services)
         {
             LogManager
-                .SetDefaultLogCategory(AppSettings.SentryDefaultCategory)
+                .SetDefaultLogCategory(AppSettings.DefaultCategory)
                 .Use(new List<ILogEngine>
                 {
+                    new RabbitMQLogging(AppSettings.RabbitMQConnectionString),
                     new SentryLogging(new SentryEngineOptions
                     {
                         Dsn = new Dsn(AppSettings.SentryDsn)
@@ -92,7 +94,7 @@ namespace NAP.SLI.Website
                 .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
             Fanex.Caching.Memory.MemoryCacheServiceCollectionExtensions.AddMemoryCache(services, Configuration.GetSection("Fanex.Caching"));
-            services.AddRedisCache(Configuration.GetSection("Fanex.Caching.Redis"));
+            services.AddRedisCache(Configuration.GetSection("Fanex.Caching:Redis"));
 
             RefDataTypeContainer
                     .ConnectTo(new Uri(Configuration["Fanex.RemotingRef.Service.Url"]))
@@ -149,13 +151,9 @@ namespace NAP.SLI.Website
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(env.ContentRootPath, "App_Data"));
             UseFanexDataWithSqlServer();
 
-            if (env.IsDevelopment())
+            app.UseExceptionHandler("/error");
+            if (!env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
