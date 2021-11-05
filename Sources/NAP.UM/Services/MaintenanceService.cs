@@ -81,7 +81,10 @@ namespace NAP.UM.Services
         {
             try
             {
-                using var client = new HttpClient();
+                using var client = new HttpClient
+                {
+                    Timeout = TimeSpan.FromSeconds(5)
+                };
                 var request = new HttpRequestMessage
                 {
                     RequestUri = new Uri($"{umConfig.ServiceUri}{endPoint}"),
