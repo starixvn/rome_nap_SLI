@@ -10,6 +10,7 @@ import {
   getByDate,
   getByMatch,
   resetState,
+  selectArg,
   selectCustomer,
 } from './reducer';
 import Table from './Table';
@@ -24,6 +25,8 @@ type QueryByMatch = {
   matchId: number;
   bettype: number;
   liveIndicator: number;
+  fromDate: string;
+  toDate: string;
 };
 
 type QueryByBetType = {
@@ -60,8 +63,15 @@ const BetListPage = () => {
     }
 
     if (location.state?.queryByMatch) {
-      const { matchId, bettype, liveIndicator } = location.state.queryByMatch;
+      const {
+        matchId,
+        bettype,
+        liveIndicator,
+        fromDate,
+        toDate,
+      } = location.state.queryByMatch;
       const { custId, roleId } = location.state;
+      dispatch(selectArg({ fromDate, toDate }));
       await dispatch(
         getByMatch({
           matchId,

@@ -119,6 +119,8 @@ const TableComponent = () => {
         matchId,
         liveIndicator,
         bettype: betType,
+        fromDate,
+        toDate,
       },
     });
   };

@@ -125,6 +125,14 @@ export const excel = async (payload: ExcelProps) => {
   return await download(`/api/${actionName}/excel`, payload);
 };
 
+const handlePendingQuery = (state: State, { meta }: any) => {
+  const { fromDate, toDate } = meta.arg;
+  state.queryArg = {
+    fromDate,
+    toDate,
+  };
+};
+
 const slice = createSlice({
   name: actionName,
   initialState,
@@ -140,17 +148,15 @@ const slice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getByDate.pending, (state, { meta }) => {
-      const { fromDate, toDate } = meta.arg;
-      state.queryArg = {
-        fromDate,
-        toDate,
-      };
-    });
+    builder.addCase(getByDate.pending, handlePendingQuery);
     builder.addCase(getByDate.fulfilled, (state, { payload }) => {
       state.queryData = payload;
     });
     builder.addCase(getByMatch.fulfilled, (state, { payload }) => {
+      state.queryData = payload;
+    });
+    builder.addCase(getByBettype.pending, handlePendingQuery);
+    builder.addCase(getByBettype.fulfilled, (state, { payload }) => {
       state.queryData = payload;
     });
     builder.addCase(getMinDate.fulfilled, (state, { payload }) => {
