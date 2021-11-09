@@ -11,6 +11,8 @@ namespace NAP.SLI.Common.Services
 
         string SentryDsn { get; }
 
+        string FrontEndSentryDsn { get; }
+
         string RabbitMQConnectionString { get; }
 
         string AppDataPath { get; }
@@ -32,6 +34,8 @@ namespace NAP.SLI.Common.Services
         public string DefaultCategory => configuration.GetValue<string>("Fanex.Logging:DefaultCategory");
 
         public string SentryDsn => configuration.GetValue<string>("Fanex.Logging:SentryDsn");
+
+        public string FrontEndSentryDsn => configuration.GetValue<string>("Fanex.Logging:FrontEndSentryDsn");
 
         public string RabbitMQConnectionString => configuration.GetValue<string>("Fanex.Logging:RabbitMQConnectionString");
 

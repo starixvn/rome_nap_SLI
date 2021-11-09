@@ -78,7 +78,8 @@ namespace NAP.SLI.Website
                     new RabbitMQLogging(AppSettings.RabbitMQConnectionString),
                     new SentryLogging(new SentryEngineOptions
                     {
-                        Dsn = new Dsn(AppSettings.SentryDsn)
+                        Dsn = new Dsn(AppSettings.SentryDsn),
+                        FrontEndDsn = new Dsn(AppSettings.FrontEndSentryDsn)
                     })
                 });
 
