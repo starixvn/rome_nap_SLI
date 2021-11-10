@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -37,7 +36,7 @@ namespace NAP.UM.Services
         public async Task<bool> IsValidTokenAsync(string token)
         {
             var url = $"/token/validate?SiteId={umConfig.SiteId}&Token={token}";
-            return await GetAsync<bool>(url).ConfigureAwait(false);
+            return await SendAsync<bool>(url, HttpMethod.Get).ConfigureAwait(false);
         }
 
         public async Task<UMTime> GetUMTimeAsync()
@@ -52,29 +51,22 @@ namespace NAP.UM.Services
                 };
             }
 
-            var umTimes = await GetUMTimesAsync().ConfigureAwait(false);
-            if (umTimes.ContainsKey(umConfig.SiteId))
-            {
-                return umTimes[umConfig.SiteId];
-            }
-
-            return new UMTime();
-        }
-
-        private async Task<Dictionary<int, UMTime>> GetUMTimesAsync()
-        {
             var cacheTimeSpan = TimeSpan.FromSeconds(umConfig.CacheDuration);
             var cacheItemOptions = new CacheItemOptions().SetAbsoluteExpiration(cacheTimeSpan);
-            return await cacheService.GetOrSetAsync<Dictionary<int, UMTime>>(CacheKey, async () =>
+            return await cacheService.GetOrSetAsync(CacheKey, async () =>
             {
-                var url = "/UnderMaintenance/GetAll";
-                return await GetAsync<Dictionary<int, UMTime>>(url).ConfigureAwait(false);
-            }, cacheItemOptions).ConfigureAwait(false);
-        }
+                var url = $"/UnderMaintenance/get?siteId={umConfig.SiteId}";
+                var umTime = await SendAsync<UMTime>(url, HttpMethod.Get).ConfigureAwait(false);
+                if (umTime == null)
+                {
+                    umTime = new UMTime
+                    {
+                        IsUnderMaintenanceTime = false
+                    };
+                }
 
-        private Task<T> GetAsync<T>(string endPoint)
-        {
-            return SendAsync<T>(endPoint, HttpMethod.Get);
+                return umTime;
+            }, cacheItemOptions).ConfigureAwait(false);
         }
 
         private async Task<T> SendAsync<T>(string endPoint, HttpMethod httpMethod)
