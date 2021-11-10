@@ -25,9 +25,9 @@ namespace NAP.SLI.Common.Controllers
         {
             var isProd = appSettings.Environment == "PRO";
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            await ExceptionHandler.HandleAsync(context.Error, HttpContext).ConfigureAwait(false);
             if (isProd)
             {
-                await ExceptionHandler.HandleAsync(context.Error, HttpContext).ConfigureAwait(false);
                 return Problem(
                                 statusCode: StatusCodes.Status500InternalServerError,
                                 title: "Internal Server Error");
