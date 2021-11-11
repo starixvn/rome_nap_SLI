@@ -23,7 +23,7 @@ namespace NAP.SLI.Common.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> Error()
         {
-            var isProd = appSettings.Environment == "PRO";
+            var isProd = appSettings.Environment == "PROD";
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             await ExceptionHandler.HandleAsync(context.Error, HttpContext).ConfigureAwait(false);
             if (isProd)
