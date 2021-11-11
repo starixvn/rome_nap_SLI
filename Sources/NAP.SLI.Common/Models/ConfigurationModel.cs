@@ -4,6 +4,6 @@ namespace NAP.SLI.Common.Models
     {
         public string Environment { get; set; }
 
-        public string SentryDsn { get; set; }
+        public string FrontEndSentryDsn { get; set; }
     }
 }
