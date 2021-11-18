@@ -56,6 +56,7 @@ namespace NAP.SLI.Website
     using NAP.SLI.BetList.Controller;
     using NAP.SLI.BetList.Extensions;
     using Fanex.Logging.RabbitMQ;
+    using NAP.SLI.Results.Extensions;
 
     public class Startup
     {
@@ -229,7 +230,8 @@ namespace NAP.SLI.Website
                 .AddWinLossDetailModule()
                 .AddWinLossAnalysisModule()
                 .AddWinLossByBetTypeModule()
-                .AddBetListModule();
+                .AddBetListModule()
+                .AddResultsModule();
         }
 
         private static void AddAutoMapper(IServiceCollection services)

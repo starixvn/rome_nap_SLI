@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.Configuration;
+using NAP.SLI.Common.Models;
 
 namespace NAP.SLI.Common.Services
 {
@@ -18,6 +19,8 @@ namespace NAP.SLI.Common.Services
         string AppDataPath { get; }
 
         string BetListApiUrl { get; }
+
+        ResultsAPI ResultsConfigs { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -40,6 +43,8 @@ namespace NAP.SLI.Common.Services
         public string RabbitMQConnectionString => configuration.GetValue<string>("Fanex.Logging:RabbitMQConnectionString");
 
         public string BetListApiUrl => configuration.GetValue<string>("BetListAPI:URL");
+
+        public ResultsAPI ResultsConfigs => configuration.GetValue<ResultsAPI>("ResultsAPI");
 
         public string AppDataPath => AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
     }
