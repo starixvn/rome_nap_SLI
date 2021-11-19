@@ -173,25 +173,22 @@ exports[`Modal open modal 1`] = `
                             <label
                               class="col-sm-4 col-form-label"
                             >
-                              Group
+                              Email
                             </label>
                             <div
                               class="col-sm-8"
                             >
-                              <select
-                                class="form-control form-control"
-                              >
-                                <option
-                                  value="0"
-                                >
-                                  User
-                                </option>
-                                <option
-                                  value="1"
-                                >
-                                  Admin
-                                </option>
-                              </select>
+                              <input
+                                aria-invalid="false"
+                                autocomplete="off"
+                                class="form-control"
+                                name="email"
+                                type="text"
+                                value=""
+                              />
+                              <div
+                                class="invalid-feedback"
+                              />
                             </div>
                           </div>
                         </div>
@@ -332,25 +329,22 @@ exports[`Modal open modal 1`] = `
                               <label
                                 class="col-sm-4 col-form-label"
                               >
-                                Group
+                                Email
                               </label>
                               <div
                                 class="col-sm-8"
                               >
-                                <select
-                                  class="form-control form-control"
-                                >
-                                  <option
-                                    value="0"
-                                  >
-                                    User
-                                  </option>
-                                  <option
-                                    value="1"
-                                  >
-                                    Admin
-                                  </option>
-                                </select>
+                                <input
+                                  aria-invalid="false"
+                                  autocomplete="off"
+                                  class="form-control"
+                                  name="email"
+                                  type="text"
+                                  value=""
+                                />
+                                <div
+                                  class="invalid-feedback"
+                                />
                               </div>
                             </div>
                           </div>
@@ -449,8 +443,8 @@ exports[`Modal open modal 1`] = `
                         initialValues={
                           Object {
                             "custId": 1,
+                            "email": "",
                             "firstName": "",
-                            "groupId": 1,
                             "lastName": "",
                           }
                         }
@@ -464,6 +458,7 @@ exports[`Modal open modal 1`] = `
                             "_blacklistError": undefined,
                             "_excludedEdges": Array [],
                             "_nodes": Array [
+                              "email",
                               "lastName",
                               "firstName",
                             ],
@@ -478,6 +473,42 @@ exports[`Modal open modal 1`] = `
                             "deps": Array [],
                             "exclusiveTests": Object {},
                             "fields": Object {
+                              "email": StringSchema {
+                                "_blacklist": ReferenceSet {
+                                  "list": Set {},
+                                  "refs": Map {},
+                                },
+                                "_blacklistError": undefined,
+                                "_mutate": undefined,
+                                "_typeError": [Function],
+                                "_whitelist": ReferenceSet {
+                                  "list": Set {},
+                                  "refs": Map {},
+                                },
+                                "_whitelistError": undefined,
+                                "conditions": Array [],
+                                "deps": Array [],
+                                "exclusiveTests": Object {
+                                  "required": true,
+                                },
+                                "spec": Object {
+                                  "abortEarly": true,
+                                  "label": undefined,
+                                  "meta": undefined,
+                                  "nullable": false,
+                                  "presence": "required",
+                                  "recursive": true,
+                                  "strict": false,
+                                  "strip": false,
+                                },
+                                "tests": Array [
+                                  [Function],
+                                ],
+                                "transforms": Array [
+                                  [Function],
+                                ],
+                                "type": "string",
+                              },
                               "firstName": StringSchema {
                                 "_blacklist": ReferenceSet {
                                   "list": Set {},
@@ -841,7 +872,7 @@ exports[`Modal open modal 1`] = `
                                         <label
                                           className="col-sm-4 col-form-label"
                                         >
-                                          Group
+                                          Email
                                         </label>
                                       </Label>
                                       <Col
@@ -860,71 +891,39 @@ exports[`Modal open modal 1`] = `
                                         <div
                                           className="col-sm-8"
                                         >
-                                          <FormikSelect
-                                            name="groupId"
-                                            options={
-                                              Array [
-                                                Object {
-                                                  "label": "User",
-                                                  "value": 0,
-                                                },
-                                                Object {
-                                                  "label": "Admin",
-                                                  "value": 1,
-                                                },
-                                              ]
-                                            }
+                                          <Input
+                                            autoComplete="off"
+                                            invalid={false}
+                                            name="email"
+                                            tag={[Function]}
+                                            type="text"
                                           >
-                                            <_
-                                              inputProps={
-                                                Object {
-                                                  "className": "form-control",
-                                                }
-                                              }
-                                              name="groupId"
-                                              onBlur={[Function]}
-                                              onChange={[Function]}
-                                              options={
-                                                Array [
-                                                  Object {
-                                                    "label": "User",
-                                                    "value": 0,
-                                                  },
-                                                  Object {
-                                                    "label": "Admin",
-                                                    "value": 1,
-                                                  },
-                                                ]
-                                              }
-                                              value={1}
+                                            <Field
+                                              aria-invalid={false}
+                                              autoComplete="off"
+                                              className="form-control"
+                                              name="email"
+                                              type="text"
                                             >
-                                              <Input
+                                              <input
+                                                aria-invalid={false}
+                                                autoComplete="off"
                                                 className="form-control"
+                                                name="email"
+                                                onBlur={[Function]}
                                                 onChange={[Function]}
-                                                type="select"
-                                                value={1}
-                                              >
-                                                <select
-                                                  className="form-control form-control"
-                                                  onChange={[Function]}
-                                                  value={1}
-                                                >
-                                                  <option
-                                                    key="0"
-                                                    value={0}
-                                                  >
-                                                    User
-                                                  </option>
-                                                  <option
-                                                    key="1"
-                                                    value={1}
-                                                  >
-                                                    Admin
-                                                  </option>
-                                                </select>
-                                              </Input>
-                                            </_>
-                                          </FormikSelect>
+                                                type="text"
+                                                value=""
+                                              />
+                                            </Field>
+                                          </Input>
+                                          <FormFeedback
+                                            tag="div"
+                                          >
+                                            <div
+                                              className="invalid-feedback"
+                                            />
+                                          </FormFeedback>
                                         </div>
                                       </Col>
                                     </div>

@@ -20,14 +20,14 @@ export const resetPassword = createAsyncThunk<ResultData, ResetPasswordProps>(
   `${sliceName}/reset-user-password`,
   async (values, { rejectWithValue }) => {
     try {
-      const payload = {
-        apiKey: 'user-management:update-user',
-        data: {
-          custId: values.custId,
-          userPwd: CryptoJS.CfsEnCode(values.password),
-        },
+      const data = {
+        custId: values.custId,
+        userPwd: CryptoJS.CfsEnCode(values.password),
       };
-      const response = await post<ResultData>('/simple-api/command', payload);
+      const response = await post<ResultData>(
+        '/api/user-management/change-password',
+        data,
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err);

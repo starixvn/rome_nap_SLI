@@ -41,9 +41,8 @@ describe('reducer', () => {
     const addNewUserProps = {
       username: 'username',
       password: 'password',
-      firstName: 'firstname',
-      lastName: 'lastname',
-      groupId: 1,
+      firstName: 'first name',
+      lastName: 'last name',
     };
 
     beforeEach(() => {

@@ -17,8 +17,6 @@ import { useSelector, batch } from 'react-redux';
 import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { update, closeModal, UpdateProps } from './reducer';
-import { UserGroupSelectOptions } from 'utils/UserGroupUtils';
-import FormikSelect from 'components/select/FormikSelect';
 import { useAppDispatch } from 'app/store';
 import { error, success } from 'components/toast/reducer';
 import { patchUser } from '../reducer';
@@ -26,6 +24,7 @@ import { patchUser } from '../reducer';
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required('First Name is required'),
   lastName: Yup.string().required('Last Name is required'),
+  email: Yup.string().required('Email is required'),
 });
 
 const EditUserModal = () => {
@@ -59,10 +58,10 @@ const EditUserModal = () => {
   };
 
   const initialValues = {
-    custId: user.custId,
+    custId: user.userId,
     firstName: user.firstName,
     lastName: user.lastName,
-    groupId: user.groupId,
+    email: user.email,
   };
   return (
     <Modal isOpen unmountOnClose>
@@ -111,12 +110,16 @@ const EditUserModal = () => {
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                  <Label sm={4}>Group</Label>
+                  <Label sm={4}>Email</Label>
                   <Col sm={8}>
-                    <FormikSelect
-                      name="groupId"
-                      options={UserGroupSelectOptions}
+                    <Input
+                      name="email"
+                      type="text"
+                      autoComplete="off"
+                      tag={Field}
+                      invalid={!!errors.email && !!touched.email}
                     />
+                    <FormFeedback>{errors.email}</FormFeedback>
                   </Col>
                 </FormGroup>
               </ModalBody>

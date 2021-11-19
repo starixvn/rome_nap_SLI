@@ -3,9 +3,8 @@ const storageKey = 'account';
 export type Account = {
   username: string;
   userId: number;
-  groupId: number;
+  isAdmin: boolean;
   token: string;
-  connectionId: string;
 };
 
 const save = (account: Account) => {

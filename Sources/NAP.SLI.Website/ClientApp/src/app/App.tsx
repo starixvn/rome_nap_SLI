@@ -21,7 +21,6 @@ import WinLossByBetTypePage from 'features/reports/win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from 'features/reports/win-loss-analysis/Page';
 import BetListPage from 'features/reports/bet-list/Page';
 import ResultsPage from 'features/reports/results/Page';
-import { startRefreshToken, stopRefreshToken } from 'services/token';
 import { startCheckin, stopCheckin } from 'services/connection';
 
 export const history = createBrowserHistory();
@@ -36,14 +35,11 @@ const App = () => {
   useEffect(() => {
     if (isUnderMaintenanceTime) {
       stopCheckin();
-      stopRefreshToken();
     } else {
       if (account) {
         startCheckin();
-        startRefreshToken();
       } else {
         stopCheckin();
-        stopRefreshToken();
       }
     }
   });

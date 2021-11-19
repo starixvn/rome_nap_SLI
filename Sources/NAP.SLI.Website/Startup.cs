@@ -58,6 +58,13 @@ namespace NAP.SLI.Website
     using Fanex.Logging.RabbitMQ;
     using NAP.SLI.Results.Extensions;
     using NAP.SLI.Results.Controllers;
+    using Fanex.NAP.Client;
+    using Fanex.NAP.Client.Configuration;
+    using Fanex.NAP.Client.Helpers.Web;
+    using Fanex.NAP.Client.Services;
+    using Fanex.NAP.Client.AspNetCore.Configuration;
+    using Fanex.NAP.Client.AspNetCore.Session;
+    using NAP.SLI.UserManagement.Controllers;
 
     public class Startup
     {
@@ -104,6 +111,10 @@ namespace NAP.SLI.Website
                     .FromApplication("NAP.SLI");
 
             services.AddSingleton<IRemotingRefService, RemotingRefService>();
+            services.AddSingleton<ISecurityService, SecurityService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<INapSettings>(new NapSettings(Configuration));
+            services.AddSingleton<INapSession, NapSession>();
 
             services
                 .AddControllersWithViews(config =>
@@ -125,7 +136,7 @@ namespace NAP.SLI.Website
 
             services.AddAuthorization(config =>
             {
-                config.AddPolicy(AuthorizationPolicies.Administration, AuthorizationPolicies.AdministrationPolicy);
+                config.AddPolicy(AuthorizationPolicies.Admin, AuthorizationPolicies.AdminPolicy);
             });
 
             var umConfigOption = Configuration.GetSection("UM");
@@ -183,6 +194,9 @@ namespace NAP.SLI.Website
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
+            NapClientManager
+                .UseConfig(app.ApplicationServices.GetService<INapSettings>())
+                .UseSession(app.ApplicationServices.GetService<INapSession>());
 
             app.UseEndpoints(endpoints =>
             {
@@ -249,7 +263,6 @@ namespace NAP.SLI.Website
         {
             services.AddSimpleApi(typeof(Account.SimpleApiProfile));
             services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
-            services.AddSimpleApi(typeof(UserManagement.SimpleApiProfile));
             services.AddSimpleApi(typeof(CustomerSetting.SimpleApiProfile));
         }
 
@@ -263,6 +276,7 @@ namespace NAP.SLI.Website
             services.AddMediatR(typeof(WinLossByBetTypeController));
             services.AddMediatR(typeof(BetListController));
             services.AddMediatR(typeof(ResultsController));
+            services.AddMediatR(typeof(UserManagementController));
         }
 
         private void UseFanexDataWithSqlServer()

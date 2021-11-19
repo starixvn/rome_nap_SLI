@@ -4,12 +4,12 @@
 
     public class AuthenticationModel : ResultModel
     {
+        public string Username { get; set; }
+
         public int UserId { get; set; }
 
-        public int GroupId { get; set; }
+        public bool IsAdmin { get; set; }
 
         public string Token { get; set; }
-
-        public string ConnectionId { get; set; }
     }
 }

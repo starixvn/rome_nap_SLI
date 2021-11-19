@@ -1,11 +1,10 @@
 import React from 'react';
-import { RenderResult, render } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
 import Modal from './Modal';
 import { Provider } from 'react-redux';
 import { Action, DeepPartial, ThunkDispatch } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 
 jest.mock('app/store');
 
@@ -16,7 +15,6 @@ const mockStore = configureStore<
 const userManagement = {
   queryArg: {
     username: '',
-    groupId: 0,
   },
 };
 
@@ -54,5 +52,4 @@ describe('Modal', () => {
     expect(component).toMatchSnapshot();
     component.unmount();
   });
-
 });

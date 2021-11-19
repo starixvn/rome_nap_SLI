@@ -1,5 +1,5 @@
 import './Page.scss';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Label,
   Form,
@@ -12,36 +12,20 @@ import {
 } from 'reactstrap';
 import Icon from '@mdi/react';
 import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
-import { useSelector, batch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Formik, Field, FormikProps, FormikHelpers } from 'formik';
-import {
-  query,
-  updateUserStatus,
-  QueryProps,
-  UserModel,
-  patchUser,
-} from './reducer';
+import { query, QueryProps } from './reducer';
 import AddNewUserModal from './add-new-user/Modal';
 import { toggleModal as toggleAddNewUserModel } from './add-new-user/reducer';
-import AddExistingUserModal from './add-existing-user/Modal';
-import { toggleModal as toggleAddExistingUserModel } from './add-existing-user/reducer';
 import EditUserModal from './edit-user/Modal';
 import { openModal as openEditUserModal } from './edit-user/reducer';
 import ResetUserPasswordModal from './reset-user-password/Modal';
 import { openModal as openResetUserPasswordModal } from './reset-user-password/reducer';
-import {
-  UserGroupSelectOptionsWithAll,
-  getGroupName,
-} from 'utils/UserGroupUtils';
-import FormikSelect from 'components/select/FormikSelect';
 import { formatDateTime } from 'utils/DateUtils';
 import { useAppDispatch } from 'app/store';
-import Confirmation from 'components/confirmation/Confirmation';
-import { error, success } from 'components/toast/reducer';
 
 const UserManagementPage = () => {
   const dispatch = useAppDispatch();
-  const [user, setUser] = useState<UserModel | undefined>(undefined);
   const formikRef = useRef<FormikProps<QueryProps>>(null);
   const { users, queryArg } = useSelector(
     (state: AppState) => state.userManagement,
@@ -57,61 +41,9 @@ const UserManagementPage = () => {
     values: QueryProps,
     { setSubmitting }: FormikHelpers<QueryProps>,
   ) => {
-    if (
-      values.groupId &&
-      values.groupId === UserGroupSelectOptionsWithAll[0].value
-    ) {
-      values.groupId = undefined;
-    }
-
     setSubmitting(true);
     await dispatch(query(values));
     setSubmitting(false);
-  };
-
-  const handleUpdateStatus = async (user: UserModel) => {
-    const newClosed = !user.closed;
-    const payload = {
-      custId: user.custId,
-      closed: newClosed,
-    };
-    const resultAction = await dispatch(updateUserStatus(payload));
-    if (updateUserStatus.fulfilled.match(resultAction)) {
-      const resultData = resultAction.payload;
-      if (resultData.isSuccess) {
-        closeConfirmation();
-        batch(() => {
-          dispatch(success('Updated successfully'));
-          dispatch(patchUser({ data: payload }));
-        });
-      } else {
-        dispatch(error(resultData.errMsg));
-      }
-    }
-  };
-
-  const closeConfirmation = () => {
-    setUser(undefined);
-  };
-
-  const renderConfirmation = () => {
-    if (!user) {
-      return <></>;
-    }
-
-    const newClosed = !user.closed;
-    const title = newClosed ? 'Deactivate User' : 'Activate User';
-    const message = `Are you sure to ${
-      newClosed ? 'deactivate' : 'activate'
-    } user [${user.userName}]?`;
-    return (
-      <Confirmation
-        title={title}
-        message={message}
-        onConfirm={async () => await handleUpdateStatus(user)}
-        onCancel={closeConfirmation}
-      />
-    );
   };
 
   const renderTableBody = () => {
@@ -122,7 +54,7 @@ const UserManagementPage = () => {
     if (users.length === 0) {
       return (
         <tr>
-          <td className="text-center" colSpan={8}>
+          <td className="text-center" colSpan={7}>
             There is no information
           </td>
         </tr>
@@ -132,7 +64,7 @@ const UserManagementPage = () => {
     return (
       <>
         {users.map((user) => (
-          <tr key={`Row_${user.custId}`}>
+          <tr key={`Row_${user.userId}`}>
             <td>
               <span
                 className="text-link"
@@ -143,16 +75,9 @@ const UserManagementPage = () => {
             </td>
             <td>{user.firstName}</td>
             <td>{user.lastName}</td>
-            <td>{getGroupName(user.groupId)}</td>
+            <td>{user.email}</td>
             <td>{user.creator}</td>
             <td className="text-center">{formatDateTime(user.createdDate)}</td>
-            <td className="text-center">
-              <Input
-                type="checkbox"
-                checked={!user.closed}
-                onChange={() => setUser(user)}
-              />
-            </td>
             <td className="text-center">
               <span
                 onClick={() => dispatch(openResetUserPasswordModal({ user }))}
@@ -189,15 +114,6 @@ const UserManagementPage = () => {
                       <Icon path={mdiAccountPlus} /> Add New User
                     </Button>
                   </FormGroup>
-                  <FormGroup>
-                    <Button
-                      type="button"
-                      className="btn-block"
-                      onClick={() => dispatch(toggleAddExistingUserModel())}
-                    >
-                      <Icon path={mdiAccountPlus} /> Add Existing User
-                    </Button>
-                  </FormGroup>
                 </div>
                 <div className="form-inline">
                   <FormGroup className="mr-5">
@@ -209,12 +125,6 @@ const UserManagementPage = () => {
                       type="text"
                       autoComplete="off"
                       tag={Field}
-                    />
-                  </FormGroup>
-                  <FormGroup className="mr-5">
-                    <FormikSelect
-                      name="groupId"
-                      options={UserGroupSelectOptionsWithAll}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -236,10 +146,9 @@ const UserManagementPage = () => {
               <th className="text-center">USER NAME</th>
               <th className="text-center">FIRST NAME</th>
               <th className="text-center">LAST NAME</th>
-              <th className="text-center">GROUP NAME</th>
+              <th className="text-center">EMAIL</th>
               <th className="text-center">CREATOR</th>
               <th className="text-center">CREATED DATE</th>
-              <th className="text-center">ACTIVE</th>
               <th className="text-center">PASSWORD</th>
             </tr>
           </thead>
@@ -247,10 +156,8 @@ const UserManagementPage = () => {
         </Table>
       )}
       <AddNewUserModal />
-      <AddExistingUserModal />
       <EditUserModal />
       <ResetUserPasswordModal />
-      {renderConfirmation()}
     </div>
   );
 };

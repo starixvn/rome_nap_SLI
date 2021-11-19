@@ -5,7 +5,6 @@ import { Provider } from 'react-redux';
 import { Action, DeepPartial, ThunkDispatch } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import { mount, ReactWrapper } from 'enzyme';
-import moment from 'moment';
 
 jest.mock('app/store');
 
@@ -26,7 +25,7 @@ describe('CustomerPage', () => {
   it('no valid customer', () => {
     const store = mockStore({
       sidebar: {
-        user: undefined,
+        customer: undefined,
       },
     });
 
@@ -40,15 +39,33 @@ describe('CustomerPage', () => {
   it('exist customer', () => {
     const store = mockStore({
       sidebar: {
-        user: {
-          userName: '',
-          firstName: '',
-          lastName: '',
-          custId: 1,
-          closed: false,
-          groupId: 1,
-          creator: '',
-          createdDate: moment().toString()
+        customer: {
+          generalInformation: {
+            custId: 1,
+            username: '',
+            firstName: '',
+            lastName: '',
+            username2: '',
+            roleId: 1,
+            enabled: true,
+            phone: 'phone',
+            mobilePhone: 'mobilePhone',
+            fax: 'fax',
+            site: 'site',
+          },
+          headline: {
+            memberId: 1,
+            memberName: 'member',
+            agentId: 2,
+            agentName: 'agent',
+            agentEnabled: true,
+            masterId: 3,
+            masterName: 'master',
+            masterEnabled: true,
+            superId: 4,
+            superName: 'super',
+            superEnabled: true,
+          },
         },
       },
     });

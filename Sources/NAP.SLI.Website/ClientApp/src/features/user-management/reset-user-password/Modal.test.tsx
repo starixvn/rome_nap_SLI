@@ -7,7 +7,6 @@ import thunk from 'redux-thunk';
 import { mount, ReactWrapper } from 'enzyme';
 import moment from 'moment';
 
-
 jest.mock('app/store');
 
 const mockStore = configureStore<
@@ -17,7 +16,6 @@ const mockStore = configureStore<
 const userManagement = {
   queryArg: {
     username: '',
-    groupId: 0,
   },
 };
 
@@ -52,11 +50,9 @@ describe('Modal', () => {
           userName: '',
           firstName: '',
           lastName: '',
-          custId: 1,
-          closed: false,
-          groupId: 1,
+          userId: 1,
           creator: '',
-          createdDate: moment().toString()
+          createdDate: moment().toString(),
         },
       },
       userManagement,

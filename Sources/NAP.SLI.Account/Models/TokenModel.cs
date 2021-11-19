@@ -1,18 +1,23 @@
-﻿namespace NAP.SLI.Account.Models
+﻿using Fanex.NAP.Client.Models;
+
+namespace NAP.SLI.Account.Models
 {
     public class TokenModel
     {
         public string Username { get; private set; }
 
+        public int OnUserId { get; private set; }
+
         public int UserId { get; private set; }
 
-        public int GroupId { get; private set; }
+        public bool IsAdmin { get; private set; }
 
-        public TokenModel(string username, int userId, int groupId)
+        public TokenModel(int onUserId, string username, int userId, bool isAdmin)
         {
+            OnUserId = onUserId;
             Username = username;
             UserId = userId;
-            GroupId = groupId;
+            IsAdmin = isAdmin;
         }
     }
 }

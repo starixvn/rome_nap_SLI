@@ -10,12 +10,11 @@ export type UpdateProps = {
   custId: number;
   firstName: string;
   lastName: string;
-  groupId: number;
+  email: string;
 };
 
 type UpdateData = ResultData & {
   custId: number;
-  groupId: number;
 };
 
 const initialState: State = {};
@@ -23,13 +22,12 @@ const sliceName = 'edit-user';
 
 export const update = createAsyncThunk<UpdateData, UpdateProps>(
   `${sliceName}/update`,
-  async (updateProps, { rejectWithValue }) => {
+  async (values, { rejectWithValue }) => {
     try {
-      const payload = {
-        apiKey: 'user-management:update-user',
-        data: updateProps,
-      };
-      const response = await post<UpdateData>('/simple-api/command', payload);
+      const response = await post<UpdateData>(
+        '/api/user-management/update-info',
+        values,
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err);

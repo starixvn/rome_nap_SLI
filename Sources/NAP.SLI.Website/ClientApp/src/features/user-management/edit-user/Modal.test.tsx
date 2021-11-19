@@ -1,5 +1,4 @@
 import React from 'react';
-import { RenderResult, render } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
 import Modal from './Modal';
 import { Provider } from 'react-redux';
@@ -17,7 +16,6 @@ const mockStore = configureStore<
 const userManagement = {
   queryArg: {
     username: '',
-    groupId: 0,
   },
 };
 
@@ -52,11 +50,10 @@ describe('Modal', () => {
           userName: '',
           firstName: '',
           lastName: '',
-          custId: 1,
-          closed: false,
-          groupId: 1,
+          email: '',
+          userId: 1,
           creator: '',
-          createdDate: moment().toString()
+          createdDate: moment().toString(),
         },
       },
       userManagement,

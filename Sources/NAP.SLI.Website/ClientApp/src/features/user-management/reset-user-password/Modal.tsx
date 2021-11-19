@@ -59,7 +59,7 @@ const ResetUserPasswordModal = () => {
   }
 
   const initialValues = {
-    custId: user.custId,
+    custId: user.userId,
     password: '',
     confirmPassword: '',
   };

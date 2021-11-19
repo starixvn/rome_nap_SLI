@@ -21,7 +21,6 @@ import { logout } from 'features/account/authentication/reducer';
 import { toggleModal } from 'features/account/change-password/reducer';
 import { toggle } from 'features/sidebar/reducer';
 import { RouteLinks } from 'utils/RouteUtils';
-import { UserGroup } from 'utils/UserGroupUtils';
 import { useAppDispatch } from 'app/store';
 
 const NavMenu = () => {
@@ -37,7 +36,7 @@ const NavMenu = () => {
     return <></>;
   }
 
-  const { username, groupId } = account;
+  const { username, isAdmin } = account;
   return (
     <Navbar className="navbar-expand border-bottom box-shadow">
       <Button
@@ -50,7 +49,7 @@ const NavMenu = () => {
       <NavbarToggler onClick={handleToggle} className="mr-2" />
       <Collapse className="d-sm-inline-flex" isOpen={isOpen} navbar>
         <Nav className="mr-auto">
-          {groupId === UserGroup.Admin && (
+          {isAdmin && (
             <NavItem>
               <NavLink
                 tag={RRNavLink}

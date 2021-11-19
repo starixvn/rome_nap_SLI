@@ -3,6 +3,7 @@
     public static class NapClaimTypes
     {
         public const string UserId = "NAP_UserId";
-        public const string GroupId = "NAP_GroupId";
+        public const string OnUserId = "NAP_OnUserId";
+        public const string IsAdmin = "NAP_IsAdmin";
     }
 }

@@ -1,6 +1,5 @@
 import storage from 'services/storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { stopRefreshToken, refreshToken } from 'services/token';
 import { stopCheckin, checkin } from 'services/connection';
 import { post } from 'services/http';
 import { Account } from 'services/storage';
@@ -18,12 +17,7 @@ export type LoginProps = {
   password: string;
 };
 
-type LoginData = ResultData & {
-  userId: number;
-  groupId: number;
-  token: string;
-  connectionId: string;
-};
+type LoginData = ResultData & Account;
 
 const sliceName = 'authentication';
 const account = storage.get();
@@ -48,14 +42,13 @@ export const login = createAsyncThunk<
       payload,
     );
     const data = response.data;
-    const { userId, groupId, token, isSuccess, errMsg, connectionId } = data;
+    const { userId, isAdmin, token, isSuccess, errMsg } = data;
     if (isSuccess) {
       return {
         username: payload.username,
         userId,
-        groupId,
+        isAdmin,
         token,
-        connectionId,
       };
     } else {
       return rejectWithValue(errMsg);
@@ -76,7 +69,6 @@ const slice = createSlice({
   reducers: {
     logout: (state) => {
       stopCheckin();
-      stopRefreshToken();
       storage.remove();
       state.account = undefined;
     },
@@ -100,7 +92,6 @@ export const { logout } = slice.actions;
 
 if (account) {
   window.setTimeout(async () => {
-    await refreshToken();
     await checkin();
   }, 1);
 }

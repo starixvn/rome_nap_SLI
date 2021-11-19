@@ -24,13 +24,11 @@ describe('UserManagementPage', () => {
     );
 
   it('render with no user', () => {
-
     const userManagement = {
       queryArg: {
         username: '',
-        groupId: 0,
       },
-      users: []
+      users: [],
     };
     const store = mockStore({
       userManagement,
@@ -49,28 +47,23 @@ describe('UserManagementPage', () => {
       firstName: '1',
       lastName: '1',
       custId: 1,
-      closed: false,
-      groupId: 1,
       creator: '1',
-      createdDate: moment().toString()
+      createdDate: moment().toString(),
     };
     const u2 = {
       userName: '2',
       firstName: '2',
       lastName: '2',
       custId: 1,
-      closed: false,
-      groupId: 1,
       creator: '2',
-      createdDate: moment().toString()
+      createdDate: moment().toString(),
     };
 
     const userManagement = {
       queryArg: {
         username: '',
-        groupId: 0,
       },
-      users: [u1, u2]
+      users: [u1, u2],
     };
 
     const store = mockStore({

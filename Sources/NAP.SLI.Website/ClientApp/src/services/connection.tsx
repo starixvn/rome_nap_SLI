@@ -4,7 +4,7 @@ import store from 'app/store';
 import { post } from './http';
 
 let timeout: number | undefined;
-const timeoutInterval = 30 * 1000;
+const timeoutInterval = 1 * 60 * 1000;
 
 export const stopCheckin = () => {
   if (timeout) {
@@ -22,15 +22,15 @@ export const startCheckin = () => {
 export const checkin = async () => {
   try {
     const account = storage.get();
-    if (!account || !account.connectionId) {
+    if (!account || !account.token) {
       return;
     }
 
     const payload = {
-      connectionId: account.connectionId,
+      token: account.token,
     };
     const response = await post<ResultData>(
-      '/api/authentication/recheckin',
+      '/api/authentication/refresh',
       payload,
     );
     const { isSuccess } = response.data;

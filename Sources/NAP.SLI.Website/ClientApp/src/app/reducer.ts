@@ -6,7 +6,6 @@ import authenticationReducer from 'features/account/authentication/reducer';
 import changePasswordReducer from 'features/account/change-password/reducer';
 import userManagementReducer from 'features/user-management/reducer';
 import addNewUserReducer from 'features/user-management/add-new-user/reducer';
-import addExistingUserReducer from 'features/user-management/add-existing-user/reducer';
 import editUserReducer from 'features/user-management/edit-user/reducer';
 import resetUserPasswordReducer from 'features/user-management/reset-user-password/reducer';
 import winLossDetailReducer from 'features/reports/win-loss-detail/reducer';
@@ -28,7 +27,6 @@ const appReducer = combineReducers({
   changePassword: changePasswordReducer,
   userManagement: userManagementReducer,
   addNewUser: addNewUserReducer,
-  addExistingUser: addExistingUserReducer,
   editUser: editUserReducer,
   resetUserPassword: resetUserPasswordReducer,
   winLossDetail: winLossDetailReducer,

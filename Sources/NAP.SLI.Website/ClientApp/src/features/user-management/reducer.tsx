@@ -3,14 +3,13 @@ import produce from 'immer';
 import { post } from 'services/http';
 
 export type UserModel = {
-  custId: number;
+  userId: number;
   userName: string;
   firstName: string;
   lastName: string;
-  groupId: number;
+  email: string;
   creator: string;
   createdDate: string;
-  closed: boolean;
 };
 
 type State = {
@@ -20,7 +19,6 @@ type State = {
 
 export type QueryProps = {
   username: string;
-  groupId?: number;
 };
 
 type PatchUserAction = {
@@ -29,15 +27,9 @@ type PatchUserAction = {
   };
 };
 
-type UpdateUserStatusProps = {
-  custId: number;
-  closed: boolean;
-};
-
 const initialState: State = {
   queryArg: {
     username: '',
-    groupId: undefined,
   },
   users: undefined,
 };
@@ -47,34 +39,16 @@ export const query = createAsyncThunk<UserModel[], QueryProps>(
   `${sliceName}/query`,
   async (values, { rejectWithValue }) => {
     try {
-      const payload = {
-        apiKey: 'user-management:query-user',
-        data: values,
-      };
-      const response = await post<UserModel[]>('/simple-api/query', payload);
+      const response = await post<UserModel[]>(
+        '/api/user-management/query',
+        values,
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
     }
   },
 );
-
-export const updateUserStatus = createAsyncThunk<
-  ResultData,
-  UpdateUserStatusProps
->(`${sliceName}/add`, async (values, { rejectWithValue }) => {
-  try {
-    const payload = {
-      apiKey: 'user-management:update-user-status',
-      data: values,
-    };
-
-    const response = await post<ResultData>('/simple-api/command', payload);
-    return response.data;
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-});
 
 const slice = createSlice({
   name: sliceName,
@@ -84,7 +58,7 @@ const slice = createSlice({
       const { data } = action.payload;
       if (state.users) {
         state.users = produce(state.users, (users) => {
-          const user = users.filter((u) => u.custId === data.custId)[0];
+          const user = users.filter((u) => u.userId === data.custId)[0];
           Object.assign(user, data);
         });
       }
@@ -93,7 +67,7 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(query.pending, (state, { meta }) => {
       state.queryArg = meta.arg;
-      state.users = [];
+      state.users = undefined;
     });
     builder.addCase(query.fulfilled, (state, { payload }) => {
       state.users = payload;

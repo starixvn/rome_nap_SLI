@@ -7,7 +7,7 @@ export type AddNewUserProps = {
   password: string;
   firstName: string;
   lastName: string;
-  groupId: number;
+  email: string;
 };
 
 type State = {
@@ -24,17 +24,16 @@ export const addNew = createAsyncThunk<ResultData, AddNewUserProps>(
   async (values, { rejectWithValue }) => {
     try {
       const payload = {
-        apiKey: 'user-management:add-new-user',
-        data: {
-          username: values.username,
-          userPwd: CryptoJS.CfsEnCode(values.password),
-          firstName: values.firstName,
-          lastName: values.lastName,
-          groupId: values.groupId,
-          isAddNew: true,
-        },
+        username: values.username,
+        userPwd: CryptoJS.CfsEnCode(values.password),
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
       };
-      const response = await post<ResultData>('/simple-api/command', payload);
+      const response = await post<ResultData>(
+        '/api/user-management/add',
+        payload,
+      );
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
