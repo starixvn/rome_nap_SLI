@@ -9,8 +9,12 @@ import TableBySuper from './TableBySuper';
 import TableByMaster from './TableByMaster';
 import TableByAgent from './TableByAgent';
 import { CustomerLevels } from 'utils/CustomerLevelUtils';
+import { useSelector } from 'react-redux';
 
 const WinLossByBetTypePage = () => {
+  const { isQuerying } = useSelector(
+    (state: AppState) => state.winLossByBetType,
+  );
   const history = useHistory();
   const location = useLocation<Customer>();
   const dispatch = useAppDispatch();
@@ -54,7 +58,7 @@ const WinLossByBetTypePage = () => {
         Win Loss By Bet Type ({location.state.username})
       </div>
       <Filter maxDate={maxDate} />
-      {renderTable()}
+      {!isQuerying && renderTable()}
     </div>
   );
 };

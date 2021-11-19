@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getMinDate } from 'components/report-filter/reducer';
+import { getBalanceUpDay } from 'components/report-filter/reducer';
 import { formatDate, getToday } from 'utils/DateUtils';
 
 type NumberGameData = any;
@@ -52,7 +52,7 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getMinDate.fulfilled, (state, { payload }) => {
+    builder.addCase(getBalanceUpDay.fulfilled, (state, { payload }) => {
       state.minDate = payload.balanceUpDay;
     });
   },

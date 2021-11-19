@@ -47,6 +47,7 @@ type State = {
   queryCustomer?: Customer;
   queryArg: QueryArg;
   queryData?: QueryData;
+  isQuerying: boolean;
 };
 
 export type QueryData = {
@@ -67,6 +68,7 @@ const initialState: State = {
     pageIndex: 1,
     pageSize: PageSize,
   },
+  isQuerying: false,
 };
 const actionName = 'win-loss-detail';
 
@@ -131,6 +133,7 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(query.pending, (state, { meta }) => {
       const { fromDate, toDate, pageIndex, pageSize, isHistory } = meta.arg;
+      state.isQuerying = true;
       state.queryArg = {
         fromDate,
         toDate,
@@ -140,6 +143,7 @@ const slice = createSlice({
       };
     });
     builder.addCase(query.fulfilled, (state, { payload }) => {
+      state.isQuerying = false;
       state.queryData = payload;
     });
   },

@@ -23,8 +23,8 @@
             return Ok(reportService.GetBetTypeName(betTypes));
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> MinDate()
+        [HttpGet("balance-up-day")]
+        public async Task<IActionResult> BalanceUpDay()
         {
             var result = await reportService.GetBalanceUpDay().ConfigureAwait(false);
             return Ok(result);

@@ -1,15 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
-  <Function Name="Authentication">
-    <Setting Key="SLI_UserLogin" SpName="SLI_UserLogin_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
-  </Function>
-  <Function Name="Administration">
-    <Setting Key="SLI_User_Sel" SpName="SLI_User_Sel_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="SLI_User_Ins" SpName="SLI_User_Ins_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="SLI_User_Upd" SpName="SLI_User_Upd_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="Acc_Con_AdminUpdClosed" SpName="Acc_Con_AdminUpdClosed" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="Acc_CustomerUpdPwdReset" SpName="Acc_CustomerUpdPwdReset" DbName="DBCUST.CustDB.bodbAdminNet" />
-  </Function>
   <Function Name="CustomerSetting">
     <Setting Key="SLI_CustomerSelCCustomer" SpName="SLI_CustomerSelCCustomer" DbName="DBCUST.CustDB.bodbAdminNet" />
     <Setting Key="SLI_CustomerSelSCustomer" SpName="SLI_CustomerSelSCustomer" DbName="DBCUST.CustDB.bodbAdminNet" />

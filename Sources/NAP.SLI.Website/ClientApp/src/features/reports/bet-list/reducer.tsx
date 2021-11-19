@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { download, post } from 'services/http';
-import { getMinDate } from 'components/report-filter/reducer';
+import { getBalanceUpDay } from 'components/report-filter/reducer';
 
 export type Ticket = {
   AgentPTComHtml: string;
@@ -77,11 +77,11 @@ const initialState: State = {
 };
 
 export const getByDate = createAsyncThunk<QueryData, QueryByDateProps>(
-  `${actionName}/getbydate`,
+  `${actionName}/getByDate`,
   async (values, { rejectWithValue }) => {
     try {
       const { data } = await post<QueryData>(
-        `/api/${actionName}/getbydate`,
+        `/api/${actionName}/getByDate`,
         values,
       );
       return data;
@@ -92,11 +92,11 @@ export const getByDate = createAsyncThunk<QueryData, QueryByDateProps>(
 );
 
 export const getByMatch = createAsyncThunk<QueryData, QueryByMatchProps>(
-  `${actionName}/getbymatch`,
+  `${actionName}/getByMatch`,
   async (values, { rejectWithValue }) => {
     try {
       const { data } = await post<QueryData>(
-        `/api/${actionName}/getbymatch`,
+        `/api/${actionName}/getByMatch`,
         values,
       );
       return data;
@@ -107,11 +107,11 @@ export const getByMatch = createAsyncThunk<QueryData, QueryByMatchProps>(
 );
 
 export const getByBettype = createAsyncThunk<QueryData, QueryByBettypeProps>(
-  `${actionName}/getbybettype`,
+  `${actionName}/getByBettype`,
   async (values, { rejectWithValue }) => {
     try {
       const { data } = await post<QueryData>(
-        `/api/${actionName}/getbybettype`,
+        `/api/${actionName}/getByBettype`,
         values,
       );
       return data;
@@ -159,7 +159,7 @@ const slice = createSlice({
     builder.addCase(getByBettype.fulfilled, (state, { payload }) => {
       state.queryData = payload;
     });
-    builder.addCase(getMinDate.fulfilled, (state, { payload }) => {
+    builder.addCase(getBalanceUpDay.fulfilled, (state, { payload }) => {
       state.minDate = payload.balanceUpDay;
     });
   },

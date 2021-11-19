@@ -25,15 +25,15 @@ import { useAppDispatch } from 'app/store';
 const UserManagementPage = () => {
   const dispatch = useAppDispatch();
   const formikRef = useRef<FormikProps<QueryProps>>(null);
-  const { users, queryArg } = useSelector(
+  const { users, queryArg, isQuerying } = useSelector(
     (state: AppState) => state.userManagement,
   );
 
   useEffect(() => {
-    if (formikRef.current && users === undefined) {
+    if (formikRef.current && users === undefined && !isQuerying) {
       formikRef.current.handleSubmit();
     }
-  }, [users]);
+  }, [users, isQuerying]);
 
   const handleQuery = async (
     values: QueryProps,

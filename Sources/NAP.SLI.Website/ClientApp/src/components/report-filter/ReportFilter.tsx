@@ -21,7 +21,7 @@ import moment, { Moment } from 'moment';
 import { Controller, useForm } from 'react-hook-form';
 import RHFDatePicker from '../date-picker/RHFDatePicker';
 import { useAppDispatch } from 'app/store';
-import { getMinDate } from './reducer';
+import { getBalanceUpDay } from './reducer';
 import { useSelector } from 'react-redux';
 
 type Props = {
@@ -81,7 +81,7 @@ const ReportFilter = ({
   useEffect(() => {
     if (!isSubmitting) {
       handleSubmit(onSubmit)();
-      dispatch(getMinDate());
+      dispatch(getBalanceUpDay());
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

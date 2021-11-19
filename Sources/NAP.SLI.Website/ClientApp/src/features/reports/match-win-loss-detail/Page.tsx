@@ -1,5 +1,6 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
@@ -8,6 +9,9 @@ import { selectCustomer } from './reducer';
 import Table from './Table';
 
 const Page = () => {
+  const { isQuerying } = useSelector(
+    (state: AppState) => state.matchWinLossDetail,
+  );
   const history = useHistory();
   const location = useLocation<Customer>();
   const dispatch = useAppDispatch();
@@ -36,7 +40,7 @@ const Page = () => {
         Match Win Loss Detail ({location.state.username})
       </div>
       <Filter maxDate={maxDate} />
-      <Table />
+      {!isQuerying && <Table />}
     </div>
   );
 };

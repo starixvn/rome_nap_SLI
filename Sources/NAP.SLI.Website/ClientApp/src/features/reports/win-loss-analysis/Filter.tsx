@@ -20,7 +20,7 @@ type Props = {
 const Filter = ({ maxDate }: Props) => {
   const dispatch = useAppDispatch();
 
-  const { queryCustomer, queryArg } = useSelector(
+  const { queryCustomer, queryArg, isQuerying } = useSelector(
     (state: AppState) => state.winLossAnalysis,
   );
 
@@ -74,6 +74,7 @@ const Filter = ({ maxDate }: Props) => {
               onChange={() => dispatch(setReportType(type))}
               name="radioReportType"
               type="radio"
+              disabled={isQuerying}
             />
             <Label for={`option_${index}`} check>
               {getReportName(type)}

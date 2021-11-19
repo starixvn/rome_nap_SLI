@@ -13,6 +13,7 @@ export type UserModel = {
 };
 
 type State = {
+  isQuerying: boolean;
   queryArg: QueryProps;
   users?: UserModel[];
 };
@@ -28,6 +29,7 @@ type PatchUserAction = {
 };
 
 const initialState: State = {
+  isQuerying: false,
   queryArg: {
     username: '',
   },
@@ -67,9 +69,11 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(query.pending, (state, { meta }) => {
       state.queryArg = meta.arg;
+      state.isQuerying = true;
       state.users = undefined;
     });
     builder.addCase(query.fulfilled, (state, { payload }) => {
+      state.isQuerying = false;
       state.users = payload;
     });
   },

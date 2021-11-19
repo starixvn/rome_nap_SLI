@@ -14,13 +14,13 @@ const initialState: State = {
   minDate: '',
 };
 
-const actionName = 'report-filter';
+const actionName = 'report';
 
-export const getMinDate = createAsyncThunk<QueryData>(
-  `${actionName}/getMinDate`,
+export const getBalanceUpDay = createAsyncThunk<QueryData>(
+  `${actionName}/getBalanceUpDay`,
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await get<QueryData>(`/api/report/mindate`);
+      const { data } = await get<QueryData>(`/api/report/balance-up-day`);
       return data;
     } catch (err) {
       return rejectWithValue(err);
@@ -33,7 +33,7 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getMinDate.fulfilled, (state, { payload }) => {
+    builder.addCase(getBalanceUpDay.fulfilled, (state, { payload }) => {
       state.minDate = payload.balanceUpDay;
     });
   },

@@ -44,6 +44,7 @@ type State = {
   queryCustomer?: Customer;
   queryArg: QueryArg;
   queryData?: QueryData;
+  isQuerying: boolean;
 };
 
 const today = getToday();
@@ -55,6 +56,7 @@ const initialState: State = {
     fromDate: formatDate(today),
     toDate: formatDate(today),
   },
+  isQuerying: false,
 };
 
 const actionName = 'win-loss-analysis';
@@ -92,6 +94,7 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(query.pending, (state, { meta }) => {
       const { fromDate, toDate, reportType } = meta.arg;
+      state.isQuerying = true;
       state.queryArg = {
         fromDate,
         toDate,
@@ -99,6 +102,7 @@ const slice = createSlice({
       };
     });
     builder.addCase(query.fulfilled, (state, { payload }) => {
+      state.isQuerying = false;
       state.queryData = payload;
     });
   },

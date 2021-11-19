@@ -15,7 +15,9 @@ const Page = () => {
   const history = useHistory();
   const location = useLocation<Customer>();
   const dispatch = useAppDispatch();
-  const { queryArg } = useSelector((state: AppState) => state.winLossDetail);
+  const { queryArg, isQuerying } = useSelector(
+    (state: AppState) => state.winLossDetail,
+  );
 
   useEffect(() => {
     if (location.state) {
@@ -48,7 +50,7 @@ const Page = () => {
       ) : (
         <NormalFilter maxDate={maxDate} />
       )}
-      <Table />
+      {!isQuerying && <Table />}
     </div>
   );
 };
