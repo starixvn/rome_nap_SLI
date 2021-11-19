@@ -48,11 +48,14 @@ const TableComponent = () => {
 
     // TODO: For dev, remove after done
     try {
-      const { data } = await post<string>('/api/results/querydetail', {
-        ObCustId: betid,
-        TranId3rd: refno,
-        IsDesktop: true,
-      });
+      const { data } = await post<string>(
+        '/api/thirdpartyresult/gethappy5linkedgameresult',
+        {
+          ObCustId: betid,
+          TranId3rd: refno,
+          IsDesktop: true,
+        },
+      );
       setUrl(data);
       handleToggle();
     } catch (err) {

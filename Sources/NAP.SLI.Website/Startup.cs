@@ -275,8 +275,8 @@ namespace NAP.SLI.Website
             services.AddMediatR(typeof(MatchWinLossDetailController));
             services.AddMediatR(typeof(WinLossByBetTypeController));
             services.AddMediatR(typeof(BetListController));
-            services.AddMediatR(typeof(ResultsController));
             services.AddMediatR(typeof(UserManagementController));
+            services.AddMediatR(typeof(ThirdPartyResultController));
         }
 
         private void UseFanexDataWithSqlServer()

@@ -2,7 +2,7 @@ namespace NAP.SLI.Results.Models
 {
     using NAP.SLI.Common.Models;
 
-    public class DetailModel : ResultModel
+    public class Happy5LinkedGameResultModel : ResultModel
     {
         public string TimeStamp { get; set; }
 

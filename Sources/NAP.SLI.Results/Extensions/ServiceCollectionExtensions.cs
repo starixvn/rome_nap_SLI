@@ -7,7 +7,7 @@ namespace NAP.SLI.Results.Extensions
     {
         public static IServiceCollection AddResultsModule(this IServiceCollection services)
         {
-            services.AddScoped<IQueryService, QueryService>();
+            services.AddScoped<IThirdPartyResultService, ThirdPartyResultService>();
             return services;
         }
     }

@@ -8,25 +8,26 @@ namespace NAP.SLI.Results.Services
     using NAP.SLI.Results.Requests;
     using NAP.SLI.Results.Utilities;
 
-    public interface IQueryService
+    public interface IThirdPartyResultService
     {
-        Task<string> QueryDetail(DetailRequest request);
+        Task<string> GetHappy5LinkedGameResult(Happy5LinkedGameResultRequest request);
+        string GetSoccer5Result(Soccer5ResultRequest request);
     }
 
-    public class QueryService : IQueryService
+    public class ThirdPartyResultService : IThirdPartyResultService
     {
         private readonly IAppSettings appSettings;
         private readonly IWebClient client;
         private readonly ISerializer serializer;
 
-        public QueryService(IAppSettings appSettings, IWebClient client = null, ISerializer serializer = null)
+        public ThirdPartyResultService(IAppSettings appSettings, IWebClient client = null, ISerializer serializer = null)
         {
             this.appSettings = appSettings;
             this.serializer = serializer ?? new JsonSerializer();
             this.client = client ?? new JsonWebClient(this.serializer);
         }
 
-        public async Task<string> QueryDetail(DetailRequest request)
+        public async Task<string> GetHappy5LinkedGameResult(Happy5LinkedGameResultRequest request)
         {
             Helper.CheckArgument(request.ObCustId, "ObCustId");
             Helper.CheckArgument(request.TranId3rd, "TranId3rd");
@@ -38,7 +39,7 @@ namespace NAP.SLI.Results.Services
             }
             else
             {
-                // var responseData = await client.QueryString<DetailModel>(
+                // var responseData = await client.QueryString<Happy5LinkedGameResultModel>(
                 //     appSettings.ResultsConfigs.Url,
                 //     requestData,
                 //     appSettings.ResultsConfigs.ProxyIPServer,
@@ -46,7 +47,7 @@ namespace NAP.SLI.Results.Services
                 //     );
 
                 //TODO: Mock response for dev, remove after done
-                var responseData = new DetailModel
+                var responseData = new Happy5LinkedGameResultModel
                 {
                     TimeStamp = "2020/12/31 13:40:01.221",
                     Seq = "4214d81b2f84449096ff1e98520ec46d",
@@ -78,7 +79,7 @@ namespace NAP.SLI.Results.Services
                 };
             }
 
-            bool ValidateResponse(DetailModel responseData)
+            bool ValidateResponse(Happy5LinkedGameResultModel responseData)
             {
                 if (!responseData.IsSuccess)
                 {
@@ -94,6 +95,37 @@ namespace NAP.SLI.Results.Services
                 }
 
                 return true;
+            }
+        }
+
+        public string GetSoccer5Result(Soccer5ResultRequest request)
+        {
+            Helper.CheckArgument(request.MatchId, "MatchId");
+            Helper.CheckArgument(request.Balls, "Balls");
+
+            var requestData = GenerateRequestData();
+            if ((DebugMode)appSettings.ResultsConfigs.DebugMode == DebugMode.DontSendRequest)
+            {
+                throw new Exception("Request data:" + serializer.Serialize(requestData));
+            }
+            else
+            {
+                return $"{appSettings.ResultsConfigs.UrlSoccer5}?{Helper.DictionaryToString(requestData)}";
+            }
+
+            Dictionary<string, string> GenerateRequestData()
+            {
+                var languageCode = Language.GetLanguageCode(request.Language);
+                return new Dictionary<string, string>
+                {
+                    { "MatchId", request.MatchId},
+                    { "SiteId", appSettings.ResultsConfigs.SiteId },
+                    { "LangCode" , languageCode },
+                    { "Balllist" , request.Balls },
+                    { "BettypeId" , request.BettypeId.ToString() },
+                    { "Platform" , request.IsDesktop ? "D" : "M" },
+                    { "DarkMode" , request.IsDarkMode ? "1" : "0"},
+                };
             }
         }
 
