@@ -60,16 +60,21 @@ export const login = createAsyncThunk<
   }
 });
 
+export const logout = createAsyncThunk<void>(
+  `${sliceName}/logout`,
+  async () => {
+    try {
+      await post<LoginData>('/api/account/logout', {});
+    } catch (err) {
+      console.error(err);
+    }
+  },
+);
+
 const slice = createSlice({
   name: sliceName,
   initialState,
-  reducers: {
-    logout: (state) => {
-      stopCheckin();
-      storage.remove();
-      state.account = undefined;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state) => {
       state.message = undefined;
@@ -82,10 +87,15 @@ const slice = createSlice({
     builder.addCase(login.rejected, (state, action) => {
       state.message = action.payload;
     });
+    builder.addCase(logout.pending, () => {
+      stopCheckin();
+    });
+    builder.addCase(logout.fulfilled, (state) => {
+      storage.remove();
+      state.account = undefined;
+    });
   },
 });
-
-export const { logout } = slice.actions;
 
 if (account) {
   window.setTimeout(async () => {

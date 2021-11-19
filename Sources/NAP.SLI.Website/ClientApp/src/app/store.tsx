@@ -9,7 +9,7 @@ import appReducer, { AppState } from './reducer';
 import { useDispatch } from 'react-redux';
 
 const reducer: Reducer<CombinedState<AppState>, Action> = (state, action) => {
-  if (action.type === logout.type) {
+  if (action.type === logout.fulfilled.type) {
     return appReducer(undefined, action);
   }
 

@@ -30,6 +30,13 @@
             return Ok(result);
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Logout([FromBody] LogoutRequest request)
+        {
+            var result = await mediator.Send(request).ConfigureAwait(false);
+            return Ok(result);
+        }
+
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
