@@ -37,10 +37,7 @@ export const login = createAsyncThunk<
       username: values.username.trim(),
       password: CryptoJS.CfsEnCode(values.password),
     };
-    const response = await post<LoginData>(
-      '/api/authentication/login',
-      payload,
-    );
+    const response = await post<LoginData>('/api/account/login', payload);
     const data = response.data;
     const { userId, isAdmin, token, isSuccess, errMsg } = data;
     if (isSuccess) {

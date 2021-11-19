@@ -7,7 +7,5 @@ namespace NAP.SLI.UserManagement.Requests
     public class QueryRequest : IRequest<IEnumerable<UserModel>>
     {
         public string Username { get; set; }
-
-        public int? GroupId { get; set; }
     }
 }

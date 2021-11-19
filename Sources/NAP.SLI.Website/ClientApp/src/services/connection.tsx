@@ -29,10 +29,7 @@ export const checkin = async () => {
     const payload = {
       token: account.token,
     };
-    const response = await post<ResultData>(
-      '/api/authentication/refresh',
-      payload,
-    );
+    const response = await post<ResultData>('/api/account/refresh', payload);
     const { isSuccess } = response.data;
     if (isSuccess) {
       stopCheckin();

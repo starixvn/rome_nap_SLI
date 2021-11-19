@@ -11,12 +11,10 @@ import {
   Spinner,
 } from 'reactstrap';
 import Icon from '@mdi/react';
-import { mdiAccountPlus, mdiLockReset } from '@mdi/js';
+import { mdiLockReset } from '@mdi/js';
 import { useSelector } from 'react-redux';
 import { Formik, Field, FormikProps, FormikHelpers } from 'formik';
 import { query, QueryProps } from './reducer';
-import AddNewUserModal from './add-new-user/Modal';
-import { toggleModal as toggleAddNewUserModel } from './add-new-user/reducer';
 import EditUserModal from './edit-user/Modal';
 import { openModal as openEditUserModal } from './edit-user/reducer';
 import ResetUserPasswordModal from './reset-user-password/Modal';
@@ -104,17 +102,6 @@ const UserManagementPage = () => {
           {({ handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               <fieldset disabled={isSubmitting}>
-                <div className="form-inline mb-3">
-                  <FormGroup className="mr-2">
-                    <Button
-                      type="button"
-                      className="btn-block"
-                      onClick={() => dispatch(toggleAddNewUserModel())}
-                    >
-                      <Icon path={mdiAccountPlus} /> Add New User
-                    </Button>
-                  </FormGroup>
-                </div>
                 <div className="form-inline">
                   <FormGroup className="mr-5">
                     <Label for="username" className="mr-2">
@@ -155,7 +142,6 @@ const UserManagementPage = () => {
           <tbody>{renderTableBody()}</tbody>
         </Table>
       )}
-      <AddNewUserModal />
       <EditUserModal />
       <ResetUserPasswordModal />
     </div>

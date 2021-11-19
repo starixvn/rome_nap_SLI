@@ -3,7 +3,6 @@ namespace NAP.SLI.Account.Handlers
     using Fanex.NAP.Client.Configuration;
     using Fanex.NAP.Client.Services;
     using MediatR;
-    using Microsoft.Extensions.Options;
     using NAP.SLI.Account.Models;
     using NAP.SLI.Account.Requests;
     using NAP.SLI.Account.Services;

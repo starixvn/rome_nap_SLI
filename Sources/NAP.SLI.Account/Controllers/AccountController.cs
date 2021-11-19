@@ -8,11 +8,11 @@
 
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticationController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly IMediator mediator;
 
-        public AuthenticationController(IMediator mediator)
+        public AccountController(IMediator mediator)
             => this.mediator = mediator;
 
         [AllowAnonymous]
@@ -25,6 +25,13 @@
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)
+        {
+            var result = await mediator.Send(request).ConfigureAwait(false);
+            return Ok(result);
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);

@@ -45,7 +45,7 @@
             {
                 return new AuthenticationModel
                 {
-                    ErrCode = 1,
+                    ErrCode = ErrorCodes.GenericError,
                     ErrMsg = "Invalid username or password"
                 };
             }
@@ -56,7 +56,7 @@
             {
                 return new AuthenticationModel
                 {
-                    ErrCode = 2,
+                    ErrCode = ErrorCodes.GenericError,
                     ErrMsg = "You do not have permission"
                 };
             }

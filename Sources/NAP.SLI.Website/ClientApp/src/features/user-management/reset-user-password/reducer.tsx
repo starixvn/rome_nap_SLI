@@ -22,7 +22,7 @@ export const resetPassword = createAsyncThunk<ResultData, ResetPasswordProps>(
     try {
       const data = {
         custId: values.custId,
-        userPwd: CryptoJS.CfsEnCode(values.password),
+        password: CryptoJS.CfsEnCode(values.password),
       };
       const response = await post<ResultData>(
         '/api/user-management/change-password',

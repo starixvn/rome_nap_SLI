@@ -19,13 +19,13 @@ export const changePassword = createAsyncThunk<
 >(`${sliceName}/change-password`, async (values, { rejectWithValue }) => {
   try {
     const payload = {
-      apiKey: 'account:change-password',
-      data: {
-        oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
-        newPassword: CryptoJS.CfsEnCode(values.newPassword),
-      },
+      oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
+      newPassword: CryptoJS.CfsEnCode(values.newPassword),
     };
-    const { data } = await post<ResultData>('/simple-api/command', payload);
+    const { data } = await post<ResultData>(
+      '/api/account/change-password',
+      payload,
+    );
     return data;
   } catch (err) {
     return rejectWithValue(err);

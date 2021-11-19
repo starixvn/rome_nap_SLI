@@ -5,7 +5,6 @@ import sidebarReducer from 'features/sidebar/reducer';
 import authenticationReducer from 'features/account/authentication/reducer';
 import changePasswordReducer from 'features/account/change-password/reducer';
 import userManagementReducer from 'features/user-management/reducer';
-import addNewUserReducer from 'features/user-management/add-new-user/reducer';
 import editUserReducer from 'features/user-management/edit-user/reducer';
 import resetUserPasswordReducer from 'features/user-management/reset-user-password/reducer';
 import winLossDetailReducer from 'features/reports/win-loss-detail/reducer';
@@ -26,7 +25,6 @@ const appReducer = combineReducers({
   authentication: authenticationReducer,
   changePassword: changePasswordReducer,
   userManagement: userManagementReducer,
-  addNewUser: addNewUserReducer,
   editUser: editUserReducer,
   resetUserPassword: resetUserPasswordReducer,
   winLossDetail: winLossDetailReducer,

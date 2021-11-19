@@ -43,8 +43,6 @@ namespace NAP.SLI.Website
     using NAP.SLI.WinLossDetail.Controllers;
     using NAP.SLI.WinLossAnalysis.Controllers;
     using Fanex.RemotingRef;
-    using NAP.SLI.Account;
-    using NAP.SLI.Customer;
     using NAP.SimpleApi;
     using NAP.UM;
     using NAP.SLI.WinLossAnalysis.Extensions;
@@ -65,6 +63,10 @@ namespace NAP.SLI.Website
     using Fanex.NAP.Client.AspNetCore.Configuration;
     using Fanex.NAP.Client.AspNetCore.Session;
     using NAP.SLI.UserManagement.Controllers;
+    using NAP.SLI.Account.Controllers;
+    using NAP.SLI.Customer.Controllers;
+    using NAP.SLI.Account;
+    using NAP.SLI.Customer;
 
     public class Startup
     {
@@ -252,7 +254,6 @@ namespace NAP.SLI.Website
         private static void AddAutoMapper(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Common.AutoMapperProfile));
-            services.AddAutoMapper(typeof(Account.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossDetail.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossAnalysis.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossByBetType.AutoMapperProfile));
@@ -261,15 +262,14 @@ namespace NAP.SLI.Website
 
         private static void AddSimpleApi(IServiceCollection services)
         {
-            services.AddSimpleApi(typeof(Account.SimpleApiProfile));
             services.AddSimpleApi(typeof(Customer.SimpleApiProfile));
             services.AddSimpleApi(typeof(CustomerSetting.SimpleApiProfile));
         }
 
         private static void AddMediatR(IServiceCollection services)
         {
-            services.AddMediatR(typeof(Account.SimpleApiProfile));
-            services.AddMediatR(typeof(Customer.SimpleApiProfile));
+            services.AddMediatR(typeof(AccountController));
+            services.AddMediatR(typeof(CustomerController));
             services.AddMediatR(typeof(WinLossDetailController));
             services.AddMediatR(typeof(WinLossAnalysisController));
             services.AddMediatR(typeof(MatchWinLossDetailController));
