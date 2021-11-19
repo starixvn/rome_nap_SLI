@@ -44,7 +44,7 @@ namespace NAP.SLI.Common.Services
 
         public string BetListApiUrl => configuration.GetValue<string>("BetListAPI:URL");
 
-        public ResultsAPI ResultsConfigs => configuration.GetValue<ResultsAPI>("ResultsAPI");
+        public ResultsAPI ResultsConfigs => configuration.GetSection("ResultsAPI").Get<ResultsAPI>();
 
         public string AppDataPath => AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
     }

@@ -16,7 +16,7 @@ namespace NAP.SLI.Results.Controllers
             this.mediator = mediator;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public async Task<IActionResult> QueryDetail([FromBody] DetailRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);

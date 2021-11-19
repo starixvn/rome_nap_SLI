@@ -10,7 +10,7 @@ namespace NAP.SLI.Results.Requests
 
         public bool IsDesktop { get; set; }
 
-        public bool IsDarkmode { get; set; } = false;
+        public bool IsDarkMode { get; set; } = false;
 
         public string Language { get; set; } = "en-US";
     }

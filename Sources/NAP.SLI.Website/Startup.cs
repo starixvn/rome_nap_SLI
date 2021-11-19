@@ -57,6 +57,7 @@ namespace NAP.SLI.Website
     using NAP.SLI.BetList.Extensions;
     using Fanex.Logging.RabbitMQ;
     using NAP.SLI.Results.Extensions;
+    using NAP.SLI.Results.Controllers;
 
     public class Startup
     {
@@ -261,6 +262,7 @@ namespace NAP.SLI.Website
             services.AddMediatR(typeof(MatchWinLossDetailController));
             services.AddMediatR(typeof(WinLossByBetTypeController));
             services.AddMediatR(typeof(BetListController));
+            services.AddMediatR(typeof(ResultsController));
         }
 
         private void UseFanexDataWithSqlServer()

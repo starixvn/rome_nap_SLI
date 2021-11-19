@@ -57,6 +57,18 @@ declare global {
   };
 
   interface Window {
-    ViewResult: () => void;
+    ViewResult: (
+      matchid: number,
+      race: number,
+      bettype: number,
+      sporttype: number,
+      refno: number,
+      username: string,
+      winlostdate: string,
+      refno_mixparlay: string,
+      league: number,
+      is_outright: number,
+      betid: number,
+    ) => void;
   }
 }
