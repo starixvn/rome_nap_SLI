@@ -10,6 +10,7 @@ COPY ./Sources/NAP.SLI.Customer ./NAP.SLI.Customer
 COPY ./Sources/NAP.SLI.CustomerSetting ./NAP.SLI.CustomerSetting
 COPY ./Sources/NAP.SLI.Localization ./NAP.SLI.Localization
 COPY ./Sources/NAP.SLI.MatchWinLossDetail ./NAP.SLI.MatchWinLossDetail
+COPY ./Sources/NAP.SLI.Results ./NAP.SLI.Results
 COPY ./Sources/NAP.SLI.UserManagement ./NAP.SLI.UserManagement
 COPY ./Sources/NAP.SLI.WinLossAnalysis ./NAP.SLI.WinLossAnalysis
 COPY ./Sources/NAP.SLI.WinLossDetail ./NAP.SLI.WinLossDetail
