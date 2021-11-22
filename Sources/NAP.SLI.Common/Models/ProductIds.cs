@@ -2,6 +2,6 @@
 {
     public enum ProductIds
     {
-        NumberGame = 1
+        NumberGame = 3
     }
 }
