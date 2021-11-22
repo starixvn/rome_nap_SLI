@@ -8,6 +8,7 @@ declare global {
     configuration: {
       env: string;
       sentryDsn: string;
+      balanceUpDay: string;
       umToken: string | null;
     };
   }

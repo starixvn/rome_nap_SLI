@@ -2,7 +2,6 @@ import { mdiFileExcelOutline } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useAppDispatch } from 'app/store';
 import RHFDatePicker from 'components/date-picker/RHFDatePicker';
-import { getBalanceUpDay } from 'components/report-filter/reducer';
 import moment, { Moment } from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -61,7 +60,6 @@ const Filter = ({ maxDate }: Props) => {
     if (!isSubmitting && queryCustomer?.custId) {
       const { custId } = queryCustomer;
       handleSubmit(() => dispatch(getByDate({ fromDate, toDate, custId })))();
-      dispatch(getBalanceUpDay());
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

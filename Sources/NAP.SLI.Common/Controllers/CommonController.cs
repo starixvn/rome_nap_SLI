@@ -5,7 +5,6 @@
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
-    using AutoMapper;
     using Fanex.Caching;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
@@ -13,8 +12,6 @@
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Localization.Services;
-    using NAP.UM.Models;
-    using NAP.UM.Services;
     using NAP.UM.Web;
 
     [AllowAnonymous]
@@ -25,21 +22,21 @@
     {
         private readonly HttpContext context;
         private readonly IAppSettings appSettings;
+        private readonly IReportService reportService;
         private readonly ICacheService memoryCacheService;
-        private readonly IMapper mapper;
         private readonly ISharedLocalizer sharedLocalizer;
 
         public CommonController(
             IHttpContextAccessor httpContextAccessor,
             IAppSettings appSettings,
+            IReportService reportService,
             ICacheContainer cacheContainer,
-            IMapper mapper,
             ISharedLocalizer sharedLocalizer)
         {
             context = httpContextAccessor.HttpContext;
             this.appSettings = appSettings;
+            this.reportService = reportService;
             memoryCacheService = cacheContainer.MemoryCacheService;
-            this.mapper = mapper;
             this.sharedLocalizer = sharedLocalizer;
         }
 
@@ -53,10 +50,10 @@
         [HttpGet("[action]")]
         public async Task<ActionResult> Configuration()
         {
-            var content = await memoryCacheService.GetOrSetAsync<string>("configuration", async () =>
+            var content = await memoryCacheService.GetOrSetAsync("configuration", async () =>
             {
                 var content = await System.IO.File.ReadAllTextAsync(Path.Combine(appSettings.AppDataPath, "configuration.js")).ConfigureAwait(false);
-                var configurationModel = mapper.Map<ConfigurationModel>(appSettings);
+                var configurationModel = await GetConfigurationAsync().ConfigureAwait(false);
                 var properties = configurationModel.GetType().GetProperties();
                 foreach (var property in properties)
                 {
@@ -67,6 +64,17 @@
                 return content;
             }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
             return Content(content, "application/javascript", Encoding.UTF8);
+        }
+
+        private async Task<ConfigurationModel> GetConfigurationAsync()
+        {
+            var model = await reportService.GetBalanceUpDay().ConfigureAwait(false);
+            return new ConfigurationModel
+            {
+                Environment = appSettings.Environment,
+                FrontEndSentryDsn = appSettings.FrontEndSentryDsn,
+                BalanceUpDay = model.BalanceUpDay
+            };
         }
 
         [HttpGet("[action]")]

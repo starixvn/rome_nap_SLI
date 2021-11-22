@@ -1,3 +1,5 @@
+using System;
+
 namespace NAP.SLI.Common.Models
 {
     public class ConfigurationModel
@@ -5,5 +7,7 @@ namespace NAP.SLI.Common.Models
         public string Environment { get; set; }
 
         public string FrontEndSentryDsn { get; set; }
+
+        public DateTime BalanceUpDay { get; set; }
     }
 }

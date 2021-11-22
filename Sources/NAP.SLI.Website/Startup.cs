@@ -253,7 +253,6 @@ namespace NAP.SLI.Website
 
         private static void AddAutoMapper(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Common.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossDetail.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossAnalysis.AutoMapperProfile));
             services.AddAutoMapper(typeof(WinLossByBetType.AutoMapperProfile));

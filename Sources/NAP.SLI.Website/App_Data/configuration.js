@@ -1,4 +1,5 @@
 window.configuration = {
     env: '{{Environment}}',
-    sentryDsn: '{{FrontEndSentryDsn}}'
+    sentryDsn: '{{FrontEndSentryDsn}}',
+    balanceUpDay: '{{BalanceUpDay}}'
 };

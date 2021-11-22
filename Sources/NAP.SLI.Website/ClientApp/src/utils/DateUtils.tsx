@@ -62,7 +62,7 @@ export const getThisMonthRange = () => {
   const date = getToday();
   return {
     from: moment(date).startOf('month'),
-    to: moment(date).endOf('month'),
+    to: moment.min(date, moment(date).endOf('month')),
   };
 };
 

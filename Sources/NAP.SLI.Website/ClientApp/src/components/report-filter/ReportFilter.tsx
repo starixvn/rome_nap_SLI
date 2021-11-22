@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactNode, useMemo } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import {
   Label,
   Form,
@@ -20,9 +20,6 @@ import { mdiFileExcelOutline } from '@mdi/js';
 import moment, { Moment } from 'moment';
 import { Controller, useForm } from 'react-hook-form';
 import RHFDatePicker from '../date-picker/RHFDatePicker';
-import { useAppDispatch } from 'app/store';
-import { getBalanceUpDay } from './reducer';
-import { useSelector } from 'react-redux';
 
 type Props = {
   maxDate: Moment;
@@ -59,8 +56,6 @@ const ReportFilter = ({
   };
   type FilterValues = typeof initialValues;
 
-  const dispatch = useAppDispatch();
-  const { minDate } = useSelector((state: AppState) => state.reportFilter);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,14 +69,12 @@ const ReportFilter = ({
     defaultValues: initialValues,
   });
 
-  const reportDateRanges = useMemo(() => getReportDateRanges(minDate), [
-    minDate,
-  ]);
+  const minDate = window.configuration.balanceUpDay;
+  const reportDateRanges = getReportDateRanges(minDate);
 
   useEffect(() => {
     if (!isSubmitting) {
       handleSubmit(onSubmit)();
-      dispatch(getBalanceUpDay());
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

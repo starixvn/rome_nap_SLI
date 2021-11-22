@@ -1,8 +1,10 @@
 ﻿namespace NAP.SLI.Common.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Fanex.Caching;
     using Fanex.Data.Repository;
     using Fanex.RemotingRef;
     using NAP.SLI.Common.Criteria;
@@ -19,17 +21,26 @@
         private readonly IDynamicRepository dynamicRepository;
         private readonly IRemotingRefService remotingRefService;
         private readonly ICurrentContextService currentContextService;
+        private readonly ICacheService memoryCacheService;
 
-        public ReportService(IDynamicRepository dynamicRepository, IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
+        public ReportService(
+            IDynamicRepository dynamicRepository,
+            IRemotingRefService remotingRefService,
+            ICurrentContextService currentContextService,
+            ICacheContainer cacheContainer)
         {
             this.dynamicRepository = dynamicRepository;
             this.remotingRefService = remotingRefService;
             this.currentContextService = currentContextService;
+            memoryCacheService = cacheContainer.MemoryCacheService;
         }
 
         public async Task<BalanceUpDayModel> GetBalanceUpDay()
         {
-            return await dynamicRepository.GetAsync<BalanceUpDayModel>(new GetBalanceUpDayCriteria()).ConfigureAwait(false);
+            return await memoryCacheService.GetOrSetAsync("balanceUpDay", async () =>
+            {
+                return await dynamicRepository.GetAsync<BalanceUpDayModel>(new GetBalanceUpDayCriteria()).ConfigureAwait(false);
+            }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
         }
 
         public IEnumerable<string> GetBetTypeName(IEnumerable<int> betTypes)

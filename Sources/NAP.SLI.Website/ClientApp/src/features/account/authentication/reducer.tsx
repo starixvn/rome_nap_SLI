@@ -64,7 +64,7 @@ export const logout = createAsyncThunk<void>(
   `${sliceName}/logout`,
   async () => {
     try {
-      await post<LoginData>('/api/account/logout', {});
+      await post('/api/account/logout', {});
     } catch (err) {
       console.error(err);
     }

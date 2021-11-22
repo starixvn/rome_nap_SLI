@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { download, post } from 'services/http';
-import { getBalanceUpDay } from 'components/report-filter/reducer';
 
 export type Ticket = {
   AgentPTComHtml: string;
@@ -158,9 +157,6 @@ const slice = createSlice({
     builder.addCase(getByBettype.pending, handlePendingQuery);
     builder.addCase(getByBettype.fulfilled, (state, { payload }) => {
       state.queryData = payload;
-    });
-    builder.addCase(getBalanceUpDay.fulfilled, (state, { payload }) => {
-      state.minDate = payload.balanceUpDay;
     });
   },
 });

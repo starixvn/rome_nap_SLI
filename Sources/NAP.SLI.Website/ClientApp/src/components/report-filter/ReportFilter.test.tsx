@@ -46,9 +46,7 @@ describe('ReportFilter', () => {
   >([thunk]);
 
   const defaultStore = mockStore({
-    reportFilter: {
-      minDate: '2021-01-01T00:00:00',
-    },
+    reportFilter: {},
   });
 
   let fromDateInput: HTMLInputElement;

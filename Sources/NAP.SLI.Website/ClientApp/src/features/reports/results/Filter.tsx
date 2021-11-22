@@ -2,9 +2,8 @@ import { mdiFileExcelOutline } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useAppDispatch } from 'app/store';
 import RHFDatePicker from 'components/date-picker/RHFDatePicker';
-import { getBalanceUpDay } from 'components/report-filter/reducer';
 import moment, { Moment } from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import {
@@ -47,7 +46,7 @@ type FilterValues = {
 
 const Filter = () => {
   const dispatch = useAppDispatch();
-  const { minDate, queryArg } = useSelector((state: AppState) => state.results);
+  const { queryArg } = useSelector((state: AppState) => state.results);
   const { date } = queryArg;
   const { control, setValue, getValues, handleSubmit } = useForm<FilterValues>({
     defaultValues: {
@@ -58,10 +57,6 @@ const Filter = () => {
   });
   const [sportDropdownOpen, setSportDropdownOpen] = useState(false);
   const [leagueDropdownOpen, setLeagueDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    dispatch(getBalanceUpDay());
-  }, [dispatch]);
 
   console.log(getValues());
 
@@ -110,7 +105,7 @@ const Filter = () => {
                   {...field}
                   onChange={handleDateChange}
                   disabled={false}
-                  minDate={moment(minDate)}
+                  minDate={moment(window.configuration.balanceUpDay)}
                   maxDate={maxDate}
                 />
               )}
