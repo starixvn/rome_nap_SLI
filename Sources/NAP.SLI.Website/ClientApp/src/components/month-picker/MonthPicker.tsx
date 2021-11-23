@@ -34,11 +34,20 @@ const MonthPicker = (props: Props) => {
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   const renderInput = (props: InputProps, openCalendar: Function) => {
+    const firstDayOfNextMonth = moment(value).startOf('month').add(1, 'months');
+    const lastDayOfPreviousMonth = moment(value)
+      .endOf('month')
+      .subtract(1, 'months');
+    const isAllowPreviousMonth =
+      !props.disabled && lastDayOfPreviousMonth.isAfter(minDate);
+    const isAllowNextMonth =
+      !props.disabled && firstDayOfNextMonth.isBefore(maxDate);
+
     return (
       <InputGroup className="month-picker">
         <InputGroupAddon
           addonType="prepend"
-          {...(!props.disabled && {
+          {...(isAllowPreviousMonth && {
             onClick: () => handleOnChange(moment(value).subtract(1, 'months')),
           })}
         >
@@ -51,7 +60,7 @@ const MonthPicker = (props: Props) => {
         </div>
         <InputGroupAddon
           addonType="append"
-          {...(!props.disabled && {
+          {...(isAllowNextMonth && {
             onClick: () => handleOnChange(moment(value).add(1, 'months')),
           })}
         >

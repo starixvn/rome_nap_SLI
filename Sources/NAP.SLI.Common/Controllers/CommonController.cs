@@ -73,38 +73,38 @@
             {
                 Environment = appSettings.Environment,
                 FrontEndSentryDsn = appSettings.FrontEndSentryDsn,
-                BalanceUpDay = model.BalanceUpDay
-            };
-        }
-
-        [HttpGet("[action]")]
-        public async Task<ActionResult> SystemInformation()
-        {
-            return Ok(new
-            {
-                CpuPercentage = await GetCpuUsageForProcess().ConfigureAwait(false),
-                Environment.WorkingSet,
-                Environment.OSVersion,
-                Environment.Is64BitOperatingSystem,
-                Environment.MachineName,
-                RemoteIpAddress = context.Connection.RemoteIpAddress.ToString()
-            });
-        }
-
-        private static async Task<int> GetCpuUsageForProcess()
-        {
-            var startTime = DateTime.UtcNow;
-            var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            // Wait 1 second
-            await Task.Delay(1000).ConfigureAwait(false);
-
-            var endTime = DateTime.UtcNow;
-            var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-            var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-            var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
-
-            return Convert.ToInt32(cpuUsageTotal * 100);
-        }
+                BalanceUpDay = model.BalanceUpDay.ToString("s")
+        };
     }
+
+    [HttpGet("[action]")]
+    public async Task<ActionResult> SystemInformation()
+    {
+        return Ok(new
+        {
+            CpuPercentage = await GetCpuUsageForProcess().ConfigureAwait(false),
+            Environment.WorkingSet,
+            Environment.OSVersion,
+            Environment.Is64BitOperatingSystem,
+            Environment.MachineName,
+            RemoteIpAddress = context.Connection.RemoteIpAddress.ToString()
+        });
+    }
+
+    private static async Task<int> GetCpuUsageForProcess()
+    {
+        var startTime = DateTime.UtcNow;
+        var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+        // Wait 1 second
+        await Task.Delay(1000).ConfigureAwait(false);
+
+        var endTime = DateTime.UtcNow;
+        var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
+        var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
+        var totalMsPassed = (endTime - startTime).TotalMilliseconds;
+        var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
+
+        return Convert.ToInt32(cpuUsageTotal * 100);
+    }
+}
 }

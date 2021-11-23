@@ -12,8 +12,13 @@ import { query, toggleMode, excel } from './reducer';
 import moment, { Moment } from 'moment';
 import { useAppDispatch } from 'app/store';
 
-const generateDateOptions = (date: Moment) => {
-  return generateRangeSelectOptions(1, date.daysInMonth());
+const generateDateOptions = (date: Moment, maxDate: Moment) => {
+  let daysInMonth = date.daysInMonth();
+  if (date.month() === maxDate.month() && date.year() === maxDate.year()) {
+    daysInMonth = maxDate.date();
+  }
+
+  return generateRangeSelectOptions(1, daysInMonth);
 };
 
 type Props = {
@@ -46,7 +51,7 @@ const HistoryFilter = ({ maxDate }: Props) => {
   const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
 
   const month = getToday();
-  const dateOptions = generateDateOptions(month);
+  const dateOptions = generateDateOptions(month, maxDate);
   const fromDateOption = dateOptions[0].value;
   const toDateOption = dateOptions[month.date() - 1].value;
 
@@ -63,7 +68,7 @@ const HistoryFilter = ({ maxDate }: Props) => {
     value: Moment,
     setFieldValue: Formik.SetFieldValueFunc,
   ) => {
-    const dateOptions = generateDateOptions(value);
+    const dateOptions = generateDateOptions(value, maxDate);
     setFieldValue('dateOptions', dateOptions);
     setFieldValue('fromDateOption', dateOptions[0].value);
     if (value.isSame(getToday())) {

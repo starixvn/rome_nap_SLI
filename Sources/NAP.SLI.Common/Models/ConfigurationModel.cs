@@ -8,6 +8,6 @@ namespace NAP.SLI.Common.Models
 
         public string FrontEndSentryDsn { get; set; }
 
-        public DateTime BalanceUpDay { get; set; }
+        public string BalanceUpDay { get; set; }
     }
 }
