@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
-import { selectCustomer } from './reducer';
+import { reset, selectCustomer } from './reducer';
 import TableBySuper from './TableBySuper';
 import TableByMaster from './TableByMaster';
 import TableByAgent from './TableByAgent';
@@ -30,6 +30,10 @@ const WinLossByBetTypePage = () => {
         }),
       );
     }
+
+    return function cleanup() {
+      dispatch(reset());
+    };
   }, [dispatch, location.state]);
 
   if (!location.state) {

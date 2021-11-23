@@ -96,6 +96,7 @@ const slice = createSlice({
   name: actionName,
   initialState,
   reducers: {
+    reset: () => initialState,
     toggleMode: (state) => {
       state.queryArg.isHistory = !state.queryArg.isHistory;
     },
@@ -149,6 +150,6 @@ const slice = createSlice({
   },
 });
 
-export const { toggleMode, selectCustomer } = slice.actions;
+export const { toggleMode, selectCustomer, reset } = slice.actions;
 
 export default slice.reducer;

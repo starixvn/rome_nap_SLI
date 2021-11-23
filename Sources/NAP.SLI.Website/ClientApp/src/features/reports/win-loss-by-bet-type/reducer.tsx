@@ -78,6 +78,7 @@ const slice = createSlice({
   name: actionName,
   initialState,
   reducers: {
+    reset: () => initialState,
     selectCustomer: (state, action: PayloadAction<Customer>) => {
       state.queryCustomer = action.payload;
     },
@@ -98,6 +99,6 @@ const slice = createSlice({
   },
 });
 
-export const { selectCustomer } = slice.actions;
+export const { selectCustomer, reset } = slice.actions;
 
 export default slice.reducer;

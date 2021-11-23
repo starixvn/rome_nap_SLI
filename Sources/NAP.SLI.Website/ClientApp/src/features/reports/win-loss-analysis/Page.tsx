@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
-import { selectCustomer } from './reducer';
+import { reset, selectCustomer } from './reducer';
 import Table from './Table';
 
 const Page = () => {
@@ -27,6 +27,10 @@ const Page = () => {
         }),
       );
     }
+
+    return function cleanup() {
+      dispatch(reset());
+    };
   }, [dispatch, location.state]);
 
   if (!location.state) {

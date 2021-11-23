@@ -61,6 +61,14 @@ const initialState: State = {
 
 const actionName = 'win-loss-analysis';
 
+export const getReportName = (reportType: ReportType) => {
+  return reportType === ReportType.Sport
+    ? 'Sport'
+    : reportType == ReportType.Monthly
+    ? 'Monthly'
+    : 'Daily';
+};
+
 export const query = createAsyncThunk<QueryData, QueryProps>(
   `${actionName}/query`,
   async (values, { rejectWithValue }) => {
@@ -84,6 +92,7 @@ const slice = createSlice({
   name: actionName,
   initialState,
   reducers: {
+    reset: () => initialState,
     setReportType: (state, action: PayloadAction<ReportType>) => {
       state.queryArg.reportType = action.payload;
     },
@@ -108,14 +117,6 @@ const slice = createSlice({
   },
 });
 
-export const { setReportType, selectCustomer } = slice.actions;
-
-export const getReportName = (reportType: ReportType) => {
-  return reportType === ReportType.Sport
-    ? 'Sport'
-    : reportType == ReportType.Monthly
-    ? 'Monthly'
-    : 'Daily';
-};
+export const { setReportType, selectCustomer, reset } = slice.actions;
 
 export default slice.reducer;

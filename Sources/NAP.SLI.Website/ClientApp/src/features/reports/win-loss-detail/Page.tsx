@@ -6,7 +6,7 @@ import HistoryFilter from './HistoryFilter';
 import { maxDate, getToday } from 'utils/DateUtils';
 import { useSelector } from 'react-redux';
 import Table from './Table';
-import { selectCustomer } from './reducer';
+import { selectCustomer, reset } from './reducer';
 import { RouteLinks } from 'utils/RouteUtils';
 import { useAppDispatch } from 'app/store';
 import Title from './Title';
@@ -33,6 +33,10 @@ const Page = () => {
         }),
       );
     }
+
+    return function cleanup() {
+      dispatch(reset());
+    };
   }, [dispatch, location.state]);
 
   if (!location.state) {
