@@ -9,7 +9,7 @@ import {
 
 type QueryProps = {
   custId: number;
-  mrecommend: number;
+  mRecommend: number;
 };
 
 export type QueryData = CustomerInfo &
@@ -74,13 +74,13 @@ export const query = createAsyncThunk<
   {
     rejectValue: string;
   }
->(`${sliceName}`, async ({ custId, mrecommend }, { rejectWithValue }) => {
+>(`${sliceName}`, async ({ custId, mRecommend }, { rejectWithValue }) => {
   try {
     const payload = {
       apiKey: 'customer-setting:query-agent',
       data: {
         custId,
-        mrecommend,
+        mRecommend,
       },
     };
     const { data } = await post<QueryData>('/simple-api/query', payload);
@@ -94,7 +94,7 @@ const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    // standard reducer logic, with auto-generated action types per reducer
+    reset: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(query.fulfilled, (state, action) => {
@@ -102,5 +102,7 @@ const slice = createSlice({
     });
   },
 });
+
+export const { reset } = slice.actions;
 
 export default slice.reducer;

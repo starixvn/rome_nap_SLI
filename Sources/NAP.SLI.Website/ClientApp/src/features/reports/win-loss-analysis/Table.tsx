@@ -4,6 +4,7 @@ import { Table } from 'reactstrap';
 import { formatInteger, formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
 import { getReportName, Record } from './reducer';
+import './Table.scss';
 
 type RowProps = {
   roleId: number;
@@ -11,14 +12,20 @@ type RowProps = {
   isFooter: boolean;
 };
 
+const getRowClassName = (isFooter: boolean) => {
+  if (isFooter) {
+    return 'total-row';
+  }
+};
+
 const RowComponent = ({ roleId, record, isFooter }: RowProps) => {
   return (
-    <tr>
+    <tr className={getRowClassName(isFooter)}>
       <td>
         {isFooter ? (
           <span>Total</span>
         ) : (
-          <span className="text-right">{record.rollupKey})</span>
+          <span className="text-right">{record.rollupKey}</span>
         )}
       </td>
       <td className="text-right">{formatInteger(record.betCount)}</td>

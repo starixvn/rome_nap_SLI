@@ -93,7 +93,7 @@ const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    // standard reducer logic, with auto-generated action types per reducer
+    reset: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(query.fulfilled, (state, action) => {
@@ -101,5 +101,7 @@ const slice = createSlice({
     });
   },
 });
+
+export const { reset } = slice.actions;
 
 export default slice.reducer;

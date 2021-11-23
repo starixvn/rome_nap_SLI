@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RouteLinks } from 'utils/RouteUtils';
-import { query } from './reducer';
+import { query, reset } from './reducer';
 import Table from './Table';
 
 const Page = () => {
@@ -17,6 +17,10 @@ const Page = () => {
     } else {
       dispatch(query({ custId: customer.generalInformation.custId }));
     }
+
+    return function cleanup() {
+      dispatch(reset());
+    };
   }, [customer, dispatch, history]);
 
   return <Table />;
