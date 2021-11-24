@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
   <Function Name="CustomerSetting">
-    <Setting Key="SLI_CustomerSelCCustomer" SpName="SLI_CustomerSelCCustomer" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="SLI_CustomerSelSCustomer" SpName="SLI_CustomerSelSCustomer" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="SLI_CustomerSelMCustomer" SpName="SLI_CustomerSelMCustomer" DbName="DBCUST.CustDB.bodbAdminNet" />
-    <Setting Key="SLI_CustomerSelCustomer" SpName="SLI_CustomerSelCustomer" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_CustomerSelCCustomer" SpName="SLI_CustomerSelCCustomer_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_CustomerSelSCustomer" SpName="SLI_CustomerSelSCustomer_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_CustomerSelMCustomer" SpName="SLI_CustomerSelMCustomer_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
+    <Setting Key="SLI_CustomerSelCustomer" SpName="SLI_CustomerSelCustomer_xtest" DbName="DBCUST.CustDB.bodbAdminNet" />
   </Function>
   <Function Name="Customer">
     <Setting Key="Acc_CustomerSelUserSearch" SpName="Acc_CustomerSelUserSearch" DbName="DBAGE.bodb02.bodbAdminNet" />
-    <Setting Key="SLI_CustomerSelAllInfo" SpName="SLI_CustomerSelAllInfo" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_CustomerSelAllInfo" SpName="SLI_CustomerSelAllInfo_xtest" DbName="DBAGE.bodb02.bodbAdminNet" />
   </Function>
   <Funtion Name="Report">
     <Setting Key="Age_SelBalanceUpDay" SpName="Age_SelBalanceUpDay" DbName="DBAGE.bodb02.bodbAdminNet" />
