@@ -12,6 +12,19 @@ declare global {
       today: string;
       umToken: string | null;
     };
+    ViewResult: (
+      matchid: number,
+      race: number,
+      bettype: number,
+      sporttype: number,
+      refno: number,
+      username: string,
+      winlostdate: string,
+      refno_mixparlay: string,
+      league: number,
+      is_outright: number,
+      betid: number,
+    ) => void;
   }
 
   type ResultData = {
@@ -57,20 +70,4 @@ declare global {
   type InputKeyValueObject = {
     [key: string]: InputValue;
   };
-
-  interface Window {
-    ViewResult: (
-      matchid: number,
-      race: number,
-      bettype: number,
-      sporttype: number,
-      refno: number,
-      username: string,
-      winlostdate: string,
-      refno_mixparlay: string,
-      league: number,
-      is_outright: number,
-      betid: number,
-    ) => void;
-  }
 }

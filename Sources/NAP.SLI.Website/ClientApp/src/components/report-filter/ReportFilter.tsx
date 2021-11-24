@@ -28,9 +28,7 @@ const defaultProps = {
   maxDate,
 };
 
-type Props = {
-  minDate: Moment;
-  maxDate: Moment;
+type Props = typeof defaultProps & {
   fromDate: Moment;
   toDate: Moment;
   component?: ReactNode;
@@ -40,7 +38,7 @@ type Props = {
 };
 
 const getReportDateRanges = (minDate: Moment) => {
-  return !minDate
+  return minDate
     ? ReportDateRanges.filter(
         (el) =>
           el.getRange()?.from.isAfter(minDate) || el.label === 'Specific Dates',

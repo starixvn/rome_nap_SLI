@@ -43,7 +43,7 @@ const Page = () => {
       <div className="page-title">
         Win Loss Analysis ({location.state.username})
       </div>
-      <Filter maxDate={maxDate} />
+      <Filter />
       {!isQuerying && <Table />}
     </div>
   );

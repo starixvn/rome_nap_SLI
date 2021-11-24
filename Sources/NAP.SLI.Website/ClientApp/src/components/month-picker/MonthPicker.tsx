@@ -18,11 +18,10 @@ const defaultProps = {
   maxDate,
 };
 
-type Props = DatetimepickerProps & {
-  minDate?: Moment;
-  maxDate?: Moment;
-  disabled: boolean;
-};
+type Props = DatetimepickerProps &
+  typeof defaultProps & {
+    disabled: boolean;
+  };
 
 const MonthPicker = (props: Props) => {
   const { minDate, maxDate, disabled } = props;

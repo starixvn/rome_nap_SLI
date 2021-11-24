@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
-import { maxDate, getToday } from 'utils/DateUtils';
 import { useSelector } from 'react-redux';
 import Table from './Table';
 import { selectCustomer, reset } from './reducer';
@@ -49,11 +48,7 @@ const Page = () => {
   return (
     <div className="win-loss-detail-page">
       <Title />
-      {isHistory ? (
-        <HistoryFilter maxDate={getToday()} />
-      ) : (
-        <NormalFilter maxDate={maxDate} />
-      )}
+      {isHistory ? <HistoryFilter /> : <NormalFilter />}
       {!isQuerying && <Table />}
     </div>
   );

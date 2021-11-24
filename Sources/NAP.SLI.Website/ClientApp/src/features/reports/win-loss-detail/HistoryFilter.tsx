@@ -21,11 +21,7 @@ const generateDateOptions = (date: Moment, maxDate: Moment) => {
   return generateRangeSelectOptions(1, daysInMonth);
 };
 
-type Props = {
-  maxDate: Moment;
-};
-
-const HistoryFilter = ({ maxDate }: Props) => {
+const HistoryFilter = () => {
   const formikRef = createRef<FormikProps<FormikValues>>();
   const dispatch = useAppDispatch();
   const { queryCustomer, queryArg } = useSelector(
@@ -51,6 +47,7 @@ const HistoryFilter = ({ maxDate }: Props) => {
   const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
 
   const month = getToday();
+  const maxDate = getToday();
   const dateOptions = generateDateOptions(month, maxDate);
   const fromDateOption = dateOptions[0].value;
   const toDateOption = dateOptions[month.date() - 1].value;

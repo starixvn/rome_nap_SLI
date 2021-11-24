@@ -1,7 +1,6 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
 import { reset, selectCustomer } from './reducer';
@@ -61,7 +60,7 @@ const WinLossByBetTypePage = () => {
       <div className="page-title">
         Win Loss By Bet Type ({location.state.username})
       </div>
-      <Filter maxDate={maxDate} />
+      <Filter />
       {!isQuerying && renderTable()}
     </div>
   );

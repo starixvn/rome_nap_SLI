@@ -2,7 +2,6 @@ import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { maxDate } from 'utils/DateUtils';
 import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
 import { reset, selectCustomer } from './reducer';
@@ -43,7 +42,7 @@ const Page = () => {
       <div className="page-title">
         Match Win Loss Detail ({location.state.username})
       </div>
-      <Filter maxDate={maxDate} />
+      <Filter />
       {!isQuerying && <Table />}
     </div>
   );

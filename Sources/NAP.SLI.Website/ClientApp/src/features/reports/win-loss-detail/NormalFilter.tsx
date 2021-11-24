@@ -4,14 +4,15 @@ import { Moment } from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Container } from 'reactstrap';
-import { formatDate, getToday, stringDateToMoment } from 'utils/DateUtils';
+import {
+  formatDate,
+  getToday,
+  maxDate,
+  stringDateToMoment,
+} from 'utils/DateUtils';
 import { excel, query, toggleMode } from './reducer';
 
-type Props = {
-  maxDate: Moment;
-};
-
-const NormalFilter = ({ maxDate }: Props) => {
+const NormalFilter = () => {
   const dispatch = useAppDispatch();
   const [key, setKey] = useState(0);
 

@@ -1,17 +1,14 @@
 import React from 'react';
 import { Moment } from 'moment';
 import { useSelector } from 'react-redux';
-import { formatDate, stringDateToMoment } from 'utils/DateUtils';
+import { formatDate, maxDate, stringDateToMoment } from 'utils/DateUtils';
 import { excel, query } from './reducer';
 import { useAppDispatch } from 'app/store';
 import ReportFilter from 'components/report-filter/ReportFilter';
 import { Container } from 'reactstrap';
+import moment from 'moment';
 
-type Props = {
-  maxDate: Moment;
-};
-
-const Filter = ({ maxDate }: Props) => {
+const Filter = () => {
   const dispatch = useAppDispatch();
 
   const { queryCustomer, queryArg } = useSelector(
@@ -48,6 +45,7 @@ const Filter = ({ maxDate }: Props) => {
   return (
     <Container fluid className="filter">
       <ReportFilter
+        minDate={moment(window.configuration.balanceUpDay)}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}
         toDate={stringDateToMoment(toDate)}

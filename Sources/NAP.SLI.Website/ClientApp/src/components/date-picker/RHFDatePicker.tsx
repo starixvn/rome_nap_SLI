@@ -18,11 +18,10 @@ const defaultProps = {
   maxDate,
 };
 
-type Props = DatetimepickerProps & {
-  minDate?: Moment;
-  maxDate?: Moment;
-  disabled: boolean;
-};
+type Props = DatetimepickerProps &
+  typeof defaultProps & {
+    disabled: boolean;
+  };
 
 const DatePicker = React.forwardRef(
   (props: Props, ref: React.LegacyRef<Datetime> | undefined) => {
