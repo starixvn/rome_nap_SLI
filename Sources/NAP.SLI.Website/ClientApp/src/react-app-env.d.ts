@@ -9,6 +9,7 @@ declare global {
       env: string;
       sentryDsn: string;
       balanceUpDay: string;
+      today: string;
       umToken: string | null;
     };
   }

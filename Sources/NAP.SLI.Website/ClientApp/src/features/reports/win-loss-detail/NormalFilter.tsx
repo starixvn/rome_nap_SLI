@@ -4,7 +4,7 @@ import { Moment } from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Container } from 'reactstrap';
-import { formatDate, stringDateToMoment } from 'utils/DateUtils';
+import { formatDate, getToday, stringDateToMoment } from 'utils/DateUtils';
 import { excel, query, toggleMode } from './reducer';
 
 type Props = {
@@ -57,9 +57,12 @@ const NormalFilter = ({ maxDate }: Props) => {
     await excel(excelPayload);
   };
 
+  const minDate = getToday().subtract(3, 'months').startOf('month');
+
   return (
     <Container fluid className="filter">
       <ReportFilter
+        minDate={minDate}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}
         toDate={stringDateToMoment(toDate)}
@@ -68,8 +71,8 @@ const NormalFilter = ({ maxDate }: Props) => {
         customKey={key}
       />
       <div>
-        You can view the report data from 09/01/2019. For more historic data,
-        please click to{' '}
+        You can view the report data from {formatDate(minDate)}. For more
+        historic data, please click to{' '}
         <span className="text-link" onClick={() => dispatch(toggleMode())}>
           View History Report
         </span>

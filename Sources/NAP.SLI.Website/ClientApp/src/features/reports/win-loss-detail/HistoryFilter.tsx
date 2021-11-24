@@ -111,6 +111,8 @@ const HistoryFilter = ({ maxDate }: Props) => {
     await excel(excelPayload);
   };
 
+  const minDate = getToday().subtract(3, 'years').startOf('year');
+
   return (
     <Formik
       innerRef={formikRef}
@@ -126,6 +128,7 @@ const HistoryFilter = ({ maxDate }: Props) => {
                 <FormikMonthPicker
                   disabled={isSubmitting}
                   name="month"
+                  minDate={minDate}
                   maxDate={maxDate}
                   onChange={(value) =>
                     handleMonthChange(moment(value), setFieldValue)
@@ -166,7 +169,7 @@ const HistoryFilter = ({ maxDate }: Props) => {
             </fieldset>
           </Form>
           <div>
-            You can view the report data from 09/01/2019.{' '}
+            You can view the report data from {formatDate(minDate)}.{' '}
             <span className="text-link" onClick={() => dispatch(toggleMode())}>
               Back To Current Report
             </span>

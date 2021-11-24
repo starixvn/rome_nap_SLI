@@ -73,7 +73,8 @@
             {
                 Environment = appSettings.Environment,
                 FrontEndSentryDsn = appSettings.FrontEndSentryDsn,
-                BalanceUpDay = model.BalanceUpDay.ToString("s")
+                BalanceUpDay = model.BalanceUpDay.ToString("s"),
+                Today = DateTime.Now.Date.ToString("s")
         };
     }
 

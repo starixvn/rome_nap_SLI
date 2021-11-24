@@ -32,7 +32,14 @@ const handleError = (e: AxiosError): AxiosError | undefined => {
   if (e.response) {
     switch (e.response.status) {
       case 401:
-        store.dispatch(logout());
+        {
+          const account = storage.get();
+          if (account) {
+            store.dispatch(logout());
+          }
+        }
+
+        history.push(RouteLinks.LOGIN);
         return;
       case 403:
         store.dispatch(error('You are not authorized to use this function'));

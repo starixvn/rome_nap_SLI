@@ -11,6 +11,8 @@ import {
   DropdownItem,
 } from 'reactstrap';
 import {
+  minDate,
+  maxDate,
   formatDate,
   ReportDateRanges,
   stringDateToMoment,
@@ -21,7 +23,13 @@ import moment, { Moment } from 'moment';
 import { Controller, useForm } from 'react-hook-form';
 import RHFDatePicker from '../date-picker/RHFDatePicker';
 
+const defaultProps = {
+  minDate,
+  maxDate,
+};
+
 type Props = {
+  minDate: Moment;
   maxDate: Moment;
   fromDate: Moment;
   toDate: Moment;
@@ -31,17 +39,17 @@ type Props = {
   onExcel: () => Promise<void>;
 };
 
-const getReportDateRanges = (minDate: string) => {
-  return minDate !== ''
+const getReportDateRanges = (minDate: Moment) => {
+  return !minDate
     ? ReportDateRanges.filter(
         (el) =>
-          el.getRange()?.from.isAfter(moment(minDate)) ||
-          el.label === 'Specific Dates',
+          el.getRange()?.from.isAfter(minDate) || el.label === 'Specific Dates',
       )
     : ReportDateRanges;
 };
 
 const ReportFilter = ({
+  minDate,
   maxDate,
   fromDate,
   toDate,
@@ -69,7 +77,6 @@ const ReportFilter = ({
     defaultValues: initialValues,
   });
 
-  const minDate = window.configuration.balanceUpDay;
   const reportDateRanges = getReportDateRanges(minDate);
 
   useEffect(() => {
@@ -210,4 +217,5 @@ const ReportFilter = ({
   );
 };
 
+ReportFilter.defaultProps = defaultProps;
 export default ReportFilter;
