@@ -99,6 +99,8 @@ const slice = createSlice({
     reset: () => initialState,
     toggleMode: (state) => {
       state.queryArg.isHistory = !state.queryArg.isHistory;
+      state.queryArg.fromDate = formatDate(today);
+      state.queryArg.toDate = formatDate(today);
     },
     selectCustomer: (
       state,
