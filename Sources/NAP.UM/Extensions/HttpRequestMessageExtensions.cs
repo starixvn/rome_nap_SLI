@@ -9,9 +9,11 @@ namespace NAP.UM.Extensions
 {
     static class HttpRequestMessageExtensions
     {
+        private static string machineIP;
+
         public static HttpRequestMessage AddHMAC(this HttpRequestMessage request, string secretKey)
         {
-            var machineIP = Dns.GetHostEntry(Dns.GetHostName());
+            var machineIP = GetMachineIP();
             var requestUri = HttpUtility.UrlEncode(request.RequestUri.OriginalString.ToLowerInvariant());
             var requestHttpMethod = request.Method.ToString();
 
@@ -37,6 +39,16 @@ namespace NAP.UM.Extensions
             request.Headers.Add("Authorization", authHeader);
 
             return request;
+        }
+
+        private static string GetMachineIP()
+        {
+            if (string.IsNullOrEmpty(machineIP))
+            {
+                machineIP = Dns.GetHostEntry(Dns.GetHostName()).ToString();
+            }
+
+            return machineIP;
         }
     }
 }

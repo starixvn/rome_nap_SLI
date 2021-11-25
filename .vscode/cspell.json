@@ -19,6 +19,7 @@
     "Cust",
     "Fanex",
     "HMAC",
+    "HMACSHA",
     "Hsts",
     "Mediat",
     "NPOI",

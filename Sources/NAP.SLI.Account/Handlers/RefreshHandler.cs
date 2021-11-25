@@ -32,20 +32,24 @@ namespace NAP.SLI.Account.Handlers
 
         public async Task<AuthenticationModel> Handle(RefreshRequest request, CancellationToken cancellationToken)
         {
-            var errCode = await securityService.ReCheckInAsync(currentUserService.OnUserId, napSettings.SiteId).ConfigureAwait(false);
-            if (errCode != ErrorCodes.OK)
+            if (napSettings.EnableReCheckIn)
             {
-                return new AuthenticationModel
+                var errCode = await securityService.ReCheckInAsync(currentUserService.OnUserId, napSettings.SiteId).ConfigureAwait(false);
+                if (errCode != ErrorCodes.OK)
                 {
-                    ErrCode = errCode
-                };
+                    return new AuthenticationModel
+                    {
+                        ErrCode = errCode
+                    };
+                }
             }
+
 
             var tokenModel = new TokenModel(currentUserService.OnUserId, currentUserService.Username, currentUserService.UserId, currentUserService.IsAdmin);
             var token = tokenManager.Generate(tokenModel);
             return new AuthenticationModel
             {
-                ErrCode = errCode,
+                ErrCode = ErrorCodes.OK,
                 Token = token,
                 UserId = tokenModel.UserId,
                 IsAdmin = tokenModel.IsAdmin
