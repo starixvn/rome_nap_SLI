@@ -21,6 +21,8 @@ namespace NAP.SLI.Common.Services
         string BetListApiUrl { get; }
 
         ResultsAPI ResultsConfigs { get; }
+
+        AuthenticationSettings Authentication { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -44,8 +46,10 @@ namespace NAP.SLI.Common.Services
 
         public string BetListApiUrl => configuration.GetValue<string>("BetListAPI:URL");
 
+        public string AppDataPath => AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+
         public ResultsAPI ResultsConfigs => configuration.GetSection("ResultsAPI").Get<ResultsAPI>();
 
-        public string AppDataPath => AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
+        public AuthenticationSettings Authentication => configuration.GetSection("Authentication").Get<AuthenticationSettings>();
     }
 }

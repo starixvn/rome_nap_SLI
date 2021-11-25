@@ -4,11 +4,10 @@
     using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
     using System.Text;
-    using Fanex.NAP.Client.Models;
-    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
     using NAP.SLI.Account.Models;
     using NAP.SLI.Common.Models;
+    using NAP.SLI.Common.Services;
 
     public interface ITokenManager
     {
@@ -20,9 +19,9 @@
         private readonly AuthenticationSettings authenticationSettings;
         private readonly JwtSecurityTokenHandler tokenHandler;
 
-        public TokenManager(IOptions<AuthenticationSettings> authenticationSettingsOptions, JwtSecurityTokenHandler tokenHandler)
+        public TokenManager(IAppSettings appSettings, JwtSecurityTokenHandler tokenHandler)
         {
-            authenticationSettings = authenticationSettingsOptions.Value;
+            authenticationSettings = appSettings.Authentication;
             this.tokenHandler = tokenHandler;
         }
 
@@ -43,6 +42,12 @@
 
         public string Generate(TokenModel model)
         {
+            var accessExpiration = authenticationSettings.AccessExpiration;
+#if DEBUG
+            /// extend access expiration for unit testing
+            accessExpiration = 43200;
+#endif
+
             var key = Encoding.ASCII.GetBytes(authenticationSettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -53,7 +58,7 @@
                     new Claim(NapClaimTypes.UserId, model.UserId.ToString(), ClaimValueTypes.Integer),
                     new Claim(NapClaimTypes.IsAdmin, model.IsAdmin.ToString(), ClaimValueTypes.Boolean)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(authenticationSettings.AccessExpiration),
+                Expires = DateTime.UtcNow.AddMinutes(accessExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -4,7 +4,15 @@ import store from 'app/store';
 import { post } from './http';
 
 let timeout: number | undefined;
-const timeoutInterval = 1 * 60 * 1000;
+const timeoutInterval =
+  (parseInt(window.configuration.accessExpiration) - 1) * 60 * 1000;
+
+type CheckInData = {
+  isSuccess: boolean;
+  token: string;
+  isAdmin: boolean;
+  userId: number;
+};
 
 export const stopCheckin = () => {
   if (timeout) {
@@ -29,9 +37,15 @@ export const checkin = async () => {
     const payload = {
       token: account.token,
     };
-    const response = await post<ResultData>('/api/account/refresh', payload);
-    const { isSuccess } = response.data;
+    const response = await post<CheckInData>('/api/account/refresh', payload);
+    const { isSuccess, token, userId, isAdmin } = response.data;
     if (isSuccess) {
+      storage.save({
+        username: account.username,
+        userId,
+        isAdmin,
+        token,
+      });
       stopCheckin();
       startCheckin();
     } else {

@@ -1,4 +1,4 @@
-﻿namespace NAP.SLI.Account.Models
+﻿namespace NAP.SLI.Common.Models
 {
     public class AuthenticationSettings
     {

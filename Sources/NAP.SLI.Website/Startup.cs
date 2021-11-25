@@ -131,11 +131,7 @@ namespace NAP.SLI.Website
                     options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
 
-            var authenticationSection = Configuration.GetSection("Authentication");
-            services.Configure<AuthenticationSettings>(authenticationSection);
-            var authenticationSettings = authenticationSection.Get<AuthenticationSettings>();
-            AddJwtAuthentication(services, authenticationSettings);
-
+            AddJwtAuthentication(services, AppSettings.Authentication);
             services.AddAuthorization(config =>
             {
                 config.AddPolicy(AuthorizationPolicies.Admin, AuthorizationPolicies.AdminPolicy);

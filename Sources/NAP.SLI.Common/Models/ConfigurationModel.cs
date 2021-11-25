@@ -8,6 +8,8 @@ namespace NAP.SLI.Common.Models
 
         public string FrontEndSentryDsn { get; set; }
 
+        public string AccessExpiration { get; set; }
+
         public string BalanceUpDay { get; set; }
 
         public string Today { get; set; }

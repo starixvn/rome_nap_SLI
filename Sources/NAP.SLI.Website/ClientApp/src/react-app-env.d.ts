@@ -8,6 +8,7 @@ declare global {
     configuration: {
       env: string;
       sentryDsn: string;
+      accessExpiration: string;
       balanceUpDay: string;
       today: string;
       umToken: string | null;
