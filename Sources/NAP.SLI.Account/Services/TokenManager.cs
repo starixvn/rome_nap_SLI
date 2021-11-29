@@ -42,12 +42,6 @@
 
         public string Generate(TokenModel model)
         {
-            var accessExpiration = authenticationSettings.AccessExpiration;
-#if DEBUG
-            /// extend access expiration for unit testing
-            accessExpiration = 43200;
-#endif
-
             var key = Encoding.ASCII.GetBytes(authenticationSettings.SecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -58,7 +52,7 @@
                     new Claim(NapClaimTypes.UserId, model.UserId.ToString(), ClaimValueTypes.Integer),
                     new Claim(NapClaimTypes.IsAdmin, model.IsAdmin.ToString(), ClaimValueTypes.Boolean)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(accessExpiration),
+                Expires = DateTime.UtcNow.AddMinutes(authenticationSettings.AccessExpiration),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
