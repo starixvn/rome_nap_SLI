@@ -7,3 +7,7 @@ export const formatInteger = (value: number) => {
 export const formatDecimal = (value: number) => {
   return numeral(value).format('0,0.00');
 };
+
+export const formatTwoDigit = (value: number) => {
+  return numeral(value).format('00');
+};

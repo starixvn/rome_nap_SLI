@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import { post } from 'services/http';
+import { HAPPY5LINKEDGAME_SPORT_TYPE } from 'utils/ConstantUtils';
 import { Ticket } from './reducer';
 import './Table.scss';
 
@@ -32,34 +33,21 @@ const TableComponent = () => {
     betid: number,
   ) => {
     // Happy5 Linked Games
-    // if (sporttype === 168) {
-    // try {
-    //   const { data } = await post<string>('/api/results/querydetail', {
-    //     ObCustId: betid,
-    //     TranId3rd: refno,
-    //     IsDesktop: true,
-    //   });
-    //   setUrl(data);
-    //   handleToggle();
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    // }
-
-    // TODO: For dev, remove after done
-    try {
-      const { data } = await post<string>(
-        '/api/thirdpartyresult/gethappy5linkedgameresult',
-        {
-          ObCustId: betid,
-          TranId3rd: refno,
-          IsDesktop: true,
-        },
-      );
-      setUrl(data);
-      handleToggle();
-    } catch (err) {
-      console.log(err);
+    if (sporttype === HAPPY5LINKEDGAME_SPORT_TYPE) {
+      try {
+        const { data } = await post<string>(
+          '/api/third-party-result/getHappy5LinkedGameResult',
+          {
+            ObCustId: betid,
+            TranId3rd: refno,
+            IsDesktop: true,
+          },
+        );
+        setUrl(data);
+        handleToggle();
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 

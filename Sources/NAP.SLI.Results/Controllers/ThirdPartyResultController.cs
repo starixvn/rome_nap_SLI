@@ -6,7 +6,7 @@ namespace NAP.SLI.Results.Controllers
     using NAP.SLI.Results.Requests;
 
     [ApiController]
-    [Route("api/thirdpartyresult")]
+    [Route("api/third-party-result")]
     public class ThirdPartyResultController : ControllerBase
     {
         private readonly IMediator mediator;

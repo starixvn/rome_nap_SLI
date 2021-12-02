@@ -1,0 +1,58 @@
+.lottoBall {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 900;
+  font-size: 12px;
+  color: #000;
+  display: inline-block;
+  width: 31px;
+  height: 30px;
+  line-height: 31px;
+  text-align: center;
+  background-image: url(/assets/images/lotto-ball.png);
+  background-repeat: no-repeat;
+}
+
+.lottoBall.red {
+  background-position: 0 0;
+}
+
+.lottoBall.blue {
+  background-position: 0 -30px;
+}
+
+.lottoBall.disable {
+  color: #999;
+  background-position: 0 -60px;
+}
+
+.col-kick-off {
+  width: 120px;
+}
+
+.col-status {
+  width: 140px;
+}
+
+// Number Game
+.col-warrior,
+.col-oeft,
+.col-1st-ball,
+.col-2nd-ball,
+.col-3rd-ball {
+  width: 110px;
+}
+
+// Happy 5
+.col-result {
+  width: 270px;
+}
+
+.col-total,
+.col-bs,
+.col-oe,
+.col-4s,
+.col-mome,
+.col-cb,
+.col-soccer5 {
+  width: 80px;
+}

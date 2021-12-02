@@ -1,17 +1,37 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import {
+  HAPPY5_SPORT_TYPE,
+  NUMBERGAME_SPORT_TYPE,
+} from '../../../utils/ConstantUtils';
 import Filter from './Filter';
-import NumberGameTable from './NumberGameTable';
 import Happy5Table from './Happy5Table';
+import NumberGameTable from './NumberGameTable';
+
+const getTableBySportType = (sportType: number) => {
+  switch (sportType) {
+    case NUMBERGAME_SPORT_TYPE:
+      return <NumberGameTable />;
+    case HAPPY5_SPORT_TYPE:
+      return <Happy5Table />;
+    default:
+      break;
+  }
+  return null;
+};
 
 const ResultsPage = () => {
-  const { sport } = useSelector((state: AppState) => state.results);
+  const { sports, leagues, selectedSportType } = useSelector(
+    (state: AppState) => state.results,
+  );
 
   return (
     <div className="result-page">
       <div className="page-title">Results</div>
       <Filter />
-      {sport === 'NumberGame' ? <NumberGameTable /> : <Happy5Table />}
+      {sports.length > 0 && leagues.length > 0
+        ? getTableBySportType(selectedSportType)
+        : null}
     </div>
   );
 };

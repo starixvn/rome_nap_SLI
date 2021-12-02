@@ -240,6 +240,22 @@ const CustomerPage = () => {
           </Container>
         </Collapse>
       </div>
+      <div className="mb-3">
+        <div className="py-2 font-weight-500 bg-lightgrey text-primary">
+          <Container>
+            <Link
+              to={{
+                pathname: RouteLinks.RESULTS,
+                state: {
+                  ...generalInformation,
+                },
+              }}
+            >
+              RESULTS
+            </Link>
+          </Container>
+        </div>
+      </div>
     </div>
   );
 };

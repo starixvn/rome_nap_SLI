@@ -17,6 +17,20 @@ export const formatDateTime = (date: Date | Moment | string) => {
   return moment(date).format(FormatStrings.DateTime);
 };
 
+export const getDate = (date: string) => {
+  const formatedTime = formatDateTime(date);
+  const indexOfFristSpace = formatedTime.indexOf(' ');
+
+  return formatedTime.substr(0, indexOfFristSpace);
+};
+
+export const getTime = (date: string) => {
+  const formatedTime = formatDateTime(date);
+  const indexOfFristSpace = formatedTime.indexOf(' ');
+
+  return formatedTime.substr(indexOfFristSpace + 1);
+};
+
 export const minDate = moment('01/01/1970', FormatStrings.Date);
 export const maxDate = moment('12/31/2999', FormatStrings.Date);
 

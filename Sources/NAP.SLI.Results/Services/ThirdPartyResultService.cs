@@ -39,23 +39,12 @@ namespace NAP.SLI.Results.Services
             }
             else
             {
-                // var responseData = await client.QueryString<Happy5LinkedGameResultModel>(
-                //     appSettings.ResultsConfigs.Url,
-                //     requestData,
-                //     appSettings.ResultsConfigs.ProxyIPServer,
-                //     appSettings.ResultsConfigs.ProxyPortServer
-                //     );
-
-                //TODO: Mock response for dev, remove after done
-                var responseData = new Happy5LinkedGameResultModel
-                {
-                    TimeStamp = "2020/12/31 13:40:01.221",
-                    Seq = "4214d81b2f84449096ff1e98520ec46d",
-                    VendorId = 63,
-                    Url = "http://fr.wikipedia.org/wiki/Main_Page",
-                };
-                responseData.ErrCode = 0;
-                responseData.ErrMsg = "Success";
+                var responseData = await client.QueryString<Happy5LinkedGameResultModel>(
+                    appSettings.ResultsConfigs.Url,
+                    requestData,
+                    appSettings.ResultsConfigs.ProxyIPServer,
+                    appSettings.ResultsConfigs.ProxyPortServer
+                    );
 
                 if (ValidateResponse(responseData))
                 {
