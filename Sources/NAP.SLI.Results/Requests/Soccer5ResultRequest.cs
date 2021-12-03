@@ -4,7 +4,7 @@ namespace NAP.SLI.Results.Requests
 
     public class Soccer5ResultRequest : IRequest<string>
     {
-        public string MatchId { get; set; }
+        public int MatchId { get; set; }
 
         public string Balls { get; set; }
 

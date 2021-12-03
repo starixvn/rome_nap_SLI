@@ -1,8 +1,9 @@
+// RESULTS
 export const SHOW_ALL_LEAGUES = 'Show All Leagues';
 export const NUMBERGAME_SPORT_TYPE = 161;
 export const HAPPY5_SPORT_TYPE = 164;
 export const HAPPY5LINKEDGAME_SPORT_TYPE = 168;
-export const RED_BALL = [
+export const NUMBERGAME_RED_BALLS = [
   '01',
   '03',
   '04',
@@ -41,3 +42,31 @@ export const RED_BALL = [
   '73',
   '74',
 ];
+export const HAPPY5_RED_BALLS = [
+  '1',
+  '3',
+  '4',
+  '6',
+  '8',
+  '10',
+  '12',
+  '15',
+  '17',
+  '20',
+];
+export const REFUND = 'REFUND';
+export const REFUND_FT = 'REFUND FT';
+export const REFUND_HT = 'REFUND HT';
+export const BIG = 'B';
+export const SMALL = 'S';
+export const EVEN = 'E';
+export const ODD = 'O';
+export const SPRING = 'Sp';
+export const SUMMER = 'Su';
+export const AUTUMN = 'Au';
+export const WINTER = 'Wi';
+export const MORE_ODD = 'MO';
+export const MORE_EVEN = 'ME';
+export const NA = 'N/A';
+export const SOCCER5_URL =
+  'https://plggc.155551.com/LinkedGamesWebPortal/GameResult';

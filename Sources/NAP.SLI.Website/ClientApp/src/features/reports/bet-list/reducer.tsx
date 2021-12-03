@@ -47,6 +47,12 @@ export type QueryByBettypeProps = QueryArg & {
   roleId: number;
 };
 
+export type Happy5LinkedGameProps = {
+  obCustId: number;
+  tranId3rd: number;
+  isDesktop: boolean;
+};
+
 type ExcelProps = {
   custId: number;
   roleId: number;
@@ -60,6 +66,7 @@ type State = {
   queryData?: QueryData;
   queryArg: QueryArg;
   minDate: string;
+  isHappy5LinkedGameLoading: boolean;
 };
 
 const actionName = 'bet-list';
@@ -73,6 +80,7 @@ const initialState: State = {
     toDate: formatDate(today),
   },
   minDate: '',
+  isHappy5LinkedGameLoading: false,
 };
 
 export const getByDate = createAsyncThunk<QueryData, QueryByDateProps>(
@@ -120,6 +128,24 @@ export const getByBettype = createAsyncThunk<QueryData, QueryByBettypeProps>(
   },
 );
 
+export const getHappy5LinkedGame = createAsyncThunk<
+  string,
+  Happy5LinkedGameProps
+>(
+  'third-party-result/getHappy5LinkedGameResult',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await post<string>(
+        'api/third-party-result/getHappy5LinkedGameResult',
+        values,
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
 export const excel = async (payload: ExcelProps) => {
   return await download(`/api/${actionName}/excel`, payload);
 };
@@ -157,6 +183,12 @@ const slice = createSlice({
     builder.addCase(getByBettype.pending, handlePendingQuery);
     builder.addCase(getByBettype.fulfilled, (state, { payload }) => {
       state.queryData = payload;
+    });
+    builder.addCase(getHappy5LinkedGame.pending, (state) => {
+      state.isHappy5LinkedGameLoading = true;
+    });
+    builder.addCase(getHappy5LinkedGame.fulfilled, (state) => {
+      state.isHappy5LinkedGameLoading = false;
     });
   },
 });

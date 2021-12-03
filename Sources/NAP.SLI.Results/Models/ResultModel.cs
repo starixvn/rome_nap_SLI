@@ -3,9 +3,9 @@ namespace NAP.SLI.Results.Models
     using System;
     using System.Collections.Generic;
 
-    public class NumberGameModel
+    public class ResultModel
     {
-        public NumberGameModel()
+        public ResultModel()
         {
             Seq = new List<int>();
             Ball = new List<int>();

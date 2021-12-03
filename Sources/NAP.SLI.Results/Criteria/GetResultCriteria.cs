@@ -3,7 +3,7 @@ namespace NAP.SLI.Results.Criteria
     using System;
     using Fanex.Data.Repository;
 
-    public class GetNumberGameResultCriteria : CriteriaBase
+    public class GetResultCriteria : CriteriaBase
     {
         public DateTime FromDate { get; set; }
 

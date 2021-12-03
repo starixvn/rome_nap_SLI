@@ -28,7 +28,7 @@ import {
 } from 'utils/DateUtils';
 import {
   queryLeagueByDate,
-  queryNumberGameByLeague,
+  queryResultByLeague,
   querySportByDate,
 } from './reducer';
 
@@ -106,11 +106,9 @@ const Filter = () => {
     [dispatch, setValue],
   );
 
-  const queryNumberGame = useCallback(
+  const queryResult = useCallback(
     async (fromDate: string, leagueId: number, sportType: number) => {
-      await dispatch(
-        queryNumberGameByLeague({ fromDate, leagueId, sportType }),
-      );
+      await dispatch(queryResultByLeague({ fromDate, leagueId, sportType }));
     },
     [dispatch],
   );
@@ -126,13 +124,13 @@ const Filter = () => {
       );
       if (leagueResult.length === 0) return;
 
-      await queryNumberGame(
+      await queryResult(
         fromDate,
         getValues('leagueId'),
         sportsResult[0].sportType,
       );
     },
-    [getValues, queryLeague, queryNumberGame, querySport],
+    [getValues, queryLeague, queryResult, querySport],
   );
 
   const handleSportClick = async (sportId: number) => {
@@ -142,11 +140,7 @@ const Filter = () => {
 
     const leagueResult = await queryLeague(getValues('fromDate'), sportId);
     if (leagueResult.length === 0) return;
-    await queryNumberGame(
-      getValues('fromDate'),
-      getValues('leagueId'),
-      sportId,
-    );
+    await queryResult(getValues('fromDate'), getValues('leagueId'), sportId);
   };
 
   const handleLeagueClick = async (leagueId: number) => {
@@ -156,11 +150,7 @@ const Filter = () => {
     setSelectedLeagueName(selectedLeague?.leagueName ?? SHOW_ALL_LEAGUES);
     setValue('leagueId', leagueId);
 
-    await queryNumberGame(
-      getValues('fromDate'),
-      leagueId,
-      getValues('sportId'),
-    );
+    await queryResult(getValues('fromDate'), leagueId, getValues('sportId'));
   };
 
   const handleDateButtonClick = (value: string) => {

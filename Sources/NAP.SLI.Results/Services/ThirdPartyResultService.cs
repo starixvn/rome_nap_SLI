@@ -89,7 +89,7 @@ namespace NAP.SLI.Results.Services
 
         public string GetSoccer5Result(Soccer5ResultRequest request)
         {
-            Helper.CheckArgument(request.MatchId, "MatchId");
+            Helper.CheckArgument(request.MatchId.ToString(), "MatchId");
             Helper.CheckArgument(request.Balls, "Balls");
 
             var requestData = GenerateRequestData();
@@ -107,7 +107,7 @@ namespace NAP.SLI.Results.Services
                 var languageCode = Language.GetLanguageCode(request.Language);
                 return new Dictionary<string, string>
                 {
-                    { "MatchId", request.MatchId},
+                    { "MatchId", request.MatchId.ToString()},
                     { "SiteId", appSettings.ResultsConfigs.SiteId },
                     { "LangCode" , languageCode },
                     { "Balllist" , request.Balls },

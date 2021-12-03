@@ -31,7 +31,7 @@ namespace NAP.SLI.Results.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> GetNumberGameResult([FromBody] NumberGameResultRequest request)
+        public async Task<IActionResult> GetResult([FromBody] ResultRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);

@@ -5,7 +5,7 @@ namespace NAP.SLI.Results.Requests
     using MediatR;
     using NAP.SLI.Results.Models;
 
-    public class NumberGameResultRequest : IRequest<IEnumerable<NumberGameRecordModel>>
+    public class ResultRequest : IRequest<IEnumerable<ResultRecordModel>>
     {
         public DateTime FromDate { get; set; }
 

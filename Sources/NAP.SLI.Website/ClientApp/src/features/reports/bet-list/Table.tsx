@@ -1,13 +1,16 @@
+import { unwrapResult } from '@reduxjs/toolkit';
+import { useAppDispatch } from 'app/store';
+import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
-import { post } from 'services/http';
 import { HAPPY5LINKEDGAME_SPORT_TYPE } from 'utils/ConstantUtils';
-import { Ticket } from './reducer';
+import { getHappy5LinkedGame, Ticket } from './reducer';
 import './Table.scss';
 
 const TableComponent = () => {
-  const { queryData, queryCustomer } = useSelector(
+  const dispatch = useAppDispatch();
+  const { queryData, queryCustomer, isHappy5LinkedGameLoading } = useSelector(
     (state: AppState) => state.betList,
   );
   const [modal, setModal] = useState(false);
@@ -17,7 +20,7 @@ const TableComponent = () => {
     return <></>;
   }
 
-  const handleToggle = () => setModal(!modal);
+  const handleToggle = () => setModal((prevModal) => !prevModal);
 
   window.ViewResult = async (
     _matchid: number,
@@ -34,26 +37,23 @@ const TableComponent = () => {
   ) => {
     // Happy5 Linked Games
     if (sporttype === HAPPY5LINKEDGAME_SPORT_TYPE) {
-      try {
-        const { data } = await post<string>(
-          '/api/third-party-result/getHappy5LinkedGameResult',
-          {
-            ObCustId: betid,
-            TranId3rd: refno,
-            IsDesktop: true,
-          },
-        );
-        setUrl(data);
-        handleToggle();
-      } catch (err) {
-        console.log(err);
-      }
+      const result = await dispatch(
+        getHappy5LinkedGame({
+          obCustId: betid,
+          tranId3rd: refno,
+          isDesktop: true,
+        }),
+      );
+      const urlRes = unwrapResult(result);
+      setUrl(urlRes);
+      handleToggle();
     }
   };
 
   const { Tickets, SumCommHtml, SumWinLossHtml, TotalHtml } = queryData;
   return (
     <>
+      {isHappy5LinkedGameLoading && <GlobalSpinner />}
       <Table bordered className="bet-list-table">
         <thead>
           <tr className="text-center">
@@ -156,7 +156,13 @@ const TableComponent = () => {
           )}
         </tbody>
       </Table>
-      <Modal centered isOpen={modal} size="xl" toggle={handleToggle}>
+      <Modal
+        centered
+        isOpen={modal}
+        size="xl"
+        toggle={handleToggle}
+        fade={false}
+      >
         <ModalHeader toggle={handleToggle}>Results </ModalHeader>
         <ModalBody>
           <iframe

@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { post } from 'services/http';
 
-type NumberGameArg = {
+type ResultArg = {
   fromDate: string;
   leagueId: number;
   sportType: number;
 };
-export type NumberGame = {
+export type Result = {
   leagueId: number;
   matchId: number;
   matchCode: string;
@@ -16,9 +16,9 @@ export type NumberGame = {
   seq: number[];
   ball: number[];
 };
-type NumberGameRecord = {
+type ResultRecord = {
   leagueName: string;
-  matches: NumberGame[];
+  matches: Result[];
 };
 
 type SportArg = {
@@ -38,14 +38,21 @@ type League = {
   leagueName: string;
 };
 
+type Soccer5Arg = {
+  matchId: number;
+  balls: string;
+  isDesktop: boolean;
+};
+
 type State = {
   sports: Sport[];
   leagues: League[];
-  numberGames: NumberGameRecord[];
+  results: ResultRecord[];
   selectedSportType: number;
   isSportLoading: boolean;
   isLeagueLoading: boolean;
   isNumberGameLoading: boolean;
+  isSoccer5Loading: boolean;
 };
 
 const actionName = 'result';
@@ -53,11 +60,12 @@ const actionName = 'result';
 const initialState: State = {
   sports: [],
   leagues: [],
-  numberGames: [],
+  results: [],
   selectedSportType: 0,
   isSportLoading: false,
   isLeagueLoading: false,
   isNumberGameLoading: false,
+  isSoccer5Loading: false,
 };
 
 export const querySportByDate = createAsyncThunk<Sport[], SportArg>(
@@ -90,20 +98,35 @@ export const queryLeagueByDate = createAsyncThunk<League[], LeagueArg>(
   },
 );
 
-export const queryNumberGameByLeague = createAsyncThunk<
-  NumberGameRecord[],
-  NumberGameArg
->(`${actionName}/getNumberGameResult`, async (values, { rejectWithValue }) => {
-  try {
-    const { data } = await post<NumberGameRecord[]>(
-      `/api/${actionName}/getNumberGameResult`,
-      values,
-    );
-    return data;
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-});
+export const queryResultByLeague = createAsyncThunk<ResultRecord[], ResultArg>(
+  `${actionName}/getResult`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await post<ResultRecord[]>(
+        `/api/${actionName}/getResult`,
+        values,
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
+export const querySoccer5 = createAsyncThunk<string, Soccer5Arg>(
+  'third-party-result/getSoccer5Result',
+  async (values, { rejectWithValue }) => {
+    try {
+      const { data } = await post<string>(
+        'api/third-party-result/getSoccer5Result',
+        values,
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
 
 const slice = createSlice({
   name: actionName,
@@ -126,12 +149,18 @@ const slice = createSlice({
       state.leagues = payload;
       state.isLeagueLoading = false;
     });
-    builder.addCase(queryNumberGameByLeague.pending, (state) => {
+    builder.addCase(queryResultByLeague.pending, (state) => {
       state.isNumberGameLoading = true;
     });
-    builder.addCase(queryNumberGameByLeague.fulfilled, (state, { payload }) => {
-      state.numberGames = payload;
+    builder.addCase(queryResultByLeague.fulfilled, (state, { payload }) => {
+      state.results = payload;
       state.isNumberGameLoading = false;
+    });
+    builder.addCase(querySoccer5.pending, (state) => {
+      state.isSoccer5Loading = true;
+    });
+    builder.addCase(querySoccer5.fulfilled, (state) => {
+      state.isSoccer5Loading = false;
     });
   },
 });

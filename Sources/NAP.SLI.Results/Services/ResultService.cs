@@ -13,7 +13,7 @@ namespace NAP.SLI.Results.Services
     {
         Task<IEnumerable<ResultSportByDateModel>> GetResultSportByDate(ResultSportByDateRequest request);
         Task<IEnumerable<ResultLeagueByDateModel>> GetResultLeagueByDate(ResultLeagueByDateRequest request);
-        Task<IEnumerable<NumberGameRecordModel>> GetNumberGameResult(NumberGameResultRequest request);
+        Task<IEnumerable<ResultRecordModel>> GetNumberGameResult(ResultRequest request);
     }
 
     public class ResultService : IResultService
@@ -50,27 +50,27 @@ namespace NAP.SLI.Results.Services
             return await dynamicRepositoryEx.FetchAsync<ResultLeagueByDateModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<NumberGameRecordModel>> GetNumberGameResult(NumberGameResultRequest request)
+        public async Task<IEnumerable<ResultRecordModel>> GetNumberGameResult(ResultRequest request)
         {
             var languageCode = currentContextService.GetLanguageCode();
-            var criteria = new GetNumberGameResultCriteria
+            var criteria = new GetResultCriteria
             {
                 FromDate = request.FromDate,
                 SportType = request.SportType,
                 LeagueID = request.LeagueId,
                 Language = languageCode
             };
-            var numberGames = await dynamicRepositoryEx.FetchAsync<NumberGame>(criteria).ConfigureAwait(false);
-            return MappingNumberGame(numberGames, languageCode);
+            var results = await dynamicRepositoryEx.FetchAsync<Result>(criteria).ConfigureAwait(false);
+            return MappingResults(results, languageCode);
         }
 
-        private IEnumerable<NumberGameRecordModel> MappingNumberGame(IEnumerable<NumberGame> numberGames, string languageCode)
+        private IEnumerable<ResultRecordModel> MappingResults(IEnumerable<Result> results, string languageCode)
         {
-            return numberGames.GroupBy(match => new { match.LeagueId }).Select(
+            return results.GroupBy(match => new { match.LeagueId }).Select(
                 leagueGroup =>
                 {
                     var leagueName = remotingRefService.GetLeagueName(leagueGroup.Key.LeagueId.ToString(), languageCode);
-                    var matches = new List<NumberGameModel>();
+                    var matches = new List<ResultModel>();
 
                     foreach (var match in leagueGroup)
                     {
@@ -82,7 +82,7 @@ namespace NAP.SLI.Results.Services
                         }
                         else
                         {
-                            matches.Add(new NumberGameModel
+                            matches.Add(new ResultModel
                             {
                                 LeagueId = match.LeagueId,
                                 MatchId = match.MatchId,
@@ -96,7 +96,7 @@ namespace NAP.SLI.Results.Services
                         }
                     }
 
-                    return new NumberGameRecordModel { LeagueName = leagueName, Matches = matches };
+                    return new ResultRecordModel { LeagueName = leagueName, Matches = matches };
                 }
             );
         }

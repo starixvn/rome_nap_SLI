@@ -8,16 +8,16 @@ namespace NAP.SLI.Results.Handlers
     using NAP.SLI.Results.Requests;
     using NAP.SLI.Results.Services;
 
-    public class NumberGameResultHandler : IRequestHandler<NumberGameResultRequest, IEnumerable<NumberGameRecordModel>>
+    public class ResultHandler : IRequestHandler<ResultRequest, IEnumerable<ResultRecordModel>>
     {
         private readonly IResultService service;
 
-        public NumberGameResultHandler(IResultService service)
+        public ResultHandler(IResultService service)
         {
             this.service = service;
         }
 
-        public async Task<IEnumerable<NumberGameRecordModel>> Handle(NumberGameResultRequest request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<ResultRecordModel>> Handle(ResultRequest request, CancellationToken cancellationToken)
         {
             return await service.GetNumberGameResult(request).ConfigureAwait(false);
         }

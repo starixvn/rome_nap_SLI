@@ -2,7 +2,7 @@ namespace NAP.SLI.Results.Models
 {
     using System;
 
-    public class NumberGame
+    public class Result
     {
         public int LeagueId { get; set; }
 
