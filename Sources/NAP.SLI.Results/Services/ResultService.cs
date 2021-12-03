@@ -13,7 +13,7 @@ namespace NAP.SLI.Results.Services
     {
         Task<IEnumerable<ResultSportByDateModel>> GetResultSportByDate(ResultSportByDateRequest request);
         Task<IEnumerable<ResultLeagueByDateModel>> GetResultLeagueByDate(ResultLeagueByDateRequest request);
-        Task<IEnumerable<ResultRecordModel>> GetNumberGameResult(ResultRequest request);
+        Task<IEnumerable<ResultRecordModel>> GetResult(ResultRequest request);
     }
 
     public class ResultService : IResultService
@@ -50,7 +50,7 @@ namespace NAP.SLI.Results.Services
             return await dynamicRepositoryEx.FetchAsync<ResultLeagueByDateModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<ResultRecordModel>> GetNumberGameResult(ResultRequest request)
+        public async Task<IEnumerable<ResultRecordModel>> GetResult(ResultRequest request)
         {
             var languageCode = currentContextService.GetLanguageCode();
             var criteria = new GetResultCriteria

@@ -19,7 +19,7 @@ namespace NAP.SLI.Results.Handlers
 
         public async Task<IEnumerable<ResultRecordModel>> Handle(ResultRequest request, CancellationToken cancellationToken)
         {
-            return await service.GetNumberGameResult(request).ConfigureAwait(false);
+            return await service.GetResult(request).ConfigureAwait(false);
         }
     }
 }
