@@ -4,7 +4,6 @@ import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
-import { SOCCER5_URL } from 'utils/ConstantUtils';
 import Happy5Match from './Happy5Match';
 import { querySoccer5 } from './reducer';
 import './Table.scss';
@@ -32,7 +31,7 @@ const Happy5Table = () => {
       }),
     );
     const urlRes = unwrapResult(result);
-    setUrl(SOCCER5_URL + urlRes);
+    setUrl(urlRes);
     handleToggle();
   };
 

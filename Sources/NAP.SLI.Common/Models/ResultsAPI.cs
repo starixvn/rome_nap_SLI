@@ -4,7 +4,7 @@ namespace NAP.SLI.Common.Models
     {
         public string Url { get; set; }
 
-        public string UrlSoccer5 { get; set; } = string.Empty;
+        public string UrlSoccer5 { get; set; }
 
         public string SiteId { get; set; } = null;
 

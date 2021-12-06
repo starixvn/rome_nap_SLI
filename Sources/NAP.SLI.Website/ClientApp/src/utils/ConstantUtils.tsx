@@ -68,5 +68,3 @@ export const WINTER = 'Wi';
 export const MORE_ODD = 'MO';
 export const MORE_EVEN = 'ME';
 export const NA = 'N/A';
-export const SOCCER5_URL =
-  'https://plggc.155551.com/LinkedGamesWebPortal/GameResult';
