@@ -50,6 +50,7 @@ describe('Modal', () => {
           userName: '',
           firstName: '',
           lastName: '',
+          email: '',
           userId: 1,
           creator: '',
           createdDate: moment().toString(),

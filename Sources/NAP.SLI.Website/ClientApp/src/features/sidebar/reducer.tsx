@@ -78,7 +78,7 @@ export const getCustomerInformation = createAsyncThunk<
 );
 
 const initialState: State = {
-  isOpen: false,
+  isOpen: true,
   username: '',
 };
 const slice = createSlice({

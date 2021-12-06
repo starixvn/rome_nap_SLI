@@ -45,9 +45,7 @@ describe('ReportFilter', () => {
     ThunkDispatch<DeepPartial<AppState>, unknown, Action<string>>
   >([thunk]);
 
-  const defaultStore = mockStore({
-    reportFilter: {},
-  });
+  const defaultStore = mockStore({});
 
   let fromDateInput: HTMLInputElement;
   let toDateInput: HTMLInputElement;
@@ -343,17 +341,15 @@ describe('ReportFilter', () => {
   });
 
   it('should disable last month and since last month button when its fromDate are before minDate', async () => {
-    // Arrange, Act
-    const store = mockStore({
-      reportFilter: {
-        minDate: getToday()
-          .subtract(1, 'months')
-          .startOf('month')
-          .add(1, 'days')
-          .toISOString(),
-      },
-    });
-    await renderComponent(store);
+    // Arrange
+    window.configuration.balanceUpDay = getToday()
+      .subtract(1, 'months')
+      .startOf('month')
+      .add(1, 'days')
+      .toISOString();
+
+    // Act
+    await renderComponent(defaultStore);
 
     // Assert
     expect(screen.queryByText('Last Month')).toBeNull();
@@ -361,17 +357,15 @@ describe('ReportFilter', () => {
   });
 
   it('should disable last week, last month and since last month button when its fromDate are before minDate', async () => {
-    // Arrange, Act
-    const store = mockStore({
-      reportFilter: {
-        minDate: getToday()
-          .subtract(1, 'weeks')
-          .startOf('isoWeek')
-          .add(1, 'days')
-          .toISOString(),
-      },
-    });
-    await renderComponent(store);
+    // Arrange
+    window.configuration.balanceUpDay = getToday()
+      .subtract(1, 'weeks')
+      .startOf('isoWeek')
+      .add(1, 'days')
+      .toISOString();
+
+    // Act
+    await renderComponent(defaultStore);
 
     // Assert
     expect(screen.queryByText('Last Week')).toBeNull();
@@ -380,13 +374,14 @@ describe('ReportFilter', () => {
   });
 
   it('should disable this week, last week, last month and since last month button when its fromDate are before minDate', async () => {
-    // Arrange, Act
-    const store = mockStore({
-      reportFilter: {
-        minDate: getToday().startOf('isoWeek').add(1, 'days').toISOString(),
-      },
-    });
-    await renderComponent(store);
+    // Arrange
+    window.configuration.balanceUpDay = getToday()
+      .startOf('isoWeek')
+      .add(1, 'days')
+      .toISOString();
+
+    // Act
+    await renderComponent(defaultStore);
 
     // Assert
     expect(screen.queryByText('This Week')).toBeNull();

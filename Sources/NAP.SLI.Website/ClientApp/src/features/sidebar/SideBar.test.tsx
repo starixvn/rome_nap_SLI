@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import configureStore from 'redux-mock-store';
 import SideBar from './SideBar';
 import { Provider } from 'react-redux';
 import { Action, DeepPartial, ThunkDispatch } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import { act, cleanup, screen, render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 
@@ -17,7 +17,7 @@ const mockStore = configureStore<
 
 describe('SideBar', () => {
   it('should show dropdown when typing', async () => {
-    // Arange
+    // Arrange
     const url = 'http://localhost:5000/simple-api/query';
     fetchMock
       .reset()
@@ -29,7 +29,7 @@ describe('SideBar', () => {
         customer: undefined,
       },
     });
-    const { rerender } = render(
+    render(
       <Provider store={store}>
         <SideBar />
       </Provider>,

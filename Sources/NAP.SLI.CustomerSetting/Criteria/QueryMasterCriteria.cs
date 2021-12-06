@@ -6,12 +6,12 @@ namespace NAP.SLI.CustomerSetting.Criteria
     {
         public int CustId { get; set; }
 
-        public int Srecommend { get; set; }
+        public int SRecommend { get; set; }
 
         public override string GetSettingKey()
             => "SLI_CustomerSelSCustomer";
 
         public override bool IsValid()
-            => CustId > 0 && Srecommend > 0;
+            => CustId > 0 && SRecommend > 0;
     }
 }
