@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Label, Table } from 'reactstrap';
-import { formatInteger } from 'utils/NumberUtils';
+import { formatDecimal } from 'utils/NumberUtils';
 import { BetSetting, CustomerInfo } from '../types';
 
 export type Props = CustomerInfo &
@@ -91,16 +91,16 @@ const TableGroup = ({
           </tr>
           <tr className="table-content">
             <td className="label text-left table-header">Number Game</td>
-            <td>{formatInteger(v161MinBet)}</td>
-            <td>{formatInteger(v161MaxBet)}</td>
-            <td>{formatInteger(v161MaxPerMatch)}</td>
-            <td>{formatInteger(v161MaxPerBall)}</td>
+            <td>{formatDecimal(v161MinBet)}</td>
+            <td>{formatDecimal(v161MaxBet)}</td>
+            <td>{formatDecimal(v161MaxPerMatch)}</td>
+            <td>{formatDecimal(v161MaxPerBall)}</td>
           </tr>
           <tr className="table-content">
             <td className="label text-left table-header">Happy 5</td>
-            <td>{formatInteger(v164MinBet)}</td>
-            <td>{formatInteger(v164MaxBet)}</td>
-            <td>{formatInteger(v164MaxPerMatch)}</td>
+            <td>{formatDecimal(v164MinBet)}</td>
+            <td>{formatDecimal(v164MaxBet)}</td>
+            <td>{formatDecimal(v164MaxPerMatch)}</td>
             <td></td>
           </tr>
         </tbody>
