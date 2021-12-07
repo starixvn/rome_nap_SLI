@@ -2,17 +2,18 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import NumberGameMatch from './NumberGameMatch';
+import { NumberGame } from './reducer';
 import './Table.scss';
 
 const NumberGameTable = () => {
   const {
     results,
-    isNumberGameLoading,
+    isResultLoading,
     isLeagueLoading,
     isSportLoading,
   } = useSelector((state: AppState) => state.results);
 
-  return isNumberGameLoading || isLeagueLoading || isSportLoading ? (
+  return isResultLoading || isLeagueLoading || isSportLoading ? (
     <></>
   ) : (
     <Table bordered striped hover>
@@ -43,7 +44,10 @@ const NumberGameTable = () => {
                 </td>
               </tr>
               {league.matches.map((match) => (
-                <NumberGameMatch key={match.matchId} match={match} />
+                <NumberGameMatch
+                  key={match.matchId}
+                  match={match as NumberGame}
+                />
               ))}
             </>
           ))

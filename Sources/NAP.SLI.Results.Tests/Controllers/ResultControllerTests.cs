@@ -15,7 +15,7 @@ namespace NAP.SLI.Results.Tests.Controllers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetResultSportByDate(IMediator mediator, ResultSportByDateRequest request, IEnumerable<ResultSportByDateModel> sendResult)
+        public async Task TestMethod_GetResultSportByDate(IMediator mediator, ResultSportByDateRequest request, object sendResult)
         {
             // Arrange
             var controller = new ResultController(mediator);
@@ -49,7 +49,7 @@ namespace NAP.SLI.Results.Tests.Controllers
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetResult(IMediator mediator, ResultRequest request, IEnumerable<ResultRecordModel> sendResult)
+        public async Task TestMethod_GetResult(IMediator mediator, ResultRequest request, IEnumerable<ResultRecord> sendResult)
         {
             // Arrange
             var controller = new ResultController(mediator);

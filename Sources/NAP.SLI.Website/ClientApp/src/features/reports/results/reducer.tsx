@@ -6,19 +6,48 @@ type ResultArg = {
   leagueId: number;
   sportType: number;
 };
-export type Result = {
-  leagueId: number;
+
+type Match = {
   matchId: number;
-  matchCode: string;
-  eventDate: string;
+  noMatch: string;
+  leagueId: number;
   kickOffTime: string;
   eventStatus: string;
-  seq: number[];
-  ball: number[];
 };
+
+export type NumberGame = Match & {
+  firstBall: Ball;
+  secondBall: Ball;
+  thirdBall: Ball;
+  oeft: string;
+};
+
+export type Happy5 = Match & {
+  firstBall: Ball;
+  secondBall: Ball;
+  thirdBall: Ball;
+  fourthBall: Ball;
+  fifthBall: Ball;
+  totalBall: string;
+  bigSmall: string;
+  oddEven: string;
+  fourSeason: string;
+  moreOddMoreEven: string;
+  soccer5: string;
+  soccer5Class: string;
+  combo: string;
+  balls: string;
+  eventStatusIsRefund: boolean;
+};
+
 type ResultRecord = {
   leagueName: string;
-  matches: Result[];
+  matches: Array<NumberGame | Happy5>;
+};
+
+export type Ball = {
+  number: string;
+  color: string;
 };
 
 type SportArg = {
@@ -51,7 +80,7 @@ type State = {
   selectedSportType: number;
   isSportLoading: boolean;
   isLeagueLoading: boolean;
-  isNumberGameLoading: boolean;
+  isResultLoading: boolean;
   isSoccer5Loading: boolean;
 };
 
@@ -64,7 +93,7 @@ const initialState: State = {
   selectedSportType: 0,
   isSportLoading: false,
   isLeagueLoading: false,
-  isNumberGameLoading: false,
+  isResultLoading: false,
   isSoccer5Loading: false,
 };
 
@@ -108,6 +137,7 @@ export const queryResultByLeague = createAsyncThunk<ResultRecord[], ResultArg>(
       );
       return data;
     } catch (err) {
+      console.log(err);
       return rejectWithValue(err);
     }
   },
@@ -135,6 +165,7 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(querySportByDate.pending, (state) => {
       state.isSportLoading = true;
+      state.results = [];
     });
     builder.addCase(querySportByDate.fulfilled, (state, { payload }) => {
       state.sports = payload;
@@ -144,17 +175,19 @@ const slice = createSlice({
     builder.addCase(queryLeagueByDate.pending, (state, { meta }) => {
       state.isLeagueLoading = true;
       state.selectedSportType = meta.arg.sportId;
+      state.results = [];
     });
     builder.addCase(queryLeagueByDate.fulfilled, (state, { payload }) => {
       state.leagues = payload;
       state.isLeagueLoading = false;
     });
     builder.addCase(queryResultByLeague.pending, (state) => {
-      state.isNumberGameLoading = true;
+      state.isResultLoading = true;
+      state.results = [];
     });
     builder.addCase(queryResultByLeague.fulfilled, (state, { payload }) => {
       state.results = payload;
-      state.isNumberGameLoading = false;
+      state.isResultLoading = false;
     });
     builder.addCase(querySoccer5.pending, (state) => {
       state.isSoccer5Loading = true;

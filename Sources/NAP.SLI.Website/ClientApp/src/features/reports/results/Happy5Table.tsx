@@ -5,14 +5,14 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import Happy5Match from './Happy5Match';
-import { querySoccer5 } from './reducer';
+import { Happy5, querySoccer5 } from './reducer';
 import './Table.scss';
 
 const Happy5Table = () => {
   const dispatch = useAppDispatch();
   const {
     results,
-    isNumberGameLoading,
+    isResultLoading,
     isLeagueLoading,
     isSportLoading,
     isSoccer5Loading,
@@ -22,11 +22,11 @@ const Happy5Table = () => {
 
   const handleToggle = () => setModal((prevModal) => !prevModal);
 
-  const handleSoccer5Click = async (matchId: number, ball: number[]) => {
+  const handleSoccer5Click = async (matchId: number, balls: string) => {
     const result = await dispatch(
       querySoccer5({
         matchId,
-        balls: ball.toString(),
+        balls,
         isDesktop: true,
       }),
     );
@@ -35,7 +35,7 @@ const Happy5Table = () => {
     handleToggle();
   };
 
-  return isNumberGameLoading || isLeagueLoading || isSportLoading ? (
+  return isResultLoading || isLeagueLoading || isSportLoading ? (
     <></>
   ) : (
     <>
@@ -74,7 +74,7 @@ const Happy5Table = () => {
                 {league.matches.map((match) => (
                   <Happy5Match
                     key={match.matchId}
-                    match={match}
+                    match={match as Happy5}
                     onSoccer5Click={handleSoccer5Click}
                   />
                 ))}

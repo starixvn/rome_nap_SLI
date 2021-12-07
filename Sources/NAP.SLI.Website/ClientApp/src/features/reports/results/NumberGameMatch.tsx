@@ -1,21 +1,13 @@
 import React from 'react';
-import { NUMBERGAME_SPORT_TYPE } from 'utils/ConstantUtils';
 import { getDate, getTime } from 'utils/DateUtils';
-import { formatTwoDigit } from 'utils/NumberUtils';
-import Ball from './Ball';
-import { Result } from './reducer';
+import BallNumber from './BallNumber';
+import { NumberGame } from './reducer';
 
 type Props = {
-  match: Result;
-};
-
-const isSumEven = (ball: number[]) => {
-  return ball.reduce((prevVal, curVal) => prevVal + curVal, 0) % 2 === 0;
+  match: NumberGame;
 };
 
 const NumberGameMatch = ({ match }: Props) => {
-  const FTOE = isSumEven(match.ball) ? 'Even' : 'Odd';
-
   return (
     <tr>
       <td className="text-center">
@@ -23,25 +15,16 @@ const NumberGameMatch = ({ match }: Props) => {
         <br />
         {getTime(match.kickOffTime)}
       </td>
-      <td className="align-middle pl-3">Number Game No {match.matchCode}</td>
-      <td className="text-center align-middle">{FTOE}</td>
+      <td className="align-middle pl-3">Number Game {match.noMatch}</td>
+      <td className="text-center align-middle">{match.oeft}</td>
       <td className="text-center align-middle">
-        <Ball
-          sportType={NUMBERGAME_SPORT_TYPE}
-          number={formatTwoDigit(match.ball[0])}
-        />
+        <BallNumber ball={match.firstBall} />
       </td>
       <td className="text-center align-middle">
-        <Ball
-          sportType={NUMBERGAME_SPORT_TYPE}
-          number={formatTwoDigit(match.ball[1])}
-        />
+        <BallNumber ball={match.secondBall} />
       </td>
       <td className="text-center align-middle">
-        <Ball
-          sportType={NUMBERGAME_SPORT_TYPE}
-          number={formatTwoDigit(match.ball[2])}
-        />
+        <BallNumber ball={match.thirdBall} />
       </td>
       <td className="text-center align-middle font-weight-bold text-capitalize">
         {match.eventStatus}

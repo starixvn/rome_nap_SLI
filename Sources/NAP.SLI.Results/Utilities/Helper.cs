@@ -25,5 +25,10 @@ namespace NAP.SLI.Results.Utilities
 
             return dictionaryString.ToString();
         }
+
+        public static string FormatTwoDigit(int number)
+        {
+            return number.ToString("00");
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace NAP.SLI.Results.Tests.Handlers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle(IResultService service, ResultRequest request, IEnumerable<ResultRecordModel> serviceResult)
+        public async Task TestMethod_Handle(IResultService service, ResultRequest request, IEnumerable<ResultRecord> serviceResult)
         {
             // Arrange
             var handler = new ResultHandler(service);

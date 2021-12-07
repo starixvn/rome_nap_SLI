@@ -1,5 +1,6 @@
 namespace NAP.SLI.Results.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -13,7 +14,8 @@ namespace NAP.SLI.Results.Services
     {
         Task<IEnumerable<ResultSportByDateModel>> GetResultSportByDate(ResultSportByDateRequest request);
         Task<IEnumerable<ResultLeagueByDateModel>> GetResultLeagueByDate(ResultLeagueByDateRequest request);
-        Task<IEnumerable<ResultRecordModel>> GetResult(ResultRequest request);
+        Task<IEnumerable<ResultRecord<NumberGameMatch>>> GetNumberGameResult(ResultRequest request);
+        Task<IEnumerable<ResultRecord<Happy5Match>>> GetHappy5Result(ResultRequest request);
     }
 
     public class ResultService : IResultService
@@ -50,9 +52,22 @@ namespace NAP.SLI.Results.Services
             return await dynamicRepositoryEx.FetchAsync<ResultLeagueByDateModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<ResultRecordModel>> GetResult(ResultRequest request)
+        public async Task<IEnumerable<ResultRecord<NumberGameMatch>>> GetNumberGameResult(ResultRequest request)
         {
             var languageCode = currentContextService.GetLanguageCode();
+            var results = await GetResult(request, languageCode).ConfigureAwait(false);
+            return MappingResult<NumberGameMatch>(results, languageCode);
+        }
+
+        public async Task<IEnumerable<ResultRecord<Happy5Match>>> GetHappy5Result(ResultRequest request)
+        {
+            var languageCode = currentContextService.GetLanguageCode();
+            var results = await GetResult(request, languageCode).ConfigureAwait(false);
+            return MappingResult<Happy5Match>(results, languageCode);
+        }
+
+        private async Task<IEnumerable<Result>> GetResult(ResultRequest request, string languageCode)
+        {
             var criteria = new GetResultCriteria
             {
                 FromDate = request.FromDate,
@@ -60,17 +75,16 @@ namespace NAP.SLI.Results.Services
                 LeagueID = request.LeagueId,
                 Language = languageCode
             };
-            var results = await dynamicRepositoryEx.FetchAsync<Result>(criteria).ConfigureAwait(false);
-            return MappingResults(results, languageCode);
+            return await dynamicRepositoryEx.FetchAsync<Result>(criteria).ConfigureAwait(false);
         }
 
-        private IEnumerable<ResultRecordModel> MappingResults(IEnumerable<Result> results, string languageCode)
+        private IEnumerable<ResultRecord<T>> MappingResult<T>(IEnumerable<Result> results, string languageCode) where T : IMatch
         {
             return results.GroupBy(match => new { match.LeagueId }).Select(
                 leagueGroup =>
                 {
                     var leagueName = remotingRefService.GetLeagueName(leagueGroup.Key.LeagueId.ToString(), languageCode);
-                    var matches = new List<ResultModel>();
+                    var matches = new List<T>();
 
                     foreach (var match in leagueGroup)
                     {
@@ -82,21 +96,11 @@ namespace NAP.SLI.Results.Services
                         }
                         else
                         {
-                            matches.Add(new ResultModel
-                            {
-                                LeagueId = match.LeagueId,
-                                MatchId = match.MatchId,
-                                EventStatus = match.EventStatus,
-                                EventDate = match.EventDate,
-                                KickOffTime = match.KickOffTime,
-                                MatchCode = match.MatchCode,
-                                Seq = new List<int> { match.Seq },
-                                Ball = new List<int> { match.Number }
-                            });
+                            matches.Add((T)Activator.CreateInstance(typeof(T), new object[] { match }));
                         }
                     }
 
-                    return new ResultRecordModel { LeagueName = leagueName, Matches = matches };
+                    return new ResultRecord<T> { LeagueName = leagueName, Matches = matches };
                 }
             );
         }
