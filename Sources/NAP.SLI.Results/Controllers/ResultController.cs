@@ -3,6 +3,8 @@ namespace NAP.SLI.Results.Controllers
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using NAP.SLI.Common.Extensions;
+    using NAP.SLI.Common.Models;
     using NAP.SLI.Results.Requests;
 
     [ApiController]
@@ -35,6 +37,17 @@ namespace NAP.SLI.Results.Controllers
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> Excel([FromBody] ExcelRequest request)
+        {
+            var fileContents = await mediator.Send(request).ConfigureAwait(false);
+            return File(
+                fileContents: fileContents,
+                contentType: ContentTypes.Excel,
+                fileDownloadName: $"{string.Join("-", "Results", request.FromDate.ToDateString(), request.SportName, request.LeagueName)}.xls"
+            );
         }
     }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { getDate, getTime } from 'utils/DateUtils';
 import BallNumber from './BallNumber';
 import { NumberGame } from './reducer';
 
@@ -10,12 +9,8 @@ type Props = {
 const NumberGameMatch = ({ match }: Props) => {
   return (
     <tr>
-      <td className="text-center">
-        {getDate(match.kickOffTime)}
-        <br />
-        {getTime(match.kickOffTime)}
-      </td>
-      <td className="align-middle pl-3">Number Game {match.noMatch}</td>
+      <td className="text-center new-line">{match.kickOffTime}</td>
+      <td className="align-middle pl-3">{match.noMatch}</td>
       <td className="text-center align-middle">{match.oeft}</td>
       <td className="text-center align-middle">
         <BallNumber ball={match.firstBall} />

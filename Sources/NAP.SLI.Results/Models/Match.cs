@@ -3,18 +3,17 @@ namespace NAP.SLI.Results.Models
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
+    using NAP.SLI.Results.Utilities;
 
     public interface IMatch
     {
         int MatchId { get; }
 
-        string NoMatch { get; }
-
         int LeagueId { get; }
 
         string MatchCode { get; }
 
-        DateTime KickOffTime { get; }
+        string KickOffTime { get; }
 
         string EventStatus { get; }
 
@@ -29,6 +28,8 @@ namespace NAP.SLI.Results.Models
     {
         protected readonly Result result;
 
+        private const string DateTimeFormat = "{0:MM/dd/yyyy \\\n hh:mm:ss tt}";
+
         public Match(Result result)
         {
             this.result = result;
@@ -38,15 +39,13 @@ namespace NAP.SLI.Results.Models
 
         public int MatchId => result.MatchId;
 
-        public string NoMatch => $"No {result.MatchCode}";
-
         public int LeagueId => result.LeagueId;
 
         public string MatchCode => result.MatchCode;
 
-        public DateTime KickOffTime => result.KickOffTime;
+        public string KickOffTime => GetFormatedKickOffTime(result.KickOffTime);
 
-        public string EventStatus => result.EventStatus;
+        public string EventStatus => Helper.Capitalize(result.EventStatus);
 
         [IgnoreDataMember]
         public List<int> Seq { get; }
@@ -54,5 +53,7 @@ namespace NAP.SLI.Results.Models
         [IgnoreDataMember]
         public List<int> Ball { get; }
 
+        private static string GetFormatedKickOffTime(DateTime kickOffTime)
+            => Helper.FullDateFormat(kickOffTime, DateTimeFormat);
     }
 }

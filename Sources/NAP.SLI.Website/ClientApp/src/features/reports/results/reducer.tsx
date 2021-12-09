@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { post } from 'services/http';
+import { download, post } from 'services/http';
 
 type ResultArg = {
   fromDate: string;
   leagueId: number;
   sportType: number;
+};
+
+type ExcelArg = ResultArg & {
+  leagueName: string;
+  sportName: string;
 };
 
 type Match = {
@@ -82,6 +87,7 @@ type State = {
   isLeagueLoading: boolean;
   isResultLoading: boolean;
   isSoccer5Loading: boolean;
+  isExcelLoading: boolean;
 };
 
 const actionName = 'result';
@@ -95,6 +101,7 @@ const initialState: State = {
   isLeagueLoading: false,
   isResultLoading: false,
   isSoccer5Loading: false,
+  isExcelLoading: false,
 };
 
 export const querySportByDate = createAsyncThunk<Sport[], SportArg>(
@@ -137,7 +144,17 @@ export const queryResultByLeague = createAsyncThunk<ResultRecord[], ResultArg>(
       );
       return data;
     } catch (err) {
-      console.log(err);
+      return rejectWithValue(err);
+    }
+  },
+);
+
+export const queryExcel = createAsyncThunk<void, ExcelArg>(
+  `${actionName}/getExcel`,
+  async (values, { rejectWithValue }) => {
+    try {
+      await download(`/api/${actionName}/excel`, values);
+    } catch (err) {
       return rejectWithValue(err);
     }
   },
@@ -188,6 +205,12 @@ const slice = createSlice({
     builder.addCase(queryResultByLeague.fulfilled, (state, { payload }) => {
       state.results = payload;
       state.isResultLoading = false;
+    });
+    builder.addCase(queryExcel.pending, (state) => {
+      state.isExcelLoading = true;
+    });
+    builder.addCase(queryExcel.fulfilled, (state) => {
+      state.isExcelLoading = false;
     });
     builder.addCase(querySoccer5.pending, (state) => {
       state.isSoccer5Loading = true;

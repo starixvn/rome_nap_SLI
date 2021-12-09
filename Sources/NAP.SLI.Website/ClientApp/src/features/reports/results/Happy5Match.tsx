@@ -1,5 +1,4 @@
 import React from 'react';
-import { getDate, getTime } from 'utils/DateUtils';
 import BallNumber from './BallNumber';
 import { Happy5 } from './reducer';
 
@@ -11,12 +10,8 @@ type Props = {
 const Happy5Match = ({ match, onSoccer5Click }: Props) => {
   return (
     <tr>
-      <td className="text-center">
-        {getDate(match.kickOffTime)}
-        <br />
-        {getTime(match.kickOffTime)}
-      </td>
-      <td className="align-middle pl-3">Number Game No {match.noMatch}</td>
+      <td className="text-center new-line">{match.kickOffTime}</td>
+      <td className="align-middle pl-3">{match.noMatch}</td>
       <td className="text-center align-middle">
         {match.eventStatusIsRefund ? (
           'N/A'

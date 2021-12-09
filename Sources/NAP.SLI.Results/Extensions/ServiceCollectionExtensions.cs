@@ -9,6 +9,7 @@ namespace NAP.SLI.Results.Extensions
         {
             services.AddScoped<IThirdPartyResultService, ThirdPartyResultService>();
             services.AddScoped<IResultService, ResultService>();
+            services.AddScoped<IExcelService, ExcelService>();
             return services;
         }
     }

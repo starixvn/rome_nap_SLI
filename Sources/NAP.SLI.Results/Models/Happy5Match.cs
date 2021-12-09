@@ -25,6 +25,8 @@ namespace NAP.SLI.Results.Models
         {
         }
 
+        public string NoMatch => $"No. {result.MatchCode}";
+
         public Ball FirstBall
         {
             get

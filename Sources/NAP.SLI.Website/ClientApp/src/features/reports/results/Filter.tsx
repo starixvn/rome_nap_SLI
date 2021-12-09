@@ -21,18 +21,18 @@ import {
 } from 'reactstrap';
 import {
   formatDate,
-  maxDate,
-  getYesterday,
-  getToday,
   getDate,
+  getToday,
+  getYesterday,
+  maxDate,
 } from 'utils/DateUtils';
+import { SHOW_ALL_LEAGUES } from '../../../utils/ConstantUtils';
 import {
+  queryExcel,
   queryLeagueByDate,
   queryResultByLeague,
   querySportByDate,
 } from './reducer';
-
-import { SHOW_ALL_LEAGUES } from '../../../utils/ConstantUtils';
 
 type FilterValues = {
   fromDate: string;
@@ -46,9 +46,13 @@ const Filter = () => {
   const yesterday = formatDate(getYesterday());
 
   const dispatch = useAppDispatch();
-  const { sports, leagues, isSportLoading, isLeagueLoading } = useSelector(
-    (state: AppState) => state.results,
-  );
+  const {
+    sports,
+    leagues,
+    isSportLoading,
+    isLeagueLoading,
+    isExcelLoading,
+  } = useSelector((state: AppState) => state.results);
   const {
     control,
     setValue,
@@ -158,8 +162,16 @@ const Filter = () => {
     handleSubmit(handleQuery)();
   };
 
-  const handleExcel = () => {
-    console.log('excel');
+  const handleExcel = async () => {
+    await dispatch(
+      queryExcel({
+        fromDate: getValues('fromDate'),
+        leagueId: getValues('leagueId'),
+        sportType: getValues('sportId'),
+        leagueName: selectedLeagueName,
+        sportName: selectedSportName,
+      }),
+    );
   };
 
   const handleDateChange = (value: string | Moment) => {
@@ -220,13 +232,13 @@ const Filter = () => {
                 className="btn-excel"
                 title="Export to Excel"
                 onClick={handleExcel}
-                //   disabled={isLoading}
+                disabled={isExcelLoading}
               >
-                {/* {isLoading ? (
-                <Spinner />
-              ) : ( */}
-                <Icon path={mdiFileExcelOutline} />
-                {/* )} */}
+                {isExcelLoading ? (
+                  <Spinner />
+                ) : (
+                  <Icon path={mdiFileExcelOutline} />
+                )}
               </Button>
             </FormGroup>
           </div>

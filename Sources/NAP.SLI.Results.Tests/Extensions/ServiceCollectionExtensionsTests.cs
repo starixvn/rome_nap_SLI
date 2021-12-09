@@ -17,11 +17,13 @@ namespace NAP.SLI.Results.Tests.Extensions
             services.AddResultsModule();
 
             // Assert
-            Assert.Equal(2, services.Count);
+            Assert.Equal(3, services.Count);
             Assert.Equal(typeof(IThirdPartyResultService), services[0].ServiceType);
             Assert.Equal(typeof(ThirdPartyResultService), services[0].ImplementationType);
             Assert.Equal(typeof(IResultService), services[1].ServiceType);
             Assert.Equal(typeof(ResultService), services[1].ImplementationType);
+            Assert.Equal(typeof(IExcelService), services[2].ServiceType);
+            Assert.Equal(typeof(ExcelService), services[2].ImplementationType);
         }
     }
 }
