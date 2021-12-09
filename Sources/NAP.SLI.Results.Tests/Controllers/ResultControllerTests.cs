@@ -10,6 +10,8 @@ namespace NAP.SLI.Results.Tests.Controllers
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
     using NAP.SLI.Results.Models;
+    using NAP.SLI.Common.Models;
+    using NAP.SLI.Common.Extensions;
 
     public class ResultControllerTests
     {
@@ -62,6 +64,25 @@ namespace NAP.SLI.Results.Tests.Controllers
             await mediator.Received().Send(request);
             var okResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(sendResult, okResult.Value);
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public async Task TestMethod_Excel(IMediator mediator, ExcelRequest request, byte[] sendResult)
+        {
+            // Arrange
+            var controller = new ResultController(mediator);
+            mediator.Send(request).Returns(sendResult);
+
+            // Act
+            var result = await controller.Excel(request);
+
+            // Assert
+            var fileContentResult = Assert.IsType<FileContentResult>(result);
+            Assert.Equal(sendResult, fileContentResult.FileContents);
+            Assert.Equal(ContentTypes.Excel, fileContentResult.ContentType);
+            var expectedFileDownloadName = $"{string.Join("-", "Results", request.FromDate.ToDateString(), request.SportName, request.LeagueName)}.xls";
+            Assert.Equal(expectedFileDownloadName, fileContentResult.FileDownloadName);
         }
     }
 }
