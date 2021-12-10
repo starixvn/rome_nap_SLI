@@ -16,7 +16,8 @@ import {
   Spinner,
 } from 'reactstrap';
 import { formatDate, stringDateToMoment } from 'utils/DateUtils';
-import { excel, getByDate } from './reducer';
+import { useCustomerParams } from '../Page';
+import { excel, getByDate, QueryArg } from './reducer';
 
 type Props = {
   maxDate: Moment;
@@ -32,11 +33,11 @@ type FilterValues = {
 };
 
 const Filter = ({ maxDate }: Props) => {
+  const queryCustomer = useCustomerParams();
   const dispatch = useAppDispatch();
-  const { queryArg, queryCustomer, minDate } = useSelector(
-    (state: AppState) => state.betList,
-  );
-  const { fromDate, toDate } = queryArg;
+  const { queryArg } = useSelector((state: AppState) => state.betListMatch);
+  const { fromDate, toDate } = queryArg as QueryArg;
+  const minDate = moment(window.configuration.balanceUpDay);
 
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -59,7 +60,7 @@ const Filter = ({ maxDate }: Props) => {
   useEffect(() => {
     if (!isSubmitting && queryCustomer?.custId) {
       const { custId } = queryCustomer;
-      handleSubmit(() => dispatch(getByDate({ fromDate, toDate, custId })))();
+      //handleSubmit(() => dispatch(getByDate({ fromDate, toDate, custId })))();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +96,7 @@ const Filter = ({ maxDate }: Props) => {
       fromDate,
       toDate,
     };
-    await dispatch(getByDate(queryPayload));
+    //await dispatch(getByDate(queryPayload));
   };
 
   const handleExcel = async () => {

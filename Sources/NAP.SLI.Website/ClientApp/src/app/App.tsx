@@ -1,12 +1,15 @@
 import './App.scss';
 import React, { useEffect } from 'react';
-import { Route, Switch, Router } from 'react-router';
+import {
+  Route,
+  Routes,
+  Navigate,
+  BrowserRouter,
+  Outlet,
+} from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { createBrowserHistory } from 'history';
-import { RouteLinks } from 'utils/RouteUtils';
 import NavMenu from 'features/nav/NavMenu';
 import SideBar from 'features/sidebar/SideBar';
-import PrivateRoute from 'components/PrivateRoute';
 import NotFoundPage from 'features/error/not-found/Page';
 import UMPage from 'features/error/UM/Page';
 import UserManagementPage from 'features/user-management/Page';
@@ -15,15 +18,25 @@ import HomePage from 'features/home/Page';
 import ChangePasswordModal from 'features/account/change-password/Modal';
 import ToastContainer from 'components/toast/ToastContainer';
 import CustomerSettingPage from 'features/customer-setting/Page';
+import CustomerSettingSuperPage from 'features/customer-setting/view-super/Page';
+import CustomerSettingMasterPage from 'features/customer-setting/view-master/Page';
+import CustomerSettingAgentPage from 'features/customer-setting/view-agent/Page';
+import CustomerSettingMemberPage from 'features/customer-setting/view-member/Page';
+import ReportPage from 'features/reports/Page';
 import WinLossDetailPage from 'features/reports/win-loss-detail/Page';
 import MatchWinLossDetailPage from 'features/reports/match-win-loss-detail/Page';
 import WinLossByBetTypePage from 'features/reports/win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from 'features/reports/win-loss-analysis/Page';
-import BetListPage from 'features/reports/bet-list/Page';
+import BetListMatchPage from 'features/reports/bet-list/match/Page';
 import ResultsPage from 'features/reports/results/Page';
 import { startCheckin, stopCheckin } from 'services/connection';
 
-export const history = createBrowserHistory();
+const RequireAuth = (props: { children: JSX.Element }) => {
+  const { account } = useSelector((state: AppState) => state.authentication);
+  const isAuthenticated = account !== undefined;
+
+  return isAuthenticated ? props.children : <Navigate to="login" />;
+};
 
 const App = () => {
   const { account } = useSelector((state: AppState) => state.authentication);
@@ -45,53 +58,79 @@ const App = () => {
   });
 
   return (
-    <Router history={history}>
+    <BrowserRouter>
       <div className={`wrapper ${isOpen && isLayout ? 'open' : ''}`}>
         {isLayout && <SideBar />}
         <div className="content">
           {isLayout && <NavMenu />}
           {isLayout && <ChangePasswordModal />}
           <div className="main">
-            <Switch>
-              <Route path={RouteLinks.ERROR_UM} component={UMPage} />
-              <Route path={RouteLinks.LOGIN} component={LoginPage} />
-              <PrivateRoute exact path={RouteLinks.HOME} component={HomePage} />
-              <PrivateRoute
-                path={RouteLinks.USER_MANAGEMENT}
-                component={UserManagementPage}
-              />
-              <PrivateRoute
-                path={RouteLinks.CUSTOMER_SETTING}
-                component={CustomerSettingPage}
-              />
-              <PrivateRoute
-                path={RouteLinks.WIN_LOSS_DETAIL}
-                component={WinLossDetailPage}
-              />
-              <PrivateRoute
-                path={RouteLinks.MATCH_WIN_LOSS_DETAIL}
-                component={MatchWinLossDetailPage}
-              />
-              <PrivateRoute
-                path={RouteLinks.WIN_LOSS_BY_BETTYPE}
-                component={WinLossByBetTypePage}
-              />
-              <PrivateRoute
-                path={RouteLinks.WIN_LOSS_ANALYSIS}
-                component={WinLossAnalysisPage}
-              />
-              <PrivateRoute
-                path={RouteLinks.BET_LIST}
-                component={BetListPage}
-              />
-              <PrivateRoute path={RouteLinks.RESULTS} component={ResultsPage} />
-              <PrivateRoute component={NotFoundPage} />
-            </Switch>
+            <Routes>
+              <Route path="error/um" element={<UMPage />} />
+              <Route path="/" element={<LoginPage />} />
+              <Route
+                element={
+                  <RequireAuth>
+                    <Outlet />
+                  </RequireAuth>
+                }
+              >
+                <Route path="/" element={<HomePage />} />
+                <Route
+                  path="user-management"
+                  element={<UserManagementPage />}
+                />
+                <Route
+                  path="customer-setting"
+                  element={<CustomerSettingPage />}
+                >
+                  <Route
+                    path="super/:custId"
+                    element={<CustomerSettingSuperPage />}
+                  />
+                  <Route
+                    path="master/:custId"
+                    element={<CustomerSettingMasterPage />}
+                  />
+                  <Route
+                    path="agent/:custId"
+                    element={<CustomerSettingAgentPage />}
+                  />
+                  <Route
+                    path="member/:custId"
+                    element={<CustomerSettingMemberPage />}
+                  />
+                </Route>
+                <Route path="report" element={<ReportPage />}>
+                  <Route
+                    path="win-loss-detail"
+                    element={<WinLossDetailPage />}
+                  />
+                  <Route
+                    path="match-win-loss-detail"
+                    element={<MatchWinLossDetailPage />}
+                  />
+                  <Route
+                    path="win-loss-by-bettype"
+                    element={<WinLossByBetTypePage />}
+                  />
+                  <Route
+                    path="win-loss-analysis"
+                    element={<WinLossAnalysisPage />}
+                  />
+                  <Route path="bet-list">
+                    <Route path="match" element={<BetListMatchPage />} />
+                  </Route>
+                  <Route path="results" element={<ResultsPage />} />
+                </Route>
+              </Route>
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
           </div>
         </div>
       </div>
       <ToastContainer />
-    </Router>
+    </BrowserRouter>
   );
 };
 

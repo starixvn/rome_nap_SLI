@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import { formatDecimal } from 'utils/NumberUtils';
-import '../Table.scss';
 import TableGroup from '../table-group/TableGroup';
 
 const TableComponent = () => {

@@ -22,6 +22,7 @@ import { mdiFileExcelOutline } from '@mdi/js';
 import moment, { Moment } from 'moment';
 import { Controller, useForm } from 'react-hook-form';
 import RHFDatePicker from '../date-picker/RHFDatePicker';
+import { useLocation } from 'react-router-dom';
 
 const defaultProps = {
   minDate,
@@ -29,10 +30,10 @@ const defaultProps = {
 };
 
 type Props = typeof defaultProps & {
+  customKey?: string;
   fromDate: Moment;
   toDate: Moment;
   component?: ReactNode;
-  customKey?: number;
   onQuery: (fromDate: Moment, toDate: Moment) => Promise<void>;
   onExcel: () => Promise<void>;
 };
@@ -47,12 +48,12 @@ const getReportDateRanges = (minDate: Moment) => {
 };
 
 const ReportFilter = ({
+  customKey,
   minDate,
   maxDate,
   fromDate,
   toDate,
   component,
-  customKey = 0,
   onQuery,
   onExcel,
 }: Props) => {
@@ -62,6 +63,7 @@ const ReportFilter = ({
   };
   type FilterValues = typeof initialValues;
 
+  const location = useLocation();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownIndex, setDropdownIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,9 +83,8 @@ const ReportFilter = ({
     if (!isSubmitting) {
       handleSubmit(onSubmit)();
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customKey]);
+  }, [location.search, customKey]);
 
   const handleDropdownItemClick = (index: number) => {
     setDropdownIndex(index);

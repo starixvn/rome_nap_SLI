@@ -13,7 +13,6 @@ import {
 import { NavLink as RRNavLink, Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiChevronDown, mdiChevronUp } from '@mdi/js';
-import { RouteLinks } from 'utils/RouteUtils';
 import {
   CustomerLevels,
   getDownlineLevel,
@@ -50,6 +49,21 @@ const CustomerPage = () => {
   const handleUsernameClicked = (username: string) => {
     dispatch(selectUsername({ username }));
   };
+
+  const getCustomerSettingLink = () => {
+    switch (roleId) {
+      case CustomerLevels.Super:
+        return 'customer-setting/super';
+      case CustomerLevels.Master:
+        return 'customer-setting/master';
+      case CustomerLevels.Agent:
+        return 'customer-setting/agent';
+      case CustomerLevels.Member:
+        return 'customer-setting/member';
+    }
+  };
+
+  const reportSearchParams = `custId=${custId}&roleId=${roleId}&username=${username}`;
 
   return (
     <div className="customer-page">
@@ -134,14 +148,7 @@ const CustomerPage = () => {
       <div className="mb-3">
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
           <Container>
-            <Link
-              to={{
-                pathname: RouteLinks.CUSTOMER_SETTING,
-                state: {
-                  ...generalInformation,
-                },
-              }}
-            >
+            <Link to={`${getCustomerSettingLink()}/${custId}`} key={custId}>
               VIEW SETTING
             </Link>
           </Container>
@@ -166,24 +173,21 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: RouteLinks.WIN_LOSS_DETAIL,
-                        state: {
-                          ...generalInformation,
-                        },
+                        pathname: 'report/win-loss-detail',
+                        search: reportSearchParams,
                       }}
                     >
-                      {getLevelName(getDownlineLevel(roleId)) +
-                        ' Win Loss Detail'}
+                      {`${getLevelName(
+                        getDownlineLevel(roleId),
+                      )} Win Loss Detail`}
                     </NavLink>
                   </NavItem>
                   <NavItem>
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: RouteLinks.MATCH_WIN_LOSS_DETAIL,
-                        state: {
-                          ...generalInformation,
-                        },
+                        pathname: 'report/match-win-loss-detail',
+                        search: reportSearchParams,
                       }}
                     >
                       Match Win Loss Detail
@@ -193,10 +197,8 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: RouteLinks.WIN_LOSS_BY_BETTYPE,
-                        state: {
-                          ...generalInformation,
-                        },
+                        pathname: 'report/win-loss-by-bet-type',
+                        search: reportSearchParams,
                       }}
                     >
                       Win Loss By Bet Type
@@ -206,10 +208,8 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: RouteLinks.WIN_LOSS_ANALYSIS,
-                        state: {
-                          ...generalInformation,
-                        },
+                        pathname: 'report/win-loss-analysis',
+                        search: reportSearchParams,
                       }}
                     >
                       Win Loss Analysis
@@ -223,7 +223,7 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: RouteLinks.BET_LIST,
+                        pathname: 'report/bet-list',
                         state: {
                           custId,
                           roleId,
@@ -245,10 +245,7 @@ const CustomerPage = () => {
           <Container>
             <Link
               to={{
-                pathname: RouteLinks.RESULTS,
-                state: {
-                  ...generalInformation,
-                },
+                pathname: 'report/result',
               }}
             >
               RESULTS

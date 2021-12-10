@@ -1,41 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
-import { CustomerLevels } from 'utils/CustomerLevelUtils';
-import { RouteLinks } from 'utils/RouteUtils';
-import ViewSuperPage from './view-super/Page';
-import ViewMasterPage from './view-master/Page';
-import ViewAgentPage from './view-agent/Page';
-import ViewMemberPage from './view-member/Page';
+import { Navigate, Outlet, useParams } from 'react-router-dom';
+import './Page.scss';
 
-const CustomerSettingPage = () => {
-  const history = useHistory();
-  const { customer } = useSelector((state: AppState) => state.sidebar);
+const Page = () => {
+  const params = useParams();
+  const custId = parseInt(params.custId as string, 10);
 
-  if (!customer) {
-    history.push(RouteLinks.HOME);
-    return <></>;
+  if (custId) {
+    return <Outlet />;
+  } else {
+    return <Navigate to="/" />;
   }
-
-  const renderBody = () => {
-    switch (customer.generalInformation.roleId) {
-      case CustomerLevels.Super:
-        return <ViewSuperPage />;
-      case CustomerLevels.Master:
-        return <ViewMasterPage />;
-      case CustomerLevels.Agent:
-        return <ViewAgentPage />;
-      case CustomerLevels.Member:
-        return <ViewMemberPage />;
-    }
-  };
-
-  return (
-    <div className="customer-setting-page">
-      <div className="page-title">Customer Setting</div>
-      <div>{renderBody()}</div>
-    </div>
-  );
 };
 
-export default CustomerSettingPage;
+export default Page;

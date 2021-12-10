@@ -14,14 +14,13 @@ import {
 } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import { Formik, Field, FormikHelpers } from 'formik';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import Icon from '@mdi/react';
 import { mdiAccount, mdiLock } from '@mdi/js';
 import { login, LoginProps } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
-import { RouteLinks } from 'utils/RouteUtils';
 import { useAppDispatch } from 'app/store';
 
 const validationSchema = Yup.object().shape({
@@ -31,7 +30,7 @@ const validationSchema = Yup.object().shape({
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { message, account } = useSelector(
     (state: AppState) => state.authentication,
   );
@@ -39,7 +38,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      history.push(RouteLinks.HOME);
+      navigate('/');
     }
   });
 
@@ -52,7 +51,7 @@ const LoginPage = () => {
     setSubmitting(false);
 
     if (login.fulfilled.match(resultAction)) {
-      history.push(RouteLinks.HOME);
+      navigate('/');
     }
   };
 

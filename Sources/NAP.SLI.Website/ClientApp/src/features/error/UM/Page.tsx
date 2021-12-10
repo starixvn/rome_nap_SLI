@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { RouteLinks } from 'utils/RouteUtils';
+import { useNavigate } from 'react-router-dom';
 
 const UMPage = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { from, to, isUnderMaintenanceTime } = useSelector(
     (state: AppState) => state.um,
   );
 
   useEffect(() => {
     if (!isUnderMaintenanceTime) {
-      history.push(RouteLinks.HOME);
+      navigate('/');
     }
   });
 

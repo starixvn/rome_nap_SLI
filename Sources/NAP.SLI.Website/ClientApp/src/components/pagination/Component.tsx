@@ -69,7 +69,7 @@ const PaginationComponent = (props: Props) => {
       initialValues={initialValues}
       onSubmit={(values, { setSubmitting, setFieldValue }) => {
         let isCallPageChange = false;
-        const newPageIndex = parseInt(values.pageIndex.toString());
+        const newPageIndex = parseInt(values.pageIndex.toString(), 10);
         const newPageSize = values.pageSize;
         if (pageIndex !== newPageIndex) {
           if (newPageIndex >= 1 && newPageIndex <= pageTotal) {

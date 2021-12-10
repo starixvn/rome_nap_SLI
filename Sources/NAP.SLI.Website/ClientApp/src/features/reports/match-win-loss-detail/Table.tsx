@@ -4,8 +4,7 @@ import { Table } from 'reactstrap';
 import { formatDecimal } from 'utils/NumberUtils';
 import { CustomerLevels, isUplineOrSameLevel } from 'utils/CustomerLevelUtils';
 import { Record } from './reducer';
-import { useHistory } from 'react-router';
-import { RouteLinks } from 'utils/RouteUtils';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import './Table.scss';
 
 enum RowType {
@@ -84,7 +83,7 @@ const RowComponent = ({
 };
 
 const TableComponent = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { queryData, queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.matchWinLossDetail,
   );
@@ -112,30 +111,32 @@ const TableComponent = () => {
 
   const handleNormalTypeClick = (record: Record) => {
     const { matchId, betType, liveIndicator } = record;
-
-    history.push(RouteLinks.BET_LIST, {
-      ...queryCustomer,
-      queryByMatch: {
-        matchId,
-        liveIndicator,
-        bettype: betType,
-        fromDate,
-        toDate,
-      },
+    navigate({
+      pathname: 'report/bet-list/match',
+      search:
+        '' +
+        createSearchParams({
+          matchId: matchId.toString(),
+          liveIndicator: liveIndicator.toString(),
+          betType: betType.toString(),
+          from: fromDate.toString(),
+          to: toDate.toString(),
+        }),
     });
   };
 
   const handleLinkedGameTypeClick = (record: Record) => {
     const { betType } = record;
 
-    history.push(RouteLinks.BET_LIST, {
-      ...queryCustomer,
-      queryByBetType: {
-        betType,
-        fromDate,
-        toDate,
-      },
-    });
+    // TODO: update code
+    // navigate(RouteLinks.BET_LIST, {
+    //   ...queryCustomer,
+    //   queryByBetType: {
+    //     betType,
+    //     fromDate,
+    //     toDate,
+    //   },
+    // });
   };
 
   return (

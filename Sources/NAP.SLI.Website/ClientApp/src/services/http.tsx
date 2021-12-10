@@ -3,11 +3,9 @@ import ContentDisposition from 'content-disposition';
 import FileSaver from 'file-saver';
 import storage from './storage';
 import store from 'app/store';
+import {} from 'react-router-dom';
 import { hide, error } from 'components/toast/reducer';
-import { logout } from 'features/account/authentication/reducer';
 import { updateUM, UMTime } from 'features/error/UM/reducer';
-import { RouteLinks } from 'utils/RouteUtils';
-import { history } from 'app/App';
 import { isNullOrWhiteSpaces } from 'utils/StringUtils';
 import { handleException } from 'utils/ExceptionUtils';
 
@@ -32,22 +30,22 @@ const handleError = (e: AxiosError): AxiosError | undefined => {
   if (e.response) {
     switch (e.response.status) {
       case 401:
-        {
-          const account = storage.get();
-          if (account) {
-            store.dispatch(logout());
-          }
-        }
-
-        history.push(RouteLinks.LOGIN);
+        storage.remove();
+        store.dispatch(() => {
+          // TODO: fix
+          // history.push(RouteLinks.LOGIN);
+        });
         return;
       case 403:
         store.dispatch(error('You are not authorized to use this function'));
         return;
       case 503: {
         const umTime = e.response.data as UMTime;
-        store.dispatch(updateUM(umTime));
-        history.push(RouteLinks.ERROR_UM);
+        store.dispatch(() => {
+          updateUM(umTime);
+          // TODO: fix
+          // history.push(RouteLinks.ERROR_UM);
+        });
         return;
       }
       default:

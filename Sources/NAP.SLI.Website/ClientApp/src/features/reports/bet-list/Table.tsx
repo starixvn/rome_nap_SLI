@@ -10,13 +10,12 @@ import './Table.scss';
 
 const TableComponent = () => {
   const dispatch = useAppDispatch();
-  const { queryData, queryCustomer, isHappy5LinkedGameLoading } = useSelector(
-    (state: AppState) => state.betList,
-  );
+  const { queryData } = useSelector((state: AppState) => state.betListMatch);
   const [modal, setModal] = useState(false);
   const [url, setUrl] = useState('');
+  const isHappy5LinkedGameLoading = false;
 
-  if (!queryData || !queryCustomer) {
+  if (!queryData) {
     return <></>;
   }
 

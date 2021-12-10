@@ -20,7 +20,6 @@ import { mdiViewDashboard } from '@mdi/js';
 import { logout } from 'features/account/authentication/reducer';
 import { toggleModal } from 'features/account/change-password/reducer';
 import { toggle } from 'features/sidebar/reducer';
-import { RouteLinks } from 'utils/RouteUtils';
 import { useAppDispatch } from 'app/store';
 
 const NavMenu = () => {
@@ -54,7 +53,7 @@ const NavMenu = () => {
               <NavLink
                 tag={RRNavLink}
                 className="nav-link"
-                to={RouteLinks.USER_MANAGEMENT}
+                to="user-management"
               >
                 User Management
               </NavLink>

@@ -14,17 +14,10 @@ import { excel, query, toggleMode } from './reducer';
 
 const NormalFilter = () => {
   const dispatch = useAppDispatch();
-  const [key, setKey] = useState(0);
 
   const { queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
-
-  useEffect(() => {
-    if (queryCustomer) {
-      setKey((prev) => prev + 1);
-    }
-  }, [queryCustomer]);
 
   if (!queryCustomer) {
     return <></>;
@@ -69,7 +62,6 @@ const NormalFilter = () => {
         toDate={stringDateToMoment(toDate)}
         onQuery={handleQuery}
         onExcel={handleExcel}
-        customKey={key}
       />
       <div>
         You can view the report data from {formatDate(minDate)}. For more

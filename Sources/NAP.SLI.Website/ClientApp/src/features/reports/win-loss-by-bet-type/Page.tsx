@@ -1,7 +1,5 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { RouteLinks } from 'utils/RouteUtils';
 import Filter from './Filter';
 import { reset, selectCustomer } from './reducer';
 import TableBySuper from './TableBySuper';
@@ -9,38 +7,28 @@ import TableByMaster from './TableByMaster';
 import TableByAgent from './TableByAgent';
 import { CustomerLevels } from 'utils/CustomerLevelUtils';
 import { useSelector } from 'react-redux';
+import { useCustomerParams } from '../Page';
 
 const WinLossByBetTypePage = () => {
+  const { custId, roleId, username } = useCustomerParams();
   const { isQuerying } = useSelector(
     (state: AppState) => state.winLossByBetType,
   );
-  const history = useHistory();
-  const location = useLocation<Customer>();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (location.state) {
-      const { custId, roleId, username } = location.state;
-      dispatch(
-        selectCustomer({
-          custId,
-          roleId,
-          username,
-        }),
-      );
-    }
+    dispatch(
+      selectCustomer({
+        custId,
+        roleId,
+        username,
+      }),
+    );
 
     return function cleanup() {
       dispatch(reset());
     };
-  }, [dispatch, location.state]);
-
-  if (!location.state) {
-    history.push(RouteLinks.HOME);
-    return <></>;
-  }
-
-  const { roleId } = location.state;
+  }, [dispatch, custId, roleId, username]);
 
   const renderTable = () => {
     switch (roleId) {
@@ -57,9 +45,7 @@ const WinLossByBetTypePage = () => {
 
   return (
     <div className="win-loss-by-bet-type-page">
-      <div className="page-title">
-        Win Loss By Bet Type ({location.state.username})
-      </div>
+      <div className="page-title">Win Loss By Bet Type ({username})</div>
       <Filter />
       {!isQuerying && renderTable()}
     </div>

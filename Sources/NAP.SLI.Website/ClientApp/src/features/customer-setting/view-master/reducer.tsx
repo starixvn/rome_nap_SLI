@@ -9,7 +9,6 @@ import {
 
 type QueryProps = {
   custId: number;
-  sRecommend: number;
 };
 
 export type QueryData = CustomerInfo &
@@ -74,13 +73,12 @@ export const query = createAsyncThunk<
   {
     rejectValue: string;
   }
->(`${sliceName}`, async ({ custId, sRecommend }, { rejectWithValue }) => {
+>(`${sliceName}`, async ({ custId }, { rejectWithValue }) => {
   try {
     const payload = {
       apiKey: 'customer-setting:query-master',
       data: {
         custId,
-        sRecommend,
       },
     };
     const { data } = await post<QueryData>('/simple-api/query', payload);

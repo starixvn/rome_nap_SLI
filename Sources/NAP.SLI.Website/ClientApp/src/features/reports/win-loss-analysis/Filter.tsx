@@ -54,7 +54,7 @@ const Filter = () => {
   return (
     <Container fluid className="filter">
       <ReportFilter
-        customKey={reportType}
+        customKey={reportType.toString()}
         minDate={moment(window.configuration.balanceUpDay)}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}

@@ -1,35 +1,31 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RouteLinks } from 'utils/RouteUtils';
+import { useParams } from 'react-router-dom';
 import { query, reset } from './reducer';
 import Table from './Table';
 
 const Page = () => {
-  const history = useHistory();
+  const params = useParams();
   const dispatch = useAppDispatch();
-  const { customer } = useSelector((state: AppState) => state.sidebar);
 
   useEffect(() => {
-    if (!customer) {
-      history.push(RouteLinks.HOME);
-    } else {
-      const { generalInformation, headline } = customer;
-      dispatch(
-        query({
-          custId: generalInformation.custId,
-          sRecommend: headline.superId,
-        }),
-      );
-    }
+    dispatch(
+      query({
+        custId: parseInt(params.custId as string, 10),
+      }),
+    );
 
     return function cleanup() {
       dispatch(reset());
     };
-  }, [customer, dispatch, history]);
+  }, [params, dispatch]);
 
-  return <Table />;
+  return (
+    <div className="customer-setting-page">
+      <div className="page-title">Customer Setting</div>
+      <Table />
+    </div>
+  );
 };
 
 export default Page;

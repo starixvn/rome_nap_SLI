@@ -2,7 +2,7 @@ import { useAppDispatch } from 'app/store';
 import Pagination from 'components/pagination/Component';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import {
   CustomerLevels,
@@ -11,9 +11,7 @@ import {
 } from 'utils/CustomerLevelUtils';
 import { formatDecimal, formatInteger } from 'utils/NumberUtils';
 import { PageSizes } from 'utils/ReportUtils';
-import { RouteLinks } from 'utils/RouteUtils';
 import { query, Record, selectCustomer } from './reducer';
-import './Table.scss';
 
 type RowProps = {
   roleId: number;
@@ -65,7 +63,7 @@ const RowComponent = ({
 
 const TableComponent = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { queryData, queryCustomer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
@@ -98,17 +96,14 @@ const TableComponent = () => {
       username: record.username,
     };
     if (roleId === CustomerLevels.Agent) {
-      history.push(RouteLinks.BET_LIST, {
-        ...customer,
-        queryByDate: {
-          fromDate,
-          toDate,
-        },
-      });
-      return;
+      navigate(
+        `report/bet-list?custId=${customer.custId}&roleId=${4}&username=${
+          customer.username
+        }`,
+      );
+    } else {
+      dispatch(selectCustomer({ customer, isReset: false }));
     }
-
-    dispatch(selectCustomer({ customer, isReset: false }));
   };
 
   const handlePageChange = async (
