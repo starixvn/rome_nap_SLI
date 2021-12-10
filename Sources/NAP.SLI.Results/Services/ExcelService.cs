@@ -1,7 +1,6 @@
 namespace NAP.SLI.Results.Services
 {
     using System.IO;
-    using System.Text;
     using System.Threading.Tasks;
     using AutoMapper;
     using NAP.SLI.Common.Services;
@@ -10,7 +9,6 @@ namespace NAP.SLI.Results.Services
     using NAP.SLI.Results.Models;
     using NAP.SLI.Results.Requests;
     using ONEbook.SpreadSheets;
-    using ONEbook.SpreadSheets.NPOI;
 
     public interface IExcelService
     {

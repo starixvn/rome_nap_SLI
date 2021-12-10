@@ -19,6 +19,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         internal Row EvenRowTemplate { get; private set; }
         internal Row SubTotalRowTemplate { get; private set; }
         internal Row TotalRowTemplate { get; private set; }
+        internal Row GrandTotalRowTemplate { get; private set; }
         protected abstract Mapper<T> CreateMapper(bool isBody);
 
         public Workbook(WorkbookInfo workbookInfo, Data<T> data)
@@ -36,6 +37,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
             EvenRowTemplate = sheet.GetRow(currentRowIndex++);
             SubTotalRowTemplate = sheet.GetRow(currentRowIndex++);
             TotalRowTemplate = sheet.GetRow(currentRowIndex++);
+            GrandTotalRowTemplate = sheet.GetRow(currentRowIndex++);
 
             return GetSheetAt(ReportSheetIndex);
         }
@@ -71,6 +73,10 @@ namespace NAP.SLI.MatchWinLossDetail.Services
             {
                 FillBodyRows(sheet);
                 FillFooterRows(sheet);
+                if (Data.Happy5LinkedGames.Any())
+                {
+                    FillHappy5LinkGameRows(sheet);
+                }
             }
             else
             {
@@ -125,9 +131,34 @@ namespace NAP.SLI.MatchWinLossDetail.Services
             }
 
             var totalMapper = CreateMapper(false);
-            var row = sheet.GetRow(currentRowIndex);
+            var row = sheet.GetRow(currentRowIndex++);
             row.CopyCellsFrom(TotalRowTemplate);
             FillCells(row, Data.Total, totalMapper.Mappings);
+        }
+
+        private void FillHappy5LinkGameRows(Sheet sheet)
+        {
+            if (sheet == null)
+            {
+                throw new ArgumentNullException(nameof(sheet), "Sheet cannot be null");
+            }
+
+            var bodyMapper = CreateMapper(true);
+            var grandTotalMapper = CreateMapper(false);
+            Row row;
+
+            foreach (var happy5LinkedGame in Data.Happy5LinkedGames)
+            {
+                var isEvenRow = false;
+                row = sheet.GetRow(currentRowIndex++);
+                row.CopyCellsFrom(isEvenRow ? EvenRowTemplate : OddRowTemplate);
+                FillCells(row, happy5LinkedGame, bodyMapper.Mappings);
+                isEvenRow = !isEvenRow;
+            }
+
+            row = sheet.GetRow(currentRowIndex++);
+            row.CopyCellsFrom(GrandTotalRowTemplate);
+            FillCells(row, Data.GrandTotal, grandTotalMapper.Mappings);
         }
     }
 
