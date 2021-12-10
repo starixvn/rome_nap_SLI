@@ -1,7 +1,7 @@
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useAppDispatch } from 'app/store';
 import GlobalSpinner from 'components/spinner/GlobalSpinner';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import Happy5Match from './Happy5Match';
@@ -65,8 +65,8 @@ const Happy5Table = () => {
             </tr>
           ) : (
             results.map((league, index) => (
-              <>
-                <tr key={index}>
+              <Fragment key={`${index}_${league.leagueName}`}>
+                <tr>
                   <td className="font-weight-bold pl-5" colSpan={11}>
                     {league.leagueName}
                   </td>
@@ -78,7 +78,7 @@ const Happy5Table = () => {
                     onSoccer5Click={handleSoccer5Click}
                   />
                 ))}
-              </>
+              </Fragment>
             ))
           )}
         </tbody>

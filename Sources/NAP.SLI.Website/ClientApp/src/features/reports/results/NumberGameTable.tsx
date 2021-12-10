@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import NumberGameMatch from './NumberGameMatch';
@@ -37,8 +37,8 @@ const NumberGameTable = () => {
           </tr>
         ) : (
           results.map((league, index) => (
-            <>
-              <tr key={index}>
+            <Fragment key={`${index}_${league.leagueName}`}>
+              <tr>
                 <td className="font-weight-bold pl-5" colSpan={8}>
                   {league.leagueName}
                 </td>
@@ -49,7 +49,7 @@ const NumberGameTable = () => {
                   match={match as NumberGame}
                 />
               ))}
-            </>
+            </Fragment>
           ))
         )}
       </tbody>
