@@ -61,7 +61,7 @@ namespace NAP.SLI.Results.Tests.Services
             // Assert
             await dynamicRepositoryEx.Received()
                                 .FetchAsync<ResultLeagueByDateModel>(
-                                    Arg.Is<GetResultLeagueByDateCriteria>(c => c.EventDate == request.FromDate && c.SportType == request.SportId && c.Language == "en-US"));
+                                    Arg.Is<GetResultLeagueByDateCriteria>(c => c.EventDate == request.FromDate && c.SportType == request.SportType && c.Language == "en-US"));
             Assert.Equal(fetchData, result);
         }
     }

@@ -1,6 +1,5 @@
 import { mdiFileExcelOutline } from '@mdi/js';
 import Icon from '@mdi/react';
-import { unwrapResult } from '@reduxjs/toolkit';
 import { useAppDispatch } from 'app/store';
 import RHFDatePicker from 'components/date-picker/RHFDatePicker';
 import moment, { Moment } from 'moment';
@@ -28,15 +27,15 @@ import {
 } from 'utils/DateUtils';
 import { SHOW_ALL_LEAGUES } from '../../../utils/ConstantUtils';
 import {
+  queryLeaguesAndResults,
+  querySubmit,
   queryExcel,
-  queryLeagueByDate,
-  queryResultByLeague,
-  querySportByDate,
+  queryResult,
 } from './reducer';
 
 type FilterValues = {
   fromDate: string;
-  sportId: number;
+  sportType: number;
   leagueId: number;
 };
 
@@ -62,7 +61,7 @@ const Filter = () => {
   } = useForm<FilterValues>({
     defaultValues: {
       fromDate: today,
-      sportId: 0,
+      sportType: 0,
       leagueId: 0,
     },
   });
@@ -71,80 +70,42 @@ const Filter = () => {
   const [selectedSportName, setSelectedSportName] = useState<string>('');
   const [selectedLeagueName, setSelectedLeagueName] = useState<string>('');
 
-  const querySport = useCallback(
-    async (fromDate: string) => {
-      const results = await dispatch(
-        querySportByDate({
-          fromDate,
-        }),
-      );
-      const sportsRes = unwrapResult(results);
-
-      if (sportsRes.length === 0) return [];
-
-      setValue('sportId', sportsRes[0].sportType);
-      setSelectedSportName(sportsRes[0].sportName);
-
-      return sportsRes;
-    },
-    [dispatch, setValue],
-  );
-
-  const queryLeague = useCallback(
-    async (fromDate: string, sportId: number) => {
-      const results = await dispatch(
-        queryLeagueByDate({
-          fromDate,
-          sportId,
-        }),
-      );
-      const leagueRes = unwrapResult(results);
-
-      if (leagueRes.length === 0) return [];
-
-      setValue('leagueId', 0);
-      setSelectedLeagueName(SHOW_ALL_LEAGUES);
-
-      return leagueRes;
-    },
-    [dispatch, setValue],
-  );
-
-  const queryResult = useCallback(
-    async (fromDate: string, leagueId: number, sportType: number) => {
-      await dispatch(queryResultByLeague({ fromDate, leagueId, sportType }));
+  const handleQuery = useCallback(
+    async ({ fromDate }: FilterValues) => {
+      await dispatch(querySubmit({ fromDate }));
     },
     [dispatch],
   );
 
-  const handleQuery = useCallback(
-    async ({ fromDate }: FilterValues) => {
-      const sportsResult = await querySport(fromDate);
-      if (sportsResult.length === 0) return;
+  useEffect(() => {
+    if (sports.length > 0) {
+      setValue('sportType', sports[0].sportType);
+      setSelectedSportName(sports[0].sportName);
+    }
+  }, [setValue, sports]);
 
-      const leagueResult = await queryLeague(
-        fromDate,
-        sportsResult[0].sportType,
-      );
-      if (leagueResult.length === 0) return;
+  useEffect(() => {
+    if (leagues.length > 0) {
+      setValue('leagueId', 0);
+      setSelectedLeagueName(SHOW_ALL_LEAGUES);
+    }
+  }, [setValue, leagues]);
 
-      await queryResult(
-        fromDate,
-        getValues('leagueId'),
-        sportsResult[0].sportType,
-      );
-    },
-    [getValues, queryLeague, queryResult, querySport],
-  );
+  useEffect(() => {
+    handleSubmit(handleQuery)();
+  }, [dispatch, handleQuery, handleSubmit]);
 
-  const handleSportClick = async (sportId: number) => {
-    const selectedSport = sports.find((sport) => sport.sportType === sportId);
+  const handleSportClick = async (sportType: number) => {
+    const selectedSport = sports.find((sport) => sport.sportType === sportType);
     setSelectedSportName(selectedSport?.sportName ?? '');
-    setValue('sportId', sportId);
+    setValue('sportType', sportType);
 
-    const leagueResult = await queryLeague(getValues('fromDate'), sportId);
-    if (leagueResult.length === 0) return;
-    await queryResult(getValues('fromDate'), getValues('leagueId'), sportId);
+    await dispatch(
+      queryLeaguesAndResults({
+        fromDate: getValues('fromDate'),
+        sportType,
+      }),
+    );
   };
 
   const handleLeagueClick = async (leagueId: number) => {
@@ -154,7 +115,13 @@ const Filter = () => {
     setSelectedLeagueName(selectedLeague?.leagueName ?? SHOW_ALL_LEAGUES);
     setValue('leagueId', leagueId);
 
-    await queryResult(getValues('fromDate'), leagueId, getValues('sportId'));
+    await dispatch(
+      queryResult({
+        fromDate: getValues('fromDate'),
+        leagueId,
+        sportType: getValues('sportType'),
+      }),
+    );
   };
 
   const handleDateButtonClick = (value: string) => {
@@ -167,7 +134,7 @@ const Filter = () => {
       queryExcel({
         fromDate: getValues('fromDate'),
         leagueId: getValues('leagueId'),
-        sportType: getValues('sportId'),
+        sportType: getValues('sportType'),
         leagueName: selectedLeagueName,
         sportName: selectedSportName,
       }),
@@ -177,10 +144,6 @@ const Filter = () => {
   const handleDateChange = (value: string | Moment) => {
     setValue('fromDate', formatDate(value as Moment));
   };
-
-  useEffect(() => {
-    handleSubmit(handleQuery)();
-  }, [dispatch, handleQuery, handleSubmit]);
 
   return (
     <Form onSubmit={handleSubmit(handleQuery)} className="mb-4">

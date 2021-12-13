@@ -9,6 +9,6 @@ namespace NAP.SLI.Results.Requests
     {
         public DateTime FromDate { get; set; }
 
-        public int SportId { get; set; }
+        public int SportType { get; set; }
     }
 }

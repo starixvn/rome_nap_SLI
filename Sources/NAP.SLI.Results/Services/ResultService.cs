@@ -46,7 +46,7 @@ namespace NAP.SLI.Results.Services
             var criteria = new GetResultLeagueByDateCriteria
             {
                 EventDate = request.FromDate,
-                SportType = request.SportId,
+                SportType = request.SportType,
                 Language = languageCode
             };
             return await dynamicRepositoryEx.FetchAsync<ResultLeagueByDateModel>(criteria).ConfigureAwait(false);
