@@ -48,26 +48,23 @@ const initialState: State = {
 
 const sliceName = 'customer-setting-query-super';
 
-export const query = createAsyncThunk<
-  QueryData,
-  QueryProps,
-  {
-    rejectValue: string;
-  }
->(`${sliceName}`, async ({ custId }, { rejectWithValue }) => {
-  try {
-    const payload = {
-      apiKey: 'customer-setting:query-super',
-      data: {
-        custId,
-      },
-    };
-    const { data } = await post<QueryData>('/simple-api/query', payload);
-    return data;
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-});
+export const query = createAsyncThunk<QueryData, QueryProps>(
+  `${sliceName}`,
+  async ({ custId }, { rejectWithValue }) => {
+    try {
+      const payload = {
+        apiKey: 'customer-setting:query-super',
+        data: {
+          custId,
+        },
+      };
+      const { data } = await post<QueryData>('/simple-api/query', payload);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
 
 const slice = createSlice({
   name: sliceName,

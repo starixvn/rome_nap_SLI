@@ -72,7 +72,7 @@ export const getCustomerInformation = createAsyncThunk<
 
       return rejectWithValue(errMsg);
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue('Unable to get customer information');
     }
   },
 );

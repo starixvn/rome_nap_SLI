@@ -10,27 +10,24 @@ export type ChangePasswordProps = {
 
 const sliceName = 'change-password';
 
-export const changePassword = createAsyncThunk<
-  ResultData,
-  ChangePasswordProps,
-  {
-    rejectValue: string;
-  }
->(`${sliceName}/change-password`, async (values, { rejectWithValue }) => {
-  try {
-    const payload = {
-      oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
-      newPassword: CryptoJS.CfsEnCode(values.newPassword),
-    };
-    const { data } = await post<ResultData>(
-      '/api/account/change-password',
-      payload,
-    );
-    return data;
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-});
+export const changePassword = createAsyncThunk<ResultData, ChangePasswordProps>(
+  `${sliceName}/change-password`,
+  async (values, { rejectWithValue }) => {
+    try {
+      const payload = {
+        oldPassword: CryptoJS.CfsEnCode(values.oldPassword),
+        newPassword: CryptoJS.CfsEnCode(values.newPassword),
+      };
+      const { data } = await post<ResultData>(
+        '/api/account/change-password',
+        payload,
+      );
+      return data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
 
 const slice = createSlice({
   name: sliceName,

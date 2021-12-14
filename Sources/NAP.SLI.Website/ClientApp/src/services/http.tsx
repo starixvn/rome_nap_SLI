@@ -65,7 +65,11 @@ export const post = async function <T>(url: string, data?: unknown) {
     const config = getConfig();
     return await axios.post<T>(url, data, config);
   } catch (e) {
-    return Promise.reject(handleError(e));
+    if (axios.isAxiosError(e)) {
+      return Promise.reject(handleError(e));
+    } else {
+      return Promise.reject();
+    }
   }
 };
 
@@ -75,7 +79,11 @@ export const get = async function <T>(url: string) {
     const config = getConfig();
     return await axios.get<T>(url, config);
   } catch (e) {
-    return Promise.reject(handleError(e));
+    if (axios.isAxiosError(e)) {
+      return Promise.reject(handleError(e));
+    } else {
+      return Promise.reject();
+    }
   }
 };
 
@@ -122,6 +130,10 @@ export const download = async (url: string, data?: unknown) => {
     FileSaver.saveAs(blobResponse.data, fileName);
     return blobResponse;
   } catch (e) {
-    return Promise.reject(handleError(e));
+    if (axios.isAxiosError(e)) {
+      return Promise.reject(handleError(e));
+    } else {
+      return Promise.reject();
+    }
   }
 };

@@ -1,20 +1,20 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useCustomerSettingParams } from '../Page';
 import { query, reset } from './reducer';
 import Table from './Table';
 
 const Page = () => {
-  const params = useParams();
+  const { custId } = useCustomerSettingParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(query({ custId: parseInt(params.custId as string, 10) }));
+    dispatch(query({ custId }));
 
     return function cleanup() {
       dispatch(reset());
     };
-  }, [params, dispatch]);
+  }, [custId, dispatch]);
 
   return (
     <div className="customer-setting-page">

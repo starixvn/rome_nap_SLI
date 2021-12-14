@@ -148,7 +148,7 @@ const CustomerPage = () => {
       <div className="mb-3">
         <div className="py-2 font-weight-500 bg-lightgrey text-primary">
           <Container>
-            <Link to={`${getCustomerSettingLink()}/${custId}`} key={custId}>
+            <Link to={`${getCustomerSettingLink()}/${custId}`}>
               VIEW SETTING
             </Link>
           </Container>

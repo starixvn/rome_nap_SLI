@@ -4,7 +4,7 @@ import { stopCheckin, checkin } from 'services/connection';
 import { post } from 'services/http';
 import { Account } from 'services/storage';
 import { CryptoJS } from 'utils/FunctionUtils';
-import { AxiosError } from 'axios';
+import axios from 'axios';
 
 type State = {
   account?: Account;
@@ -50,13 +50,17 @@ export const login = createAsyncThunk<
     } else {
       return rejectWithValue(errMsg);
     }
-  } catch (err) {
-    const error: AxiosError<string> = err;
-    if (!error.response) {
-      throw err;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const errResp = error.response;
+      if (typeof errResp === 'string') {
+        return rejectWithValue(errResp);
+      } else {
+        throw errResp;
+      }
+    } else {
+      throw error;
     }
-
-    return rejectWithValue(error.response.data);
   }
 });
 

@@ -111,7 +111,7 @@ const App = () => {
                     element={<MatchWinLossDetailPage />}
                   />
                   <Route
-                    path="win-loss-by-bettype"
+                    path="win-loss-by-bet-type"
                     element={<WinLossByBetTypePage />}
                   />
                   <Route
