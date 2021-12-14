@@ -67,7 +67,7 @@ const App = () => {
           <div className="main">
             <Routes>
               <Route path="error/um" element={<UMPage />} />
-              <Route path="/" element={<LoginPage />} />
+              <Route path="login" element={<LoginPage />} />
               <Route
                 element={
                   <RequireAuth>
