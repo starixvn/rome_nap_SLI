@@ -245,7 +245,8 @@ const CustomerPage = () => {
           <Container>
             <Link
               to={{
-                pathname: 'report/result',
+                pathname: 'report/results',
+                search: reportSearchParams,
               }}
             >
               RESULTS

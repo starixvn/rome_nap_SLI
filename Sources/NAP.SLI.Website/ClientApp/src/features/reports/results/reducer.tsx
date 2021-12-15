@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, unwrapResult } from '@reduxjs/toolkit';
+import { error } from 'components/toast/reducer';
 import { download, post } from 'services/http';
 
 type ResultArg = {
@@ -10,6 +11,21 @@ type ResultArg = {
 type ExcelArg = ResultArg & {
   leagueName: string;
   sportName: string;
+};
+
+type SportArg = {
+  fromDate: string;
+};
+
+type LeagueArg = {
+  fromDate: string;
+  sportType: number;
+};
+
+type Soccer5Arg = {
+  matchId: number;
+  balls: string;
+  isDesktop: boolean;
 };
 
 type Match = {
@@ -55,27 +71,14 @@ export type Ball = {
   color: string;
 };
 
-type SportArg = {
-  fromDate: string;
-};
 type Sport = {
   sportType: number;
   sportName: string;
 };
 
-type LeagueArg = {
-  fromDate: string;
-  sportType: number;
-};
 type League = {
   leagueId: number;
   leagueName: string;
-};
-
-type Soccer5Arg = {
-  matchId: number;
-  balls: string;
-  isDesktop: boolean;
 };
 
 type State = {
@@ -217,8 +220,13 @@ export const queryLeaguesAndResults = createAsyncThunk<
 
 export const queryExcel = createAsyncThunk<void, ExcelArg>(
   `${actionName}/getExcel`,
-  async (values, { rejectWithValue }) => {
+  async (values, { rejectWithValue, dispatch }) => {
     try {
+      if (values.sportType === 0 && values.leagueId === 0) {
+        dispatch(error('Cannot export excel'));
+        return;
+      }
+
       await download(`/api/${actionName}/excel`, values);
     } catch (err) {
       return rejectWithValue(err);

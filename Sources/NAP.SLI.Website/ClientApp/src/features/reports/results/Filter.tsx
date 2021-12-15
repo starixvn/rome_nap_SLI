@@ -81,6 +81,9 @@ const Filter = () => {
     if (sports.length > 0) {
       setValue('sportType', sports[0].sportType);
       setSelectedSportName(sports[0].sportName);
+    } else {
+      setValue('sportType', 0);
+      setValue('leagueId', 0);
     }
   }, [setValue, sports]);
 
@@ -88,12 +91,15 @@ const Filter = () => {
     if (leagues.length > 0) {
       setValue('leagueId', 0);
       setSelectedLeagueName(SHOW_ALL_LEAGUES);
+    } else {
+      setValue('sportType', 0);
+      setValue('leagueId', 0);
     }
   }, [setValue, leagues]);
 
   useEffect(() => {
     handleSubmit(handleQuery)();
-  }, [dispatch, handleQuery, handleSubmit]);
+  }, [handleQuery, handleSubmit]);
 
   const handleSportClick = async (sportType: number) => {
     const selectedSport = sports.find((sport) => sport.sportType === sportType);
