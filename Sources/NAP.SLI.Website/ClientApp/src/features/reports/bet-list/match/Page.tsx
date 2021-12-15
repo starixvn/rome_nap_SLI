@@ -1,33 +1,68 @@
-import { useAppDispatch } from 'app/store';
 import { useCustomerParams } from 'features/reports/Page';
-import React, { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { query, excel, reset } from './reducer';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, Navigate } from 'react-router-dom';
+import { query, excel } from './reducer';
 import Title from '../Title';
+import { QueryArg } from './reducer';
+import Table from '../Table';
+import { Spinner } from 'reactstrap';
+import { QueryData } from '../types';
 
-const BetListPage = () => {
+const usePageParams = () => {
   const { custId, roleId, username } = useCustomerParams();
   const [searchParams] = useSearchParams();
-  const dispatch = useAppDispatch();
   const matchId = parseInt(searchParams.get('matchId') || '', 10);
   const betType = parseInt(searchParams.get('betType') || '', 10);
   const liveIndicator = parseInt(searchParams.get('liveIndicator') || '', 10);
   const fromDate = searchParams.get('fromDate') || '';
   const toDate = searchParams.get('toDate') || '';
+  return {
+    custId,
+    roleId,
+    username,
+    matchId,
+    betType,
+    liveIndicator,
+    fromDate,
+    toDate,
+  };
+};
+
+const Page = () => {
+  const [data, setData] = useState<QueryData | undefined>(undefined);
+  const params = usePageParams();
+  const {
+    custId,
+    roleId,
+    username,
+    matchId,
+    betType,
+    liveIndicator,
+    fromDate,
+    toDate,
+  } = params;
+  const isValid = matchId > 0 && betType > 0 && fromDate && toDate;
+
+  const fetchData = async (queryArg: QueryArg) => {
+    const data = await query(queryArg);
+    setData(data);
+  };
+
   useEffect(() => {
-    dispatch(
-      query({
+    if (isValid) {
+      fetchData({
         matchId,
         betType,
         liveIndicator,
         custId,
         roleId,
-      }),
-    );
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch, custId, roleId, betType, liveIndicator, matchId]);
+      });
+    }
+  }, [isValid, custId, roleId, betType, liveIndicator, matchId]);
+
+  if (!isValid) {
+    return <Navigate to="/" />;
+  }
 
   const handleExcel = async () => {
     await excel({
@@ -45,9 +80,13 @@ const BetListPage = () => {
         content={`MEMBER BET LIST ${fromDate} --> ${toDate} - ${username}`}
         handleExcel={handleExcel}
       />
-      {/* {isLoading ? <Spinner color="primary" /> : <Table />} */}
+      {data ? (
+        <Table data={data} isHappy5LinkedGame={false} />
+      ) : (
+        <Spinner color="primary" />
+      )}
     </div>
   );
 };
 
-export default BetListPage;
+export default Page;

@@ -2,22 +2,21 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useAppDispatch } from 'app/store';
 import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import { HAPPY5LINKEDGAME_SPORT_TYPE } from 'utils/ConstantUtils';
 import { getHappy5LinkedGame } from './reducer';
 import './Table.scss';
+import { QueryData } from './types';
 
-const TableComponent = () => {
+type Props = {
+  data: QueryData;
+  isHappy5LinkedGame: boolean;
+};
+
+const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
   const dispatch = useAppDispatch();
-  const { queryData } = useSelector((state: AppState) => state.betList);
   const [modal, setModal] = useState(false);
   const [url, setUrl] = useState('');
-  const isHappy5LinkedGameLoading = false;
-
-  if (!queryData) {
-    return <></>;
-  }
 
   const handleToggle = () => setModal((prevModal) => !prevModal);
 
@@ -49,10 +48,10 @@ const TableComponent = () => {
     }
   };
 
-  const { Tickets, SumCommHtml, SumWinLossHtml, TotalHtml } = queryData;
+  const { Tickets, SumCommHtml, SumWinLossHtml, TotalHtml } = data;
   return (
     <>
-      {isHappy5LinkedGameLoading && <GlobalSpinner />}
+      {isHappy5LinkedGame && <GlobalSpinner />}
       <Table bordered className="bet-list-table">
         <thead>
           <tr className="text-center">

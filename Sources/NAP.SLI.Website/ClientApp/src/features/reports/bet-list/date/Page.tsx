@@ -1,30 +1,45 @@
-import { useAppDispatch } from 'app/store';
 import { useCustomerParams } from 'features/reports/Page';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { query, excel, reset } from './reducer';
-// import Table from '../Table';
+import { query, excel, QueryArg } from './reducer';
+import Table from '../Table';
 import Title from '../Title';
+import { QueryData } from '../types';
+import { Spinner } from 'reactstrap';
 
-const BetListPage = () => {
-  const { custId, username } = useCustomerParams();
+const usePageParams = () => {
+  const { custId, roleId, username } = useCustomerParams();
   const [searchParams] = useSearchParams();
-  const dispatch = useAppDispatch();
   const fromDate = searchParams.get('fromDate') || '';
   const toDate = searchParams.get('toDate') || '';
+  return {
+    custId,
+    roleId,
+    username,
+    fromDate,
+    toDate,
+  };
+};
+
+const Page = () => {
+  const [data, setData] = useState<QueryData | undefined>(undefined);
+  const { custId, username, fromDate, toDate } = usePageParams();
+  const isValid = fromDate && toDate;
+
+  const fetchData = async (queryArg: QueryArg) => {
+    const data = await query(queryArg);
+    setData(data);
+  };
 
   useEffect(() => {
-    dispatch(
-      query({
+    if (isValid) {
+      fetchData({
         custId,
         fromDate,
         toDate,
-      }),
-    );
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch, custId, fromDate, toDate]);
+      });
+    }
+  }, [isValid, custId, fromDate, toDate]);
 
   const handleExcel = async () => {
     await excel({
@@ -40,9 +55,13 @@ const BetListPage = () => {
         content={`MEMBER BET LIST ${fromDate} --> ${toDate} - ${username}`}
         handleExcel={handleExcel}
       />
-      {/* {isLoading ? <Spinner color="primary" /> : <Table />} */}
+      {data ? (
+        <Table data={data} isHappy5LinkedGame={false} />
+      ) : (
+        <Spinner color="primary" />
+      )}
     </div>
   );
 };
 
-export default BetListPage;
+export default Page;

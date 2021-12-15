@@ -13,8 +13,11 @@ const Title = ({ content, handleExcel }: Props) => {
 
   const exportExcel = async () => {
     setIsLoading(true);
-    await handleExcel();
-    setIsLoading(false);
+    try {
+      await handleExcel();
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
