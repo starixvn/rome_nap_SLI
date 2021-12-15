@@ -17,7 +17,6 @@ import {
 } from 'reactstrap';
 import { formatDate, stringDateToMoment } from 'utils/DateUtils';
 import { useCustomerParams } from '../Page';
-import { excel, getByDate, QueryArg } from './reducer';
 
 type Props = {
   maxDate: Moment;
@@ -33,10 +32,9 @@ type FilterValues = {
 };
 
 const Filter = ({ maxDate }: Props) => {
-  const queryCustomer = useCustomerParams();
-  const dispatch = useAppDispatch();
-  const { queryArg } = useSelector((state: AppState) => state.betListMatch);
-  const { fromDate, toDate } = queryArg as QueryArg;
+  const { custId, roleId, username } = useCustomerParams();
+  // const dispatch = useAppDispatch();
+  const { fromDate, toDate } = useSelector((state: AppState) => state.betList);
   const minDate = moment(window.configuration.balanceUpDay);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -58,16 +56,8 @@ const Filter = ({ maxDate }: Props) => {
   });
 
   useEffect(() => {
-    if (!isSubmitting && queryCustomer?.custId) {
-      const { custId } = queryCustomer;
-      //handleSubmit(() => dispatch(getByDate({ fromDate, toDate, custId })))();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryCustomer?.custId]);
-
-  if (!queryCustomer) return <></>;
-  const { custId, roleId, username } = queryCustomer;
+    // TODO:
+  }, [custId, fromDate, toDate]);
 
   const handleFromDateChange = (selectedDate: string | Moment) => {
     const selectedFromDate = moment(selectedDate);
@@ -91,24 +81,24 @@ const Filter = ({ maxDate }: Props) => {
 
   const handleQuery = async (values: FilterValues) => {
     const { fromDate, toDate } = values;
-    const queryPayload = {
-      custId,
-      fromDate,
-      toDate,
-    };
+    // const queryPayload = {
+    //   custId,
+    //   fromDate,
+    //   toDate,
+    // };
     //await dispatch(getByDate(queryPayload));
   };
 
   const handleExcel = async () => {
-    const excelPayload = {
-      custId,
-      roleId,
-      username,
-      fromDate,
-      toDate,
-    };
+    // const excelPayload = {
+    //   custId,
+    //   roleId,
+    //   username,
+    //   fromDate,
+    //   toDate,
+    // };
     setIsLoading(true);
-    await excel(excelPayload);
+    // await excel(excelPayload);
     setIsLoading(false);
   };
 

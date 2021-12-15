@@ -93,7 +93,7 @@ const TableComponent = () => {
   }
 
   const { matches, total, grandTotal, happy5LinkedGames } = queryData;
-  const { roleId } = queryCustomer;
+  const { roleId, custId } = queryCustomer;
   const { fromDate, toDate } = queryArg;
 
   const getRemovedColumnTotal = () => {
@@ -112,31 +112,33 @@ const TableComponent = () => {
   const handleNormalTypeClick = (record: Record) => {
     const { matchId, betType, liveIndicator } = record;
     navigate({
-      pathname: 'report/bet-list/match',
+      pathname: '/report/bet-list/match',
       search:
         '' +
         createSearchParams({
+          custId: custId.toString(),
+          roleId: '4',
           matchId: matchId.toString(),
           liveIndicator: liveIndicator.toString(),
           betType: betType.toString(),
-          from: fromDate.toString(),
-          to: toDate.toString(),
         }),
     });
   };
 
   const handleLinkedGameTypeClick = (record: Record) => {
     const { betType } = record;
-
-    // TODO: update code
-    // navigate(RouteLinks.BET_LIST, {
-    //   ...queryCustomer,
-    //   queryByBetType: {
-    //     betType,
-    //     fromDate,
-    //     toDate,
-    //   },
-    // });
+    navigate({
+      pathname: '/report/bet-list/bet-type',
+      search:
+        '' +
+        createSearchParams({
+          custId: custId.toString(),
+          roleId: '4',
+          betType: betType.toString(),
+          fromDate,
+          toDate,
+        }),
+    });
   };
 
   return (

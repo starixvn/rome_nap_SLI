@@ -5,12 +5,12 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import { HAPPY5LINKEDGAME_SPORT_TYPE } from 'utils/ConstantUtils';
-import { getHappy5LinkedGame, Ticket } from './reducer';
+import { getHappy5LinkedGame } from './reducer';
 import './Table.scss';
 
 const TableComponent = () => {
   const dispatch = useAppDispatch();
-  const { queryData } = useSelector((state: AppState) => state.betListMatch);
+  const { queryData } = useSelector((state: AppState) => state.betList);
   const [modal, setModal] = useState(false);
   const [url, setUrl] = useState('');
   const isHappy5LinkedGameLoading = false;
@@ -77,7 +77,7 @@ const TableComponent = () => {
             </tr>
           ) : (
             <>
-              {Tickets.map((ticket: Ticket, index: number) => (
+              {Tickets.map((ticket, index: number) => (
                 <tr key={index}>
                   <td className="text-right">{index + 1}</td>
                   <td

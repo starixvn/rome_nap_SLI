@@ -1,40 +1,32 @@
 import { mdiFileExcelOutline } from '@mdi/js';
 import Icon from '@mdi/react';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Button, Spinner } from 'reactstrap';
-import { excel } from './reducer';
 
-const Title = () => {
-  const { queryArg } = useSelector((state: AppState) => state.betListMatch);
+type Props = {
+  content: string;
+  handleExcel: () => Promise<void>;
+};
+
+const Title = ({ content, handleExcel }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!queryArg) return <></>;
-  const { username, custId, roleId, fromDate, toDate } = queryArg;
-
-  const handleExcel = async () => {
+  const exportExcel = async () => {
     setIsLoading(true);
-    const excelPayload = {
-      custId,
-      roleId,
-      username,
-      fromDate,
-      toDate,
-    };
-    await excel(excelPayload);
+    await handleExcel();
     setIsLoading(false);
   };
 
   return (
     <>
       <div className="page-title">
-        MEMBER BET LIST {fromDate} --&gt; {toDate} - {username}
+        {content}
         <Button
           type="button"
           color="success"
           className="btn-excel float-right"
           title="Export to Excel"
-          onClick={handleExcel}
+          onClick={exportExcel}
           disabled={isLoading}
         >
           {isLoading ? (

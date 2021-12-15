@@ -2,7 +2,7 @@ import { useAppDispatch } from 'app/store';
 import Pagination from 'components/pagination/Component';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Table } from 'reactstrap';
 import {
   CustomerLevels,
@@ -96,11 +96,18 @@ const TableComponent = () => {
       username: record.username,
     };
     if (roleId === CustomerLevels.Agent) {
-      navigate(
-        `report/bet-list?custId=${customer.custId}&roleId=${4}&username=${
-          customer.username
-        }`,
-      );
+      navigate({
+        pathname: '/report/bet-list/date',
+        search:
+          '' +
+          createSearchParams({
+            custId: customer.custId.toString(),
+            roleId: '4',
+            username: customer.username,
+            fromDate,
+            toDate,
+          }),
+      });
     } else {
       dispatch(selectCustomer({ customer, isReset: false }));
     }

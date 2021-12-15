@@ -30,7 +30,6 @@ const validationSchema = Yup.object().shape({
 const EditUserModal = () => {
   const dispatch = useAppDispatch();
   const { user } = useSelector((state: AppState) => state.editUser);
-
   if (!user) {
     return <></>;
   }

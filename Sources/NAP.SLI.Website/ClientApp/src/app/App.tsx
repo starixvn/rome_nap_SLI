@@ -27,7 +27,9 @@ import WinLossDetailPage from 'features/reports/win-loss-detail/Page';
 import MatchWinLossDetailPage from 'features/reports/match-win-loss-detail/Page';
 import WinLossByBetTypePage from 'features/reports/win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from 'features/reports/win-loss-analysis/Page';
-import BetListMatchPage from 'features/reports/bet-list/match/Page';
+import BetListByDatePage from 'features/reports/bet-list/date/Page';
+import BetListByMatchPage from 'features/reports/bet-list/match/Page';
+import BetListByBetTypePage from 'features/reports/bet-list/match/Page';
 import ResultsPage from 'features/reports/results/Page';
 import { startCheckin, stopCheckin } from 'services/connection';
 
@@ -119,7 +121,9 @@ const App = () => {
                     element={<WinLossAnalysisPage />}
                   />
                   <Route path="bet-list">
-                    <Route path="match" element={<BetListMatchPage />} />
+                    <Route path="date" element={<BetListByDatePage />} />
+                    <Route path="match" element={<BetListByMatchPage />} />
+                    <Route path="bet-type" element={<BetListByBetTypePage />} />
                   </Route>
                   <Route path="results" element={<ResultsPage />} />
                 </Route>

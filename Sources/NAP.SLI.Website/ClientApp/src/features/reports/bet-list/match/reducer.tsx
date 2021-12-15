@@ -1,27 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { download, post } from 'services/http';
-
-export type Ticket = {
-  AgentPTComHtml: string;
-  ChoiceHtml: string;
-  MasterPTComHtml: string;
-  OddHtml: string;
-  PlayerComm: number;
-  StakeHtml: string;
-  Status: string;
-  StatusHtml: string;
-  SuperPTComHtml: string;
-  TransDateHtml: string;
-  WinLossHtml: string;
-  Winlost: number;
-};
-
-type QueryData = {
-  Tickets: Ticket[];
-  SumCommHtml: string;
-  SumWinLossHtml: string;
-  TotalHtml: string;
-};
+import { QueryData } from '../types';
 
 export type QueryArg = {
   matchId: number;
@@ -29,17 +8,6 @@ export type QueryArg = {
   liveIndicator: number;
   custId: number;
   roleId: number;
-  username: string;
-  fromDate: string;
-  toDate: string;
-};
-
-type ExcelProps = {
-  custId: number;
-  roleId: number;
-  username: string;
-  fromDate: string;
-  toDate: string;
 };
 
 type State = {
@@ -54,7 +22,7 @@ const initialState: State = {
   queryArg: undefined,
 };
 
-export const getByMatch = createAsyncThunk<QueryData, QueryArg>(
+export const query = createAsyncThunk<QueryData, QueryArg>(
   `${actionName}/getByMatch`,
   async (values, { rejectWithValue }) => {
     try {
@@ -69,7 +37,7 @@ export const getByMatch = createAsyncThunk<QueryData, QueryArg>(
   },
 );
 
-export const excel = async (payload: ExcelProps) => {
+export const excel = async (payload: QueryArg) => {
   return await download(`/api/${actionName}/excel`, payload);
 };
 
@@ -80,10 +48,10 @@ const slice = createSlice({
     reset: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(getByMatch.pending, (state, { meta }) => {
+    builder.addCase(query.pending, (state, { meta }) => {
       state.queryArg = meta.arg;
     });
-    builder.addCase(getByMatch.fulfilled, (state, { payload }) => {
+    builder.addCase(query.fulfilled, (state, { payload }) => {
       state.queryData = payload;
     });
   },

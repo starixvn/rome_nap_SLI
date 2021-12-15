@@ -200,7 +200,7 @@ const ReportFilter = ({
               className="btn-excel"
               title="Export to Excel"
               onClick={handleExcel}
-              disabled={isLoading}
+              disabled={isSubmitting || isLoading}
             >
               {isLoading ? (
                 <Spinner data-testid="excel-loading" />

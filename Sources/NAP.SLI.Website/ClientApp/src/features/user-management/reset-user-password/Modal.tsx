@@ -31,6 +31,9 @@ const validationSchema = Yup.object().shape({
 const ResetUserPasswordModal = () => {
   const dispatch = useAppDispatch();
   const { user } = useSelector((state: AppState) => state.resetUserPassword);
+  if (!user) {
+    return <></>;
+  }
 
   const handleResetPassword = async (
     values: ResetPasswordProps,
@@ -53,10 +56,6 @@ const ResetUserPasswordModal = () => {
       }
     }
   };
-
-  if (!user) {
-    return <></>;
-  }
 
   const initialValues = {
     custId: user.userId,
