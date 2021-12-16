@@ -5,8 +5,8 @@ import {
   NUMBERGAME_SPORT_TYPE,
 } from '../../../utils/ConstantUtils';
 import Filter from './Filter';
-import Happy5Table from './Happy5Table';
-import NumberGameTable from './NumberGameTable';
+import Happy5Table from './happy5/Happy5Table';
+import NumberGameTable from './numberGame/NumberGameTable';
 
 const getTableBySportType = (sportType: number) => {
   switch (sportType) {

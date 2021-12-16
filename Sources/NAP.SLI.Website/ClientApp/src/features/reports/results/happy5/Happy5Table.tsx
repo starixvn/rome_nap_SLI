@@ -5,8 +5,8 @@ import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import Happy5Match from './Happy5Match';
-import { Happy5, querySoccer5 } from './reducer';
-import './Table.scss';
+import { Happy5, querySoccer5 } from '../reducer';
+import '../Table.scss';
 
 const Happy5Table = () => {
   const dispatch = useAppDispatch();
