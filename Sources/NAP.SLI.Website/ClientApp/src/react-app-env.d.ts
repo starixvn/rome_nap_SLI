@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /// <reference types="react-scripts" />
 import { AppDispatch as _AppDispatch } from './app/store';
+import { AppThunk as _AppThunk } from './app/store';
 import { AppState as _AppState } from './app/reducer';
 
 declare global {
@@ -56,6 +57,7 @@ declare global {
   };
 
   type AppDispatch = _AppDispatch;
+  type AppThunk = _AppThunk;
   type AppState = _AppState;
 
   type KeyValueObject = {

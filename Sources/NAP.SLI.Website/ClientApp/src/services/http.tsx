@@ -3,7 +3,6 @@ import ContentDisposition from 'content-disposition';
 import FileSaver from 'file-saver';
 import storage from './storage';
 import store from 'app/store';
-import {} from 'react-router-dom';
 import { hide, error } from 'components/toast/reducer';
 import { updateUM, UMTime } from 'features/error/UM/reducer';
 import { isNullOrWhiteSpaces } from 'utils/StringUtils';
@@ -22,7 +21,7 @@ const getConfig = (): AxiosRequestConfig => {
   }
 
   return {
-    headers: headers,
+    headers,
   };
 };
 

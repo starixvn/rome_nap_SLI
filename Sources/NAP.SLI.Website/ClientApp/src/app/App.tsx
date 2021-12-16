@@ -32,6 +32,8 @@ import BetListByMatchPage from 'features/reports/bet-list/match/Page';
 import BetListByBetTypePage from 'features/reports/bet-list/match/Page';
 import ResultsPage from 'features/reports/results/Page';
 import { startCheckin, stopCheckin } from 'services/connection';
+import { ErrorBoundary } from '@sentry/react';
+import SentryFallback from 'components/error/SentryFallback';
 
 const RequireAuth = (props: { children: JSX.Element }) => {
   const { account } = useSelector((state: AppState) => state.authentication);
@@ -67,69 +69,75 @@ const App = () => {
           {isLayout && <NavMenu />}
           {isLayout && <ChangePasswordModal />}
           <div className="main">
-            <Routes>
-              <Route path="error/um" element={<UMPage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route
-                element={
-                  <RequireAuth>
-                    <Outlet />
-                  </RequireAuth>
-                }
-              >
-                <Route path="/" element={<HomePage />} />
+            <ErrorBoundary fallback={<SentryFallback />}>
+              <Routes>
+                <Route path="error/um" element={<UMPage />} />
+                <Route path="login" element={<LoginPage />} />
                 <Route
-                  path="user-management"
-                  element={<UserManagementPage />}
-                />
-                <Route
-                  path="customer-setting"
-                  element={<CustomerSettingPage />}
+                  path="/"
+                  element={
+                    <RequireAuth>
+                      <Outlet />
+                    </RequireAuth>
+                  }
                 >
+                  <Route index element={<HomePage />} />
                   <Route
-                    path="super/:custId"
-                    element={<CustomerSettingSuperPage />}
+                    path="user-management"
+                    element={<UserManagementPage />}
                   />
                   <Route
-                    path="master/:custId"
-                    element={<CustomerSettingMasterPage />}
-                  />
-                  <Route
-                    path="agent/:custId"
-                    element={<CustomerSettingAgentPage />}
-                  />
-                  <Route
-                    path="member/:custId"
-                    element={<CustomerSettingMemberPage />}
-                  />
-                </Route>
-                <Route path="report" element={<ReportPage />}>
-                  <Route
-                    path="win-loss-detail"
-                    element={<WinLossDetailPage />}
-                  />
-                  <Route
-                    path="match-win-loss-detail"
-                    element={<MatchWinLossDetailPage />}
-                  />
-                  <Route
-                    path="win-loss-by-bet-type"
-                    element={<WinLossByBetTypePage />}
-                  />
-                  <Route
-                    path="win-loss-analysis"
-                    element={<WinLossAnalysisPage />}
-                  />
-                  <Route path="bet-list">
-                    <Route path="date" element={<BetListByDatePage />} />
-                    <Route path="match" element={<BetListByMatchPage />} />
-                    <Route path="bet-type" element={<BetListByBetTypePage />} />
+                    path="customer-setting"
+                    element={<CustomerSettingPage />}
+                  >
+                    <Route
+                      path="super/:custId"
+                      element={<CustomerSettingSuperPage />}
+                    />
+                    <Route
+                      path="master/:custId"
+                      element={<CustomerSettingMasterPage />}
+                    />
+                    <Route
+                      path="agent/:custId"
+                      element={<CustomerSettingAgentPage />}
+                    />
+                    <Route
+                      path="member/:custId"
+                      element={<CustomerSettingMemberPage />}
+                    />
                   </Route>
-                  <Route path="results" element={<ResultsPage />} />
+                  <Route path="report" element={<ReportPage />}>
+                    <Route
+                      path="win-loss-detail"
+                      element={<WinLossDetailPage />}
+                    />
+                    <Route
+                      path="match-win-loss-detail"
+                      element={<MatchWinLossDetailPage />}
+                    />
+                    <Route
+                      path="win-loss-by-bet-type"
+                      element={<WinLossByBetTypePage />}
+                    />
+                    <Route
+                      path="win-loss-analysis"
+                      element={<WinLossAnalysisPage />}
+                    />
+                    <Route path="bet-list">
+                      <Route path="date" element={<BetListByDatePage />} />
+                      <Route path="match" element={<BetListByMatchPage />} />
+                      <Route
+                        path="bet-type"
+                        element={<BetListByBetTypePage />}
+                      />
+                    </Route>
+                    <Route path="results" element={<ResultsPage />} />
+                  </Route>
                 </Route>
-              </Route>
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </ErrorBoundary>
           </div>
         </div>
       </div>
