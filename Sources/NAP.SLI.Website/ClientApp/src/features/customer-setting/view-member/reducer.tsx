@@ -70,19 +70,15 @@ const sliceName = 'customer-setting-query-member';
 
 export const query = createAsyncThunk<QueryData, QueryProps>(
   `${sliceName}`,
-  async ({ custId }, { rejectWithValue }) => {
-    try {
-      const payload = {
-        apiKey: 'customer-setting:query-member',
-        data: {
-          custId,
-        },
-      };
-      const { data } = await post<QueryData>('/simple-api/query', payload);
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async ({ custId }) => {
+    const payload = {
+      apiKey: 'customer-setting:query-member',
+      data: {
+        custId,
+      },
+    };
+    const { data } = await post<QueryData>('/simple-api/query', payload);
+    return data;
   },
 );
 

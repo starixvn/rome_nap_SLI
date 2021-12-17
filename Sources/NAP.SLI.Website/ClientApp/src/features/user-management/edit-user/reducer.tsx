@@ -22,16 +22,12 @@ const sliceName = 'edit-user';
 
 export const update = createAsyncThunk<UpdateData, UpdateProps>(
   `${sliceName}/update`,
-  async (values, { rejectWithValue }) => {
-    try {
-      const response = await post<UpdateData>(
-        '/api/user-management/update-info',
-        values,
-      );
-      return response.data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    const { data } = await post<UpdateData>(
+      '/api/user-management/update-info',
+      values,
+    );
+    return data;
   },
 );
 

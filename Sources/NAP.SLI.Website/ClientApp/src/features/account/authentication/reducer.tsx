@@ -4,7 +4,6 @@ import { stopCheckin, checkin } from 'services/connection';
 import { post } from 'services/http';
 import { Account } from 'services/storage';
 import { CryptoJS } from 'utils/FunctionUtils';
-import axios from 'axios';
 
 type State = {
   account?: Account;
@@ -32,35 +31,22 @@ export const login = createAsyncThunk<
     rejectValue: string;
   }
 >(`${sliceName}/login`, async (values, { rejectWithValue }) => {
-  try {
-    const payload = {
-      username: values.username.trim(),
-      password: CryptoJS.CfsEnCode(values.password),
+  const payload = {
+    username: values.username.trim(),
+    password: CryptoJS.CfsEnCode(values.password),
+  };
+  const response = await post<LoginData>('/api/account/login', payload);
+  const data = response.data;
+  const { userId, isAdmin, token, isSuccess, errMsg } = data;
+  if (isSuccess) {
+    return {
+      username: payload.username,
+      userId,
+      isAdmin,
+      token,
     };
-    const response = await post<LoginData>('/api/account/login', payload);
-    const data = response.data;
-    const { userId, isAdmin, token, isSuccess, errMsg } = data;
-    if (isSuccess) {
-      return {
-        username: payload.username,
-        userId,
-        isAdmin,
-        token,
-      };
-    } else {
-      return rejectWithValue(errMsg);
-    }
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const errResp = error.response;
-      if (typeof errResp === 'string') {
-        return rejectWithValue(errResp);
-      } else {
-        throw errResp;
-      }
-    } else {
-      throw error;
-    }
+  } else {
+    return rejectWithValue(errMsg);
   }
 });
 

@@ -57,27 +57,16 @@ const actionName = 'win-loss-by-bet-type';
 
 export const query = createAsyncThunk<QueryData, QueryProps>(
   `${actionName}/query`,
-  async (values, { rejectWithValue }) => {
-    try {
-      const { data } = await post<QueryData>(
-        `/api/${actionName}/query`,
-        values,
-      );
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    const { data } = await post<QueryData>(`/api/${actionName}/query`, values);
+    return data;
   },
 );
 
 export const excel = createAsyncThunk<void, ExcelProps>(
   `${actionName}/excel`,
-  async (values, { rejectWithValue }) => {
-    try {
-      await download(`/api/${actionName}/excel`, values);
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    await download(`/api/${actionName}/excel`, values);
   },
 );
 

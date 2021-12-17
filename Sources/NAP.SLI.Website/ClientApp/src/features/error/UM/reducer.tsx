@@ -16,13 +16,9 @@ const initialState: UMTime = {
 
 export const checkUM = createAsyncThunk<UMTime>(
   `${sliceName}/checkUM`,
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data } = await post<UMTime>('/api/common/umtime');
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async () => {
+    const { data } = await post<UMTime>('/api/common/umtime');
+    return data;
   },
 );
 

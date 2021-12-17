@@ -39,16 +39,12 @@ const sliceName = 'user-management';
 
 export const query = createAsyncThunk<UserModel[], QueryProps>(
   `${sliceName}/query`,
-  async (values, { rejectWithValue }) => {
-    try {
-      const response = await post<UserModel[]>(
-        '/api/user-management/query',
-        values,
-      );
-      return response.data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    const { data } = await post<UserModel[]>(
+      '/api/user-management/query',
+      values,
+    );
+    return data;
   },
 );
 

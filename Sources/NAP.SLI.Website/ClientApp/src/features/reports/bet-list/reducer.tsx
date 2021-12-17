@@ -37,20 +37,13 @@ const initialState: State = {
 export const getHappy5LinkedGame = createAsyncThunk<
   string,
   Happy5LinkedGameProps
->(
-  'third-party-result/getHappy5LinkedGameResult',
-  async (values, { rejectWithValue }) => {
-    try {
-      const { data } = await post<string>(
-        'api/third-party-result/getHappy5LinkedGameResult',
-        values,
-      );
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
-  },
-);
+>('third-party-result/getHappy5LinkedGameResult', async (values) => {
+  const { data } = await post<string>(
+    'api/third-party-result/getHappy5LinkedGameResult',
+    values,
+  );
+  return data;
+});
 
 export const excel = async (payload: QueryArg) => {
   return await download(`/api/${actionName}/excel`, payload);
