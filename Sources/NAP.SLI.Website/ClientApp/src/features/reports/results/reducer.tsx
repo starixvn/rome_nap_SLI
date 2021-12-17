@@ -109,143 +109,112 @@ const initialState: State = {
 
 const querySportByDate = createAsyncThunk<Sport[], SportArg>(
   `${actionName}/getResultSportByDate`,
-  async (values, { rejectWithValue }) => {
-    try {
-      const { data } = await post<Sport[]>(
-        `/api/${actionName}/getResultSportByDate`,
-        values,
-      );
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    const { data } = await post<Sport[]>(
+      `/api/${actionName}/getResultSportByDate`,
+      values,
+    );
+    return data;
   },
 );
 
 const queryLeagueByDate = createAsyncThunk<League[], LeagueArg>(
   `${actionName}/getResultLeagueByDate`,
-  async (values, { rejectWithValue }) => {
-    try {
-      const { data } = await post<League[]>(
-        `/api/${actionName}/getResultLeagueByDate`,
-        values,
-      );
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    const { data } = await post<League[]>(
+      `/api/${actionName}/getResultLeagueByDate`,
+      values,
+    );
+    return data;
   },
 );
 
 export const queryResult = createAsyncThunk<ResultRecord[], ResultArg>(
   `${actionName}/getResult`,
-  async (values, { rejectWithValue }) => {
-    try {
-      const { data } = await post<ResultRecord[]>(
-        `/api/${actionName}/getResult`,
-        values,
-      );
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    const { data } = await post<ResultRecord[]>(
+      `/api/${actionName}/getResult`,
+      values,
+    );
+    return data;
   },
 );
 
 export const querySubmit = createAsyncThunk<
   { sports: Sport[]; leagues: League[]; results: ResultRecord[] },
   { fromDate: string }
->(
-  `${actionName}/querySubmit`,
-  async ({ fromDate }, { rejectWithValue, dispatch }) => {
-    try {
-      const sports = await dispatch(querySportByDate({ fromDate })).then(
-        unwrapResult,
-      );
-      if (sports.length === 0) return { sports: [], leagues: [], results: [] };
+>(`${actionName}/querySubmit`, async ({ fromDate }, { dispatch }) => {
+  const sports = await dispatch(querySportByDate({ fromDate })).then(
+    unwrapResult,
+  );
+  if (sports.length === 0) return { sports: [], leagues: [], results: [] };
 
-      const leagues = await dispatch(
-        queryLeagueByDate({ fromDate, sportType: sports[0].sportType }),
-      ).then(unwrapResult);
-      if (leagues.length === 0) return { sports: [], leagues: [], results: [] };
+  const leagues = await dispatch(
+    queryLeagueByDate({ fromDate, sportType: sports[0].sportType }),
+  ).then(unwrapResult);
+  if (leagues.length === 0) return { sports: [], leagues: [], results: [] };
 
-      const results = await dispatch(
-        queryResult({
-          fromDate,
-          sportType: sports[0].sportType,
-          leagueId: leagues[0].leagueId,
-        }),
-      ).then(unwrapResult);
+  const results = await dispatch(
+    queryResult({
+      fromDate,
+      sportType: sports[0].sportType,
+      leagueId: leagues[0].leagueId,
+    }),
+  ).then(unwrapResult);
 
-      return {
-        sports,
-        leagues,
-        results,
-      };
-    } catch (err) {
-      return rejectWithValue(err);
-    }
-  },
-);
+  return {
+    sports,
+    leagues,
+    results,
+  };
+});
 
 export const queryLeaguesAndResults = createAsyncThunk<
   { leagues: League[]; results: ResultRecord[] },
   { fromDate: string; sportType: number }
 >(
   `${actionName}/getLeaguesAndResults`,
-  async ({ fromDate, sportType }, { rejectWithValue, dispatch }) => {
-    try {
-      const leagues = await dispatch(
-        queryLeagueByDate({ fromDate, sportType }),
-      ).then(unwrapResult);
-      if (leagues.length === 0) return { leagues: [], results: [] };
+  async ({ fromDate, sportType }, { dispatch }) => {
+    const leagues = await dispatch(
+      queryLeagueByDate({ fromDate, sportType }),
+    ).then(unwrapResult);
+    if (leagues.length === 0) return { leagues: [], results: [] };
 
-      const results = await dispatch(
-        queryResult({
-          fromDate,
-          sportType,
-          leagueId: leagues[0].leagueId,
-        }),
-      ).then(unwrapResult);
+    const results = await dispatch(
+      queryResult({
+        fromDate,
+        sportType,
+        leagueId: leagues[0].leagueId,
+      }),
+    ).then(unwrapResult);
 
-      return {
-        leagues,
-        results,
-      };
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+    return {
+      leagues,
+      results,
+    };
   },
 );
 
 export const queryExcel = createAsyncThunk<void, ExcelArg>(
   `${actionName}/getExcel`,
-  async (values, { rejectWithValue, dispatch }) => {
-    try {
-      if (values.sportType === 0 && values.leagueId === 0) {
-        dispatch(error('Cannot export excel'));
-        return;
-      }
-
-      await download(`/api/${actionName}/excel`, values);
-    } catch (err) {
-      return rejectWithValue(err);
+  async (values, { dispatch }) => {
+    if (values.sportType === 0 && values.leagueId === 0) {
+      dispatch(error('Cannot export excel'));
+      return;
     }
+
+    await download(`/api/${actionName}/excel`, values);
   },
 );
 
 export const querySoccer5 = createAsyncThunk<string, Soccer5Arg>(
   'third-party-result/getSoccer5Result',
-  async (values, { rejectWithValue }) => {
-    try {
-      const { data } = await post<string>(
-        'api/third-party-result/getSoccer5Result',
-        values,
-      );
-      return data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
+  async (values) => {
+    const { data } = await post<string>(
+      'api/third-party-result/getSoccer5Result',
+      values,
+    );
+    return data;
   },
 );
 
