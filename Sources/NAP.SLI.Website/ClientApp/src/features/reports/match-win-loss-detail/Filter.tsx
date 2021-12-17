@@ -39,7 +39,7 @@ const Filter = () => {
       fromDate,
       toDate,
     };
-    await excel(excelPayload);
+    await dispatch(excel(excelPayload));
   };
 
   return (

@@ -47,7 +47,7 @@ const Filter = () => {
       fromDate,
       toDate,
     };
-    await excel(excelPayload);
+    await dispatch(excel(excelPayload));
   };
 
   const reportTypes = [ReportType.Daily, ReportType.Monthly, ReportType.Sport];

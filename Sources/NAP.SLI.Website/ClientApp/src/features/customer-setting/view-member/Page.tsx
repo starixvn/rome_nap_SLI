@@ -9,9 +9,10 @@ const Page = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(query({ custId }));
+    const promise = dispatch(query({ custId }));
 
-    return function cleanup() {
+    return () => {
+      promise.abort();
       dispatch(reset());
     };
   }, [custId, dispatch]);

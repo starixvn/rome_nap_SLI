@@ -29,7 +29,7 @@ const Page = () => {
       }),
     );
 
-    return function cleanup() {
+    return () => {
       dispatch(reset());
     };
   }, [dispatch, custId, roleId, username]);

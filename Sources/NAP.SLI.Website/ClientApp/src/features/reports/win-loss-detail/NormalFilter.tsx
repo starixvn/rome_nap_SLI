@@ -48,7 +48,7 @@ const NormalFilter = () => {
       fromDate,
       toDate,
     };
-    await excel(excelPayload);
+    await dispatch(excel(excelPayload));
   };
 
   const minDate = getToday().subtract(3, 'months').startOf('month');

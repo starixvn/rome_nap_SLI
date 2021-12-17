@@ -88,9 +88,16 @@ export const query = createAsyncThunk<QueryData, QueryProps>(
   },
 );
 
-export const excel = async (payload: ExcelProps) => {
-  return await download(`/api/${actionName}/excel`, payload);
-};
+export const excel = createAsyncThunk<void, ExcelProps>(
+  `${actionName}/excel`,
+  async (values, { rejectWithValue }) => {
+    try {
+      await download(`/api/${actionName}/excel`, values);
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
 
 const slice = createSlice({
   name: actionName,

@@ -1,5 +1,6 @@
 import { mdiFileExcelOutline } from '@mdi/js';
 import Icon from '@mdi/react';
+import { useAppDispatch } from 'app/store';
 import React, { useState } from 'react';
 import { Button, Spinner } from 'reactstrap';
 
@@ -9,15 +10,13 @@ type Props = {
 };
 
 const Title = ({ content, handleExcel }: Props) => {
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const exportExcel = async () => {
     setIsLoading(true);
-    try {
-      await handleExcel();
-    } finally {
-      setIsLoading(false);
-    }
+    await dispatch(async () => await handleExcel());
+    setIsLoading(false);
   };
 
   return (
