@@ -7,7 +7,7 @@ import TableByMaster from './TableByMaster';
 import TableByAgent from './TableByAgent';
 import { CustomerLevels } from 'utils/CustomerLevelUtils';
 import { useSelector } from 'react-redux';
-import { useCustomerParams } from '../Page';
+import { useCustomerParams } from 'features/reports';
 
 const WinLossByBetTypePage = () => {
   const { custId, roleId, username } = useCustomerParams();

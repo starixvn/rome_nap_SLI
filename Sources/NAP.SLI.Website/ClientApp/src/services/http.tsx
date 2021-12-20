@@ -7,10 +7,12 @@ import { hide, error } from 'components/toast/reducer';
 import { updateUM, UMTime } from 'features/error/UM/reducer';
 import { isNullOrWhiteSpaces } from 'utils/StringUtils';
 import { handleException } from 'utils/ExceptionUtils';
+import { history } from 'app/routes';
 
 const getConfig = (): AxiosRequestConfig => {
   const headers: KeyValueObject = {};
-  const token = storage.getToken();
+  const account = storage.get();
+  const token = account?.token;
   if (token) {
     headers['Authorization'] = 'Bearer ' + token;
   }
@@ -30,21 +32,15 @@ const handleError = (e: AxiosError): AxiosError | undefined => {
     switch (e.response.status) {
       case 401:
         storage.remove();
-        store.dispatch(() => {
-          // TODO: fix
-          // history.push(RouteLinks.LOGIN);
-        });
+        history.replace('/login');
         return;
       case 403:
         store.dispatch(error('You are not authorized to use this function'));
         return;
       case 503: {
         const umTime = e.response.data as UMTime;
-        store.dispatch(() => {
-          updateUM(umTime);
-          // TODO: fix
-          // history.push(RouteLinks.ERROR_UM);
-        });
+        updateUM(umTime);
+        history.replace('/error/under-maintenance');
         return;
       }
       default:

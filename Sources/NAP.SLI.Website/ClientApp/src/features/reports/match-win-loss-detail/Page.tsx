@@ -1,7 +1,7 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useCustomerParams } from '../Page';
+import { useCustomerParams } from 'features/reports';
 import Filter from './Filter';
 import { reset, selectCustomer } from './reducer';
 import Table from './Table';

@@ -22,6 +22,7 @@ import { login, LoginProps } from './reducer';
 import { ReactComponent as Firefox } from './images/firefox.svg';
 import { ReactComponent as Chrome } from './images/chrome.svg';
 import { useAppDispatch } from 'app/store';
+import storage from 'services/storage';
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -31,13 +32,11 @@ const validationSchema = Yup.object().shape({
 const LoginPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { message, account } = useSelector(
-    (state: AppState) => state.authentication,
-  );
-  const isLoggedIn = account !== undefined;
+  const { message } = useSelector((state: AppState) => state.authentication);
+  const account = storage.get();
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (account) {
       navigate('/');
     }
   });

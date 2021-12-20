@@ -1,6 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import toastReducer from 'components/toast/reducer';
-import sidebarReducer from 'features/sidebar/reducer';
+import sidebarReducer from 'layout/sidebar/reducer';
 import authenticationReducer from 'features/account/authentication/reducer';
 import changePasswordReducer from 'features/account/change-password/reducer';
 import userManagementReducer from 'features/user-management/reducer';

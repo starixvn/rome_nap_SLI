@@ -53,13 +53,13 @@ const CustomerPage = () => {
   const getCustomerSettingLink = () => {
     switch (roleId) {
       case CustomerLevels.Super:
-        return 'customer-setting/super';
+        return '/customer-setting/super';
       case CustomerLevels.Master:
-        return 'customer-setting/master';
+        return '/customer-setting/master';
       case CustomerLevels.Agent:
-        return 'customer-setting/agent';
+        return '/customer-setting/agent';
       case CustomerLevels.Member:
-        return 'customer-setting/member';
+        return '/customer-setting/member';
     }
   };
 
@@ -173,7 +173,7 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: 'report/win-loss-detail',
+                        pathname: '/report/win-loss-detail',
                         search: reportSearchParams,
                       }}
                     >
@@ -186,7 +186,7 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: 'report/match-win-loss-detail',
+                        pathname: '/report/match-win-loss-detail',
                         search: reportSearchParams,
                       }}
                     >
@@ -197,7 +197,7 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: 'report/win-loss-by-bet-type',
+                        pathname: '/report/win-loss-by-bet-type',
                         search: reportSearchParams,
                       }}
                     >
@@ -208,7 +208,7 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: 'report/win-loss-analysis',
+                        pathname: '/report/win-loss-analysis',
                         search: reportSearchParams,
                       }}
                     >
@@ -223,7 +223,7 @@ const CustomerPage = () => {
                     <NavLink
                       tag={RRNavLink}
                       to={{
-                        pathname: 'report/bet-list',
+                        pathname: '/report/bet-list',
                         state: {
                           custId,
                           roleId,
@@ -245,7 +245,7 @@ const CustomerPage = () => {
           <Container>
             <Link
               to={{
-                pathname: 'report/results',
+                pathname: '/report/results',
                 search: reportSearchParams,
               }}
             >

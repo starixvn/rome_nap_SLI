@@ -17,6 +17,7 @@ const get = () => {
     try {
       return JSON.parse(storageValue) as Account;
     } catch {
+      remove();
       return undefined;
     }
   }
@@ -26,14 +27,8 @@ const remove = () => {
   localStorage.removeItem(storageKey);
 };
 
-const getToken = () => {
-  const account = get();
-  return account?.token;
-};
-
 export default {
   save,
   get,
   remove,
-  getToken,
 };

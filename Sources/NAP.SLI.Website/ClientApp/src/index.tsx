@@ -15,7 +15,11 @@ init({
 
 ReactDOM.render(
   <Provider store={store}>
-    <ErrorBoundary fallback={<SentryFallback />}>
+    <ErrorBoundary
+      fallback={() => {
+        <SentryFallback />;
+      }}
+    >
       <App />
     </ErrorBoundary>
   </Provider>,

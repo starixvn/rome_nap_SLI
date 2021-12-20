@@ -1,12 +1,11 @@
 import storage from 'services/storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { stopCheckin, checkin } from 'services/connection';
+import { stopCheckin } from 'services/connection';
 import { post } from 'services/http';
 import { Account } from 'services/storage';
 import { CryptoJS } from 'utils/FunctionUtils';
 
 type State = {
-  account?: Account;
   message?: string;
   isLoading: boolean;
 };
@@ -19,10 +18,7 @@ export type LoginProps = {
 type LoginData = ResultData & Account;
 
 const sliceName = 'authentication';
-const account = storage.get();
-const initialState: State = account
-  ? { isLoading: false, account, message: '' }
-  : { isLoading: false, message: '' };
+const initialState: State = { isLoading: false, message: '' };
 
 export const login = createAsyncThunk<
   Account,
@@ -72,7 +68,6 @@ const slice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       const account = action.payload;
       storage.save(account);
-      state.account = account;
     });
     builder.addCase(login.rejected, (state, action) => {
       state.message = action.payload;
@@ -80,17 +75,10 @@ const slice = createSlice({
     builder.addCase(logout.pending, () => {
       stopCheckin();
     });
-    builder.addCase(logout.fulfilled, (state) => {
+    builder.addCase(logout.fulfilled, () => {
       storage.remove();
-      state.account = undefined;
     });
   },
 });
-
-if (account) {
-  window.setTimeout(async () => {
-    await checkin();
-  }, 1);
-}
 
 export default slice.reducer;

@@ -1,6 +1,5 @@
 import { mdiFileExcelOutline } from '@mdi/js';
 import Icon from '@mdi/react';
-import { useAppDispatch } from 'app/store';
 import RHFDatePicker from 'components/date-picker/RHFDatePicker';
 import moment, { Moment } from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -16,7 +15,7 @@ import {
   Spinner,
 } from 'reactstrap';
 import { formatDate, stringDateToMoment } from 'utils/DateUtils';
-import { useCustomerParams } from '../Page';
+import { useCustomerParams } from 'features/reports';
 
 type Props = {
   maxDate: Moment;

@@ -1,6 +1,6 @@
 import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
-import { useCustomerSettingParams } from '../Page';
+import { useCustomerSettingParams } from '../';
 import { query, reset } from './reducer';
 import Table from './Table';
 

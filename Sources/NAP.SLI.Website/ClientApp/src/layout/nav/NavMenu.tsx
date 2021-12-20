@@ -1,6 +1,5 @@
 import './NavMenu.scss';
 import React, { useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import {
   Collapse,
   Navbar,
@@ -14,28 +13,36 @@ import {
   DropdownItem,
   Button,
 } from 'reactstrap';
-import { NavLink as RRNavLink } from 'react-router-dom';
+import { NavLink as RRNavLink, useNavigate } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiViewDashboard } from '@mdi/js';
 import { logout } from 'features/account/authentication/reducer';
 import { toggleModal } from 'features/account/change-password/reducer';
-import { toggle } from 'features/sidebar/reducer';
 import { useAppDispatch } from 'app/store';
+import { toggle } from 'layout/sidebar/reducer';
+import storage from 'services/storage';
 
 const NavMenu = () => {
   const dispatch = useAppDispatch();
-  const { account } = useSelector((state: AppState) => state.authentication);
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = useCallback(() => {
     setIsOpen((isOpen) => !isOpen);
   }, []);
 
+  const handleLogout = async () => {
+    await dispatch(logout());
+    navigate('/login');
+  };
+
+  const account = storage.get();
   if (!account) {
     return <></>;
   }
 
   const { username, isAdmin } = account;
+
   return (
     <Navbar className="navbar-expand border-bottom box-shadow">
       <Button
@@ -53,7 +60,7 @@ const NavMenu = () => {
               <NavLink
                 tag={RRNavLink}
                 className="nav-link"
-                to="user-management"
+                to="/user-management"
               >
                 User Management
               </NavLink>
@@ -68,9 +75,7 @@ const NavMenu = () => {
             <DropdownItem onClick={() => dispatch(toggleModal())}>
               Change password
             </DropdownItem>
-            <DropdownItem onClick={() => dispatch(logout())}>
-              Sign Out
-            </DropdownItem>
+            <DropdownItem onClick={handleLogout}>Sign Out</DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       </Collapse>

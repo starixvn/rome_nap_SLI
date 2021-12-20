@@ -1,4 +1,4 @@
-import { useCustomerParams } from 'features/reports/Page';
+import { useCustomerParams } from 'features/reports';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { query, excel } from './reducer';

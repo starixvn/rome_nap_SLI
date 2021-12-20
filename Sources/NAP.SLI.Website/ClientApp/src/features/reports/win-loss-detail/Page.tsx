@@ -6,7 +6,7 @@ import Table from './Table';
 import { selectCustomer, reset } from './reducer';
 import { useAppDispatch } from 'app/store';
 import Title from './Title';
-import { useCustomerParams } from '../Page';
+import { useCustomerParams } from 'features/reports';
 import './Page.scss';
 
 const Page = () => {

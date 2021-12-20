@@ -2,7 +2,7 @@ import { useAppDispatch } from 'app/store';
 import React, { useEffect } from 'react';
 import { Spinner } from 'reactstrap';
 import { maxDate } from 'utils/DateUtils';
-import { useCustomerParams } from '../Page';
+import { useCustomerParams } from 'features/reports';
 import Filter from './Filter';
 import { reset } from './reducer';
 import Title from './Title';

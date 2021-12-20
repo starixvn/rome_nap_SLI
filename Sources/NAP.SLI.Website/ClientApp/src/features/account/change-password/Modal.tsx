@@ -19,6 +19,7 @@ import * as Yup from 'yup';
 import { toggleModal, changePassword, ChangePasswordProps } from './reducer';
 import { error, success } from 'components/toast/reducer';
 import { useAppDispatch } from 'app/store';
+import storage from 'services/storage';
 
 const validationSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Old Password is required'),
@@ -30,9 +31,8 @@ const validationSchema = Yup.object().shape({
 
 const ChangePasswordModal = () => {
   const dispatch = useAppDispatch();
-  const { account } = useSelector((state: AppState) => state.authentication);
   const { isOpen } = useSelector((state: AppState) => state.changePassword);
-
+  const account = storage.get();
   if (!account) {
     return <></>;
   }
