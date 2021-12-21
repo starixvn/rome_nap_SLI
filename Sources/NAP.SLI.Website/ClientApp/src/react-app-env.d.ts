@@ -73,4 +73,9 @@ declare global {
   type InputKeyValueObject = {
     [key: string]: InputValue;
   };
+
+  type AppPromise = {
+    abort: () => void;
+    finally: (onfinally: () => void) => void;
+  };
 }

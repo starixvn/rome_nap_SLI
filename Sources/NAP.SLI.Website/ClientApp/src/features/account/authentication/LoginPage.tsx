@@ -39,7 +39,8 @@ const LoginPage = () => {
     if (account) {
       navigate('/');
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLogin = async (
     values: LoginProps,

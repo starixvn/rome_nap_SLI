@@ -34,7 +34,7 @@ const PaginationComponent = (props: Props) => {
     return () => {
       isMounted.current = false;
     };
-  });
+  }, []);
 
   const handlePageSizeChange = (
     pageSize: number,

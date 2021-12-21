@@ -39,8 +39,8 @@ const handleError = (e: AxiosError): AxiosError | undefined => {
         return;
       case 503: {
         const umTime = e.response.data as UMTime;
-        updateUM(umTime);
-        history.replace('/error/under-maintenance');
+        store.dispatch(updateUM(umTime));
+        history.replace('/error/um');
         return;
       }
       default:

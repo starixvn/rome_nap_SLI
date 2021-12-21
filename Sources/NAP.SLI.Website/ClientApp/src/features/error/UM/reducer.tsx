@@ -17,7 +17,7 @@ const initialState: UMTime = {
 export const checkUM = createAsyncThunk<UMTime>(
   `${sliceName}/checkUM`,
   async () => {
-    const { data } = await post<UMTime>('/api/common/umtime');
+    const { data } = await post<UMTime>('/api/common/um');
     return data;
   },
 );
@@ -27,14 +27,18 @@ const slice = createSlice({
   initialState,
   reducers: {
     updateUM: (state, action: PayloadAction<UMTime>) => {
-      state = action.payload;
+      const { from, to, isUnderMaintenanceTime } = action.payload;
+      state.from = from;
+      state.to = to;
+      state.isUnderMaintenanceTime = isUnderMaintenanceTime;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(checkUM.fulfilled, (state, { payload }) => {
-      if (JSON.stringify(state) !== JSON.stringify(payload)) {
-        state = payload;
-      }
+      const { from, to, isUnderMaintenanceTime } = payload;
+      state.from = from;
+      state.to = to;
+      state.isUnderMaintenanceTime = isUnderMaintenanceTime;
     });
   },
 });

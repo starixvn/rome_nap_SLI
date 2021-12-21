@@ -25,23 +25,33 @@ import { useAppDispatch } from 'app/store';
 const UserManagementPage = () => {
   const dispatch = useAppDispatch();
   const formikRef = useRef<FormikProps<QueryProps>>(null);
-  const { users, queryArg, isQuerying } = useSelector(
+  const { users, queryArg } = useSelector(
     (state: AppState) => state.userManagement,
   );
+  let promise: AppPromise | undefined;
 
   useEffect(() => {
-    if (formikRef.current && users === undefined && !isQuerying) {
+    if (formikRef.current && users === undefined) {
       formikRef.current.handleSubmit();
     }
-  }, [users, isQuerying]);
 
-  const handleQuery = async (
+    return () => {
+      if (promise) {
+        promise.abort();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleQuery = (
     values: QueryProps,
     { setSubmitting }: FormikHelpers<QueryProps>,
   ) => {
     setSubmitting(true);
-    await dispatch(query(values));
-    setSubmitting(false);
+    promise = dispatch(query(values));
+    promise.finally(() => {
+      setSubmitting(false);
+    });
   };
 
   const renderTableBody = () => {
@@ -126,7 +136,7 @@ const UserManagementPage = () => {
           )}
         </Formik>
       </Container>
-      {users && (
+      {users !== undefined && (
         <Table hover bordered striped>
           <thead>
             <tr>

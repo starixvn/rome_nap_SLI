@@ -10,6 +10,7 @@ import HomePage from 'features/home/Page';
 import storage from 'services/storage';
 import { CustomRouter } from 'components/custom-router';
 import { PrivateLayout } from 'layout/Private';
+import UMPage from 'features/error/UM/Page';
 
 export const history = createBrowserHistory();
 
@@ -18,6 +19,7 @@ export const AppRoutes = () => {
     <CustomRouter history={history}>
       <Routes>
         <Route path="login" element={<LoginPage />} />
+        <Route path="error/um" element={<UMPage />} />
         <Route
           element={
             <PrivateLayout>

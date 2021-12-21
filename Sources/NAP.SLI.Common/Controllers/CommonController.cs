@@ -12,6 +12,8 @@
     using NAP.SLI.Common.Models;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Localization.Services;
+    using NAP.UM.Models;
+    using NAP.UM.Services;
     using NAP.UM.Web;
 
     [AllowAnonymous]
@@ -25,19 +27,22 @@
         private readonly IReportService reportService;
         private readonly ICacheService memoryCacheService;
         private readonly ISharedLocalizer sharedLocalizer;
+        private readonly IMaintenanceService maintenanceService;
 
         public CommonController(
             IHttpContextAccessor httpContextAccessor,
             IAppSettings appSettings,
             IReportService reportService,
             ICacheContainer cacheContainer,
-            ISharedLocalizer sharedLocalizer)
+            ISharedLocalizer sharedLocalizer,
+            IMaintenanceService maintenanceService)
         {
             context = httpContextAccessor.HttpContext;
             this.appSettings = appSettings;
             this.reportService = reportService;
             memoryCacheService = cacheContainer.MemoryCacheService;
             this.sharedLocalizer = sharedLocalizer;
+            this.maintenanceService = maintenanceService;
         }
 
         [HttpPost("[action]")]
@@ -45,6 +50,12 @@
         {
             var title = sharedLocalizer["Title"];
             throw new NotSupportedException(title);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<UMTime> UM()
+        {
+            return await maintenanceService.GetUMTimeAsync().ConfigureAwait(false);
         }
 
         [HttpGet("[action]")]
