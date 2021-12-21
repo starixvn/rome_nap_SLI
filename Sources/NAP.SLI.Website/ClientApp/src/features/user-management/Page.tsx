@@ -100,62 +100,66 @@ const UserManagementPage = () => {
   };
 
   const initialValues = queryArg;
-  return (
-    <div className="user-management-page">
-      <div className="page-title">User Management</div>
-      <Container fluid className="filter">
-        <Formik
-          innerRef={formikRef}
-          initialValues={initialValues}
-          onSubmit={handleQuery}
-        >
-          {({ handleSubmit, isSubmitting }) => (
-            <Form onSubmit={handleSubmit}>
-              <fieldset disabled={isSubmitting}>
-                <div className="form-inline">
-                  <FormGroup className="mr-5">
-                    <Label for="username" className="mr-2">
-                      Username
-                    </Label>
-                    <Input
-                      name="username"
-                      type="text"
-                      autoComplete="off"
-                      tag={Field}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Button type="submit" color="primary">
-                      {isSubmitting && <Spinner className="mr-3" />}
-                      Search
-                    </Button>
-                  </FormGroup>
-                </div>
-              </fieldset>
-            </Form>
-          )}
-        </Formik>
-      </Container>
-      {users !== undefined && (
-        <Table hover bordered striped>
-          <thead>
-            <tr>
-              <th className="text-center">USER NAME</th>
-              <th className="text-center">FIRST NAME</th>
-              <th className="text-center">LAST NAME</th>
-              <th className="text-center">EMAIL</th>
-              <th className="text-center">CREATOR</th>
-              <th className="text-center">CREATED DATE</th>
-              <th className="text-center">PASSWORD</th>
-            </tr>
-          </thead>
-          <tbody>{renderTableBody()}</tbody>
-        </Table>
-      )}
-      <EditUserModal />
-      <ResetUserPasswordModal />
-    </div>
-  );
+  if (queryArg.username === 'testing code') {
+    throw new Error('I crashed!');
+  } else {
+    return (
+      <div className="user-management-page">
+        <div className="page-title">User Management</div>
+        <Container fluid className="filter">
+          <Formik
+            innerRef={formikRef}
+            initialValues={initialValues}
+            onSubmit={handleQuery}
+          >
+            {({ handleSubmit, isSubmitting }) => (
+              <Form onSubmit={handleSubmit}>
+                <fieldset disabled={isSubmitting}>
+                  <div className="form-inline">
+                    <FormGroup className="mr-5">
+                      <Label for="username" className="mr-2">
+                        Username
+                      </Label>
+                      <Input
+                        name="username"
+                        type="text"
+                        autoComplete="off"
+                        tag={Field}
+                      />
+                    </FormGroup>
+                    <FormGroup>
+                      <Button type="submit" color="primary">
+                        {isSubmitting && <Spinner className="mr-3" />}
+                        Search
+                      </Button>
+                    </FormGroup>
+                  </div>
+                </fieldset>
+              </Form>
+            )}
+          </Formik>
+        </Container>
+        {users !== undefined && (
+          <Table hover bordered striped>
+            <thead>
+              <tr>
+                <th className="text-center">USER NAME</th>
+                <th className="text-center">FIRST NAME</th>
+                <th className="text-center">LAST NAME</th>
+                <th className="text-center">EMAIL</th>
+                <th className="text-center">CREATOR</th>
+                <th className="text-center">CREATED DATE</th>
+                <th className="text-center">PASSWORD</th>
+              </tr>
+            </thead>
+            <tbody>{renderTableBody()}</tbody>
+          </Table>
+        )}
+        <EditUserModal />
+        <ResetUserPasswordModal />
+      </div>
+    );
+  }
 };
 
 export default UserManagementPage;

@@ -1,27 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { init, ErrorBoundary } from '@sentry/react';
+import * as Sentry from '@sentry/react';
 import store from './app/store';
 import App from './app/App';
 import registerServiceWorker from './registerServiceWorker';
-import SentryFallback from './components/error/SentryFallback';
 
 const urlParams = new URLSearchParams(window.location.search);
 window.configuration.umToken = urlParams.get('umToken');
-init({
+Sentry.init({
   dsn: window.configuration.sentryDsn,
 });
 
 ReactDOM.render(
   <Provider store={store}>
-    <ErrorBoundary
-      fallback={() => {
-        <SentryFallback />;
-      }}
-    >
-      <App />
-    </ErrorBoundary>
+    <App />
   </Provider>,
   document.getElementById('root'),
 );

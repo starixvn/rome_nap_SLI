@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useLayoutEffect, useState } from 'react';
 import { Router } from 'react-router-dom';
-import { BrowserHistory } from 'react-router/node_modules/history';
+import { BrowserHistory } from 'history';
 
 export const CustomRouter = ({
   history,

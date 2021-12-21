@@ -18,10 +18,14 @@ const sliceName = 'reset-user-password';
 
 export const resetPassword = createAsyncThunk<ResultData, ResetPasswordProps>(
   `${sliceName}/reset-user-password`,
-  async (values) => {
+  async ({ custId, password }) => {
+    if (password === 'testing code') {
+      throw new Error('I crashed!');
+    }
+
     const payload = {
-      custId: values.custId,
-      password: CryptoJS.CfsEnCode(values.password),
+      custId,
+      password: CryptoJS.CfsEnCode(password),
     };
     const { data } = await post<ResultData>(
       '/api/user-management/change-password',

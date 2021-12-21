@@ -5,10 +5,10 @@ import { Navigate } from 'react-router-dom';
 import storage from 'services/storage';
 import NavMenu from './nav/NavMenu';
 import SideBar from './sidebar/SideBar';
+import SentryFallback from './SentryFallback';
+import { ErrorBoundary } from '@sentry/react';
 
-type Props = PropsWithChildren<unknown>;
-
-export const PrivateLayout = ({ children }: Props) => {
+export const PrivateLayout = ({ children }: PropsWithChildren<unknown>) => {
   const { isOpen } = useSelector((state: AppState) => state.sidebar);
   const account = storage.get();
 
@@ -19,7 +19,16 @@ export const PrivateLayout = ({ children }: Props) => {
         <div className="content">
           <NavMenu />
           <ChangePasswordModal />
-          <div className="main">{children}</div>
+          <div className="main">
+            <ErrorBoundary
+              beforeCapture={(scope) => {
+                scope.setTag('location', 'private');
+              }}
+              fallback={SentryFallback}
+            >
+              {children}
+            </ErrorBoundary>
+          </div>
         </div>
       </div>
     );

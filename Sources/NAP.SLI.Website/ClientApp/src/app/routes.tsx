@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet, Route, Routes, RoutesProps } from 'react-router-dom';
-import { createBrowserHistory } from 'react-router/node_modules/history';
+import { createBrowserHistory } from 'history';
 import LoginPage from 'features/account/authentication/LoginPage';
 import { UserManagementRoutes } from 'features/user-management';
 import { ErrorRoutes } from 'features/error';
@@ -8,9 +8,9 @@ import { CustomerSettingRoutes } from 'features/customer-setting';
 import { ReportsRoutes } from 'features/reports';
 import HomePage from 'features/home/Page';
 import storage from 'services/storage';
-import { CustomRouter } from 'components/custom-router';
 import { PrivateLayout } from 'layout/Private';
 import UMPage from 'features/error/UM/Page';
+import { CustomRouter } from 'components/custom-router';
 
 export const history = createBrowserHistory();
 

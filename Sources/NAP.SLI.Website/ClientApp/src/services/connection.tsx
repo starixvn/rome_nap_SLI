@@ -4,7 +4,8 @@ import store from 'app/store';
 import { post } from './http';
 
 let timeout: number | undefined;
-const timeoutInterval = 10000;
+const timeoutInterval =
+  (parseInt(window.configuration.accessExpiration) - 1) * 60 * 1000;
 
 type CheckInData = {
   isSuccess: boolean;

@@ -44,7 +44,7 @@ namespace NAP.SLI.BetList.Services
             return response;
         }
 
-        private async Task<object> Query(object request, string url)
+        private static async Task<object> Query(object request, string url)
         {
             var serializeRequest = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(serializeRequest, Encoding.UTF8, "application/json");

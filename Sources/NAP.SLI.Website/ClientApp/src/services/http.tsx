@@ -6,7 +6,6 @@ import store from 'app/store';
 import { hide, error } from 'components/toast/reducer';
 import { updateUM, UMTime } from 'features/error/UM/reducer';
 import { isNullOrWhiteSpaces } from 'utils/StringUtils';
-import { handleException } from 'utils/ExceptionUtils';
 import { history } from 'app/routes';
 
 const getConfig = (): AxiosRequestConfig => {
@@ -43,14 +42,9 @@ const handleError = (e: AxiosError): AxiosError | undefined => {
         history.replace('/error/um');
         return;
       }
-      default:
-        store.dispatch(error(e.message));
     }
-  } else {
-    store.dispatch(error(e.message));
   }
 
-  handleException(e);
   return e;
 };
 
@@ -63,7 +57,7 @@ export const post = async function <T>(url: string, data?: unknown) {
     if (axios.isAxiosError(e)) {
       return Promise.reject(handleError(e));
     } else {
-      return Promise.reject();
+      return Promise.reject(e);
     }
   }
 };
@@ -77,7 +71,7 @@ export const get = async function <T>(url: string) {
     if (axios.isAxiosError(e)) {
       return Promise.reject(handleError(e));
     } else {
-      return Promise.reject();
+      return Promise.reject(e);
     }
   }
 };
@@ -128,7 +122,7 @@ export const download = async (url: string, data?: unknown) => {
     if (axios.isAxiosError(e)) {
       return Promise.reject(handleError(e));
     } else {
-      return Promise.reject();
+      return Promise.reject(e);
     }
   }
 };

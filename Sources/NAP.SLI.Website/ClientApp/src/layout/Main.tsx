@@ -1,8 +1,19 @@
 import React, { PropsWithChildren } from 'react';
 import { Container } from 'reactstrap';
+import SentryFallback from './SentryFallback';
+import { ErrorBoundary } from '@sentry/react';
 
-type Props = PropsWithChildren<unknown>;
-
-export const MainLayout = ({ children }: Props) => {
-  return <Container fluid>{children}</Container>;
+export const MainLayout = ({ children }: PropsWithChildren<unknown>) => {
+  return (
+    <Container fluid>
+      <ErrorBoundary
+        beforeCapture={(scope) => {
+          scope.setTag('location', 'main');
+        }}
+        fallback={SentryFallback}
+      >
+        {children}
+      </ErrorBoundary>
+    </Container>
+  );
 };

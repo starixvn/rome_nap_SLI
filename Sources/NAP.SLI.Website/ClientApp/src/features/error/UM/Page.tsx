@@ -28,7 +28,7 @@ const UMPage = () => {
 
     return () => {
       if (promise) {
-        promise.abort;
+        promise.abort();
       }
 
       if (timeout) {
