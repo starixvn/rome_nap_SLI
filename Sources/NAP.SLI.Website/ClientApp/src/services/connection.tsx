@@ -22,12 +22,12 @@ export const stopCheckin = () => {
 };
 
 export const startCheckin = () => {
-  if (!timeout) {
-    timeout = window.setTimeout(async () => await checkin(), timeoutInterval);
-  }
+  stopCheckin();
+  timeout = window.setTimeout(async () => await checkin(), timeoutInterval);
 };
 
 export const checkin = async () => {
+  stopCheckin();
   try {
     const account = storage.get();
     if (!account || !account.token) {
@@ -46,8 +46,7 @@ export const checkin = async () => {
         isAdmin,
         token,
       });
-      stopCheckin();
-      startCheckin();
+      timeout = window.setTimeout(async () => await checkin(), timeoutInterval);
     } else {
       alert(
         "You have been logged out because your account has logged into another session. Don't recognize this activity? Please contact your upline for assistance.",

@@ -1,6 +1,6 @@
 import storage from 'services/storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { stopCheckin } from 'services/connection';
+import { startCheckin, stopCheckin } from 'services/connection';
 import { post } from 'services/http';
 import { Account } from 'services/storage';
 import { CryptoJS } from 'utils/FunctionUtils';
@@ -66,6 +66,7 @@ const slice = createSlice({
       state.message = undefined;
     });
     builder.addCase(login.fulfilled, (state, action) => {
+      startCheckin();
       const account = action.payload;
       storage.save(account);
     });
@@ -76,6 +77,7 @@ const slice = createSlice({
       stopCheckin();
     });
     builder.addCase(logout.fulfilled, () => {
+      stopCheckin();
       storage.remove();
     });
   },
