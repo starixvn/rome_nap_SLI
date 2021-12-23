@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { startCheckin, stopCheckin } from 'services/connection';
+import { start, stop } from 'services/connection';
 import { post } from 'services/http';
 
 export type UMTime = {
@@ -39,9 +39,9 @@ const slice = createSlice({
       const { from, to, isUnderMaintenanceTime } = payload;
       if (state.isUnderMaintenanceTime !== isUnderMaintenanceTime) {
         if (isUnderMaintenanceTime) {
-          stopCheckin();
+          stop();
         } else {
-          startCheckin();
+          start();
         }
       }
 

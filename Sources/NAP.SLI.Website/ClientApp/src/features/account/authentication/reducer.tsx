@@ -1,9 +1,10 @@
 import storage from 'services/storage';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { startCheckin, stopCheckin } from 'services/connection';
+import { start, stop } from 'services/connection';
 import { post } from 'services/http';
 import { Account } from 'services/storage';
 import { CryptoJS } from 'utils/FunctionUtils';
+import { history } from 'app/routes';
 
 type State = {
   message?: string;
@@ -49,13 +50,17 @@ export const login = createAsyncThunk<
 export const logout = createAsyncThunk<void>(
   `${sliceName}/logout`,
   async () => {
-    try {
-      await post('/api/account/logout', {});
-    } catch (err) {
-      console.error(err);
-    }
+    await post('/api/account/logout', {});
   },
 );
+
+const postLogout = () => {
+  stop();
+  storage.remove();
+  setTimeout(() => {
+    history.replace('/login');
+  }, 1);
+};
 
 const slice = createSlice({
   name: sliceName,
@@ -66,7 +71,7 @@ const slice = createSlice({
       state.message = undefined;
     });
     builder.addCase(login.fulfilled, (state, action) => {
-      startCheckin();
+      start();
       const account = action.payload;
       storage.save(account);
     });
@@ -74,11 +79,13 @@ const slice = createSlice({
       state.message = action.payload;
     });
     builder.addCase(logout.pending, () => {
-      stopCheckin();
+      stop();
     });
     builder.addCase(logout.fulfilled, () => {
-      stopCheckin();
-      storage.remove();
+      postLogout();
+    });
+    builder.addCase(logout.rejected, () => {
+      postLogout();
     });
   },
 });

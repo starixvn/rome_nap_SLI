@@ -6,7 +6,5 @@
 
     public class RefreshRequest : IRequest<AuthenticationModel>
     {
-        [Required]
-        public string Token { get; set; }
     }
 }

@@ -13,7 +13,7 @@ import {
   DropdownItem,
   Button,
 } from 'reactstrap';
-import { NavLink as RRNavLink, useNavigate } from 'react-router-dom';
+import { NavLink as RRNavLink } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiViewDashboard } from '@mdi/js';
 import { logout } from 'features/account/authentication/reducer';
@@ -24,7 +24,6 @@ import storage from 'services/storage';
 
 const NavMenu = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = useCallback(() => {
@@ -33,7 +32,6 @@ const NavMenu = () => {
 
   const handleLogout = async () => {
     await dispatch(logout());
-    navigate('/login');
   };
 
   const account = storage.get();
