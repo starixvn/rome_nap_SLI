@@ -1,5 +1,5 @@
 import React from 'react';
-import { Ball } from '../reducer';
+import { Ball } from '../types';
 
 type Props = {
   ball: Ball;

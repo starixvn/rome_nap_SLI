@@ -1,6 +1,6 @@
 import React from 'react';
 import BallNumber from '../components/BallNumber';
-import { Happy5 } from '../reducer';
+import { Happy5 } from '../types';
 
 type Props = {
   match: Happy5;

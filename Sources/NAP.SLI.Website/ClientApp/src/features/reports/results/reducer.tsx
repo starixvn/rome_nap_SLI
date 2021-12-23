@@ -1,97 +1,21 @@
 import { createAsyncThunk, createSlice, unwrapResult } from '@reduxjs/toolkit';
 import { error } from 'components/toast/reducer';
 import { download, post } from 'services/http';
-
-type ResultArg = {
-  fromDate: string;
-  leagueId: number;
-  sportType: number;
-};
-
-type ExcelArg = ResultArg & {
-  leagueName: string;
-  sportName: string;
-};
-
-type SportArg = {
-  fromDate: string;
-};
-
-type LeagueArg = {
-  fromDate: string;
-  sportType: number;
-};
-
-type Soccer5Arg = {
-  matchId: number;
-  balls: string;
-  isDesktop: boolean;
-};
-
-type Match = {
-  matchId: number;
-  noMatch: string;
-  leagueId: number;
-  kickOffTime: string;
-  eventStatus: string;
-};
-
-export type NumberGame = Match & {
-  firstBall: Ball;
-  secondBall: Ball;
-  thirdBall: Ball;
-  oeft: string;
-};
-
-export type Happy5 = Match & {
-  firstBall: Ball;
-  secondBall: Ball;
-  thirdBall: Ball;
-  fourthBall: Ball;
-  fifthBall: Ball;
-  totalBall: string;
-  bigSmall: string;
-  oddEven: string;
-  fourSeason: string;
-  moreOddMoreEven: string;
-  soccer5: string;
-  soccer5Class: string;
-  combo: string;
-  balls: string;
-  eventStatusIsRefund: boolean;
-};
-
-type ResultRecord = {
-  leagueName: string;
-  matches: Array<NumberGame | Happy5>;
-};
-
-export type Ball = {
-  number: string;
-  color: string;
-};
-
-type Sport = {
-  sportType: number;
-  sportName: string;
-};
-
-type League = {
-  leagueId: number;
-  leagueName: string;
-};
-
-type State = {
-  sports: Sport[];
-  leagues: League[];
-  results: ResultRecord[];
-  selectedSportType: number;
-  isSportLoading: boolean;
-  isLeagueLoading: boolean;
-  isResultLoading: boolean;
-  isSoccer5Loading: boolean;
-  isExcelLoading: boolean;
-};
+import {
+  ExcelArg,
+  League,
+  LeagueArg,
+  QueryLeaguesAndResultsArg,
+  QueryLeaguesAndResultsResponse,
+  QuerySubmitArg,
+  QuerySubmitResponse,
+  ResultArg,
+  ResultRecord,
+  Soccer5Arg,
+  Sport,
+  SportArg,
+  State,
+} from './types';
 
 const actionName = 'result';
 
@@ -141,8 +65,8 @@ export const queryResult = createAsyncThunk<ResultRecord[], ResultArg>(
 );
 
 export const querySubmit = createAsyncThunk<
-  { sports: Sport[]; leagues: League[]; results: ResultRecord[] },
-  { fromDate: string }
+  QuerySubmitResponse,
+  QuerySubmitArg
 >(`${actionName}/querySubmit`, async ({ fromDate }, { dispatch }) => {
   const sports = await dispatch(querySportByDate({ fromDate })).then(
     unwrapResult,
@@ -170,8 +94,8 @@ export const querySubmit = createAsyncThunk<
 });
 
 export const queryLeaguesAndResults = createAsyncThunk<
-  { leagues: League[]; results: ResultRecord[] },
-  { fromDate: string; sportType: number }
+  QueryLeaguesAndResultsResponse,
+  QueryLeaguesAndResultsArg
 >(
   `${actionName}/getLeaguesAndResults`,
   async ({ fromDate, sportType }, { dispatch }) => {
