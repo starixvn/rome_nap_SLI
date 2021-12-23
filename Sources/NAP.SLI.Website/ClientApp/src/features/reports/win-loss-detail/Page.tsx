@@ -3,7 +3,7 @@ import NormalFilter from './NormalFilter';
 import HistoryFilter from './HistoryFilter';
 import { useSelector } from 'react-redux';
 import Table from './Table';
-import { selectCustomer, reset } from './reducer';
+import { select, reset } from './reducer';
 import { useAppDispatch } from 'app/store';
 import Title from './Title';
 import { useCustomerParams } from 'features/reports';
@@ -19,13 +19,10 @@ const Page = () => {
 
   useEffect(() => {
     dispatch(
-      selectCustomer({
-        customer: {
-          custId,
-          roleId,
-          username,
-        },
-        isReset: true,
+      select({
+        custId,
+        roleId,
+        username,
       }),
     );
 

@@ -2,41 +2,41 @@ import React from 'react';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import { useSelector } from 'react-redux';
 import { getDownlineLevel, getLevelName } from 'utils/CustomerLevelUtils';
-import { selectCustomer } from './reducer';
+import { drillUp } from './reducer';
 import { useAppDispatch } from 'app/store';
 
 const Title = () => {
   const dispatch = useAppDispatch();
-  const { queryCustomer, uplineCustomers } = useSelector(
+  const { customer, customers } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
 
-  if (!queryCustomer) {
+  if (!customer) {
     return <></>;
   }
 
   return (
     <div className="page-title">
       <span>
-        {getLevelName(getDownlineLevel(queryCustomer.roleId)) +
-          ' Win Loss Detail'}{' '}
-        (
+        {getLevelName(getDownlineLevel(customer.roleId)) + ' Win Loss Detail'} (
       </span>
       <Breadcrumb>
-        {uplineCustomers &&
-          uplineCustomers.map((c, index) => (
+        {customers.map(({ username }, index) =>
+          index === customers.length - 1 ? (
+            <BreadcrumbItem key={index} active>
+              {customer.username}
+            </BreadcrumbItem>
+          ) : (
             <BreadcrumbItem key={index}>
               <span
                 className="text-link"
-                onClick={() =>
-                  dispatch(selectCustomer({ customer: c, isReset: false }))
-                }
+                onClick={() => dispatch(drillUp(index))}
               >
-                {c.username}
+                {username}
               </span>
             </BreadcrumbItem>
-          ))}
-        <BreadcrumbItem active>{queryCustomer.username}</BreadcrumbItem>
+          ),
+        )}
       </Breadcrumb>
       <span>)</span>
     </div>

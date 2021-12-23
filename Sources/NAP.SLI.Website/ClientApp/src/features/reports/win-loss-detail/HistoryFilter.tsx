@@ -24,7 +24,7 @@ const generateDateOptions = (date: Moment, maxDate: Moment) => {
 const HistoryFilter = () => {
   const formikRef = createRef<FormikProps<FormikValues>>();
   const dispatch = useAppDispatch();
-  const { queryCustomer, queryArg } = useSelector(
+  const { customer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
 
@@ -37,13 +37,13 @@ const HistoryFilter = () => {
     if (!isSubmitting) {
       handleSubmit();
     }
-  }, [formikRef, queryCustomer]);
+  }, [formikRef, customer]);
 
-  if (!queryCustomer) {
+  if (!customer) {
     return <></>;
   }
 
-  const { custId, roleId, username } = queryCustomer;
+  const { custId, roleId, username } = customer;
   const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
 
   const month = getToday();

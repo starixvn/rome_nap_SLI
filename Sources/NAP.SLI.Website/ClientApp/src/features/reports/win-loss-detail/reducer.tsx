@@ -1,9 +1,4 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  current,
-  PayloadAction,
-} from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PageSize } from 'utils/ReportUtils';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { download, post } from 'services/http';
@@ -43,8 +38,8 @@ type ExcelProps = {
 };
 
 type State = {
-  uplineCustomers: Customer[];
-  queryCustomer?: Customer;
+  customers: Customer[];
+  customer?: Customer;
   queryArg: QueryArg;
   queryData?: QueryData;
   isQuerying: boolean;
@@ -58,8 +53,8 @@ export type QueryData = {
 
 const today = getToday();
 const initialState: State = {
-  uplineCustomers: [],
-  queryCustomer: undefined,
+  customers: [],
+  customer: undefined,
   queryData: undefined,
   queryArg: {
     isHistory: false,
@@ -97,35 +92,20 @@ const slice = createSlice({
       state.queryArg.fromDate = formatDate(today);
       state.queryArg.toDate = formatDate(today);
     },
-    selectCustomer: (
-      state,
-      action: PayloadAction<{ customer: Customer; isReset: boolean }>,
-    ) => {
-      const { customer, isReset } = action.payload;
-      const currentState = current(state);
-      if (isReset || !currentState.queryCustomer) {
-        state.queryCustomer = customer;
-        state.uplineCustomers = [];
-      } else {
-        const uplineCustomers = [];
-        let isDrillDown = true;
-        for (let i = 0; i < currentState.uplineCustomers.length; i++) {
-          const uplineCustomer = currentState.uplineCustomers[i];
-          if (uplineCustomer.custId === customer.custId) {
-            isDrillDown = false;
-            break;
-          }
-
-          uplineCustomers.push(uplineCustomer);
-        }
-
-        if (isDrillDown) {
-          uplineCustomers.push(currentState.queryCustomer);
-        }
-
-        state.queryCustomer = customer;
-        state.uplineCustomers = uplineCustomers;
-      }
+    select: (state, action: PayloadAction<Customer>) => {
+      const customer = action.payload;
+      state.customer = customer;
+      state.customers = [customer];
+    },
+    drillDown: (state, action: PayloadAction<Customer>) => {
+      const customer = action.payload;
+      state.customer = customer;
+      state.customers.push(customer);
+    },
+    drillUp: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      state.customer = state.customers[index];
+      state.customers = state.customers.slice(0, index + 1);
     },
   },
   extraReducers: (builder) => {
@@ -147,6 +127,6 @@ const slice = createSlice({
   },
 });
 
-export const { toggleMode, selectCustomer, reset } = slice.actions;
+export const { toggleMode, select, drillDown, drillUp, reset } = slice.actions;
 
 export default slice.reducer;

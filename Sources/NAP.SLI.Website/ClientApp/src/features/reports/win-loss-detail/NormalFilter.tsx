@@ -15,15 +15,15 @@ import { excel, query, toggleMode } from './reducer';
 const NormalFilter = () => {
   const dispatch = useAppDispatch();
 
-  const { queryCustomer, queryArg } = useSelector(
+  const { customer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
 
-  if (!queryCustomer) {
+  if (!customer) {
     return <></>;
   }
 
-  const { custId, roleId, username } = queryCustomer;
+  const { custId, roleId, username } = customer;
   const { isHistory, fromDate, toDate, pageIndex, pageSize } = queryArg;
 
   const handleQuery = async (fromDate: Moment, toDate: Moment) => {
@@ -56,6 +56,7 @@ const NormalFilter = () => {
   return (
     <Container fluid className="filter">
       <ReportFilter
+        key={customer.custId}
         minDate={minDate}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}

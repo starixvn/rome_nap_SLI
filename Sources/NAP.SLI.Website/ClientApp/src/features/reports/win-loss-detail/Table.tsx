@@ -11,7 +11,7 @@ import {
 } from 'utils/CustomerLevelUtils';
 import { formatDecimal, formatInteger } from 'utils/NumberUtils';
 import { PageSizes } from 'utils/ReportUtils';
-import { query, Record, selectCustomer } from './reducer';
+import { query, Record, drillDown } from './reducer';
 
 type RowProps = {
   roleId: number;
@@ -64,17 +64,17 @@ const RowComponent = ({
 const TableComponent = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { queryData, queryCustomer, queryArg } = useSelector(
+  const { queryData, customer, queryArg } = useSelector(
     (state: AppState) => state.winLossDetail,
   );
 
-  if (!queryData || !queryCustomer) {
+  if (!queryData || !customer) {
     return <></>;
   }
 
   const { pageIndex, pageSize, isHistory, fromDate, toDate } = queryArg;
   const { records, total, totalRecords } = queryData;
-  const { roleId } = queryCustomer;
+  const { roleId } = customer;
 
   const getRemovedColumnTotal = () => {
     switch (roleId) {
@@ -109,7 +109,7 @@ const TableComponent = () => {
           }),
       });
     } else {
-      dispatch(selectCustomer({ customer, isReset: false }));
+      dispatch(drillDown(customer));
     }
   };
 
@@ -118,7 +118,7 @@ const TableComponent = () => {
     pageSize: number,
     callback: Func,
   ) => {
-    const { custId, roleId } = queryCustomer;
+    const { custId, roleId } = customer;
     await dispatch(
       query({
         isHistory,
