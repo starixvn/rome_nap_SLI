@@ -19,6 +19,7 @@ namespace NAP.SLI.Common.Controllers
             this.appSettings = appSettings;
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("/error")]
         [HttpGet("[action]")]
         public async Task<ActionResult> Error()

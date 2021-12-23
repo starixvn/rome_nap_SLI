@@ -1,12 +1,15 @@
 ﻿namespace NAP.SLI.MatchWinLossDetail.Controllers
 {
+    using System.Net.Mime;
     using System.Threading.Tasks;
     using MediatR;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.Common.Extensions;
     using NAP.SLI.Common.Models;
     using NAP.SLI.MatchWinLossDetail.Requests;
 
+    [Consumes(MediaTypeNames.Application.Json)]
     [ApiController]
     [Route("api/match-win-loss-detail")]
     public class MatchWinLossDetailController : ControllerBase
@@ -18,13 +21,16 @@
             this.mediator = mediator;
         }
 
+        /// <summary>Query</summary>
         [HttpPost("[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Query([FromBody] QueryRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
         }
 
+        /// <summary>Excel</summary>
         [HttpPost("[action]")]
         public async Task<IActionResult> Excel([FromBody] ExcelRequest request)
         {

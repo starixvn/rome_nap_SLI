@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Net.Mime;
     using System.Text;
     using System.Threading.Tasks;
     using Fanex.Caching;
@@ -16,6 +17,7 @@
     using NAP.UM.Services;
     using NAP.UM.Web;
 
+    [Consumes(MediaTypeNames.Application.Json)]
     [AllowAnonymous]
     [UncheckUMFilter]
     [ApiController]
@@ -45,6 +47,7 @@
             this.maintenanceService = maintenanceService;
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpPost("[action]")]
         public void Exception()
         {
@@ -52,12 +55,16 @@
             throw new NotSupportedException(title);
         }
 
+        /// <summary>UM</summary>
         [HttpPost("[action]")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(UMTime), StatusCodes.Status200OK)]
         public async Task<UMTime> UM()
         {
             return await maintenanceService.GetUMTimeAsync().ConfigureAwait(false);
         }
 
+        /// <summary>Configuration</summary>
         [HttpGet("[action]")]
         public async Task<ActionResult> Configuration()
         {
@@ -90,6 +97,7 @@
             };
         }
 
+        /// <summary>System Information</summary>
         [HttpGet("[action]")]
         public async Task<ActionResult> SystemInformation()
         {

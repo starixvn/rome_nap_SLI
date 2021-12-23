@@ -1,10 +1,13 @@
 namespace NAP.SLI.BetList.Controller
 {
+    using System.Net.Mime;
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using NAP.SLI.BetList.Requests;
 
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
     [ApiController]
     [Route("api/bet-list")]
     public class BetListController : ControllerBase
@@ -16,6 +19,7 @@ namespace NAP.SLI.BetList.Controller
             this.mediator = mediator;
         }
 
+        /// <summary>Get By Date</summary>
         [HttpPost("[action]")]
         public async Task<IActionResult> GetByDate([FromBody] QueryByDateRequest request)
         {
@@ -23,6 +27,7 @@ namespace NAP.SLI.BetList.Controller
             return Ok(result);
         }
 
+        /// <summary>Get By Match</summary>
         [HttpPost("[action]")]
         public async Task<IActionResult> GetByMatch([FromBody] QueryByMatchRequest request)
         {
@@ -30,6 +35,7 @@ namespace NAP.SLI.BetList.Controller
             return Ok(result);
         }
 
+        /// <summary>Get By Bettype</summary>
         [HttpPost("[action]")]
         public async Task<IActionResult> GetByBettype([FromBody] QueryByBettypeRequest request)
         {

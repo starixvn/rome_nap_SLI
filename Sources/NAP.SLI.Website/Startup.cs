@@ -67,6 +67,7 @@ namespace NAP.SLI.Website
     using NAP.SLI.Customer.Controllers;
     using NAP.SLI.Account;
     using NAP.SLI.Customer;
+    using Microsoft.OpenApi.Models;
 
     public class Startup
     {
@@ -153,12 +154,14 @@ namespace NAP.SLI.Website
             AddAutoMapper(services);
             AddSimpleApi(services);
             AddMediatR(services);
+            AddSwagger(services);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
@@ -172,6 +175,14 @@ namespace NAP.SLI.Website
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            else
+            {
+                app.UseSwagger();
+                // url: /swagger
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SLI"));
+                // url: /api-docs
+                app.UseReDoc(c => { c.DocumentTitle = "SLI"; c.SpecUrl = "/swagger/v1/swagger.json"; });
             }
 
             app.UseRequestLocalization(option =>
@@ -277,6 +288,40 @@ namespace NAP.SLI.Website
             services.AddMediatR(typeof(BetListController));
             services.AddMediatR(typeof(UserManagementController));
             services.AddMediatR(typeof(ThirdPartyResultController));
+        }
+
+        private static void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SLI", Version = "v1" });
+                c.CustomSchemaIds(type => type.FullName);
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below. Example: 'Bearer 12345abcdef'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                        },
+                        new List<string>()
+                    }
+                });
+
+                var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+                xmlFiles.ForEach(xmlFile => c.IncludeXmlComments(xmlFile));
+            });
         }
 
         private void UseFanexDataWithSqlServer()

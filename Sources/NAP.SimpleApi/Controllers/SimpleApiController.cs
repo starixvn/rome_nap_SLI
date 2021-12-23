@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Net.Mime;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
@@ -12,6 +13,8 @@
     using NAP.SimpleApi.Models;
     using NAP.SimpleApi.Requests;
 
+    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json)]
     [ApiController]
     [Route("simple-api")]
     public class SimpleApiController : ControllerBase
@@ -27,12 +30,14 @@
             this.authorizationService = authorizationService;
         }
 
+        /// <summary>Query</summary>
         [HttpPost("[action]")]
         public async Task<IActionResult> Query([FromBody] SimpleApiRequest request)
         {
             return await Handle(request, ActionTypes.Query).ConfigureAwait(false);
         }
 
+        /// <summary>Command</summary>
         [HttpPost("[action]")]
         public async Task<IActionResult> Command([FromBody] SimpleApiRequest request)
         {

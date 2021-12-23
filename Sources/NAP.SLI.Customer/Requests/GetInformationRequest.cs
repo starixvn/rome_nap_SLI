@@ -5,6 +5,7 @@
 
     public class GetInformationRequest : IRequest<CustomerModel>
     {
+        /// <example>supertest1</example>
         public string Username { get; set; }
     }
 }

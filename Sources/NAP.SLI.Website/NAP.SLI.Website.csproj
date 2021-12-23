@@ -7,6 +7,8 @@
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <UserSecretsId>d87b8f332ab094834f8f76119c91aa14</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
@@ -28,14 +30,16 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
     <PackageReference Include="ONEbook.SpreadSheets.NPOI" Version="2.0.0-netstandard01" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="6.2.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAP.SimpleApi\NAP.SimpleApi.csproj" />
     <ProjectReference Include="..\NAP.SLI.Account\NAP.SLI.Account.csproj" />
     <ProjectReference Include="..\NAP.SLI.BetList\NAP.SLI.BetList.csproj" />
     <ProjectReference Include="..\NAP.SLI.Common\NAP.SLI.Common.csproj" />
-	<ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
-	<ProjectReference Include="..\NAP.SLI.Localization\NAP.SLI.Localization.csproj" />
+	  <ProjectReference Include="..\NAP.SLI.Customer\NAP.SLI.Customer.csproj" />
+	  <ProjectReference Include="..\NAP.SLI.Localization\NAP.SLI.Localization.csproj" />
     <ProjectReference Include="..\NAP.SLI.WinLossDetail\NAP.SLI.WinLossDetail.csproj" />
     <ProjectReference Include="..\NAP.SLI.WinLossAnalysis\NAP.SLI.WinLossAnalysis.csproj" />
     <ProjectReference Include="..\NAP.SLI.UserManagement\NAP.SLI.UserManagement.csproj" />
