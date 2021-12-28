@@ -12,17 +12,17 @@ namespace NAP.SLI.BetList.Tests.Handlers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle(IQueryService service, QueryByBettypeRequest request, object queryResult)
+        public async Task TestMethod_Handle(IQueryService service, QueryByBetTypeRequest request, object queryResult)
         {
             // Arrange
             var handler = new QueryByBettypeHandler(service);
-            service.QueryByBettype(request).Returns(queryResult);
+            service.QueryByBetType(request).Returns(queryResult);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().QueryByBettype(request);
+            await service.Received().QueryByBetType(request);
             Assert.Equal(queryResult, result);
         }
     }

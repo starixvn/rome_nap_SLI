@@ -1,6 +1,4 @@
-﻿using Fanex.NAP.Client.Models;
-
-namespace NAP.SLI.Account.Models
+﻿namespace NAP.SLI.Account.Models
 {
     public class TokenModel
     {

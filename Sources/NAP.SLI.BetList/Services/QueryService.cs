@@ -14,7 +14,7 @@ namespace NAP.SLI.BetList.Services
 
         Task<object> QueryByMatch(QueryByMatchRequest request);
 
-        Task<object> QueryByBettype(QueryByBettypeRequest request);
+        Task<object> QueryByBetType(QueryByBetTypeRequest request);
     }
 
     public class QueryService : IQueryService
@@ -38,9 +38,9 @@ namespace NAP.SLI.BetList.Services
             return response;
         }
 
-        public async Task<object> QueryByBettype(QueryByBettypeRequest request)
+        public async Task<object> QueryByBetType(QueryByBetTypeRequest request)
         {
-            var response = await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByBettype").ConfigureAwait(false);
+            var response = await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByBetType").ConfigureAwait(false);
             return response;
         }
 

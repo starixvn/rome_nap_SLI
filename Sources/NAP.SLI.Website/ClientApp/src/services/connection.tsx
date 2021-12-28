@@ -58,6 +58,11 @@ export const stop = () => {
 export const checkin = async () => {
   stopCheckIn();
   try {
+    const account = storage.get();
+    if (!account || !account.token) {
+      return;
+    }
+
     const response = await post<ResultData>('/api/account/checkin', {});
     const { isSuccess } = response.data;
     if (isSuccess) {

@@ -47,7 +47,7 @@ namespace NAP.SLI.BetList.Tests.Controllers
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetByBettype(IMediator mediator, QueryByBettypeRequest request, object sendResult)
+        public async Task TestMethod_GetByBettype(IMediator mediator, QueryByBetTypeRequest request, object sendResult)
         {
             // Arrange
             var controller = new BetListController(mediator);

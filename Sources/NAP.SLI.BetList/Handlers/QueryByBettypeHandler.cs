@@ -7,7 +7,7 @@ namespace NAP.SLI.BetList.Handlers
     using NAP.SLI.BetList.Requests;
     using NAP.SLI.BetList.Services;
 
-    public class QueryByBettypeHandler : IRequestHandler<QueryByBettypeRequest, object>
+    public class QueryByBettypeHandler : IRequestHandler<QueryByBetTypeRequest, object>
     {
         private readonly IQueryService service;
 
@@ -16,9 +16,9 @@ namespace NAP.SLI.BetList.Handlers
             this.service = service;
         }
 
-        public async Task<object> Handle(QueryByBettypeRequest request, CancellationToken cancellationToken)
+        public async Task<object> Handle(QueryByBetTypeRequest request, CancellationToken cancellationToken)
         {
-            return await service.QueryByBettype(request).ConfigureAwait(false);
+            return await service.QueryByBetType(request).ConfigureAwait(false);
         }
     }
 }

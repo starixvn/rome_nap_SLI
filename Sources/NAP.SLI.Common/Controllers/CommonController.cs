@@ -24,7 +24,6 @@
     [Route("api/[controller]")]
     public class CommonController : ControllerBase
     {
-        private readonly HttpContext context;
         private readonly IAppSettings appSettings;
         private readonly IReportService reportService;
         private readonly ICacheService memoryCacheService;
@@ -32,14 +31,12 @@
         private readonly IMaintenanceService maintenanceService;
 
         public CommonController(
-            IHttpContextAccessor httpContextAccessor,
             IAppSettings appSettings,
             IReportService reportService,
             ICacheContainer cacheContainer,
             ISharedLocalizer sharedLocalizer,
             IMaintenanceService maintenanceService)
         {
-            context = httpContextAccessor.HttpContext;
             this.appSettings = appSettings;
             this.reportService = reportService;
             memoryCacheService = cacheContainer.MemoryCacheService;
@@ -55,7 +52,7 @@
             throw new NotSupportedException(title);
         }
 
-        /// <summary>UM</summary>
+        /// <summary>Get UM Information</summary>
         [HttpPost("[action]")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(UMTime), StatusCodes.Status200OK)]
@@ -64,8 +61,19 @@
             return await maintenanceService.GetUMTimeAsync().ConfigureAwait(false);
         }
 
-        /// <summary>Configuration</summary>
+        /// <summary>Get System Configuration</summary>
+        /// <response code="200">
+        /// window.configuration = {
+        ///     env: 'LOCAL',
+        ///     sentryDsn: 'https://db0f69a2468845f3a267c95dd7d99d24@sentry.nexdev.net/138',
+        ///     accessExpiration: '43200',
+        ///     balanceUpDay: '2021-12-01T00:00:00',
+        ///     today: '2021-12-28T00:00:00'
+        /// };
+        /// </response>
         [HttpGet("[action]")]
+        [Produces("application/javascript")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> Configuration()
         {
             var content = await memoryCacheService.GetOrSetAsync("configuration", async () =>
@@ -95,37 +103,6 @@
                 BalanceUpDay = model.BalanceUpDay.ToString("s"),
                 Today = DateTime.Now.Date.ToString("s")
             };
-        }
-
-        /// <summary>System Information</summary>
-        [HttpGet("[action]")]
-        public async Task<ActionResult> SystemInformation()
-        {
-            return Ok(new
-            {
-                CpuPercentage = await GetCpuUsageForProcess().ConfigureAwait(false),
-                Environment.WorkingSet,
-                Environment.OSVersion,
-                Environment.Is64BitOperatingSystem,
-                Environment.MachineName,
-                RemoteIpAddress = context.Connection.RemoteIpAddress.ToString()
-            });
-        }
-
-        private static async Task<int> GetCpuUsageForProcess()
-        {
-            var startTime = DateTime.UtcNow;
-            var startCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            // Wait 1 second
-            await Task.Delay(1000).ConfigureAwait(false);
-
-            var endTime = DateTime.UtcNow;
-            var endCpuUsage = Process.GetCurrentProcess().TotalProcessorTime;
-            var cpuUsedMs = (endCpuUsage - startCpuUsage).TotalMilliseconds;
-            var totalMsPassed = (endTime - startTime).TotalMilliseconds;
-            var cpuUsageTotal = cpuUsedMs / (Environment.ProcessorCount * totalMsPassed);
-
-            return Convert.ToInt32(cpuUsageTotal * 100);
         }
     }
 }

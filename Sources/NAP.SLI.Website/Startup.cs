@@ -172,14 +172,6 @@ namespace NAP.SLI.Website
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            else
-            {
-                app.UseSwagger();
-                // url: /swagger
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SLI"));
-                // url: /api-docs
-                app.UseReDoc(c => { c.DocumentTitle = "SLI"; c.SpecUrl = "/swagger/v1/swagger.json"; });
-            }
 
             app.UseRequestLocalization(option =>
             {
@@ -193,6 +185,14 @@ namespace NAP.SLI.Website
             if (AppSettings.Environment == Common.Models.Environments.PROD)
             {
                 contentTypeProvider.Mappings.Remove(".map");
+            }
+            else
+            {
+                app.UseSwagger();
+                // url: /swagger
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SLI"));
+                // url: /api-docs
+                app.UseReDoc(c => { c.DocumentTitle = "SLI"; c.SpecUrl = "/swagger/v1/swagger.json"; });
             }
 
             app.UseSpaStaticFiles(new StaticFileOptions

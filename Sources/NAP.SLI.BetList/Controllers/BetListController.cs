@@ -37,7 +37,7 @@ namespace NAP.SLI.BetList.Controller
 
         /// <summary>Get By Bettype</summary>
         [HttpPost("[action]")]
-        public async Task<IActionResult> GetByBettype([FromBody] QueryByBettypeRequest request)
+        public async Task<IActionResult> GetByBettype([FromBody] QueryByBetTypeRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
