@@ -79,10 +79,6 @@ namespace NAP.SLI.Website
         {
             Configuration = configuration;
             AppSettings = new AppSettings(configuration);
-#if DEBUG
-            /// extend access expiration for unit testing
-            AppSettings.Authentication.AccessExpiration = 43200;
-#endif
         }
 
         public void ConfigureServices(IServiceCollection services)
