@@ -34,7 +34,7 @@ import {
 } from './reducer';
 
 type FilterValues = {
-  fromDate: string;
+  eventDate: string;
   sportType: number;
   leagueId: number;
 };
@@ -60,7 +60,7 @@ const Filter = () => {
     formState: { isSubmitting },
   } = useForm<FilterValues>({
     defaultValues: {
-      fromDate: today,
+      eventDate: today,
       sportType: 0,
       leagueId: 0,
     },
@@ -71,8 +71,8 @@ const Filter = () => {
   const [selectedLeagueName, setSelectedLeagueName] = useState<string>('');
 
   const handleQuery = useCallback(
-    async ({ fromDate }: FilterValues) => {
-      await dispatch(querySubmit({ fromDate }));
+    async ({ eventDate }: FilterValues) => {
+      await dispatch(querySubmit({ eventDate }));
     },
     [dispatch],
   );
@@ -108,7 +108,7 @@ const Filter = () => {
 
     await dispatch(
       queryLeaguesAndResults({
-        fromDate: getValues('fromDate'),
+        eventDate: getValues('eventDate'),
         sportType,
       }),
     );
@@ -123,7 +123,7 @@ const Filter = () => {
 
     await dispatch(
       queryResult({
-        fromDate: getValues('fromDate'),
+        eventDate: getValues('eventDate'),
         leagueId,
         sportType: getValues('sportType'),
       }),
@@ -131,14 +131,14 @@ const Filter = () => {
   };
 
   const handleDateButtonClick = (value: string) => {
-    setValue('fromDate', value);
+    setValue('eventDate', value);
     handleSubmit(handleQuery)();
   };
 
   const handleExcel = async () => {
     await dispatch(
       queryExcel({
-        fromDate: getValues('fromDate'),
+        eventDate: getValues('eventDate'),
         leagueId: getValues('leagueId'),
         sportType: getValues('sportType'),
         leagueName: selectedLeagueName,
@@ -148,7 +148,7 @@ const Filter = () => {
   };
 
   const handleDateChange = (value: string | Moment) => {
-    setValue('fromDate', formatDate(value as Moment));
+    setValue('eventDate', formatDate(value as Moment));
   };
 
   return (
@@ -160,7 +160,7 @@ const Filter = () => {
               <Label className="mr-3">Date: </Label>
               <Controller
                 control={control}
-                name="fromDate"
+                name="eventDate"
                 render={({ field }) => (
                   <RHFDatePicker
                     {...field}
@@ -194,22 +194,24 @@ const Filter = () => {
                 {yesterday}
               </Button>
             </FormGroup>
-            <FormGroup className="ml-3 mb-4">
-              <Button
-                type="button"
-                color="success"
-                className="btn-excel"
-                title="Export to Excel"
-                onClick={handleExcel}
-                disabled={isExcelLoading}
-              >
-                {isExcelLoading ? (
-                  <Spinner />
-                ) : (
-                  <Icon path={mdiFileExcelOutline} />
-                )}
-              </Button>
-            </FormGroup>
+            {getValues('sportType') !== 0 && (
+              <FormGroup className="ml-3 mb-4">
+                <Button
+                  type="button"
+                  color="success"
+                  className="btn-excel"
+                  title="Export to Excel"
+                  onClick={handleExcel}
+                  disabled={isExcelLoading}
+                >
+                  {isExcelLoading ? (
+                    <Spinner />
+                  ) : (
+                    <Icon path={mdiFileExcelOutline} />
+                  )}
+                </Button>
+              </FormGroup>
+            )}
           </div>
           <div>
             You can view the report data from{' '}

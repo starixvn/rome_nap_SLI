@@ -7,7 +7,7 @@ namespace NAP.SLI.Results.Extensions
     {
         public static string GetTitle(this ExcelRequest request)
         {
-            return $"Results - {request.FromDate.ToDateString()} | {request.SportName} - {request.LeagueName}";
+            return $"Results - {request.EventDate.ToDateString()} | {request.SportName} - {request.LeagueName}";
         }
     }
 }

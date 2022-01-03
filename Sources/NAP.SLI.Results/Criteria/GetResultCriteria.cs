@@ -1,11 +1,13 @@
 namespace NAP.SLI.Results.Criteria
 {
     using System;
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class GetResultCriteria : CriteriaBase
     {
-        public DateTime FromDate { get; set; }
+        [SpParam(SqlParamName = "FromDate")]
+        public DateTime EventDate { get; set; }
 
         public int LeagueID { get; set; }
 
@@ -13,14 +15,8 @@ namespace NAP.SLI.Results.Criteria
 
         public int SportType { get; set; }
 
-        public override string GetSettingKey()
-        {
-            return "U3_Result_MatchSelNumberGameByLeague";
-        }
+        public override string GetSettingKey() => "U3_Result_MatchSelNumberGameByLeague";
 
-        public override bool IsValid()
-        {
-            return FromDate > DateTime.MinValue;
-        }
+        public override bool IsValid() => EventDate > DateTime.MinValue;
     }
 }

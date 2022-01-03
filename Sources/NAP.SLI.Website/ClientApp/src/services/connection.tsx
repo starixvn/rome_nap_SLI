@@ -4,10 +4,12 @@ import store from 'app/store';
 import { post } from './http';
 
 let refreshTimeout: number | undefined;
-let checkinTimeout: number | undefined;
-const refreshInterval =
-  (parseInt(window.configuration.accessExpiration) - 1) * 60 * 1000;
-const checkinInterval = 30 * 1000;
+let checkInTimeout: number | undefined;
+const refreshInterval = Math.min(
+  1000000,
+  (parseInt(window.configuration.accessExpiration) - 1) * 60 * 1000,
+);
+const checkInInterval = 30 * 1000;
 
 type CheckInData = ResultData & {
   token: string;
@@ -32,16 +34,16 @@ export const stopRefresh = () => {
 
 export const startCheckIn = () => {
   stopCheckIn();
-  checkinTimeout = window.setTimeout(
+  checkInTimeout = window.setTimeout(
     async () => await checkin(),
-    checkinInterval,
+    checkInInterval,
   );
 };
 
 export const stopCheckIn = () => {
-  if (checkinTimeout) {
-    clearTimeout(checkinTimeout);
-    checkinTimeout = undefined;
+  if (checkInTimeout) {
+    clearTimeout(checkInTimeout);
+    checkInTimeout = undefined;
   }
 };
 

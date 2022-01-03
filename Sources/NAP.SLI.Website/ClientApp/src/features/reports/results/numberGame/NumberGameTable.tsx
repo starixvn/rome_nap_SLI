@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
 import NumberGameMatch from './NumberGameMatch';
-import '../Table.scss';
 import { NumberGame } from '../types';
 
 const NumberGameTable = () => {

@@ -4,7 +4,7 @@ namespace NAP.SLI.Results.Requests
 
     public class RequestBase
     {
-        public DateTime FromDate { get; set; }
+        public DateTime EventDate { get; set; }
 
         public int LeagueId { get; set; }
 

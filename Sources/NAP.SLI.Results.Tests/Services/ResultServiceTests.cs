@@ -38,7 +38,7 @@ namespace NAP.SLI.Results.Tests.Services
             // Assert
             await dynamicRepositoryEx.Received()
                                 .FetchAsync<ResultSportByDateModel>(
-                                    Arg.Is<GetResultSportByDateCriteria>(c => c.EventDate == request.FromDate));
+                                    Arg.Is<GetResultSportByDateCriteria>(c => c.EventDate == request.EventDate));
             Assert.Equal(fetchData, result);
         }
 
@@ -64,7 +64,7 @@ namespace NAP.SLI.Results.Tests.Services
             // Assert
             await dynamicRepositoryEx.Received()
                                 .FetchAsync<ResultLeagueByDateModel>(
-                                    Arg.Is<GetResultLeagueByDateCriteria>(c => c.EventDate == request.FromDate && c.SportType == request.SportType && c.Language == "en-US"));
+                                    Arg.Is<GetResultLeagueByDateCriteria>(c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.Language == "en-US"));
             Assert.Equal(fetchData, result);
         }
 
@@ -102,7 +102,7 @@ namespace NAP.SLI.Results.Tests.Services
             await dynamicRepositoryEx.Received()
                                     .FetchAsync<Result>(
                                         Arg.Is<GetResultCriteria>(
-                                            c => c.FromDate == request.FromDate && c.SportType == request.SportType && c.LeagueID == request.LeagueId && c.Language == languageCode
+                                            c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueID == request.LeagueId && c.Language == languageCode
                                         ));
             var firstExpectedResult = expectedResults.ElementAt(0);
             var firstResult = results.ElementAt(0);
@@ -152,7 +152,7 @@ namespace NAP.SLI.Results.Tests.Services
             await dynamicRepositoryEx.Received()
                                     .FetchAsync<Result>(
                                         Arg.Is<GetResultCriteria>(
-                                            c => c.FromDate == request.FromDate && c.SportType == request.SportType && c.LeagueID == request.LeagueId && c.Language == languageCode
+                                            c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueID == request.LeagueId && c.Language == languageCode
                                         ));
             var firstExpectedResult = expectedResults.ElementAt(0);
             var firstResult = results.ElementAt(0);

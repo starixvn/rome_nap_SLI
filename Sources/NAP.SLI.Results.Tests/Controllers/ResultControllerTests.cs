@@ -81,7 +81,7 @@ namespace NAP.SLI.Results.Tests.Controllers
             var fileContentResult = Assert.IsType<FileContentResult>(result);
             Assert.Equal(sendResult, fileContentResult.FileContents);
             Assert.Equal(ContentTypes.Excel, fileContentResult.ContentType);
-            var expectedFileDownloadName = $"{string.Join("-", "Results", request.FromDate.ToDateString(), request.SportName, request.LeagueName)}.xls";
+            var expectedFileDownloadName = $"{string.Join("-", "Results", request.EventDate.ToDateString(), request.SportName, request.LeagueName)}.xls";
             Assert.Equal(expectedFileDownloadName, fileContentResult.FileDownloadName);
         }
     }

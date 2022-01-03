@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, unwrapResult } from '@reduxjs/toolkit';
-import { error } from 'components/toast/reducer';
 import { download, post } from 'services/http';
 import {
   ExcelArg,
@@ -67,20 +66,23 @@ export const queryResult = createAsyncThunk<ResultRecord[], ResultArg>(
 export const querySubmit = createAsyncThunk<
   QuerySubmitResponse,
   QuerySubmitArg
->(`${actionName}/querySubmit`, async ({ fromDate }, { dispatch }) => {
-  const sports = await dispatch(querySportByDate({ fromDate })).then(
+>(`${actionName}/querySubmit`, async ({ eventDate }, { dispatch }) => {
+  const sports = await dispatch(querySportByDate({ eventDate })).then(
     unwrapResult,
   );
   if (sports.length === 0) return { sports: [], leagues: [], results: [] };
 
   const leagues = await dispatch(
-    queryLeagueByDate({ fromDate, sportType: sports[0].sportType }),
+    queryLeagueByDate({
+      eventDate,
+      sportType: sports[0].sportType,
+    }),
   ).then(unwrapResult);
   if (leagues.length === 0) return { sports: [], leagues: [], results: [] };
 
   const results = await dispatch(
     queryResult({
-      fromDate,
+      eventDate,
       sportType: sports[0].sportType,
       leagueId: leagues[0].leagueId,
     }),
@@ -98,15 +100,15 @@ export const queryLeaguesAndResults = createAsyncThunk<
   QueryLeaguesAndResultsArg
 >(
   `${actionName}/getLeaguesAndResults`,
-  async ({ fromDate, sportType }, { dispatch }) => {
+  async ({ eventDate, sportType }, { dispatch }) => {
     const leagues = await dispatch(
-      queryLeagueByDate({ fromDate, sportType }),
+      queryLeagueByDate({ eventDate, sportType }),
     ).then(unwrapResult);
     if (leagues.length === 0) return { leagues: [], results: [] };
 
     const results = await dispatch(
       queryResult({
-        fromDate,
+        eventDate,
         sportType,
         leagueId: leagues[0].leagueId,
       }),
@@ -121,12 +123,7 @@ export const queryLeaguesAndResults = createAsyncThunk<
 
 export const queryExcel = createAsyncThunk<void, ExcelArg>(
   `${actionName}/getExcel`,
-  async (values, { dispatch }) => {
-    if (values.sportType === 0 && values.leagueId === 0) {
-      dispatch(error('Cannot export excel'));
-      return;
-    }
-
+  async (values) => {
     await download(`/api/${actionName}/excel`, values);
   },
 );

@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import Happy5Match from './Happy5Match';
 import { querySoccer5 } from '../reducer';
-import '../Table.scss';
 import { Happy5 } from '../types';
 
 const Happy5Table = () => {

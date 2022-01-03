@@ -1,5 +1,5 @@
 export type ResultArg = {
-  fromDate: string;
+  eventDate: string;
   leagueId: number;
   sportType: number;
 };
@@ -10,11 +10,11 @@ export type ExcelArg = ResultArg & {
 };
 
 export type SportArg = {
-  fromDate: string;
+  eventDate: string;
 };
 
 export type LeagueArg = {
-  fromDate: string;
+  eventDate: string;
   sportType: number;
 };
 
@@ -96,7 +96,7 @@ export type QuerySubmitResponse = {
 };
 
 export type QuerySubmitArg = {
-  fromDate: string;
+  eventDate: string;
 };
 
 export type QueryLeaguesAndResultsResponse = {
@@ -105,6 +105,6 @@ export type QueryLeaguesAndResultsResponse = {
 };
 
 export type QueryLeaguesAndResultsArg = {
-  fromDate: string;
+  eventDate: string;
   sportType: number;
 };

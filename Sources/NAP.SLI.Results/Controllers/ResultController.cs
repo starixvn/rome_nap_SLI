@@ -59,7 +59,7 @@ namespace NAP.SLI.Results.Controllers
             return File(
                 fileContents: fileContents,
                 contentType: ContentTypes.Excel,
-                fileDownloadName: $"{string.Join("-", "Results", request.FromDate.ToDateString(), request.SportName, request.LeagueName)}.xls"
+                fileDownloadName: $"{string.Join("-", "Results", request.EventDate.ToDateString(), request.SportName, request.LeagueName)}.xls"
             );
         }
     }

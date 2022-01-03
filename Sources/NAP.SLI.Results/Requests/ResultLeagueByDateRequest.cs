@@ -7,7 +7,7 @@ namespace NAP.SLI.Results.Requests
 
     public class ResultLeagueByDateRequest : IRequest<IEnumerable<ResultLeagueByDateModel>>
     {
-        public DateTime FromDate { get; set; }
+        public DateTime EventDate { get; set; }
 
         public int SportType { get; set; }
     }
