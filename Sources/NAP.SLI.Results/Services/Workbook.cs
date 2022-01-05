@@ -50,7 +50,7 @@ namespace NAP.SLI.Results.Services
         {
             if (sheet == null)
             {
-                throw new ArgumentNullException(nameof(sheet), "Sheet cannnot be null");
+                throw new ArgumentNullException(nameof(sheet), "Sheet cannot be null");
             }
 
             Workbook.RemoveSheetAt(TemplateSheetIndex);
@@ -68,7 +68,7 @@ namespace NAP.SLI.Results.Services
         {
             if (sheet == null)
             {
-                throw new ArgumentNullException(nameof(sheet), "Sheet cannnot be null");
+                throw new ArgumentNullException(nameof(sheet), "Sheet cannot be null");
             }
 
             currentRowIndex = TemplateInfo.BodyStartIndex;
@@ -92,7 +92,7 @@ namespace NAP.SLI.Results.Services
         {
             if (sheet == null)
             {
-                throw new ArgumentNullException(nameof(sheet), "Sheet cannnot be null");
+                throw new ArgumentNullException(nameof(sheet), "Sheet cannot be null");
             }
 
             var rowIndex = TemplateInfo.BodyStartIndex;

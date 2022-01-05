@@ -5,6 +5,7 @@ namespace NAP.SLI.Results.Tests.Services
     using System.Linq;
     using System.Threading.Tasks;
     using AutoFixture;
+    using Fanex.RemotingRef;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Results.Criteria;
     using NAP.SLI.Results.Models;
@@ -189,19 +190,13 @@ namespace NAP.SLI.Results.Tests.Services
                 });
             }
 
-            // var numberGame = new NumberGameMatch(fetchedResults[0]);
-            var numberGame = (T)Activator.CreateInstance(typeof(T), new object[] { fetchedResults[0] });
+            var match = (T)Activator.CreateInstance(typeof(T), new object[] { fetchedResults[0] });
             for (var i = 1; i < number.Count; i++)
             {
-                numberGame.Seq.Add(seq[i]);
-                numberGame.Ball.Add(number[i]);
+                match.Seq.Add(seq[i]);
+                match.Ball.Add(number[i]);
             }
-
-            var fixture = new Fixture();
-            var expectedResults = fixture.Build<ResultMatch<T>>()
-                                    .With(c => c.LeagueName, leagueName)
-                                    .With(c => c.Matches, new List<T>() { numberGame })
-                                    .CreateMany(1);
+            var expectedResults = new List<ResultMatch<T>> { new ResultMatch<T> { LeagueName = leagueName, Matches = new List<T> { match } } };
 
             return (fetchedResults, expectedResults);
         }
