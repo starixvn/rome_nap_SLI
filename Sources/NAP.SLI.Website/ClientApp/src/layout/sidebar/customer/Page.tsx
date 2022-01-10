@@ -224,11 +224,7 @@ const CustomerPage = () => {
                       tag={RRNavLink}
                       to={{
                         pathname: '/report/bet-list',
-                        state: {
-                          custId,
-                          roleId,
-                          username,
-                        },
+                        search: reportSearchParams,
                       }}
                     >
                       Bet List

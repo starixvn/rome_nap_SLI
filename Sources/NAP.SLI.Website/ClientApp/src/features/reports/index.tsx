@@ -5,6 +5,7 @@ import WinLossDetailPage from './win-loss-detail/Page';
 import MatchWinLossDetailPage from './match-win-loss-detail/Page';
 import WinLossByBetTypePage from './win-loss-by-bet-type/Page';
 import WinLossAnalysisPage from './win-loss-analysis/Page';
+import BetListPage from './bet-list/Page';
 import BetListByDatePage from './bet-list/date/Page';
 import BetListByMatchPage from './bet-list/match/Page';
 import BetListByBetTypePage from './bet-list/match/Page';
@@ -36,6 +37,7 @@ export const ReportsRoutes = () => {
         <Route path="win-loss-by-bet-type" element={<WinLossByBetTypePage />} />
         <Route path="win-loss-analysis" element={<WinLossAnalysisPage />} />
         <Route path="bet-list">
+          <Route index element={<BetListPage />} />
           <Route path="date" element={<BetListByDatePage />} />
           <Route path="match" element={<BetListByMatchPage />} />
           <Route path="bet-type" element={<BetListByBetTypePage />} />

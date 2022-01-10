@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import { query, excel } from './reducer';
 import Title from '../Title';
-import { QueryArg } from './reducer';
 import Table from '../Table';
 import { Spinner } from 'reactstrap';
 import { QueryData } from '../types';
@@ -43,20 +42,15 @@ const Page = () => {
   } = params;
   const isValid = matchId > 0 && betType > 0 && fromDate && toDate;
 
-  const fetchData = async (queryArg: QueryArg) => {
-    const data = await query(queryArg);
-    setData(data);
-  };
-
   useEffect(() => {
     if (isValid) {
-      fetchData({
+      query({
         matchId,
         betType,
         liveIndicator,
         custId,
         roleId,
-      });
+      }).then((data) => setData(data));
     }
   }, [isValid, custId, roleId, betType, liveIndicator, matchId]);
 
@@ -66,6 +60,7 @@ const Page = () => {
 
   const handleExcel = async () => {
     await excel({
+      username,
       matchId,
       betType,
       liveIndicator,

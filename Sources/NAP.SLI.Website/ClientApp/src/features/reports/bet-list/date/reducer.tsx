@@ -1,10 +1,14 @@
 import { download, post } from 'services/http';
 import { QueryData } from '../types';
 
-export type QueryArg = {
+type QueryArg = {
   custId: number;
   fromDate: string;
   toDate: string;
+};
+
+type ExcelArg = QueryArg & {
+  username: string;
 };
 
 const actionName = 'bet-list';
@@ -17,6 +21,6 @@ export const query = async (payload: QueryArg) => {
   return data;
 };
 
-export const excel = async (payload: QueryArg) => {
+export const excel = async (payload: ExcelArg) => {
   return await download(`/api/${actionName}/excel`, payload);
 };

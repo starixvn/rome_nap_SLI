@@ -2,9 +2,8 @@ import { mdiFileExcelOutline } from '@mdi/js';
 import Icon from '@mdi/react';
 import RHFDatePicker from 'components/date-picker/RHFDatePicker';
 import moment, { Moment } from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 import {
   Button,
   Container,
@@ -14,28 +13,33 @@ import {
   Label,
   Spinner,
 } from 'reactstrap';
-import { formatDate, stringDateToMoment } from 'utils/DateUtils';
+import {
+  formatDate,
+  getToday,
+  maxDate,
+  stringDateToMoment,
+} from 'utils/DateUtils';
 import { useCustomerParams } from 'features/reports';
+import { query, excel } from './date/reducer';
+import { QueryData } from './types';
 
 type Props = {
-  maxDate: Moment;
+  setData: (data: QueryData | undefined) => void;
 };
 
-type RadioBtn = 'refno' | 'eventdate';
+type RadioBtn = 'refNo' | 'eventDate';
 
 type FilterValues = {
-  refno: string;
+  refNo: string;
   fromDate: string;
   toDate: string;
   radio: RadioBtn;
 };
 
-const Filter = ({ maxDate }: Props) => {
-  const { custId, roleId, username } = useCustomerParams();
-  // const dispatch = useAppDispatch();
-  const { fromDate, toDate } = useSelector((state: AppState) => state.betList);
+const Filter = ({ setData }: Props) => {
+  const { custId, username } = useCustomerParams();
   const minDate = moment(window.configuration.balanceUpDay);
-
+  const today = getToday();
   const [isLoading, setIsLoading] = useState(false);
   const {
     setValue,
@@ -47,16 +51,12 @@ const Filter = ({ maxDate }: Props) => {
     reset,
   } = useForm<FilterValues>({
     defaultValues: {
-      refno: '',
-      fromDate,
-      toDate,
-      radio: 'refno',
+      refNo: '',
+      fromDate: formatDate(today),
+      toDate: formatDate(today),
+      radio: 'eventDate',
     },
   });
-
-  useEffect(() => {
-    // TODO:
-  }, [custId, fromDate, toDate]);
 
   const handleFromDateChange = (selectedDate: string | Moment) => {
     const selectedFromDate = moment(selectedDate);
@@ -78,63 +78,70 @@ const Filter = ({ maxDate }: Props) => {
     setValue('toDate', formatDate(selectedToDate));
   };
 
-  const handleQuery = async (values: FilterValues) => {
-    const { fromDate, toDate } = values;
-    // const queryPayload = {
-    //   custId,
-    //   fromDate,
-    //   toDate,
-    // };
-    //await dispatch(getByDate(queryPayload));
-  };
+  const handleQuery = useCallback(async () => {
+    const { fromDate, toDate } = getValues();
+    setData(undefined);
+    const data = await query({
+      custId,
+      fromDate,
+      toDate,
+    });
+    setData(data);
+  }, [custId, getValues, setData]);
 
   const handleExcel = async () => {
-    // const excelPayload = {
-    //   custId,
-    //   roleId,
-    //   username,
-    //   fromDate,
-    //   toDate,
-    // };
     setIsLoading(true);
-    // await excel(excelPayload);
+    const { fromDate, toDate } = getValues();
+    await excel({
+      custId,
+      username,
+      fromDate,
+      toDate,
+    });
     setIsLoading(false);
   };
 
+  const handleReset = async () => {
+    reset();
+    await handleQuery();
+  };
+
+  useEffect(() => {
+    handleQuery();
+  }, [handleQuery]);
+
   return (
     <Container fluid className="filter">
-      <Form onSubmit={handleSubmit(handleQuery)}>
+      <Form inline onSubmit={handleSubmit(handleQuery)}>
         <fieldset disabled={isSubmitting}>
-          <FormGroup className="form-inline mb-4">
-            <Label check>
+          <FormGroup className="form-inline mb-3">
+            <Label check className="mr-5">
               <input
                 type="radio"
                 {...register('radio')}
-                value="refno"
+                value="refNo"
                 className="mr-2"
               />
-              By Ref No:{' '}
-              <Controller
-                control={control}
-                name="refno"
-                render={({ field }) => (
-                  <Input className="ml-3" type="text" {...field} />
-                )}
-              />
+              By Ref No
             </Label>
+            <Controller
+              control={control}
+              name="refNo"
+              render={({ field }) => <Input type="text" {...field} />}
+            />
           </FormGroup>
-          <FormGroup className="form-inline mb-4">
-            <Label check>
+          <FormGroup className="form-inline mb-3">
+            <Label check className="mr-5">
               <input
                 type="radio"
                 {...register('radio')}
-                value="eventdate"
+                value="eventDate"
                 className="mr-2"
               />
-              Advance (Event Date):
+              Advance (Event Date)
             </Label>
-            <FormGroup className="ml-3">
-              <Label className="mr-3">From</Label>
+            <FormGroup className="mr-5">
+              <Label className="mr-2">From</Label>
               <Controller
                 control={control}
                 name="fromDate"
@@ -149,8 +156,8 @@ const Filter = ({ maxDate }: Props) => {
                 )}
               />
             </FormGroup>
-            <FormGroup className="ml-3">
-              <Label className="mr-3">To</Label>
+            <FormGroup>
+              <Label className="mr-2">To</Label>
               <Controller
                 control={control}
                 name="toDate"
@@ -167,19 +174,19 @@ const Filter = ({ maxDate }: Props) => {
             </FormGroup>
           </FormGroup>
           <FormGroup className="mr-5">
-            <Button type="submit" color="primary">
+            <Button type="submit" color="primary" className="mr-3">
               {isSubmitting && (
                 <Spinner data-testid="loading" className="mr-3" />
               )}
               Submit
             </Button>
-            <Button color="primary" className="ml-4" onClick={() => reset()}>
+            <Button color="primary" className="mr-3" onClick={handleReset}>
               Reset
             </Button>
             <Button
               type="button"
               color="success"
-              className="btn-excel ml-4"
+              className="btn-excel"
               title="Export to Excel"
               onClick={handleExcel}
               disabled={isLoading}

@@ -4,9 +4,8 @@ import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { useState } from 'react';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
 import { HAPPY5_LINKED_GAME_SPORT_TYPE } from 'utils/ConstantUtils';
-import { getHappy5LinkedGame } from './reducer';
-import './Table.scss';
 import { QueryData } from './types';
+import './Table.scss';
 
 type Props = {
   data: QueryData;
@@ -35,15 +34,15 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
   ) => {
     // Happy5 Linked Games
     if (sporttype === HAPPY5_LINKED_GAME_SPORT_TYPE) {
-      const result = await dispatch(
-        getHappy5LinkedGame({
-          obCustId: betid,
-          tranId3rd: refno,
-          isDesktop: true,
-        }),
-      );
-      const urlRes = unwrapResult(result);
-      setUrl(urlRes);
+      // const result = await dispatch(
+      //   getHappy5LinkedGame({
+      //     obCustId: betid,
+      //     tranId3rd: refno,
+      //     isDesktop: true,
+      //   }),
+      // );
+      // const urlRes = unwrapResult(result);
+      // setUrl(urlRes);
       handleToggle();
     }
   };

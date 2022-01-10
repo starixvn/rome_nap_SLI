@@ -1,7 +1,7 @@
 import { useCustomerParams } from 'features/reports';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { query, excel, QueryArg } from './reducer';
+import { query, excel } from './reducer';
 import Title from '../Title';
 import Table from '../Table';
 import { QueryData } from '../types';
@@ -25,29 +25,32 @@ const usePageParams = () => {
 
 const Page = () => {
   const [data, setData] = useState<QueryData | undefined>(undefined);
-  const { custId, roleId, betType, fromDate, toDate } = usePageParams();
+  const {
+    custId,
+    roleId,
+    betType,
+    fromDate,
+    toDate,
+    username,
+  } = usePageParams();
   const isValid = betType > 0 && fromDate && toDate;
-
-  const fetchData = async (queryArg: QueryArg) => {
-    const data = await query(queryArg);
-    setData(data);
-  };
 
   useEffect(() => {
     if (isValid) {
-      fetchData({
+      query({
         custId,
         roleId,
         betType,
         fromDate,
         toDate,
-      });
+      }).then((data) => setData(data));
     }
   }, [isValid, custId, roleId, betType, fromDate, toDate]);
 
   const handleExcel = async () => {
     await excel({
       betType,
+      username,
       custId,
       roleId,
       fromDate,

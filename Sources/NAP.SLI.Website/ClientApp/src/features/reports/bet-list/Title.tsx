@@ -6,7 +6,7 @@ import { Button, Spinner } from 'reactstrap';
 
 type Props = {
   content: string;
-  handleExcel: () => Promise<void>;
+  handleExcel?: () => Promise<void>;
 };
 
 const Title = ({ content, handleExcel }: Props) => {
@@ -15,14 +15,14 @@ const Title = ({ content, handleExcel }: Props) => {
 
   const exportExcel = async () => {
     setIsLoading(true);
-    await dispatch(async () => await handleExcel());
+    await dispatch(async () => handleExcel && (await handleExcel()));
     setIsLoading(false);
   };
 
   return (
-    <>
-      <div className="page-title">
-        {content}
+    <div className="page-title">
+      {content}
+      {handleExcel && (
         <Button
           type="button"
           color="success"
@@ -37,8 +37,8 @@ const Title = ({ content, handleExcel }: Props) => {
             <Icon path={mdiFileExcelOutline} />
           )}
         </Button>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

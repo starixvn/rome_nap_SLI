@@ -10,7 +10,6 @@ import winLossDetailReducer from 'features/reports/win-loss-detail/reducer';
 import winLossAnalysisReducer from 'features/reports/win-loss-analysis/reducer';
 import winLossByBetTypeReducer from 'features/reports/win-loss-by-bet-type/reducer';
 import matchWinLossDetailReducer from 'features/reports/match-win-loss-detail/reducer';
-import betListReducer from 'features/reports/bet-list/reducer';
 import resultsReducer from 'features/reports/results/reducer';
 import umReducer from 'features/error/UM/reducer';
 import customerSettingViewSuperReducer from 'features/customer-setting/view-super/reducer';
@@ -30,7 +29,6 @@ const appReducer = combineReducers({
   winLossAnalysis: winLossAnalysisReducer,
   winLossByBetType: winLossByBetTypeReducer,
   matchWinLossDetail: matchWinLossDetailReducer,
-  betList: betListReducer,
   results: resultsReducer,
   um: umReducer,
   customerSettingViewSuper: customerSettingViewSuperReducer,

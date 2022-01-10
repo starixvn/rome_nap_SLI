@@ -1,7 +1,7 @@
 import { useCustomerParams } from 'features/reports';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { query, excel, QueryArg } from './reducer';
+import { query, excel } from './reducer';
 import Table from '../Table';
 import Title from '../Title';
 import { QueryData } from '../types';
@@ -26,18 +26,13 @@ const Page = () => {
   const { custId, username, fromDate, toDate } = usePageParams();
   const isValid = fromDate && toDate;
 
-  const fetchData = async (queryArg: QueryArg) => {
-    const data = await query(queryArg);
-    setData(data);
-  };
-
   useEffect(() => {
     if (isValid) {
-      fetchData({
+      query({
         custId,
         fromDate,
         toDate,
-      });
+      }).then((data) => setData(data));
     }
   }, [isValid, custId, fromDate, toDate]);
 
@@ -46,6 +41,7 @@ const Page = () => {
       custId,
       fromDate,
       toDate,
+      username,
     });
   };
 
