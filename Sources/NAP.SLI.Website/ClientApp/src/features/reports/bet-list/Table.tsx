@@ -54,16 +54,28 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
       <Table bordered className="bet-list-table">
         <thead>
           <tr className="text-center">
-            <th className="col-number">No</th>
-            <th className="col-date">Date</th>
-            <th>Choice</th>
-            <th className="col-odds">Odds</th>
-            <th className="col-state">State</th>
-            <th className="col-winloss">Win Loss</th>
-            <th className="col-status">Status</th>
-            <th className="col-pt">SuperPT/Comm</th>
-            <th className="col-pt">MasterPT/Comm</th>
-            <th className="col-pt">AgentPT/Comm</th>
+            <th className="col-number align-middle">No</th>
+            <th className="col-date align-middle">Date</th>
+            <th className="align-middle">Choice</th>
+            <th className="col-odds align-middle">Odds</th>
+            <th className="col-state align-middle">State</th>
+            <th className="col-winloss align-middle">Win Loss</th>
+            <th className="col-status align-middle">Status</th>
+            <th className="col-pt align-middle">
+              Super
+              <br />
+              PT/Comm
+            </th>
+            <th className="col-pt align-middle">
+              Master
+              <br />
+              PT/Comm
+            </th>
+            <th className="col-pt align-middle">
+              Agent
+              <br />
+              PT/Comm
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -77,57 +89,57 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
             <>
               {Tickets.map((ticket, index: number) => (
                 <tr key={index}>
-                  <td className="text-right">{index + 1}</td>
+                  <td className="text-center align-middle">{index + 1}</td>
                   <td
-                    className="text-center"
+                    className="text-center align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.TransDateHtml,
                     }}
                   />
                   <td
-                    className="text-right"
+                    className="text-right align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.ChoiceHtml,
                     }}
                   />
                   <td
-                    className="text-right"
+                    className="text-right align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.OddHtml,
                     }}
                   />
                   <td
-                    className="text-right"
+                    className="text-right align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.StakeHtml,
                     }}
                   />
                   <td
-                    className="text-right font-weight-bold"
+                    className="text-right font-weight-bold align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.WinLossHtml,
                     }}
                   />
                   <td
-                    className="text-center"
+                    className="text-center align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.StatusHtml,
                     }}
                   />
                   <td
-                    className="text-right bg-gray"
+                    className="text-right bg-gray align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.SuperPTComHtml,
                     }}
                   />
                   <td
-                    className="text-right bg-gray"
+                    className="text-right bg-gray align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.MasterPTComHtml,
                     }}
                   />
                   <td
-                    className="text-right bg-gray"
+                    className="text-right bg-gray align-middle"
                     dangerouslySetInnerHTML={{
                       __html: ticket.AgentPTComHtml,
                     }}
