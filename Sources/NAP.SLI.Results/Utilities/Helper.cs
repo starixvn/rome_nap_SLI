@@ -3,11 +3,11 @@ namespace NAP.SLI.Results.Utilities
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Text;
+    using System.Linq;
 
     public static class Helper
     {
-        private static readonly CultureInfo Cult = new("en-US");
+        private static readonly CultureInfo EnglishCultureInfo = new("en-US");
 
         public static void CheckArgument(string arg, string argName)
         {
@@ -17,16 +17,9 @@ namespace NAP.SLI.Results.Utilities
             }
         }
 
-        public static string DictionaryToString(Dictionary<string, string> dictionary)
+        public static string ConvertToQueryString(Dictionary<string, string> dictionary)
         {
-            var dictionaryString = new StringBuilder();
-
-            foreach (KeyValuePair<string, string> keyValues in dictionary)
-            {
-                dictionaryString.Append($"{keyValues.Key}={keyValues.Value}&");
-            }
-
-            return dictionaryString.ToString();
+            return string.Join("&", dictionary.Select(kvp => string.Format("{0}={1}", kvp.Key, kvp.Value)));
         }
 
         public static string FormatTwoDigit(int number)
@@ -34,19 +27,19 @@ namespace NAP.SLI.Results.Utilities
             return number.ToString("00");
         }
 
-        public static string FullDateFormat(object dateValue, string formatPattern)
+        public static string FormatFullDate(object dateValue, string formatPattern)
         {
             if (Convert.IsDBNull(dateValue) || dateValue == null)
             {
                 return string.Empty;
             }
 
-            return string.Format(Cult, formatPattern, dateValue);
+            return string.Format(EnglishCultureInfo, formatPattern, dateValue);
         }
 
         public static string Capitalize(string value)
         {
-            var textInfo = Cult.TextInfo;
+            var textInfo = EnglishCultureInfo.TextInfo;
             return textInfo.ToTitleCase(value);
         }
     }

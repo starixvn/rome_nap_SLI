@@ -3,7 +3,9 @@
   "search.exclude": {
     "**/libs/*.js": true
   },
+  "jest.autoRun": {
+    "onStartup": []
+  }
   // "jest.pathToJest": "npm test -- --coverage --updateSnapshot",
-  // "jest.autoEnable": false,
   // "jest.debugMode": true,
 }

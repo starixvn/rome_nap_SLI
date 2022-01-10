@@ -11,7 +11,7 @@ import { Happy5 } from '../types';
 const Happy5Table = () => {
   const dispatch = useAppDispatch();
   const {
-    results,
+    records,
     isResultLoading,
     isLeagueLoading,
     isSportLoading,
@@ -43,7 +43,7 @@ const Happy5Table = () => {
       <Table bordered striped hover>
         <thead>
           <tr className="text-center">
-            <th className="col-kick-off">Kick Off. Time</th>
+            <th className="col-ko-time">Kick Off. Time</th>
             <th>Match</th>
             <th className="col-result">Result</th>
             <th className="col-total">Total</th>
@@ -57,17 +57,17 @@ const Happy5Table = () => {
           </tr>
         </thead>
         <tbody>
-          {results.length === 0 ? (
+          {records.length === 0 ? (
             <tr>
               <td className="text-center" colSpan={11}>
                 There is no information
               </td>
             </tr>
           ) : (
-            results.map((league, index) => (
+            records.map((league, index) => (
               <Fragment key={`${index}_${league.leagueName}`}>
                 <tr>
-                  <td className="font-weight-bold pl-5" colSpan={11}>
+                  <td className="col-league" colSpan={11}>
                     {league.leagueName}
                   </td>
                 </tr>

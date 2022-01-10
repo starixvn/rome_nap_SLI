@@ -6,7 +6,7 @@ import { NumberGame } from '../types';
 
 const NumberGameTable = () => {
   const {
-    results,
+    records: results,
     isResultLoading,
     isLeagueLoading,
     isSportLoading,
@@ -18,7 +18,7 @@ const NumberGameTable = () => {
     <Table bordered striped hover>
       <thead>
         <tr className="text-center">
-          <th className="col-kick-off">Kick Off. Time</th>
+          <th className="col-ko-time">Kick Off. Time</th>
           <th>Match</th>
           <th className="col-oeft">FT.O/E</th>
           <th className="col-1st-ball">1st Ball</th>
@@ -38,7 +38,7 @@ const NumberGameTable = () => {
           results.map((league, index) => (
             <Fragment key={`${index}_${league.leagueName}`}>
               <tr>
-                <td className="font-weight-bold pl-5" colSpan={8}>
+                <td className="col-league" colSpan={8}>
                   {league.leagueName}
                 </td>
               </tr>

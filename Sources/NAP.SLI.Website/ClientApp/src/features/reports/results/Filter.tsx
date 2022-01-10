@@ -25,7 +25,7 @@ import {
   getYesterday,
   maxDate,
 } from 'utils/DateUtils';
-import { SHOW_ALL_LEAGUES } from '../../../utils/ConstantUtils';
+import { SHOW_ALL_LEAGUES } from 'utils/ConstantUtils';
 import {
   queryLeaguesAndResults,
   querySubmit,
@@ -152,76 +152,77 @@ const Filter = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit(handleQuery)} className="mb-4">
-      <fieldset disabled={isSubmitting}>
-        <Container fluid className="filter">
-          <div className="form-inline">
-            <FormGroup className="mb-4">
-              <Label className="mr-3">Date: </Label>
-              <Controller
-                control={control}
-                name="eventDate"
-                render={({ field }) => (
-                  <RHFDatePicker
-                    {...field}
-                    onChange={handleDateChange}
-                    disabled={isSubmitting}
-                    minDate={moment(window.configuration.balanceUpDay)}
-                    maxDate={maxDate}
-                  />
-                )}
-              />
-            </FormGroup>
-            <FormGroup className="ml-3 mb-4" type="submit">
-              <Button color="primary">
-                {isSubmitting && <Spinner className="mr-3" />}
-                Submit
-              </Button>
-            </FormGroup>
-            <FormGroup className="ml-3 mb-4">
-              <Button
-                color="primary"
-                onClick={() => handleDateButtonClick(today)}
-              >
-                {today}
-              </Button>
-            </FormGroup>
-            <FormGroup className="ml-3 mb-4">
-              <Button
-                color="primary"
-                onClick={() => handleDateButtonClick(yesterday)}
-              >
-                {yesterday}
-              </Button>
-            </FormGroup>
-            {getValues('sportType') !== 0 && (
-              <FormGroup className="ml-3 mb-4">
-                <Button
-                  type="button"
-                  color="success"
-                  className="btn-excel"
-                  title="Export to Excel"
-                  onClick={handleExcel}
-                  disabled={isExcelLoading}
-                >
-                  {isExcelLoading ? (
-                    <Spinner />
-                  ) : (
-                    <Icon path={mdiFileExcelOutline} />
-                  )}
-                </Button>
-              </FormGroup>
-            )}
-          </div>
-          <div>
-            You can view the report data from{' '}
-            {getDate(window.configuration.balanceUpDay)}.
-          </div>
-        </Container>
-        {sports.length > 0 && leagues.length > 0 ? (
-          <div className="form-inline">
+    <Container fluid className="filter">
+      <Form onSubmit={handleSubmit(handleQuery)}>
+        <fieldset
+          className="form-inline mb-3"
+          disabled={isSubmitting || isSportLoading || isLeagueLoading}
+        >
+          <FormGroup className="mr-5">
+            <Label className="mr-2">Date</Label>
+            <Controller
+              control={control}
+              name="eventDate"
+              render={({ field }) => (
+                <RHFDatePicker
+                  {...field}
+                  onChange={handleDateChange}
+                  disabled={isSubmitting}
+                  minDate={moment(window.configuration.balanceUpDay)}
+                  maxDate={maxDate}
+                />
+              )}
+            />
+          </FormGroup>
+          <FormGroup className="mr-3" type="submit">
+            <Button color="primary">
+              {isSubmitting && <Spinner className="mr-3" />}
+              Submit
+            </Button>
+          </FormGroup>
+          <FormGroup className="mr-3">
+            <Button
+              color="primary"
+              onClick={() => handleDateButtonClick(today)}
+            >
+              {today}
+            </Button>
+          </FormGroup>
+          <FormGroup className="mr-5">
+            <Button
+              color="primary"
+              onClick={() => handleDateButtonClick(yesterday)}
+            >
+              {yesterday}
+            </Button>
+          </FormGroup>
+          {getValues('sportType') !== 0 && (
             <FormGroup>
-              <Label className="mr-3">Sport</Label>
+              <Button
+                type="button"
+                color="success"
+                className="btn-excel"
+                title="Export to Excel"
+                onClick={handleExcel}
+                disabled={isExcelLoading}
+              >
+                {isExcelLoading ? (
+                  <Spinner />
+                ) : (
+                  <Icon path={mdiFileExcelOutline} />
+                )}
+              </Button>
+            </FormGroup>
+          )}
+        </fieldset>
+        <div>
+          You can view the report data from{' '}
+          {getDate(window.configuration.balanceUpDay)}.
+        </div>
+        {sports.length > 0 && leagues.length > 0 && (
+          <fieldset disabled={isSubmitting} className="form-inline mt-3">
+            <FormGroup className="mr-5">
+              <Label className="mr-2">Sport</Label>
               <Dropdown
                 isOpen={sportDropdownOpen}
                 toggle={() => setSportDropdownOpen(!sportDropdownOpen)}
@@ -245,8 +246,8 @@ const Filter = () => {
                 </DropdownMenu>
               </Dropdown>
             </FormGroup>
-            <FormGroup className="ml-5">
-              <Label className="mr-3">League</Label>
+            <FormGroup>
+              <Label className="mr-2">League</Label>
               <Dropdown
                 isOpen={leagueDropdownOpen}
                 toggle={() => setLeagueDropdownOpen(!leagueDropdownOpen)}
@@ -273,10 +274,10 @@ const Filter = () => {
                 </DropdownMenu>
               </Dropdown>
             </FormGroup>
-          </div>
-        ) : null}
-      </fieldset>
-    </Form>
+          </fieldset>
+        )}
+      </Form>
+    </Container>
   );
 };
 

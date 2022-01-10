@@ -9,7 +9,7 @@ import {
   QuerySubmitArg,
   QuerySubmitResponse,
   ResultArg,
-  ResultRecord,
+  Record,
   Soccer5Arg,
   Sport,
   SportArg,
@@ -21,7 +21,7 @@ const actionName = 'result';
 const initialState: State = {
   sports: [],
   leagues: [],
-  results: [],
+  records: [],
   selectedSportType: 0,
   isSportLoading: false,
   isLeagueLoading: false,
@@ -52,10 +52,10 @@ const queryLeagueByDate = createAsyncThunk<League[], LeagueArg>(
   },
 );
 
-export const queryResult = createAsyncThunk<ResultRecord[], ResultArg>(
+export const queryResult = createAsyncThunk<Record[], ResultArg>(
   `${actionName}/getResult`,
   async (values) => {
-    const { data } = await post<ResultRecord[]>(
+    const { data } = await post<Record[]>(
       `/api/${actionName}/getResult`,
       values,
     );
@@ -146,41 +146,41 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(querySportByDate.pending, (state) => {
       state.isSportLoading = true;
-      state.results = [];
+      state.records = [];
     });
     builder.addCase(querySportByDate.fulfilled, (state, { payload }) => {
+      state.isSportLoading = false;
       state.sports = payload;
       state.selectedSportType = payload[0]?.sportType ?? 0;
-      state.isSportLoading = false;
     });
 
     builder.addCase(queryLeagueByDate.pending, (state, { meta }) => {
       state.isLeagueLoading = true;
       state.selectedSportType = meta.arg.sportType;
-      state.results = [];
+      state.records = [];
     });
     builder.addCase(queryLeagueByDate.fulfilled, (state, { payload }) => {
-      state.leagues = payload;
       state.isLeagueLoading = false;
+      state.leagues = payload;
     });
 
     builder.addCase(queryResult.pending, (state) => {
       state.isResultLoading = true;
-      state.results = [];
+      state.records = [];
     });
     builder.addCase(queryResult.fulfilled, (state, { payload }) => {
-      state.results = payload;
       state.isResultLoading = false;
+      state.records = payload;
     });
 
     builder.addCase(queryLeaguesAndResults.fulfilled, (state, { payload }) => {
       state.leagues = payload.leagues;
-      state.results = payload.results;
+      state.records = payload.results;
     });
     builder.addCase(querySubmit.fulfilled, (state, { payload }) => {
       state.sports = payload.sports;
       state.leagues = payload.leagues;
-      state.results = payload.results;
+      state.records = payload.results;
     });
 
     builder.addCase(queryExcel.pending, (state) => {

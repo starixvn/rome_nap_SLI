@@ -57,7 +57,7 @@ export type Happy5 = Match & {
   eventStatusIsRefund: boolean;
 };
 
-export type ResultRecord = {
+export type Record = {
   leagueName: string;
   matches: Array<NumberGame | Happy5>;
 };
@@ -80,7 +80,7 @@ export type League = {
 export type State = {
   sports: Sport[];
   leagues: League[];
-  results: ResultRecord[];
+  records: Record[];
   selectedSportType: number;
   isSportLoading: boolean;
   isLeagueLoading: boolean;
@@ -92,7 +92,7 @@ export type State = {
 export type QuerySubmitResponse = {
   sports: Sport[];
   leagues: League[];
-  results: ResultRecord[];
+  results: Record[];
 };
 
 export type QuerySubmitArg = {
@@ -101,7 +101,7 @@ export type QuerySubmitArg = {
 
 export type QueryLeaguesAndResultsResponse = {
   leagues: League[];
-  results: ResultRecord[];
+  results: Record[];
 };
 
 export type QueryLeaguesAndResultsArg = {

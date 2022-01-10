@@ -79,7 +79,7 @@ namespace NAP.SLI.Results.Services
                     else
                     {
                         throw new Exception($"Url of LinkedGames send request incorrectly! Detail request:" +
-                            $" {Helper.DictionaryToString(requestData)}; \n Detail response: {serializer.Serialize(responseData)}");
+                            $" {Helper.ConvertToQueryString(requestData)}; \n Detail response: {serializer.Serialize(responseData)}");
                     }
                 }
 
@@ -99,7 +99,7 @@ namespace NAP.SLI.Results.Services
             }
             else
             {
-                return $"{appSettings.ResultsConfigs.UrlSoccer5}?{Helper.DictionaryToString(requestData)}";
+                return $"{appSettings.ResultsConfigs.UrlSoccer5}?{Helper.ConvertToQueryString(requestData)}";
             }
 
             Dictionary<string, string> GenerateRequestData()

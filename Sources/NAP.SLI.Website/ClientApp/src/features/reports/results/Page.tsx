@@ -7,6 +7,7 @@ import {
 import Filter from './Filter';
 import Happy5Table from './happy5/Happy5Table';
 import NumberGameTable from './numberGame/NumberGameTable';
+import EmptyTable from './components/EmptyTable';
 import './Page.scss';
 
 const getTableBySportType = (sportType: number) => {
@@ -15,23 +16,25 @@ const getTableBySportType = (sportType: number) => {
       return <NumberGameTable />;
     case HAPPY5_SPORT_TYPE:
       return <Happy5Table />;
+    default:
+      return <EmptyTable />;
   }
 };
 
-const ResultsPage = () => {
-  const { sports, leagues, selectedSportType } = useSelector(
+const Page = () => {
+  const { isSportLoading, isLeagueLoading, selectedSportType } = useSelector(
     (state: AppState) => state.results,
   );
+
+  const isLoading = isSportLoading || isLeagueLoading;
 
   return (
     <div className="result-page">
       <div className="page-title">Results</div>
       <Filter />
-      {sports.length > 0 &&
-        leagues.length > 0 &&
-        getTableBySportType(selectedSportType)}
+      {!isLoading && getTableBySportType(selectedSportType)}
     </div>
   );
 };
 
-export default ResultsPage;
+export default Page;

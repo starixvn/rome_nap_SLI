@@ -54,6 +54,6 @@ namespace NAP.SLI.Results.Models
         public List<int> Ball { get; }
 
         private static string GetFormatedKickOffTime(DateTime kickOffTime)
-            => Helper.FullDateFormat(kickOffTime, DateTimeFormat);
+            => Helper.FormatFullDate(kickOffTime, DateTimeFormat);
     }
 }

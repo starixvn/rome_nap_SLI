@@ -5,6 +5,7 @@ namespace NAP.SLI.Results.Utilities
     public static class Language
     {
         private const string DefaultLanguage = "en-US";
+
         private static readonly Dictionary<string, string> SupportedLanguages = new()
         {
             { "en-US", "en" },

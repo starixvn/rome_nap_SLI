@@ -25,12 +25,15 @@
   background-position: 0 -60px;
 }
 
-.col-kick-off {
-  width: 120px;
+.col-league {
+  background-color: #f8f1e9;
+  font-weight: bold;
+  padding-left: 1rem !important;
 }
 
-.col-status {
-  width: 140px;
+.col-status,
+.col-ko-time {
+  width: 120px;
 }
 
 // Number Game
@@ -39,7 +42,7 @@
 .col-1st-ball,
 .col-2nd-ball,
 .col-3rd-ball {
-  width: 110px;
+  width: 80px;
 }
 
 // Happy 5
