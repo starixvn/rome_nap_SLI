@@ -4,7 +4,7 @@ import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
-import Happy5Match from './Happy5Match';
+import Happy5Match from './Match';
 import { querySoccer5 } from '../reducer';
 import { Happy5 } from '../types';
 

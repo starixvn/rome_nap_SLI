@@ -6,7 +6,7 @@ type Props = {
   match: NumberGame;
 };
 
-const NumberGameMatch = ({ match }: Props) => {
+const Match = ({ match }: Props) => {
   return (
     <tr>
       <td className="text-center new-line">{match.kickOffTime}</td>
@@ -28,4 +28,4 @@ const NumberGameMatch = ({ match }: Props) => {
   );
 };
 
-export default NumberGameMatch;
+export default Match;

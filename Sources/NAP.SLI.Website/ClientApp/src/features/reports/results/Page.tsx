@@ -5,8 +5,8 @@ import {
   NUMBER_GAME_SPORT_TYPE,
 } from '../../../utils/ConstantUtils';
 import Filter from './Filter';
-import Happy5Table from './happy5/Happy5Table';
-import NumberGameTable from './numberGame/NumberGameTable';
+import Happy5Table from './happy5/Table';
+import NumberGameTable from './number-game/Table';
 import EmptyTable from './components/EmptyTable';
 import './Page.scss';
 

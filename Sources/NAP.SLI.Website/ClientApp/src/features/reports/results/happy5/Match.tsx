@@ -7,7 +7,7 @@ type Props = {
   onSoccer5Click: (matchId: number, balls: string) => void;
 };
 
-const Happy5Match = ({ match, onSoccer5Click }: Props) => {
+const Match = ({ match, onSoccer5Click }: Props) => {
   return (
     <tr>
       <td className="text-center new-line">{match.kickOffTime}</td>
@@ -46,4 +46,4 @@ const Happy5Match = ({ match, onSoccer5Click }: Props) => {
   );
 };
 
-export default Happy5Match;
+export default Match;
