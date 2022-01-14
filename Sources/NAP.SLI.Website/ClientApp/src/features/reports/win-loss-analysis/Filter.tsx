@@ -50,18 +50,23 @@ const Filter = () => {
     await dispatch(excel(excelPayload));
   };
 
+  const minDate = moment(window.configuration.balanceUpDay);
   const reportTypes = [ReportType.Daily, ReportType.Monthly, ReportType.Sport];
+
   return (
     <Container fluid className="filter">
       <ReportFilter
         customKey={reportType.toString()}
-        minDate={moment(window.configuration.balanceUpDay)}
+        minDate={minDate}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}
         toDate={stringDateToMoment(toDate)}
         onQuery={handleQuery}
         onExcel={handleExcel}
       />
+      <div className="mb-3">
+        You can view the report data from {formatDate(minDate)}
+      </div>
       <div>
         <span className="mr-4">Report By</span>
         {reportTypes.map((type, index) => (

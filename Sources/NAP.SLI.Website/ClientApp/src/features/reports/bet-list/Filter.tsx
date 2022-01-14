@@ -16,11 +16,12 @@ import {
 import {
   formatDate,
   getToday,
+  minDate,
   maxDate,
   stringDateToMoment,
 } from 'utils/DateUtils';
 import { useCustomerParams } from 'features/reports';
-import * as dateService from './date/service';
+import * as betTypeService from './bet-type/service';
 import * as refNoService from './ref-no/service';
 import { QueryData } from './types';
 
@@ -38,8 +39,8 @@ type FilterValues = {
 };
 
 const Filter = ({ setData }: Props) => {
-  const { custId, username } = useCustomerParams();
-  const minDate = moment(window.configuration.balanceUpDay);
+  const { custId, roleId, username } = useCustomerParams();
+  const betType = 0;
   const today = getToday();
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -84,27 +85,31 @@ const Filter = ({ setData }: Props) => {
     setData(undefined);
     const data =
       option === 'date'
-        ? await dateService.query({
+        ? await betTypeService.query({
             custId,
+            roleId,
             fromDate,
             toDate,
+            betType,
           })
         : await refNoService.query({
             custId,
             refNo: parseInt(refNo),
           });
     setData(data);
-  }, [custId, getValues, setData]);
+  }, [custId, roleId, getValues, setData]);
 
   const handleExcel = async () => {
     setIsLoading(true);
     const { fromDate, toDate, option, refNo } = getValues();
     option === 'date'
-      ? await dateService.excel({
+      ? await betTypeService.excel({
           custId,
+          roleId,
           username,
           fromDate,
           toDate,
+          betType,
         })
       : await refNoService.excel({
           custId,
@@ -162,7 +167,7 @@ const Filter = ({ setData }: Props) => {
                   <RHFDatePicker
                     {...field}
                     onChange={(value) => handleFromDateChange(value)}
-                    minDate={moment(minDate)}
+                    minDate={minDate}
                     maxDate={maxDate}
                     disabled={isSubmitting}
                   />
@@ -178,7 +183,7 @@ const Filter = ({ setData }: Props) => {
                   <RHFDatePicker
                     {...field}
                     onChange={(value) => handleToDateChange(value)}
-                    minDate={moment(minDate)}
+                    minDate={minDate}
                     maxDate={maxDate}
                     disabled={isSubmitting}
                   />
