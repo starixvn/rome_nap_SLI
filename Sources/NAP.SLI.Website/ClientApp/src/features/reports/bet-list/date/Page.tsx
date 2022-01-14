@@ -1,7 +1,7 @@
 import { useCustomerParams } from 'features/reports';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { query, excel } from './reducer';
+import { query, excel } from './service';
 import Table from '../Table';
 import Title from '../Title';
 import { QueryData } from '../types';

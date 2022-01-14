@@ -50,7 +50,7 @@ const MonthPicker = (props: Props) => {
             onClick: () => handleOnChange(moment(value).subtract(1, 'months')),
           })}
         >
-          <InputGroupText>
+          <InputGroupText className={!isAllowPreviousMonth ? 'disabled' : ''}>
             <Icon path={mdiArrowLeftBold} />
           </InputGroupText>
         </InputGroupAddon>
@@ -63,7 +63,7 @@ const MonthPicker = (props: Props) => {
             onClick: () => handleOnChange(moment(value).add(1, 'months')),
           })}
         >
-          <InputGroupText>
+          <InputGroupText className={!isAllowNextMonth ? 'disabled' : ''}>
             <Icon path={mdiArrowRightBold} />
           </InputGroupText>
         </InputGroupAddon>

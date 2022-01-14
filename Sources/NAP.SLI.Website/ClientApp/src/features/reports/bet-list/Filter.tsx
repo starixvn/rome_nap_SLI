@@ -20,20 +20,21 @@ import {
   stringDateToMoment,
 } from 'utils/DateUtils';
 import { useCustomerParams } from 'features/reports';
-import { query, excel } from './date/reducer';
+import * as dateService from './date/service';
+import * as refNoService from './ref-no/service';
 import { QueryData } from './types';
 
 type Props = {
   setData: (data: QueryData | undefined) => void;
 };
 
-type RadioBtn = 'refNo' | 'eventDate';
+type Option = 'refNo' | 'date';
 
 type FilterValues = {
   refNo: string;
   fromDate: string;
   toDate: string;
-  radio: RadioBtn;
+  option: Option;
 };
 
 const Filter = ({ setData }: Props) => {
@@ -54,7 +55,7 @@ const Filter = ({ setData }: Props) => {
       refNo: '',
       fromDate: formatDate(today),
       toDate: formatDate(today),
-      radio: 'eventDate',
+      option: 'date',
     },
   });
 
@@ -79,25 +80,37 @@ const Filter = ({ setData }: Props) => {
   };
 
   const handleQuery = useCallback(async () => {
-    const { fromDate, toDate } = getValues();
+    const { fromDate, toDate, option, refNo } = getValues();
     setData(undefined);
-    const data = await query({
-      custId,
-      fromDate,
-      toDate,
-    });
+    const data =
+      option === 'date'
+        ? await dateService.query({
+            custId,
+            fromDate,
+            toDate,
+          })
+        : await refNoService.query({
+            custId,
+            refNo: parseInt(refNo),
+          });
     setData(data);
   }, [custId, getValues, setData]);
 
   const handleExcel = async () => {
     setIsLoading(true);
-    const { fromDate, toDate } = getValues();
-    await excel({
-      custId,
-      username,
-      fromDate,
-      toDate,
-    });
+    const { fromDate, toDate, option, refNo } = getValues();
+    option === 'date'
+      ? await dateService.excel({
+          custId,
+          username,
+          fromDate,
+          toDate,
+        })
+      : await refNoService.excel({
+          custId,
+          username,
+          refNo: parseInt(refNo),
+        });
     setIsLoading(false);
   };
 
@@ -114,11 +127,11 @@ const Filter = ({ setData }: Props) => {
     <Container fluid className="filter">
       <Form inline onSubmit={handleSubmit(handleQuery)}>
         <fieldset disabled={isSubmitting}>
-          <FormGroup className="form-inline mb-3">
+          {/* <FormGroup inline className="mb-3">
             <Label check className="mr-5">
               <input
                 type="radio"
-                {...register('radio')}
+                {...register('option')}
                 value="refNo"
                 className="mr-2"
               />
@@ -129,13 +142,13 @@ const Filter = ({ setData }: Props) => {
               name="refNo"
               render={({ field }) => <Input type="text" {...field} />}
             />
-          </FormGroup>
-          <FormGroup className="form-inline mb-3">
+          </FormGroup> */}
+          <FormGroup inline className="mb-3">
             <Label check className="mr-5">
               <input
                 type="radio"
-                {...register('radio')}
-                value="eventDate"
+                {...register('option')}
+                value="date"
                 className="mr-2"
               />
               Advance (Event Date)

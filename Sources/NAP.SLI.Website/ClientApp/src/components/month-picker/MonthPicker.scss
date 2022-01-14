@@ -13,4 +13,11 @@
       background-color: inherit;
     }
   }
+
+  .input-group-text {
+    &.disabled {
+      cursor: not-allowed;
+      color: #999999;
+    }
+  }
 }
