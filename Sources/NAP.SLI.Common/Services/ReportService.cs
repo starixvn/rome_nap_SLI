@@ -65,8 +65,8 @@
             return betType switch
             {
                 (int)BetTypes.OverUnder => sharedLocalizer["Next"] + " " + betTypeName + " (" + sharedLocalizer["NumberGame"] + ")",
-                (int)BetTypes.OddEven => liveIndicator ? sharedLocalizer["Next"] : sharedLocalizer["FT"] + ". " + betTypeName + " (" + sharedLocalizer["NumberGame"] + ")",
-                (int)BetTypes.NumberWheel => liveIndicator ? sharedLocalizer["LiveGame"] : sharedLocalizer["PreGame"] + ". " + betTypeName + " (" + sharedLocalizer["NumberGame"] + ")",
+                (int)BetTypes.OddEven => (liveIndicator ? (sharedLocalizer["Next"] + " ") : (sharedLocalizer["FT"] + ". ")) + betTypeName + " (" + sharedLocalizer["NumberGame"] + ")",
+                (int)BetTypes.NumberWheel => betTypeName + " (" + (liveIndicator ? sharedLocalizer["LiveGame"] : sharedLocalizer["PreGame"]) + ")",
                 _ => betTypeName,
             };
         }
