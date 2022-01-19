@@ -9,7 +9,6 @@ import Happy5Table from './happy5/Table';
 import NumberGameTable from './number-game/Table';
 import EmptyTable from './components/EmptyTable';
 import './Page.scss';
-import { useCustomerParams } from '..';
 
 const getTableBySportType = (sportType: number) => {
   switch (sportType) {
@@ -26,13 +25,12 @@ const Page = () => {
   const { isSportLoading, isLeagueLoading, selectedSportType } = useSelector(
     (state: AppState) => state.results,
   );
-  const { username } = useCustomerParams();
 
   const isLoading = isSportLoading || isLeagueLoading;
 
   return (
     <div className="result-page">
-      <div className="page-title">Results ({username})</div>
+      <div className="page-title">Results</div>
       <Filter />
       {!isLoading && getTableBySportType(selectedSportType)}
     </div>
