@@ -49,7 +49,7 @@
 
         public override void CalculateCompanyWinLoss(AgentRecord source, AgentRecordEx destination)
         {
-            destination.CompanyWinLoss = -source.MemberWinLoss + source.AgentWinLoss;
+            destination.CompanyWinLoss = -(source.MemberWinLoss + source.AgentWinLoss);
         }
     }
 
@@ -62,7 +62,7 @@
 
         public override void CalculateCompanyWinLoss(MasterRecord source, MasterRecordEx destination)
         {
-            destination.CompanyWinLoss = -source.MemberWinLoss + source.AgentWinLoss + source.MasterWinLoss;
+            destination.CompanyWinLoss = -(source.MemberWinLoss + source.AgentWinLoss + source.MasterWinLoss);
         }
     }
 
@@ -75,7 +75,7 @@
 
         public override void CalculateCompanyWinLoss(SuperRecord source, SuperRecordEx destination)
         {
-            destination.CompanyWinLoss = -source.MemberWinLoss + source.AgentWinLoss + source.MasterWinLoss + source.SuperWinLoss;
+            destination.CompanyWinLoss = -(source.MemberWinLoss + source.AgentWinLoss + source.MasterWinLoss + source.SuperWinLoss);
         }
     }
 }

@@ -50,7 +50,9 @@ const Filter = () => {
     await dispatch(excel(excelPayload));
   };
 
-  const minDate = moment(window.configuration.balanceUpDay);
+  const minDate = moment(window.configuration.today)
+    .subtract(18, 'months')
+    .startOf('month');
   const reportTypes = [ReportType.Daily, ReportType.Monthly, ReportType.Sport];
 
   return (

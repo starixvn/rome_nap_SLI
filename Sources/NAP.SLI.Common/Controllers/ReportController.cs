@@ -20,12 +20,20 @@
             this.reportService = reportService;
         }
 
-        /// <summary>Bettype Name</summary>
-        [HttpGet("[action]")]
+        /// <summary>Bet Type Name</summary>
+        [HttpPost("[action]")]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-        public ActionResult BetTypeName(IEnumerable<int> betTypes)
+        public ActionResult BetTypeNames(IEnumerable<int> betTypes)
         {
-            return Ok(reportService.GetBetTypeName(betTypes));
+            return Ok(reportService.GetBetTypeNames(betTypes));
+        }
+
+        /// <summary>Sport Type Name</summary>
+        [HttpPost("[action]")]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        public ActionResult SportTypeNames(IEnumerable<int> sportTypes)
+        {
+            return Ok(reportService.GetSportTypeNames(sportTypes));
         }
     }
 }

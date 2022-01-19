@@ -13,7 +13,8 @@
     public interface IReportService
     {
         Task<BalanceUpDayModel> GetBalanceUpDay();
-        IEnumerable<string> GetBetTypeName(IEnumerable<int> betTypes);
+        IEnumerable<string> GetBetTypeNames(IEnumerable<int> betTypes);
+        IEnumerable<string> GetSportTypeNames(IEnumerable<int> sportTypes);
     }
 
     public class ReportService : IReportService
@@ -43,10 +44,16 @@
             }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
         }
 
-        public IEnumerable<string> GetBetTypeName(IEnumerable<int> betTypes)
+        public IEnumerable<string> GetBetTypeNames(IEnumerable<int> betTypes)
         {
             var languageCode = currentContextService.GetLanguageCode();
             return betTypes.Select(x => remotingRefService.GetBetTypeName(x.ToString(), languageCode));
+        }
+
+        public IEnumerable<string> GetSportTypeNames(IEnumerable<int> sportTypes)
+        {
+            var languageCode = currentContextService.GetLanguageCode();
+            return sportTypes.Select(x => remotingRefService.GetSportName(x.ToString(), languageCode));
         }
     }
 }

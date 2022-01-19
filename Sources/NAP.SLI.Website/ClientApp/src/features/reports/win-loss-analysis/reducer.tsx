@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { formatDate, getToday } from 'utils/DateUtils';
 import { post, download } from 'services/http';
+import { getSportTypeNames } from 'services/resources';
 
 export enum ReportType {
   Daily = 1,
@@ -73,6 +74,15 @@ export const query = createAsyncThunk<QueryData, QueryProps>(
   `${actionName}/query`,
   async (values) => {
     const { data } = await post<QueryData>(`/api/${actionName}/query`, values);
+    if (data.records.length > 0 && values.reportType === ReportType.Sport) {
+      const sportTypes = data.records
+        .map((x) => parseInt(x.rollupKey))
+        .filter((v, i, a) => a.indexOf(v) == i);
+      const resources = await getSportTypeNames(sportTypes);
+      data.records.forEach(
+        (x) => (x.rollupKey = resources[parseInt(x.rollupKey)]),
+      );
+    }
     return data;
   },
 );

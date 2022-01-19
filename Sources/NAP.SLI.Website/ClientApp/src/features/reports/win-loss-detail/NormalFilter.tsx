@@ -1,15 +1,11 @@
 import { useAppDispatch } from 'app/store';
 import ReportFilter from 'components/report-filter/ReportFilter';
+import moment from 'moment';
 import { Moment } from 'moment';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Container } from 'reactstrap';
-import {
-  formatDate,
-  getToday,
-  maxDate,
-  stringDateToMoment,
-} from 'utils/DateUtils';
+import { formatDate, maxDate, stringDateToMoment } from 'utils/DateUtils';
 import { excel, query, toggleMode } from './reducer';
 
 const NormalFilter = () => {
@@ -51,7 +47,9 @@ const NormalFilter = () => {
     await dispatch(excel(excelPayload));
   };
 
-  const minDate = getToday().subtract(3, 'months').startOf('month');
+  const minDate = moment(window.configuration.today)
+    .subtract(3, 'months')
+    .startOf('month');
 
   return (
     <Container fluid className="filter">

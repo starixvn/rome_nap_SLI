@@ -1,8 +1,10 @@
 // RESULTS
+export const SportTypes = {
+  NumberGame: 161,
+  Happy5: 164,
+  Happy5_Linked_Game: 168,
+};
 export const SHOW_ALL_LEAGUES = '*..::* Show All Leagues *::..*';
-export const NUMBER_GAME_SPORT_TYPE = 161;
-export const HAPPY5_SPORT_TYPE = 164;
-export const HAPPY5_LINKED_GAME_SPORT_TYPE = 168;
 export const NUMBER_GAME_RED_BALLS = [
   '01',
   '03',

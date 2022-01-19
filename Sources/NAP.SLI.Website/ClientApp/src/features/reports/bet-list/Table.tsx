@@ -3,7 +3,7 @@ import { useAppDispatch } from 'app/store';
 import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { useState } from 'react';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
-import { HAPPY5_LINKED_GAME_SPORT_TYPE } from 'utils/ConstantUtils';
+import { SportTypes } from 'utils/ConstantUtils';
 import { QueryData } from './types';
 import './Table.scss';
 
@@ -20,12 +20,12 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
   const handleToggle = () => setModal((prevModal) => !prevModal);
 
   window.ViewResult = async (
-    _matchid: number,
-    _race: number,
-    _bettype: number,
-    sporttype: number,
-    refno: number,
-    _username: string,
+    matchId: number,
+    race: number,
+    betType: number,
+    sportType: number,
+    refNo: number,
+    username: string,
     _winlostdate: string,
     _refno_mixparlay: string,
     _league: number,
@@ -33,7 +33,7 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
     betid: number,
   ) => {
     // Happy5 Linked Games
-    if (sporttype === HAPPY5_LINKED_GAME_SPORT_TYPE) {
+    if (sportType === SportTypes.Happy5_Linked_Game) {
       // const result = await dispatch(
       //   getHappy5LinkedGame({
       //     obCustId: betid,

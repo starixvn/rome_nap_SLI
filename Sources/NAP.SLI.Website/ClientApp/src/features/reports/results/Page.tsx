@@ -1,9 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  HAPPY5_SPORT_TYPE,
-  NUMBER_GAME_SPORT_TYPE,
-} from '../../../utils/ConstantUtils';
+import { SportTypes } from '../../../utils/ConstantUtils';
 import Filter from './Filter';
 import Happy5Table from './happy5/Table';
 import NumberGameTable from './number-game/Table';
@@ -12,9 +9,9 @@ import './Page.scss';
 
 const getTableBySportType = (sportType: number) => {
   switch (sportType) {
-    case NUMBER_GAME_SPORT_TYPE:
+    case SportTypes.NumberGame:
       return <NumberGameTable />;
-    case HAPPY5_SPORT_TYPE:
+    case SportTypes.Happy5:
       return <Happy5Table />;
     default:
       return <EmptyTable />;
