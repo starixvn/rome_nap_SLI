@@ -29,7 +29,7 @@
 
         public void Process(S source, D destination, ResolutionContext context)
         {
-            destination.BetTypeName = reportService.GetBetTypeName(source.BetType);
+            destination.BetTypeName = reportService.GetBetTypeName(source.BetType, source.LiveIndicator);
             CalculateCompanyWinLoss(source, destination);
         }
 

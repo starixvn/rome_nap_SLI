@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
 using NAP.SLI.Common.Services;
+using NAP.SLI.Localization.Services;
 using NAP.SLI.MatchWinLossDetail.Constants;
 using NAP.SLI.MatchWinLossDetail.Criteria;
 using NAP.SLI.MatchWinLossDetail.Models;
@@ -26,9 +27,10 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         private readonly IReportService reportService;
         private readonly IDynamicRepository dynamicRepository;
         private readonly IMapper mapper;
+        private readonly ISharedLocalizer sharedLocalizer;
 
-        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository, IMapper mapper)
-            => (this.reportService, this.dynamicRepository, this.mapper) = (reportService, dynamicRepository, mapper);
+        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository, IMapper mapper, ISharedLocalizer sharedLocalizer)
+            => (this.reportService, this.dynamicRepository, this.mapper, this.sharedLocalizer) = (reportService, dynamicRepository, mapper, sharedLocalizer);
 
         public async Task<SuperData> QuerySuper(QueryRequest request)
         {
@@ -61,11 +63,12 @@ namespace NAP.SLI.MatchWinLossDetail.Services
             return records.GroupBy(r => new
             {
                 r.LeagueId,
-                r.MatchId
+                r.MatchId,
+                r.MatchCode
             }).Select(gcs =>
             {
-                var leagueName = reportService.GetLeagueName(gcs.Key.LeagueId);
-                var matchName = $"No {gcs.Key.MatchId}";
+                var leagueName = sharedLocalizer["NumberGame"] + "-" + reportService.GetLeagueName(gcs.Key.LeagueId);
+                var matchName = sharedLocalizer["NumberGame"] + $"No {gcs.Key.MatchCode}";
                 var records = gcs;
                 return (K)Activator.CreateInstance(typeof(K), new object[] { leagueName, matchName, records });
             });

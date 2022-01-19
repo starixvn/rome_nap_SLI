@@ -4,7 +4,11 @@
     {
         public int MatchId { get; set; }
 
+        public string MatchCode { get; set; }
+
         public int SportType { get; set; }
+
+        public bool LiveIndicator { get; set; }
 
         public int HomeId { get; set; }
 
@@ -13,8 +17,6 @@
         public int LeagueId { get; set; }
 
         public int BetType { get; set; }
-
-        public int LiveIndicator { get; set; }
 
         public decimal Turnover { get; set; }
 

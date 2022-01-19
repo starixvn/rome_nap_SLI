@@ -4,7 +4,13 @@ namespace NAP.SLI.MatchWinLossDetail.Models
     {
         int MatchId { get; set; }
 
+        string MatchCode { get; set; }
+
         int LeagueId { get; set; }
+
+        int SportType { get; set; }
+
+        bool LiveIndicator { get; set; }
 
         int BetType { get; set; }
     }
