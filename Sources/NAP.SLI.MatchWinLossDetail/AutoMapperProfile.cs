@@ -1,7 +1,6 @@
 ﻿namespace NAP.SLI.MatchWinLossDetail
 {
     using AutoMapper;
-    using Fanex.RemotingRef;
     using NAP.SLI.Common.Services;
     using NAP.SLI.MatchWinLossDetail.Models;
     using NAP.SLI.MatchWinLossDetail.Requests;
@@ -21,19 +20,16 @@
     where S : IRecord
     where D : IRecordEx<D>
     {
-        private readonly IRemotingRefService remotingRefService;
-        private readonly ICurrentContextService currentContextService;
+        private readonly IReportService reportService;
 
-        public RecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
+        public RecordExMappingAction(IReportService reportService)
         {
-            this.remotingRefService = remotingRefService;
-            this.currentContextService = currentContextService;
+            this.reportService = reportService;
         }
 
         public void Process(S source, D destination, ResolutionContext context)
         {
-            var languageCode = currentContextService.GetLanguageCode();
-            destination.BetTypeName = remotingRefService.GetBetTypeName(source.BetType.ToString(), languageCode);
+            destination.BetTypeName = reportService.GetBetTypeName(source.BetType);
             CalculateCompanyWinLoss(source, destination);
         }
 
@@ -42,8 +38,8 @@
 
     public class AgentRecordExMappingAction : RecordExMappingAction<AgentRecord, AgentRecordEx>
     {
-        public AgentRecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
-        : base(remotingRefService, currentContextService)
+        public AgentRecordExMappingAction(IReportService reportService)
+        : base(reportService)
         {
         }
 
@@ -55,8 +51,8 @@
 
     public class MasterRecordExMappingAction : RecordExMappingAction<MasterRecord, MasterRecordEx>
     {
-        public MasterRecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
-        : base(remotingRefService, currentContextService)
+        public MasterRecordExMappingAction(IReportService reportService)
+        : base(reportService)
         {
         }
 
@@ -68,8 +64,8 @@
 
     public class SuperRecordExMappingAction : RecordExMappingAction<SuperRecord, SuperRecordEx>
     {
-        public SuperRecordExMappingAction(IRemotingRefService remotingRefService, ICurrentContextService currentContextService)
-        : base(remotingRefService, currentContextService)
+        public SuperRecordExMappingAction(IReportService reportService)
+        : base(reportService)
         {
         }
 

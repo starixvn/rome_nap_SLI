@@ -22,13 +22,13 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetResultSportByDate(
             IDynamicRepositoryEx dynamicRepositoryEx,
             ICurrentContextService currentContextService,
-            IRemotingRefService remotingRefService,
+            IReportService reportService,
             ResultSportByDateRequest request,
             IEnumerable<ResultSportByDateModel> fetchData
             )
         {
             // Arrange
-            var service = new ResultService(dynamicRepositoryEx, currentContextService, remotingRefService);
+            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
             dynamicRepositoryEx.FetchAsync<ResultSportByDateModel>(Arg.Any<GetResultSportByDateCriteria>())
                             .Returns(Task.FromResult(fetchData));
 
@@ -47,13 +47,13 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetResultLeagueByDate(
             IDynamicRepositoryEx dynamicRepositoryEx,
             ICurrentContextService currentContextService,
-            IRemotingRefService remotingRefService,
+            IReportService reportService,
             ResultLeagueByDateRequest request,
             IEnumerable<ResultLeagueByDateModel> fetchData
             )
         {
             // Arrange
-            var service = new ResultService(dynamicRepositoryEx, currentContextService, remotingRefService);
+            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
             currentContextService.GetLanguageCode().Returns("en-US");
             dynamicRepositoryEx.FetchAsync<ResultLeagueByDateModel>(Arg.Any<GetResultLeagueByDateCriteria>())
                             .Returns(Task.FromResult(fetchData));
@@ -73,7 +73,7 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetNumberGameResult(
             IDynamicRepositoryEx dynamicRepositoryEx,
             ICurrentContextService currentContextService,
-            IRemotingRefService remotingRefService,
+            IReportService reportService,
             ResultRequest request
         )
         {
@@ -89,9 +89,9 @@ namespace NAP.SLI.Results.Tests.Services
             var seq = new List<int> { 1, 2, 3 };
             var number = new List<int> { 10, 20, 30 };
             var (fetchData, expectedResults) = CreateFakeData<NumberGameMatch>(leagueName, leagueId, matchId, matchCode, eventDate, kickOffTime, eventStatus, seq, number);
-            var service = new ResultService(dynamicRepositoryEx, currentContextService, remotingRefService);
+            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
             currentContextService.GetLanguageCode().Returns(languageCode);
-            remotingRefService.GetLeagueName(Arg.Is(leagueId.ToString()), Arg.Is(languageCode)).Returns(leagueName);
+            reportService.GetLeagueName(Arg.Is(leagueId)).Returns(leagueName);
             dynamicRepositoryEx.FetchAsync<Result>(Arg.Any<GetResultCriteria>())
                                 .Returns(Task.FromResult(fetchData));
 
@@ -123,7 +123,7 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetHappy5Result(
             IDynamicRepositoryEx dynamicRepositoryEx,
             ICurrentContextService currentContextService,
-            IRemotingRefService remotingRefService,
+            IReportService reportService,
             ResultRequest request
         )
         {
@@ -139,9 +139,9 @@ namespace NAP.SLI.Results.Tests.Services
             var seq = new List<int> { 1, 2, 3, 4, 5 };
             var number = new List<int> { 10, 20, 30, 40, 50 };
             var (fetchData, expectedResults) = CreateFakeData<Happy5Match>(leagueName, leagueId, matchId, matchCode, eventDate, kickOffTime, eventStatus, seq, number);
-            var service = new ResultService(dynamicRepositoryEx, currentContextService, remotingRefService);
+            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
             currentContextService.GetLanguageCode().Returns(languageCode);
-            remotingRefService.GetLeagueName(Arg.Is(leagueId.ToString()), Arg.Is(languageCode)).Returns(leagueName);
+            reportService.GetLeagueName(Arg.Is(leagueId)).Returns(leagueName);
             dynamicRepositoryEx.FetchAsync<Result>(Arg.Any<GetResultCriteria>())
                                 .Returns(Task.FromResult(fetchData));
 

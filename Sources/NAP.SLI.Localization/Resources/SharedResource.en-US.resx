@@ -129,4 +129,24 @@
     <value>Sheet 1</value>
     <comment/>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+    <comment/>
+  </data>
+  <data name="NumberGame" xml:space="preserve">
+    <value>Number Game</value>
+    <comment/>
+  </data>
+  <data name="FT" xml:space="preserve">
+    <value>FT</value>
+    <comment/>
+  </data>
+  <data name="LiveGame" xml:space="preserve">
+    <value>Live Game</value>
+    <comment/>
+  </data>
+  <data name="PreGame" xml:space="preserve">
+    <value>Pre Game</value>
+    <comment/>
+  </data>
 </root>

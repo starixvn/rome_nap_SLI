@@ -9,10 +9,16 @@
     using Fanex.RemotingRef;
     using NAP.SLI.Common.Criteria;
     using NAP.SLI.Common.Models;
+    using NAP.SLI.Localization.Services;
 
     public interface IReportService
     {
         Task<BalanceUpDayModel> GetBalanceUpDay();
+        string GetBetTypeName(int betType);
+        string GetBetTypeName(int betType, bool liveIndicator);
+        string GetSportTypeName(int sportType);
+        string GetLeagueName(int leagueId);
+        string GetLeagueName3rd(int leagueId);
         IEnumerable<string> GetBetTypeNames(IEnumerable<int> betTypes);
         IEnumerable<string> GetSportTypeNames(IEnumerable<int> sportTypes);
     }
@@ -23,17 +29,20 @@
         private readonly IRemotingRefService remotingRefService;
         private readonly ICurrentContextService currentContextService;
         private readonly ICacheService memoryCacheService;
+        private readonly ISharedLocalizer sharedLocalizer;
 
         public ReportService(
             IDynamicRepository dynamicRepository,
             IRemotingRefService remotingRefService,
             ICurrentContextService currentContextService,
-            ICacheContainer cacheContainer)
+            ICacheContainer cacheContainer,
+            ISharedLocalizer sharedLocalizer)
         {
             this.dynamicRepository = dynamicRepository;
             this.remotingRefService = remotingRefService;
             this.currentContextService = currentContextService;
             memoryCacheService = cacheContainer.MemoryCacheService;
+            this.sharedLocalizer = sharedLocalizer;
         }
 
         public async Task<BalanceUpDayModel> GetBalanceUpDay()
@@ -42,6 +51,42 @@
             {
                 return await dynamicRepository.GetAsync<BalanceUpDayModel>(new GetBalanceUpDayCriteria()).ConfigureAwait(false);
             }, new CacheItemOptions().SetAbsoluteExpiration(TimeSpan.FromDays(1))).ConfigureAwait(false);
+        }
+
+        public string GetBetTypeName(int betType)
+        {
+            var languageCode = currentContextService.GetLanguageCode();
+            return remotingRefService.GetBetTypeName(betType.ToString(), languageCode);
+        }
+
+        public string GetBetTypeName(int betType, bool liveIndicator)
+        {
+            var betTypeName = GetBetTypeName(betType);
+            return betType switch
+            {
+                (int)BetTypes.OverUnder => sharedLocalizer["Next"] + " " + betTypeName + " (" + sharedLocalizer["NumberGame"] + ")",
+                (int)BetTypes.OddEven => liveIndicator ? sharedLocalizer["Next"] : sharedLocalizer["FT"] + ". " + betTypeName + " (" + sharedLocalizer["NumberGame"] + ")",
+                (int)BetTypes.NumberWheel => liveIndicator ? sharedLocalizer["LiveGame"] : sharedLocalizer["PreGame"] + ". " + betTypeName + " (" + sharedLocalizer["NumberGame"] + ")",
+                _ => betTypeName,
+            };
+        }
+
+        public string GetSportTypeName(int sportType)
+        {
+            var languageCode = currentContextService.GetLanguageCode();
+            return remotingRefService.GetSportName(sportType.ToString(), languageCode);
+        }
+
+        public string GetLeagueName(int leagueId)
+        {
+            var languageCode = currentContextService.GetLanguageCode();
+            return remotingRefService.GetLeagueName(leagueId.ToString(), languageCode);
+        }
+
+        public string GetLeagueName3rd(int leagueId)
+        {
+            var languageCode = currentContextService.GetLanguageCode();
+            return remotingRefService.GetLeagueName3rd(leagueId.ToString(), languageCode);
         }
 
         public IEnumerable<string> GetBetTypeNames(IEnumerable<int> betTypes)

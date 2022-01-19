@@ -1,4 +1,3 @@
-import { string } from 'yup/lib/locale';
 import { post } from './http';
 
 type Resources = {

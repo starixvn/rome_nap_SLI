@@ -21,9 +21,9 @@
     <Setting Key="SLI_Rpt_WinlossAnalysis_Master" SpName="SLI_Rpt_WinlossAnalysis_Master" DbName="DBAGE.bodb02.bodbAdminNet" />
     <Setting Key="SLI_Rpt_WinlossAnalysis_Agent" SpName="SLI_Rpt_WinlossAnalysis_Agent" DbName="DBAGE.bodb02.bodbAdminNet" />
     <Setting Key="SLI_Rpt_WinlossAnalysis_Member" SpName="SLI_Rpt_WinlossAnalysis_Member" DbName="DBAGE.bodb02.bodbAdminNet" />
-    <Setting Key="SLI_Rpt_WinLossByBettype_Master" SpName="SLI_Rpt_WinLossByBettype_Master" DbName="DBAGE.bodb02.bodbAdminNet" />
-    <Setting Key="SLI_Rpt_WinLossByBettype_Agent" SpName="SLI_Rpt_WinLossByBettype_Agent" DbName="DBAGE.bodb02.bodbAdminNet" />
-    <Setting Key="SLI_Rpt_WinLossByBettype_Member" SpName="SLI_Rpt_WinLossByBettype_Member" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossByBettype_Master" SpName="SLI_Rpt_WinLossByBettype_Master_xtest" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossByBettype_Agent" SpName="SLI_Rpt_WinLossByBettype_Agent_xtest" DbName="DBAGE.bodb02.bodbAdminNet" />
+    <Setting Key="SLI_Rpt_WinLossByBettype_Member" SpName="SLI_Rpt_WinLossByBettype_Member_xtest" DbName="DBAGE.bodb02.bodbAdminNet" />
     <Setting Key="U3_Result_SportSelByDate" SpName="U3_Result_SportSelByDate" DbName="DBAGE.bodb02.bodbDownlineNetView"/>
     <Setting Key="U3_Age_Result_LeagueSelByDate" SpName="U3_Age_Result_LeagueSelByDate" DbName="DBAGE.bodb02.bodbDownlineNetView"/>
     <Setting Key="U3_Result_MatchSelNumberGameByLeague" SpName="U3_Result_MatchSelNumberGameByLeague" DbName="DBAGE.bodb02.bodbDownlineNetView"/>

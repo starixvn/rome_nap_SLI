@@ -6,6 +6,8 @@ namespace NAP.SLI.WinLossByBetType.Models
 
         public int BetType { get; set; }
 
+        public bool LiveIndicator { get; set; }
+
         public int BetCount { get; set; }
 
         public decimal Turnover { get; set; }

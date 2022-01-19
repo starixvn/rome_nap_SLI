@@ -39,6 +39,11 @@ namespace NAP.SLI.WinLossAnalysis.Services
         public async Task<SuperData> QuerySuper(QueryRequest request)
         {
             var (Records, Total) = await Query<SuperRecord>(request).ConfigureAwait(false);
+            if (request.ReportType == (int)ReportTypes.Sport)
+            {
+                UpdateSportTypeNames(Records);
+            }
+
             return new SuperData
             {
                 Records = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(Records),
@@ -49,6 +54,11 @@ namespace NAP.SLI.WinLossAnalysis.Services
         public async Task<MasterData> QueryMaster(QueryRequest request)
         {
             var (Records, Total) = await Query<MasterRecord>(request).ConfigureAwait(false);
+            if (request.ReportType == (int)ReportTypes.Sport)
+            {
+                UpdateSportTypeNames(Records);
+            }
+
             return new MasterData
             {
                 Records = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(Records),
@@ -59,11 +69,24 @@ namespace NAP.SLI.WinLossAnalysis.Services
         public async Task<AgentData> QueryAgent(QueryRequest request)
         {
             var (Records, Total) = await Query<AgentRecord>(request).ConfigureAwait(false);
+            if (request.ReportType == (int)ReportTypes.Sport)
+            {
+                UpdateSportTypeNames(Records);
+            }
+
             return new AgentData
             {
                 Records = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(Records),
                 Total = mapper.Map<AgentRecord, AgentRecordEx>(Total)
             };
+        }
+
+        private void UpdateSportTypeNames(IEnumerable<AgentRecord> records)
+        {
+            foreach (var record in records)
+            {
+                record.RollupKey = reportService.GetSportTypeName(Convert.ToInt32(record.RollupKey));
+            }
         }
 
         private async Task<(IEnumerable<T> Records, T Total)> Query<T>(QueryRequest request)

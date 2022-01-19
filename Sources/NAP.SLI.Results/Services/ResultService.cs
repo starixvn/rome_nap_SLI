@@ -4,7 +4,6 @@ namespace NAP.SLI.Results.Services
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using Fanex.RemotingRef;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Results.Criteria;
     using NAP.SLI.Results.Models;
@@ -21,14 +20,14 @@ namespace NAP.SLI.Results.Services
     public class ResultService : IResultService
     {
         private readonly IDynamicRepositoryEx dynamicRepositoryEx;
+        private readonly IReportService reportService;
         private readonly ICurrentContextService currentContextService;
-        private readonly IRemotingRefService remotingRefService;
 
-        public ResultService(IDynamicRepositoryEx dynamicRepositoryEx, ICurrentContextService currentContextService, IRemotingRefService remotingRefService)
+        public ResultService(IDynamicRepositoryEx dynamicRepositoryEx, IReportService reportService, ICurrentContextService currentContextService)
         {
             this.dynamicRepositoryEx = dynamicRepositoryEx;
+            this.reportService = reportService;
             this.currentContextService = currentContextService;
-            this.remotingRefService = remotingRefService;
         }
 
         public async Task<IEnumerable<ResultSportByDateModel>> GetResultSportByDate(ResultSportByDateRequest request)
@@ -54,36 +53,34 @@ namespace NAP.SLI.Results.Services
 
         public async Task<IEnumerable<ResultRecord<NumberGameMatch>>> GetNumberGameResult(ResultRequest request)
         {
-            var languageCode = currentContextService.GetLanguageCode();
-            var results = await GetResult(request, languageCode).ConfigureAwait(false);
-            return MappingResult<NumberGameMatch>(results, languageCode);
+            var results = await GetResult(request).ConfigureAwait(false);
+            return MappingResult<NumberGameMatch>(results);
         }
 
         public async Task<IEnumerable<ResultRecord<Happy5Match>>> GetHappy5Result(ResultRequest request)
         {
-            var languageCode = currentContextService.GetLanguageCode();
-            var results = await GetResult(request, languageCode).ConfigureAwait(false);
-            return MappingResult<Happy5Match>(results, languageCode);
+            var results = await GetResult(request).ConfigureAwait(false);
+            return MappingResult<Happy5Match>(results);
         }
 
-        private async Task<IEnumerable<Result>> GetResult(ResultRequest request, string languageCode)
+        private async Task<IEnumerable<Result>> GetResult(ResultRequest request)
         {
             var criteria = new GetResultCriteria
             {
                 EventDate = request.EventDate,
                 SportType = request.SportType,
                 LeagueID = request.LeagueId,
-                Language = languageCode
+                Language = currentContextService.GetLanguageCode()
             };
             return await dynamicRepositoryEx.FetchAsync<Result>(criteria).ConfigureAwait(false);
         }
 
-        private IEnumerable<ResultRecord<T>> MappingResult<T>(IEnumerable<Result> results, string languageCode) where T : IMatch
+        private IEnumerable<ResultRecord<T>> MappingResult<T>(IEnumerable<Result> results) where T : IMatch
         {
             return results.GroupBy(match => new { match.LeagueId }).Select(
                 leagueGroup =>
                 {
-                    var leagueName = remotingRefService.GetLeagueName(leagueGroup.Key.LeagueId.ToString(), languageCode);
+                    var leagueName = reportService.GetLeagueName(leagueGroup.Key.LeagueId);
                     var matches = new List<T>();
 
                     foreach (var match in leagueGroup)

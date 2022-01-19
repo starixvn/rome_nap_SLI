@@ -42,16 +42,19 @@ const Filter = () => {
     await dispatch(excel(excelPayload));
   };
 
+  const minDate = moment(window.configuration.balanceUpDay);
+
   return (
     <Container fluid className="filter">
       <ReportFilter
-        minDate={moment(window.configuration.balanceUpDay)}
+        minDate={minDate}
         maxDate={maxDate}
         fromDate={stringDateToMoment(fromDate)}
         toDate={stringDateToMoment(toDate)}
         onQuery={handleQuery}
         onExcel={handleExcel}
       />
+      <div>You can view the report data from {formatDate(minDate)}</div>
     </Container>
   );
 };

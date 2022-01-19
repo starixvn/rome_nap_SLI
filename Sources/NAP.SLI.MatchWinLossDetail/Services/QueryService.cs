@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
-using Fanex.RemotingRef;
 using NAP.SLI.Common.Services;
 using NAP.SLI.MatchWinLossDetail.Constants;
 using NAP.SLI.MatchWinLossDetail.Criteria;
@@ -26,18 +25,16 @@ namespace NAP.SLI.MatchWinLossDetail.Services
     {
         private readonly IReportService reportService;
         private readonly IDynamicRepository dynamicRepository;
-        private readonly IRemotingRefService remotingRefService;
-        private readonly ICurrentContextService currentContextService;
         private readonly IMapper mapper;
 
-        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository, IRemotingRefService remotingRefService, ICurrentContextService currentContextService, IMapper mapper)
-            => (this.reportService, this.dynamicRepository, this.remotingRefService, this.currentContextService, this.mapper) = (reportService, dynamicRepository, remotingRefService, currentContextService, mapper);
+        public QueryService(IReportService reportService, IDynamicRepository dynamicRepository, IMapper mapper)
+            => (this.reportService, this.dynamicRepository, this.mapper) = (reportService, dynamicRepository, mapper);
 
         public async Task<SuperData> QuerySuper(QueryRequest request)
         {
             var records = await Query<SuperRecord>(request).ConfigureAwait(false);
             var recordExs = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(records);
-            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype<SuperRecordEx>(recordExs);
+            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype(recordExs);
             return new SuperData(Build<SuperRecordEx, MatchData<SuperRecordEx>>(numberGameAndHappy5Records), happy5LinkedGameRecords);
         }
 
@@ -45,7 +42,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         {
             var records = await Query<MasterRecord>(request).ConfigureAwait(false);
             var recordExs = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(records);
-            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype<MasterRecordEx>(recordExs);
+            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype(recordExs);
             return new MasterData(Build<MasterRecordEx, MatchData<MasterRecordEx>>(numberGameAndHappy5Records), happy5LinkedGameRecords);
         }
 
@@ -53,7 +50,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         {
             var records = await Query<AgentRecord>(request).ConfigureAwait(false);
             var recordExs = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(records);
-            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype<AgentRecordEx>(recordExs);
+            var (numberGameAndHappy5Records, happy5LinkedGameRecords) = SplitRecordsByBettype(recordExs);
             return new AgentData(Build<AgentRecordEx, MatchData<AgentRecordEx>>(numberGameAndHappy5Records), happy5LinkedGameRecords);
         }
 
@@ -61,14 +58,13 @@ namespace NAP.SLI.MatchWinLossDetail.Services
         where T : IRecordEx<T>, new()
         where K : MatchData<T>
         {
-            var languageCode = currentContextService.GetLanguageCode();
             return records.GroupBy(r => new
             {
                 r.LeagueId,
                 r.MatchId
             }).Select(gcs =>
             {
-                var leagueName = remotingRefService.GetLeagueName3rd(gcs.Key.LeagueId.ToString(), languageCode);
+                var leagueName = reportService.GetLeagueName(gcs.Key.LeagueId);
                 var matchName = $"No {gcs.Key.MatchId}";
                 var records = gcs;
                 return (K)Activator.CreateInstance(typeof(K), new object[] { leagueName, matchName, records });

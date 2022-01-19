@@ -19,7 +19,7 @@ namespace NAP.SLI.WinLossAnalysis.Extensions
 
         public static string GetTitle(this ExcelRequest request)
         {
-            return $"Win Loss Analysis {request.FromDate.ToDateString()} -> {request.ToDate.ToDateString()}";
+            return $"{request.GetReportName()} Win Loss Analysis {request.FromDate.ToDateString()} -> {request.ToDate.ToDateString()}";
         }
     }
 }
