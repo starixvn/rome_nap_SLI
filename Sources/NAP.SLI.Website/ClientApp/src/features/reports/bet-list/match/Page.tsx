@@ -13,8 +13,6 @@ const usePageParams = () => {
   const matchId = parseInt(searchParams.get('matchId') || '', 10);
   const betType = parseInt(searchParams.get('betType') || '', 10);
   const liveIndicator = parseInt(searchParams.get('liveIndicator') || '', 10);
-  const fromDate = searchParams.get('fromDate') || '';
-  const toDate = searchParams.get('toDate') || '';
   return {
     custId,
     roleId,
@@ -22,25 +20,14 @@ const usePageParams = () => {
     matchId,
     betType,
     liveIndicator,
-    fromDate,
-    toDate,
   };
 };
 
 const Page = () => {
   const [data, setData] = useState<QueryData | undefined>(undefined);
   const params = usePageParams();
-  const {
-    custId,
-    roleId,
-    username,
-    matchId,
-    betType,
-    liveIndicator,
-    fromDate,
-    toDate,
-  } = params;
-  const isValid = matchId > 0 && betType > 0 && fromDate && toDate;
+  const { custId, roleId, matchId, betType, liveIndicator } = params;
+  const isValid = matchId > 0 && betType > 0;
 
   useEffect(() => {
     if (isValid) {
@@ -60,7 +47,6 @@ const Page = () => {
 
   const handleExcel = async () => {
     await excel({
-      username,
       matchId,
       betType,
       liveIndicator,
@@ -71,10 +57,7 @@ const Page = () => {
 
   return (
     <div className="bet-list-page">
-      <Title
-        content={`MEMBER BET LIST ${fromDate} --> ${toDate} - ${username}`}
-        handleExcel={handleExcel}
-      />
+      <Title content={`MEMBER BET LIST`} handleExcel={handleExcel} />
       {data ? (
         <Table data={data} isHappy5LinkedGame={false} />
       ) : (

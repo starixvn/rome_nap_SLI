@@ -111,33 +111,35 @@ const TableComponent = () => {
 
   const handleNormalTypeClick = (record: Record) => {
     const { matchId, betType, liveIndicator } = record;
+    const search =
+      '' +
+      createSearchParams({
+        custId: custId.toString(),
+        roleId: '4',
+        matchId: matchId.toString(),
+        liveIndicator: liveIndicator.toString(),
+        betType: betType.toString(),
+      });
     navigate({
       pathname: '/report/bet-list/match',
-      search:
-        '' +
-        createSearchParams({
-          custId: custId.toString(),
-          roleId: '4',
-          matchId: matchId.toString(),
-          liveIndicator: liveIndicator.toString(),
-          betType: betType.toString(),
-        }),
+      search,
     });
   };
 
   const handleLinkedGameTypeClick = (record: Record) => {
     const { betType } = record;
+    const search =
+      '' +
+      createSearchParams({
+        custId: custId.toString(),
+        roleId: '4',
+        betType: betType.toString(),
+        fromDate,
+        toDate,
+      });
     navigate({
       pathname: '/report/bet-list/bet-type',
-      search:
-        '' +
-        createSearchParams({
-          custId: custId.toString(),
-          roleId: '4',
-          betType: betType.toString(),
-          fromDate,
-          toDate,
-        }),
+      search,
     });
   };
 

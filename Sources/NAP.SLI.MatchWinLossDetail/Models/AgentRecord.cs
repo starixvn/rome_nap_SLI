@@ -8,7 +8,7 @@
 
         public int SportType { get; set; }
 
-        public bool LiveIndicator { get; set; }
+        public int LiveIndicator { get; set; }
 
         public int HomeId { get; set; }
 

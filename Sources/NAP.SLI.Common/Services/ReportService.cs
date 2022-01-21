@@ -15,7 +15,7 @@
     {
         Task<BalanceUpDayModel> GetBalanceUpDay();
         string GetBetTypeName(int betType);
-        string GetBetTypeName(int betType, bool liveIndicator);
+        string GetBetTypeName(int betType, int liveIndicator);
         string GetSportTypeName(int sportType);
         string GetLeagueName(int leagueId);
         string GetLeagueName3rd(int leagueId);
@@ -59,14 +59,14 @@
             return remotingRefService.GetBetTypeName(betType.ToString(), languageCode);
         }
 
-        public string GetBetTypeName(int betType, bool liveIndicator)
+        public string GetBetTypeName(int betType, int liveIndicator)
         {
             var betTypeName = GetBetTypeName(betType);
             return betType switch
             {
                 (int)BetTypes.OverUnder => sharedLocalizer["Next"] + " " + betTypeName,
-                (int)BetTypes.OddEven => (liveIndicator ? (sharedLocalizer["Next"] + " ") : (sharedLocalizer["FT"] + ". ")) + betTypeName,
-                (int)BetTypes.NumberWheel => betTypeName + " (" + (liveIndicator ? sharedLocalizer["LiveGame"] : sharedLocalizer["PreGame"]) + ")",
+                (int)BetTypes.OddEven => (liveIndicator == 1 ? (sharedLocalizer["Next"] + " ") : (sharedLocalizer["FT"] + ". ")) + betTypeName,
+                (int)BetTypes.NumberWheel => betTypeName + " (" + (liveIndicator == 1 ? sharedLocalizer["LiveGame"] : sharedLocalizer["PreGame"]) + ")",
                 _ => betTypeName,
             };
         }

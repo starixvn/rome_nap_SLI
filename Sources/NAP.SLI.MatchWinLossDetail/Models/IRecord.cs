@@ -10,7 +10,7 @@ namespace NAP.SLI.MatchWinLossDetail.Models
 
         int SportType { get; set; }
 
-        bool LiveIndicator { get; set; }
+        int LiveIndicator { get; set; }
 
         int BetType { get; set; }
     }

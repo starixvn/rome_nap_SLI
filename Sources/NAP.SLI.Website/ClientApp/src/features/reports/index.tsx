@@ -24,9 +24,9 @@ export const useCustomerParams = (): Customer => {
 };
 
 export const ReportsRoutes = () => {
-  const { custId, roleId, username } = useCustomerParams();
+  const { custId, roleId } = useCustomerParams();
 
-  if (custId > 0 && [1, 2, 3, 4].indexOf(roleId) >= 0 && username) {
+  if (custId > 0 && [1, 2, 3, 4].indexOf(roleId) >= 0) {
     return (
       <PrivateRoutes>
         <Route path="win-loss-detail" element={<WinLossDetailPage />} />

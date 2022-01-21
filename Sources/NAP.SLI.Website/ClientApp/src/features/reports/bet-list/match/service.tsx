@@ -9,9 +9,7 @@ type QueryArg = {
   roleId: number;
 };
 
-type ExcelArg = QueryArg & {
-  username: string;
-};
+type ExcelArg = QueryArg;
 
 const actionName = 'bet-list';
 
