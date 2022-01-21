@@ -68,7 +68,7 @@ namespace NAP.SLI.MatchWinLossDetail.Services
             }).Select(gcs =>
             {
                 var leagueName = sharedLocalizer["NumberGame"] + "-" + reportService.GetLeagueName(gcs.Key.LeagueId);
-                var matchName = sharedLocalizer["NumberGame"] + $"No {gcs.Key.MatchCode}";
+                var matchName = sharedLocalizer["NumberGame"] + $" No {gcs.Key.MatchCode}";
                 var records = gcs;
                 return (K)Activator.CreateInstance(typeof(K), new object[] { leagueName, matchName, records });
             });

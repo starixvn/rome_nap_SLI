@@ -74,7 +74,9 @@ const slice = createSlice({
   name: actionName,
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset: (state) => {
+      Object.assign(state, initialState);
+    },
     selectCustomer: (state, action: PayloadAction<Customer>) => {
       state.queryCustomer = action.payload;
     },

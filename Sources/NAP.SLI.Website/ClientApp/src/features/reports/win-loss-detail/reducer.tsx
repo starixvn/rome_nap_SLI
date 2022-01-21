@@ -86,7 +86,9 @@ const slice = createSlice({
   name: actionName,
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset: (state) => {
+      Object.assign(state, initialState);
+    },
     toggleMode: (state) => {
       state.queryArg.isHistory = !state.queryArg.isHistory;
       state.queryArg.fromDate = formatDate(today);

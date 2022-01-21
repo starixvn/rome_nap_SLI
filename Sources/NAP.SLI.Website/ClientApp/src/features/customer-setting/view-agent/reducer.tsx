@@ -85,7 +85,9 @@ const slice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset: (state) => {
+      Object.assign(state, initialState);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(query.fulfilled, (state, action) => {

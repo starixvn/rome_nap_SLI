@@ -88,7 +88,9 @@ const slice = createSlice({
   name: actionName,
   initialState,
   reducers: {
-    reset: () => initialState,
+    reset: (state) => {
+      Object.assign(state, initialState);
+    },
     setReportType: (state, action: PayloadAction<ReportType>) => {
       state.queryArg.reportType = action.payload;
     },
