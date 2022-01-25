@@ -13,7 +13,7 @@ namespace NAP.SLI.Results.Services
         private const int TemplateSheetIndex = 1;
         private int currentRowIndex = 0;
 
-        internal IEnumerable<ResultRecord<T>> Records { get; }
+        internal IEnumerable<ResultMatch<T>> Records { get; }
         internal Row LeagueNameRowTemplate { get; private set; }
         internal Row OddRowTemplate { get; private set; }
         internal Row EvenRowTemplate { get; private set; }
@@ -25,7 +25,7 @@ namespace NAP.SLI.Results.Services
         protected abstract Mapper<T> CreateMapper();
         protected abstract void FillBallsColor(T match);
 
-        public Workbook(WorkbookInfo workbookInfo, IEnumerable<ResultRecord<T>> records)
+        public Workbook(WorkbookInfo workbookInfo, IEnumerable<ResultMatch<T>> records)
         {
             UseTemplate(workbookInfo.TemplateInfo).Title(workbookInfo.Title).Sheet(workbookInfo.SheetName).Header(workbookInfo.Localize);
             Records = records;
@@ -117,7 +117,7 @@ namespace NAP.SLI.Results.Services
 
     public class NumberGameWorkbook : Workbook<NumberGameMatch>
     {
-        public NumberGameWorkbook(WorkbookInfo workbookInfo, IEnumerable<ResultRecord<NumberGameMatch>> records)
+        public NumberGameWorkbook(WorkbookInfo workbookInfo, IEnumerable<ResultMatch<NumberGameMatch>> records)
         : base(workbookInfo, records)
         {
         }
@@ -159,7 +159,7 @@ namespace NAP.SLI.Results.Services
 
     public class Happy5Workbook : Workbook<Happy5Match>
     {
-        public Happy5Workbook(WorkbookInfo workbookInfo, IEnumerable<ResultRecord<Happy5Match>> records)
+        public Happy5Workbook(WorkbookInfo workbookInfo, IEnumerable<ResultMatch<Happy5Match>> records)
         : base(workbookInfo, records)
         {
         }

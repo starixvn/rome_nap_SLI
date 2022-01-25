@@ -108,3 +108,9 @@ export type QueryLeaguesAndResultsArg = {
   eventDate: string;
   sportType: number;
 };
+
+export type QueryNumberGameResultsArg = {
+  eventDate: string;
+  leagueId: number;
+  sportType: number;
+};

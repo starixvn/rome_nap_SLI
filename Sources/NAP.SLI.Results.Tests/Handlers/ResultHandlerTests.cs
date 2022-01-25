@@ -17,41 +17,41 @@ namespace NAP.SLI.Results.Tests.Handlers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle_With_Number_Game_Sport_Type(IResultService service, IEnumerable<ResultRecord<NumberGameMatch>> resultRecords)
+        public async Task TestMethod_Handle_With_Number_Game_Sport_Type(IResultService service, IEnumerable<ResultMatch<NumberGameMatch>> resultRecords)
         {
             // Arrange
             var fixture = new Fixture();
-            var handler = new ResultHandler(service);
-            var request = fixture.Build<ResultRequest>()
+            var handler = new GetResultsByDateHandler(service);
+            var request = fixture.Build<GetResultsByDateRequest>()
                 .With(c => c.SportType, (int)SportTypes.NumberGame)
                 .Create();
-            service.GetNumberGameResult(request).Returns(resultRecords);
+            service.GetNumberGameResultsByDate(request).Returns(resultRecords);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().GetNumberGameResult(request);
+            await service.Received().GetNumberGameResultsByDate(request);
             Assert.Equal(resultRecords, result);
         }
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle_With_Happy_5_Sport_Type(IResultService service, IEnumerable<ResultRecord<Happy5Match>> resultRecords)
+        public async Task TestMethod_Handle_With_Happy_5_Sport_Type(IResultService service, IEnumerable<ResultMatch<Happy5Match>> resultRecords)
         {
             // Arrange
             var fixture = new Fixture();
-            var handler = new ResultHandler(service);
-            var request = fixture.Build<ResultRequest>()
+            var handler = new GetResultsByDateHandler(service);
+            var request = fixture.Build<GetResultsByDateRequest>()
                 .With(c => c.SportType, (int)SportTypes.Happy5)
                 .Create();
-            service.GetHappy5Result(request).Returns(resultRecords);
+            service.GetHappy5ResultsByDate(request).Returns(resultRecords);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().GetHappy5Result(request);
+            await service.Received().GetHappy5ResultsByDate(request);
             Assert.Equal(resultRecords, result);
         }
     }

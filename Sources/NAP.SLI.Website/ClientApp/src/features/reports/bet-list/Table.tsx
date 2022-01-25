@@ -1,9 +1,7 @@
-import { unwrapResult } from '@reduxjs/toolkit';
-import { useAppDispatch } from 'app/store';
 import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { useState } from 'react';
-import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
-import { SportTypes } from 'utils/ConstantUtils';
+import { Alert, Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
+import ResultsModal from 'features/reports/results/Modal';
 import { QueryData } from './types';
 import './Table.scss';
 
@@ -13,11 +11,11 @@ type Props = {
 };
 
 const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
-  const dispatch = useAppDispatch();
   const [modal, setModal] = useState(false);
-  const [url, setUrl] = useState('');
+  const [sportType, setSportType] = useState(0);
+  const [matchId, setMatchId] = useState(0);
 
-  const handleToggle = () => setModal((prevModal) => !prevModal);
+  const handleToggle = () => setModal(!modal);
 
   window.ViewResult = async (
     matchId: number,
@@ -30,21 +28,11 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
     _refno_mixparlay: string,
     _league: number,
     _is_outright: number,
-    betid: number,
+    betId: number,
   ) => {
-    // Happy5 Linked Games
-    if (sportType === SportTypes.Happy5_Linked_Game) {
-      // const result = await dispatch(
-      //   getHappy5LinkedGame({
-      //     obCustId: betid,
-      //     tranId3rd: refno,
-      //     isDesktop: true,
-      //   }),
-      // );
-      // const urlRes = unwrapResult(result);
-      // setUrl(urlRes);
-      handleToggle();
-    }
+    setSportType(sportType);
+    setMatchId(matchId);
+    handleToggle();
   };
 
   const { Tickets, SumCommHtml, SumWinLossHtml, TotalHtml } = data;
@@ -165,6 +153,11 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
           )}
         </tbody>
       </Table>
+      <Alert color="secondary">
+        <b>Note: </b>Com. is rounded for reference only. Therefore, Subtotal
+        Com. amount may be different from the sum of Com. when it sums all the
+        actual Com. amounts.
+      </Alert>
       <Modal
         centered
         isOpen={modal}
@@ -174,13 +167,7 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
       >
         <ModalHeader toggle={handleToggle}>Results </ModalHeader>
         <ModalBody>
-          <iframe
-            src={url}
-            height="600px"
-            width="100%"
-            title="results"
-            style={{ border: 'none' }}
-          ></iframe>
+          <ResultsModal sportType={sportType} matchId={matchId} />
         </ModalBody>
       </Modal>
     </>

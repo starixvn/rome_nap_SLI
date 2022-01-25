@@ -5,7 +5,6 @@ namespace NAP.SLI.Results.Tests.Services
     using System.Linq;
     using System.Threading.Tasks;
     using AutoFixture;
-    using Fanex.RemotingRef;
     using NAP.SLI.Common.Services;
     using NAP.SLI.Results.Criteria;
     using NAP.SLI.Results.Models;
@@ -21,24 +20,23 @@ namespace NAP.SLI.Results.Tests.Services
         [AutoDomainData]
         public async Task TestMethod_GetResultSportByDate(
             IDynamicRepositoryEx dynamicRepositoryEx,
-            ICurrentContextService currentContextService,
             IReportService reportService,
-            ResultSportByDateRequest request,
-            IEnumerable<ResultSportByDateModel> fetchData
+            GetSportsRequest request,
+            IEnumerable<SportModel> fetchData
             )
         {
             // Arrange
-            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
-            dynamicRepositoryEx.FetchAsync<ResultSportByDateModel>(Arg.Any<GetResultSportByDateCriteria>())
+            var service = new ResultService(dynamicRepositoryEx, reportService);
+            dynamicRepositoryEx.FetchAsync<SportModel>(Arg.Any<GetSportsCriteria>())
                             .Returns(Task.FromResult(fetchData));
 
             // Act
-            var result = await service.GetResultSportByDate(request);
+            var result = await service.GetSports(request);
 
             // Assert
             await dynamicRepositoryEx.Received()
-                                .FetchAsync<ResultSportByDateModel>(
-                                    Arg.Is<GetResultSportByDateCriteria>(c => c.EventDate == request.EventDate));
+                                .FetchAsync<SportModel>(
+                                    Arg.Is<GetSportsCriteria>(c => c.EventDate == request.EventDate));
             Assert.Equal(fetchData, result);
         }
 
@@ -46,25 +44,23 @@ namespace NAP.SLI.Results.Tests.Services
         [AutoDomainData]
         public async Task TestMethod_GetResultLeagueByDate(
             IDynamicRepositoryEx dynamicRepositoryEx,
-            ICurrentContextService currentContextService,
             IReportService reportService,
-            ResultLeagueByDateRequest request,
-            IEnumerable<ResultLeagueByDateModel> fetchData
+            GetLeaguesRequest request,
+            IEnumerable<LeagueModel> fetchData
             )
         {
             // Arrange
-            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
-            currentContextService.GetLanguageCode().Returns("en-US");
-            dynamicRepositoryEx.FetchAsync<ResultLeagueByDateModel>(Arg.Any<GetResultLeagueByDateCriteria>())
+            var service = new ResultService(dynamicRepositoryEx, reportService);
+            dynamicRepositoryEx.FetchAsync<LeagueModel>(Arg.Any<GetLeaguesCriteria>())
                             .Returns(Task.FromResult(fetchData));
 
             // Act
-            var result = await service.GetResultLeagueByDate(request);
+            var result = await service.GetLeagues(request);
 
             // Assert
             await dynamicRepositoryEx.Received()
-                                .FetchAsync<ResultLeagueByDateModel>(
-                                    Arg.Is<GetResultLeagueByDateCriteria>(c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.Language == "en-US"));
+                                .FetchAsync<LeagueModel>(
+                                    Arg.Is<GetLeaguesCriteria>(c => c.EventDate == request.EventDate && c.SportType == request.SportType));
             Assert.Equal(fetchData, result);
         }
 
@@ -72,15 +68,13 @@ namespace NAP.SLI.Results.Tests.Services
         [AutoDomainData]
         public async Task TestMethod_GetNumberGameResult(
             IDynamicRepositoryEx dynamicRepositoryEx,
-            ICurrentContextService currentContextService,
             IReportService reportService,
-            ResultRequest request
+            GetResultsByDateRequest request
         )
         {
             // Arrange
             var leagueName = "NumberGame";
             var leagueId = 15223;
-            var languageCode = "en-Us";
             var matchId = 48419635;
             var matchCode = "0001";
             var eventDate = new DateTime(2021, 12, 24);
@@ -89,20 +83,19 @@ namespace NAP.SLI.Results.Tests.Services
             var seq = new List<int> { 1, 2, 3 };
             var number = new List<int> { 10, 20, 30 };
             var (fetchData, expectedResults) = CreateFakeData<NumberGameMatch>(leagueName, leagueId, matchId, matchCode, eventDate, kickOffTime, eventStatus, seq, number);
-            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
-            currentContextService.GetLanguageCode().Returns(languageCode);
+            var service = new ResultService(dynamicRepositoryEx, reportService);
             reportService.GetLeagueName(Arg.Is(leagueId)).Returns(leagueName);
-            dynamicRepositoryEx.FetchAsync<Result>(Arg.Any<GetResultCriteria>())
+            dynamicRepositoryEx.FetchAsync<ResultModel>(Arg.Any<GetResultsByDateCriteria>())
                                 .Returns(Task.FromResult(fetchData));
 
             // Act
-            var results = await service.GetNumberGameResult(request);
+            var results = await service.GetNumberGameResultsByDate(request);
 
             // Assert
             await dynamicRepositoryEx.Received()
-                                    .FetchAsync<Result>(
-                                        Arg.Is<GetResultCriteria>(
-                                            c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueID == request.LeagueId && c.Language == languageCode
+                                    .FetchAsync<ResultModel>(
+                                        Arg.Is<GetResultsByDateCriteria>(
+                                            c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueId == request.LeagueId
                                         ));
             var firstExpectedResult = expectedResults.ElementAt(0);
             var firstResult = results.ElementAt(0);
@@ -122,15 +115,13 @@ namespace NAP.SLI.Results.Tests.Services
         [AutoDomainData]
         public async Task TestMethod_GetHappy5Result(
             IDynamicRepositoryEx dynamicRepositoryEx,
-            ICurrentContextService currentContextService,
             IReportService reportService,
-            ResultRequest request
+            GetResultsByDateRequest request
         )
         {
             // Arrange
             var leagueName = "Happy5";
             var leagueId = 15223;
-            var languageCode = "en-Us";
             var matchId = 48419635;
             var matchCode = "0001";
             var eventDate = new DateTime(2021, 12, 24);
@@ -139,20 +130,19 @@ namespace NAP.SLI.Results.Tests.Services
             var seq = new List<int> { 1, 2, 3, 4, 5 };
             var number = new List<int> { 10, 20, 30, 40, 50 };
             var (fetchData, expectedResults) = CreateFakeData<Happy5Match>(leagueName, leagueId, matchId, matchCode, eventDate, kickOffTime, eventStatus, seq, number);
-            var service = new ResultService(dynamicRepositoryEx, reportService, currentContextService);
-            currentContextService.GetLanguageCode().Returns(languageCode);
+            var service = new ResultService(dynamicRepositoryEx, reportService);
             reportService.GetLeagueName(Arg.Is(leagueId)).Returns(leagueName);
-            dynamicRepositoryEx.FetchAsync<Result>(Arg.Any<GetResultCriteria>())
+            dynamicRepositoryEx.FetchAsync<ResultModel>(Arg.Any<GetResultsByDateCriteria>())
                                 .Returns(Task.FromResult(fetchData));
 
             // Act
-            var results = await service.GetHappy5Result(request);
+            var results = await service.GetHappy5ResultsByDate(request);
 
             // Assert
             await dynamicRepositoryEx.Received()
-                                    .FetchAsync<Result>(
-                                        Arg.Is<GetResultCriteria>(
-                                            c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueID == request.LeagueId && c.Language == languageCode
+                                    .FetchAsync<ResultModel>(
+                                        Arg.Is<GetResultsByDateCriteria>(
+                                            c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueId == request.LeagueId
                                         ));
             var firstExpectedResult = expectedResults.ElementAt(0);
             var firstResult = results.ElementAt(0);
@@ -170,7 +160,7 @@ namespace NAP.SLI.Results.Tests.Services
             Assert.Equal(firstExpectedResultMatch.FifthBall.Number, firstResultMatch.FifthBall.Number);
         }
 
-        public static (IEnumerable<Result> fetchedResults, IEnumerable<ResultRecord<T>> expectedResults) CreateFakeData<T>(
+        public static (IEnumerable<ResultModel> fetchedResults, IEnumerable<ResultMatch<T>> expectedResults) CreateFakeData<T>(
             string leagueName,
             int leagueId,
             int matchId,
@@ -182,11 +172,11 @@ namespace NAP.SLI.Results.Tests.Services
             List<int> number
         ) where T : IMatch
         {
-            var fetchedResults = new List<Result>();
+            var fetchedResults = new List<ResultModel>();
 
             for (var i = 0; i < number.Count; i++)
             {
-                fetchedResults.Add(new Result()
+                fetchedResults.Add(new ResultModel()
                 {
                     LeagueId = leagueId,
                     MatchId = matchId,
@@ -208,7 +198,7 @@ namespace NAP.SLI.Results.Tests.Services
             }
 
             var fixture = new Fixture();
-            var expectedResults = fixture.Build<ResultRecord<T>>()
+            var expectedResults = fixture.Build<ResultMatch<T>>()
                                     .With(c => c.LeagueName, leagueName)
                                     .With(c => c.Matches, new List<T>() { numberGame })
                                     .CreateMany(1);

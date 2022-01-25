@@ -26,11 +26,11 @@ namespace NAP.SLI.Results.Models
 
     public class Match : IMatch
     {
-        protected readonly Result result;
+        protected readonly ResultModel result;
 
         private const string DateTimeFormat = "{0:MM/dd/yyyy \\\n hh:mm:ss tt}";
 
-        public Match(Result result)
+        public Match(ResultModel result)
         {
             this.result = result;
             Seq = new() { result.Seq };

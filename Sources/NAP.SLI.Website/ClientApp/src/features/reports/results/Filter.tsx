@@ -28,9 +28,9 @@ import {
 import { SHOW_ALL_LEAGUES } from 'utils/ConstantUtils';
 import {
   queryLeaguesAndResults,
-  querySubmit,
+  queryResults,
   queryExcel,
-  queryResult,
+  queryResultsByDate,
 } from './reducer';
 
 type FilterValues = {
@@ -72,7 +72,7 @@ const Filter = () => {
 
   const handleQuery = useCallback(
     async ({ eventDate }: FilterValues) => {
-      await dispatch(querySubmit({ eventDate }));
+      await dispatch(queryResults({ eventDate }));
     },
     [dispatch],
   );
@@ -122,7 +122,7 @@ const Filter = () => {
     setValue('leagueId', leagueId);
 
     await dispatch(
-      queryResult({
+      queryResultsByDate({
         eventDate: getValues('eventDate'),
         leagueId,
         sportType: getValues('sportType'),
@@ -260,10 +260,7 @@ const Filter = () => {
                   )}
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem onClick={() => handleLeagueClick(0)}>
-                    {SHOW_ALL_LEAGUES}
-                  </DropdownItem>
-                  {leagues?.map((league) => (
+                  {leagues.map((league) => (
                     <DropdownItem
                       key={league.leagueId}
                       onClick={() => handleLeagueClick(league.leagueId)}

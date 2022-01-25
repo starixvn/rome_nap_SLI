@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { SportTypes } from '../../../utils/ConstantUtils';
 import Filter from './Filter';
@@ -6,6 +6,8 @@ import Happy5Table from './happy5/Table';
 import NumberGameTable from './number-game/Table';
 import EmptyTable from './components/EmptyTable';
 import './Page.scss';
+import { useAppDispatch } from 'app/store';
+import { reset } from './reducer';
 
 const getTableBySportType = (sportType: number) => {
   switch (sportType) {
@@ -22,6 +24,13 @@ const Page = () => {
   const { isSportLoading, isLeagueLoading, selectedSportType } = useSelector(
     (state: AppState) => state.results,
   );
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
 
   const isLoading = isSportLoading || isLeagueLoading;
 

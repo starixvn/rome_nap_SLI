@@ -21,7 +21,7 @@ namespace NAP.SLI.Results.Models
         private const string Winter = "Wi";
         private const string NA = "N/A";
 
-        public Happy5Match(Result result) : base(result)
+        public Happy5Match(ResultModel result) : base(result)
         {
         }
 

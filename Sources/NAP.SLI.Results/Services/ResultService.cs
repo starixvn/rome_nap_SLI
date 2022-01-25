@@ -11,78 +11,83 @@ namespace NAP.SLI.Results.Services
 
     public interface IResultService
     {
-        Task<IEnumerable<ResultSportByDateModel>> GetResultSportByDate(ResultSportByDateRequest request);
-        Task<IEnumerable<ResultLeagueByDateModel>> GetResultLeagueByDate(ResultLeagueByDateRequest request);
-        Task<IEnumerable<ResultRecord<NumberGameMatch>>> GetNumberGameResult(ResultRequest request);
-        Task<IEnumerable<ResultRecord<Happy5Match>>> GetHappy5Result(ResultRequest request);
+        Task<IEnumerable<SportModel>> GetSports(GetSportsRequest request);
+        Task<IEnumerable<LeagueModel>> GetLeagues(GetLeaguesRequest request);
+        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(GetResultsByDateRequest request);
+        Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(GetResultsByDateRequest request);
+        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultByMatch(GetResultByMatchRequest request);
     }
 
     public class ResultService : IResultService
     {
         private readonly IDynamicRepositoryEx dynamicRepositoryEx;
         private readonly IReportService reportService;
-        private readonly ICurrentContextService currentContextService;
 
-        public ResultService(IDynamicRepositoryEx dynamicRepositoryEx, IReportService reportService, ICurrentContextService currentContextService)
+        public ResultService(IDynamicRepositoryEx dynamicRepositoryEx, IReportService reportService)
         {
             this.dynamicRepositoryEx = dynamicRepositoryEx;
             this.reportService = reportService;
-            this.currentContextService = currentContextService;
         }
 
-        public async Task<IEnumerable<ResultSportByDateModel>> GetResultSportByDate(ResultSportByDateRequest request)
+        public async Task<IEnumerable<SportModel>> GetSports(GetSportsRequest request)
         {
-            var criteria = new GetResultSportByDateCriteria
+            var criteria = new GetSportsCriteria
             {
                 EventDate = request.EventDate
             };
-            return await dynamicRepositoryEx.FetchAsync<ResultSportByDateModel>(criteria).ConfigureAwait(false);
+            return await dynamicRepositoryEx.FetchAsync<SportModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<ResultLeagueByDateModel>> GetResultLeagueByDate(ResultLeagueByDateRequest request)
+        public async Task<IEnumerable<LeagueModel>> GetLeagues(GetLeaguesRequest request)
         {
-            var languageCode = currentContextService.GetLanguageCode();
-            var criteria = new GetResultLeagueByDateCriteria
+            var criteria = new GetLeaguesCriteria
             {
                 EventDate = request.EventDate,
-                SportType = request.SportType,
-                Language = languageCode
+                SportType = request.SportType
             };
-            return await dynamicRepositoryEx.FetchAsync<ResultLeagueByDateModel>(criteria).ConfigureAwait(false);
+            return await dynamicRepositoryEx.FetchAsync<LeagueModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<ResultRecord<NumberGameMatch>>> GetNumberGameResult(ResultRequest request)
+        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(GetResultsByDateRequest request)
         {
-            var results = await GetResult(request).ConfigureAwait(false);
+            var results = await GetResultsByDate(request).ConfigureAwait(false);
             return MappingResult<NumberGameMatch>(results);
         }
 
-        public async Task<IEnumerable<ResultRecord<Happy5Match>>> GetHappy5Result(ResultRequest request)
+        public async Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(GetResultsByDateRequest request)
         {
-            var results = await GetResult(request).ConfigureAwait(false);
+            var results = await GetResultsByDate(request).ConfigureAwait(false);
             return MappingResult<Happy5Match>(results);
         }
 
-        private async Task<IEnumerable<Result>> GetResult(ResultRequest request)
+        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultByMatch(GetResultByMatchRequest request)
         {
-            var criteria = new GetResultCriteria
+            var criteria = new GetResultByMatchCriteria
+            {
+                MatchId = request.MatchId
+            };
+            var results = await dynamicRepositoryEx.FetchAsync<ResultModel>(criteria).ConfigureAwait(false);
+            return MappingResult<NumberGameMatch>(results);
+        }
+
+        private async Task<IEnumerable<ResultModel>> GetResultsByDate(GetResultsByDateRequest request)
+        {
+            var criteria = new GetResultsByDateCriteria
             {
                 EventDate = request.EventDate,
                 SportType = request.SportType,
-                LeagueID = request.LeagueId,
-                Language = currentContextService.GetLanguageCode()
+                LeagueId = request.LeagueId
             };
-            return await dynamicRepositoryEx.FetchAsync<Result>(criteria).ConfigureAwait(false);
+            return await dynamicRepositoryEx.FetchAsync<ResultModel>(criteria).ConfigureAwait(false);
         }
 
-        private IEnumerable<ResultRecord<T>> MappingResult<T>(IEnumerable<Result> results) where T : IMatch
+        private IEnumerable<ResultMatch<T>> MappingResult<T>(IEnumerable<ResultModel> results) where T : IMatch
         {
             return results.GroupBy(match => new { match.LeagueId }).Select(
                 leagueGroup =>
                 {
                     var leagueName = reportService.GetLeagueName(leagueGroup.Key.LeagueId);
                     var matches = new List<T>();
-
                     foreach (var match in leagueGroup)
                     {
                         var existMatch = matches.SingleOrDefault(res => res.MatchId == match.MatchId);
@@ -97,7 +102,7 @@ namespace NAP.SLI.Results.Services
                         }
                     }
 
-                    return new ResultRecord<T> { LeagueName = leagueName, Matches = matches };
+                    return new ResultMatch<T> { LeagueName = leagueName, Matches = matches };
                 }
             );
         }

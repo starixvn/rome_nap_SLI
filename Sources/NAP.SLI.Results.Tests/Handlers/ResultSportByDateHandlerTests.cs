@@ -14,17 +14,17 @@ namespace NAP.SLI.Results.Tests.Handlers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle(IResultService service, ResultSportByDateRequest request, IEnumerable<ResultSportByDateModel> serviceResult)
+        public async Task TestMethod_Handle(IResultService service, GetSportsRequest request, IEnumerable<SportModel> serviceResult)
         {
             // Arrange
-            var handler = new ResultSportByDateHandler(service);
-            service.GetResultSportByDate(request).Returns(serviceResult);
+            var handler = new GetSportsHandler(service);
+            service.GetSports(request).Returns(serviceResult);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().GetResultSportByDate(request);
+            await service.Received().GetSports(request);
             Assert.Equal(serviceResult, result);
         }
     }

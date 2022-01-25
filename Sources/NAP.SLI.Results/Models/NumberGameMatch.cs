@@ -12,7 +12,7 @@ namespace NAP.SLI.Results.Models
         private const string RedBallColor = "red";
         private const string BlueBallColor = "blue";
 
-        public NumberGameMatch(Result result) : base(result)
+        public NumberGameMatch(ResultModel result) : base(result)
         {
         }
 

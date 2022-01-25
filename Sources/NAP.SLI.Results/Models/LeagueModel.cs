@@ -1,6 +1,6 @@
 namespace NAP.SLI.Results.Models
 {
-    public class ResultLeagueByDateModel
+    public class LeagueModel
     {
         public int LeagueId { get; set; }
 

@@ -23,29 +23,38 @@ namespace NAP.SLI.Results.Controllers
             this.mediator = mediator;
         }
 
-        /// <summary>Get Result Sport By Date</summary>
+        /// <summary>Get Sports</summary>
         [HttpPost("[action]")]
-        [ProducesResponseType(typeof(IEnumerable<ResultSportByDateModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<SportModel>), StatusCodes.Status200OK)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetResultSportByDate([FromBody] ResultSportByDateRequest request)
+        public async Task<IActionResult> GetSports([FromBody] GetSportsRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);
         }
 
-        /// <summary>Get Result League By Date</summary>
+        /// <summary>Get Leagues</summary>
         [HttpPost("[action]")]
-        [ProducesResponseType(typeof(IEnumerable<ResultLeagueByDateModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<LeagueModel>), StatusCodes.Status200OK)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetResultLeagueByDate([FromBody] ResultLeagueByDateRequest request)
+        public async Task<IActionResult> GetLeagues([FromBody] GetLeaguesRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);
         }
 
-        /// <summary>Get Result</summary>
+        /// <summary>Get Results By Date</summary>
         [HttpPost("[action]")]
-        public async Task<IActionResult> GetResult([FromBody] ResultRequest request)
+        public async Task<IActionResult> GetResultsByDate([FromBody] GetResultsByDateRequest request)
+        {
+            var results = await mediator.Send(request).ConfigureAwait(false);
+            return Ok(results);
+        }
+
+        /// <summary>Get Result By Match</summary>
+        [HttpPost("[action]")]
+        [Produces(MediaTypeNames.Application.Json)]
+        public async Task<IActionResult> GetResultByMatch([FromBody] GetResultByMatchRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);
