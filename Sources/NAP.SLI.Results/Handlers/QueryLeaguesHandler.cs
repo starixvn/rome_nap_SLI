@@ -8,16 +8,16 @@ namespace NAP.SLI.Results.Handlers
     using NAP.SLI.Results.Requests;
     using NAP.SLI.Results.Services;
 
-    public class GetLeaguesHandler : IRequestHandler<GetLeaguesRequest, IEnumerable<LeagueModel>>
+    public class QueryLeaguesHandler : IRequestHandler<QueryLeaguesRequest, IEnumerable<LeagueModel>>
     {
         private readonly IResultService service;
 
-        public GetLeaguesHandler(IResultService service)
+        public QueryLeaguesHandler(IResultService service)
         {
             this.service = service;
         }
 
-        public async Task<IEnumerable<LeagueModel>> Handle(GetLeaguesRequest request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<LeagueModel>> Handle(QueryLeaguesRequest request, CancellationToken cancellationToken)
         {
             return await service.GetLeagues(request).ConfigureAwait(false);
         }

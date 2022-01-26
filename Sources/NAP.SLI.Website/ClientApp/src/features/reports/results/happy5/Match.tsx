@@ -1,9 +1,9 @@
 import React from 'react';
 import BallNumber from '../components/BallNumber';
-import { Happy5 } from '../types';
+import { Happy5Match } from '../reducer';
 
 type Props = {
-  match: Happy5;
+  match: Happy5Match;
   onSoccer5Click: (matchId: number, balls: string) => void;
 };
 

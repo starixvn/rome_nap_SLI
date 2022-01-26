@@ -3,7 +3,7 @@ namespace NAP.SLI.Results.Criteria
     using System;
     using Fanex.Data.Repository;
 
-    public class GetLeaguesCriteria : CriteriaBase
+    public class QueryLeaguesCriteria : CriteriaBase
     {
         public DateTime EventDate { get; set; }
 

@@ -27,7 +27,7 @@ namespace NAP.SLI.Results.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(IEnumerable<SportModel>), StatusCodes.Status200OK)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetSports([FromBody] GetSportsRequest request)
+        public async Task<IActionResult> QuerySports([FromBody] QuerySportsRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);
@@ -37,7 +37,7 @@ namespace NAP.SLI.Results.Controllers
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(IEnumerable<LeagueModel>), StatusCodes.Status200OK)]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetLeagues([FromBody] GetLeaguesRequest request)
+        public async Task<IActionResult> QueryLeagues([FromBody] QueryLeaguesRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);
@@ -45,7 +45,7 @@ namespace NAP.SLI.Results.Controllers
 
         /// <summary>Get Results By Date</summary>
         [HttpPost("[action]")]
-        public async Task<IActionResult> GetResultsByDate([FromBody] GetResultsByDateRequest request)
+        public async Task<IActionResult> QueryResultsByDate([FromBody] QueryResultsByDateRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);
@@ -54,7 +54,7 @@ namespace NAP.SLI.Results.Controllers
         /// <summary>Get Result By Match</summary>
         [HttpPost("[action]")]
         [Produces(MediaTypeNames.Application.Json)]
-        public async Task<IActionResult> GetResultByMatch([FromBody] GetResultByMatchRequest request)
+        public async Task<IActionResult> QueryResultsByMatch([FromBody] QueryResultsByMatchRequest request)
         {
             var results = await mediator.Send(request).ConfigureAwait(false);
             return Ok(results);

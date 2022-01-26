@@ -3,7 +3,7 @@ namespace NAP.SLI.Results.Requests
     using System;
     using MediatR;
 
-    public class GetResultsByDateRequest : IRequest<object>
+    public class QueryResultsByDateRequest : IRequest<object>
     {
         public DateTime EventDate { get; set; }
 

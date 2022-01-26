@@ -14,10 +14,10 @@ namespace NAP.SLI.Results.Tests.Handlers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle(IResultService service, GetLeaguesRequest request, IEnumerable<LeagueModel> serviceResult)
+        public async Task TestMethod_Handle(IResultService service, QueryLeaguesRequest request, IEnumerable<LeagueModel> serviceResult)
         {
             // Arrange
-            var handler = new GetLeaguesHandler(service);
+            var handler = new QueryLeaguesHandler(service);
             service.GetLeagues(request).Returns(serviceResult);
 
             // Act

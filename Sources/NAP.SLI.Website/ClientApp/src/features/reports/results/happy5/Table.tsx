@@ -4,18 +4,18 @@ import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal, ModalBody, ModalHeader, Table } from 'reactstrap';
-import Happy5Match from './Match';
-import { querySoccer5 } from '../reducer';
-import { Happy5 } from '../types';
+import Match from './Match';
+import { querySoccer5, Happy5Match } from '../reducer';
 
 const Happy5Table = () => {
   const dispatch = useAppDispatch();
   const {
-    records,
+    results,
     isResultLoading,
     isLeagueLoading,
     isSportLoading,
     isSoccer5Loading,
+    isShowLeagueName,
   } = useSelector((state: AppState) => state.results);
   const [modal, setModal] = useState(false);
   const [url, setUrl] = useState('');
@@ -57,24 +57,26 @@ const Happy5Table = () => {
           </tr>
         </thead>
         <tbody>
-          {records.length === 0 ? (
+          {results.length === 0 ? (
             <tr>
               <td className="text-center" colSpan={11}>
                 There is no information
               </td>
             </tr>
           ) : (
-            records.map((league, index) => (
+            results.map((league, index) => (
               <Fragment key={`${index}_${league.leagueName}`}>
-                <tr>
-                  <td className="col-league" colSpan={11}>
-                    {league.leagueName}
-                  </td>
-                </tr>
+                {isShowLeagueName && (
+                  <tr>
+                    <td className="col-league" colSpan={11}>
+                      {league.leagueName}
+                    </td>
+                  </tr>
+                )}
                 {league.matches.map((match) => (
-                  <Happy5Match
+                  <Match
                     key={match.matchId}
-                    match={match as Happy5}
+                    match={match as Happy5Match}
                     onSoccer5Click={handleSoccer5Click}
                   />
                 ))}

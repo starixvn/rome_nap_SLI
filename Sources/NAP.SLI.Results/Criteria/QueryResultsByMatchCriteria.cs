@@ -2,7 +2,7 @@ namespace NAP.SLI.Results.Criteria
 {
     using Fanex.Data.Repository;
 
-    public class GetResultByMatchCriteria : CriteriaBase
+    public class QueryResultsByMatchCriteria : CriteriaBase
     {
         public long MatchId { get; set; }
 

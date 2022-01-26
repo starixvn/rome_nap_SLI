@@ -5,8 +5,10 @@ namespace NAP.SLI.Results.Requests
     using MediatR;
     using NAP.SLI.Results.Models;
 
-    public class GetSportsRequest : IRequest<IEnumerable<SportModel>>
+    public class QueryLeaguesRequest : IRequest<IEnumerable<LeagueModel>>
     {
         public DateTime EventDate { get; set; }
+
+        public int SportType { get; set; }
     }
 }

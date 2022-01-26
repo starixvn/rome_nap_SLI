@@ -11,11 +11,11 @@ namespace NAP.SLI.Results.Services
 
     public interface IResultService
     {
-        Task<IEnumerable<SportModel>> GetSports(GetSportsRequest request);
-        Task<IEnumerable<LeagueModel>> GetLeagues(GetLeaguesRequest request);
-        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(GetResultsByDateRequest request);
-        Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(GetResultsByDateRequest request);
-        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultByMatch(GetResultByMatchRequest request);
+        Task<IEnumerable<SportModel>> GetSports(QuerySportsRequest request);
+        Task<IEnumerable<LeagueModel>> GetLeagues(QueryLeaguesRequest request);
+        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(QueryResultsByDateRequest request);
+        Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(QueryResultsByDateRequest request);
+        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByMatch(QueryResultsByMatchRequest request);
     }
 
     public class ResultService : IResultService
@@ -29,18 +29,18 @@ namespace NAP.SLI.Results.Services
             this.reportService = reportService;
         }
 
-        public async Task<IEnumerable<SportModel>> GetSports(GetSportsRequest request)
+        public async Task<IEnumerable<SportModel>> GetSports(QuerySportsRequest request)
         {
-            var criteria = new GetSportsCriteria
+            var criteria = new QuerySportsCriteria
             {
                 EventDate = request.EventDate
             };
             return await dynamicRepositoryEx.FetchAsync<SportModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<LeagueModel>> GetLeagues(GetLeaguesRequest request)
+        public async Task<IEnumerable<LeagueModel>> GetLeagues(QueryLeaguesRequest request)
         {
-            var criteria = new GetLeaguesCriteria
+            var criteria = new QueryLeaguesCriteria
             {
                 EventDate = request.EventDate,
                 SportType = request.SportType
@@ -48,21 +48,21 @@ namespace NAP.SLI.Results.Services
             return await dynamicRepositoryEx.FetchAsync<LeagueModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(GetResultsByDateRequest request)
+        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(QueryResultsByDateRequest request)
         {
             var results = await GetResultsByDate(request).ConfigureAwait(false);
             return MappingResult<NumberGameMatch>(results);
         }
 
-        public async Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(GetResultsByDateRequest request)
+        public async Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(QueryResultsByDateRequest request)
         {
             var results = await GetResultsByDate(request).ConfigureAwait(false);
             return MappingResult<Happy5Match>(results);
         }
 
-        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultByMatch(GetResultByMatchRequest request)
+        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByMatch(QueryResultsByMatchRequest request)
         {
-            var criteria = new GetResultByMatchCriteria
+            var criteria = new QueryResultsByMatchCriteria
             {
                 MatchId = request.MatchId
             };
@@ -70,9 +70,9 @@ namespace NAP.SLI.Results.Services
             return MappingResult<NumberGameMatch>(results);
         }
 
-        private async Task<IEnumerable<ResultModel>> GetResultsByDate(GetResultsByDateRequest request)
+        private async Task<IEnumerable<ResultModel>> GetResultsByDate(QueryResultsByDateRequest request)
         {
-            var criteria = new GetResultsByDateCriteria
+            var criteria = new QueryResultsByDateCriteria
             {
                 EventDate = request.EventDate,
                 SportType = request.SportType,

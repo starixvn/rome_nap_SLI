@@ -21,13 +21,13 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetResultSportByDate(
             IDynamicRepositoryEx dynamicRepositoryEx,
             IReportService reportService,
-            GetSportsRequest request,
+            QuerySportsRequest request,
             IEnumerable<SportModel> fetchData
             )
         {
             // Arrange
             var service = new ResultService(dynamicRepositoryEx, reportService);
-            dynamicRepositoryEx.FetchAsync<SportModel>(Arg.Any<GetSportsCriteria>())
+            dynamicRepositoryEx.FetchAsync<SportModel>(Arg.Any<QuerySportsCriteria>())
                             .Returns(Task.FromResult(fetchData));
 
             // Act
@@ -36,7 +36,7 @@ namespace NAP.SLI.Results.Tests.Services
             // Assert
             await dynamicRepositoryEx.Received()
                                 .FetchAsync<SportModel>(
-                                    Arg.Is<GetSportsCriteria>(c => c.EventDate == request.EventDate));
+                                    Arg.Is<QuerySportsCriteria>(c => c.EventDate == request.EventDate));
             Assert.Equal(fetchData, result);
         }
 
@@ -45,13 +45,13 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetResultLeagueByDate(
             IDynamicRepositoryEx dynamicRepositoryEx,
             IReportService reportService,
-            GetLeaguesRequest request,
+            QueryLeaguesRequest request,
             IEnumerable<LeagueModel> fetchData
             )
         {
             // Arrange
             var service = new ResultService(dynamicRepositoryEx, reportService);
-            dynamicRepositoryEx.FetchAsync<LeagueModel>(Arg.Any<GetLeaguesCriteria>())
+            dynamicRepositoryEx.FetchAsync<LeagueModel>(Arg.Any<QueryLeaguesCriteria>())
                             .Returns(Task.FromResult(fetchData));
 
             // Act
@@ -60,7 +60,7 @@ namespace NAP.SLI.Results.Tests.Services
             // Assert
             await dynamicRepositoryEx.Received()
                                 .FetchAsync<LeagueModel>(
-                                    Arg.Is<GetLeaguesCriteria>(c => c.EventDate == request.EventDate && c.SportType == request.SportType));
+                                    Arg.Is<QueryLeaguesCriteria>(c => c.EventDate == request.EventDate && c.SportType == request.SportType));
             Assert.Equal(fetchData, result);
         }
 
@@ -69,7 +69,7 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetNumberGameResult(
             IDynamicRepositoryEx dynamicRepositoryEx,
             IReportService reportService,
-            GetResultsByDateRequest request
+            QueryResultsByDateRequest request
         )
         {
             // Arrange
@@ -85,7 +85,7 @@ namespace NAP.SLI.Results.Tests.Services
             var (fetchData, expectedResults) = CreateFakeData<NumberGameMatch>(leagueName, leagueId, matchId, matchCode, eventDate, kickOffTime, eventStatus, seq, number);
             var service = new ResultService(dynamicRepositoryEx, reportService);
             reportService.GetLeagueName(Arg.Is(leagueId)).Returns(leagueName);
-            dynamicRepositoryEx.FetchAsync<ResultModel>(Arg.Any<GetResultsByDateCriteria>())
+            dynamicRepositoryEx.FetchAsync<ResultModel>(Arg.Any<QueryResultsByDateCriteria>())
                                 .Returns(Task.FromResult(fetchData));
 
             // Act
@@ -94,7 +94,7 @@ namespace NAP.SLI.Results.Tests.Services
             // Assert
             await dynamicRepositoryEx.Received()
                                     .FetchAsync<ResultModel>(
-                                        Arg.Is<GetResultsByDateCriteria>(
+                                        Arg.Is<QueryResultsByDateCriteria>(
                                             c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueId == request.LeagueId
                                         ));
             var firstExpectedResult = expectedResults.ElementAt(0);
@@ -116,7 +116,7 @@ namespace NAP.SLI.Results.Tests.Services
         public async Task TestMethod_GetHappy5Result(
             IDynamicRepositoryEx dynamicRepositoryEx,
             IReportService reportService,
-            GetResultsByDateRequest request
+            QueryResultsByDateRequest request
         )
         {
             // Arrange
@@ -132,7 +132,7 @@ namespace NAP.SLI.Results.Tests.Services
             var (fetchData, expectedResults) = CreateFakeData<Happy5Match>(leagueName, leagueId, matchId, matchCode, eventDate, kickOffTime, eventStatus, seq, number);
             var service = new ResultService(dynamicRepositoryEx, reportService);
             reportService.GetLeagueName(Arg.Is(leagueId)).Returns(leagueName);
-            dynamicRepositoryEx.FetchAsync<ResultModel>(Arg.Any<GetResultsByDateCriteria>())
+            dynamicRepositoryEx.FetchAsync<ResultModel>(Arg.Any<QueryResultsByDateCriteria>())
                                 .Returns(Task.FromResult(fetchData));
 
             // Act
@@ -141,7 +141,7 @@ namespace NAP.SLI.Results.Tests.Services
             // Assert
             await dynamicRepositoryEx.Received()
                                     .FetchAsync<ResultModel>(
-                                        Arg.Is<GetResultsByDateCriteria>(
+                                        Arg.Is<QueryResultsByDateCriteria>(
                                             c => c.EventDate == request.EventDate && c.SportType == request.SportType && c.LeagueId == request.LeagueId
                                         ));
             var firstExpectedResult = expectedResults.ElementAt(0);

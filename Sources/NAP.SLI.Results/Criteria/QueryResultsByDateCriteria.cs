@@ -4,7 +4,7 @@ namespace NAP.SLI.Results.Criteria
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class GetResultsByDateCriteria : CriteriaBase
+    public class QueryResultsByDateCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "FromDate")]
         public DateTime EventDate { get; set; }

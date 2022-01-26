@@ -21,8 +21,8 @@ namespace NAP.SLI.Results.Tests.Handlers
         {
             // Arrange
             var fixture = new Fixture();
-            var handler = new GetResultsByDateHandler(service);
-            var request = fixture.Build<GetResultsByDateRequest>()
+            var handler = new QueryResultsByDateHandler(service);
+            var request = fixture.Build<QueryResultsByDateRequest>()
                 .With(c => c.SportType, (int)SportTypes.NumberGame)
                 .Create();
             service.GetNumberGameResultsByDate(request).Returns(resultRecords);
@@ -41,8 +41,8 @@ namespace NAP.SLI.Results.Tests.Handlers
         {
             // Arrange
             var fixture = new Fixture();
-            var handler = new GetResultsByDateHandler(service);
-            var request = fixture.Build<GetResultsByDateRequest>()
+            var handler = new QueryResultsByDateHandler(service);
+            var request = fixture.Build<QueryResultsByDateRequest>()
                 .With(c => c.SportType, (int)SportTypes.Happy5)
                 .Create();
             service.GetHappy5ResultsByDate(request).Returns(resultRecords);

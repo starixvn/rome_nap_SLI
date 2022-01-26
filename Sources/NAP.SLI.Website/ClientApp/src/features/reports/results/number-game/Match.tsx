@@ -1,9 +1,9 @@
 import React from 'react';
 import BallNumber from '../components/BallNumber';
-import { NumberGame } from '../types';
+import { NumberGameMatch } from '../reducer';
 
 type Props = {
-  match: NumberGame;
+  match: NumberGameMatch;
 };
 
 const Match = ({ match }: Props) => {

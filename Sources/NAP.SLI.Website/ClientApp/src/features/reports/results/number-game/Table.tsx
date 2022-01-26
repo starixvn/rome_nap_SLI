@@ -1,15 +1,16 @@
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Table } from 'reactstrap';
-import NumberGameMatch from './Match';
-import { NumberGame } from '../types';
+import Match from './Match';
+import { NumberGameMatch } from '../reducer';
 
 const NumberGameTable = () => {
   const {
-    records: results,
+    results,
     isResultLoading,
     isLeagueLoading,
     isSportLoading,
+    isShowLeagueName,
   } = useSelector((state: AppState) => state.results);
 
   return isResultLoading || isLeagueLoading || isSportLoading ? (
@@ -37,16 +38,15 @@ const NumberGameTable = () => {
         ) : (
           results.map((league, index) => (
             <Fragment key={`${index}_${league.leagueName}`}>
-              <tr>
-                <td className="col-league" colSpan={8}>
-                  {league.leagueName}
-                </td>
-              </tr>
+              {isShowLeagueName && (
+                <tr>
+                  <td className="col-league" colSpan={8}>
+                    {league.leagueName}
+                  </td>
+                </tr>
+              )}
               {league.matches.map((match) => (
-                <NumberGameMatch
-                  key={match.matchId}
-                  match={match as NumberGame}
-                />
+                <Match key={match.matchId} match={match as NumberGameMatch} />
               ))}
             </Fragment>
           ))

@@ -17,14 +17,14 @@ namespace NAP.SLI.Results.Tests.Controllers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetResultSportByDate(IMediator mediator, GetSportsRequest request, IEnumerable<SportModel> sendResult)
+        public async Task TestMethod_GetResultSportByDate(IMediator mediator, QuerySportsRequest request, IEnumerable<SportModel> sendResult)
         {
             // Arrange
             var controller = new ResultController(mediator);
             mediator.Send(request).Returns(sendResult);
 
             // Act
-            var result = await controller.GetSports(request);
+            var result = await controller.QuerySports(request);
 
             // Assert
             await mediator.Received().Send(request);
@@ -34,14 +34,14 @@ namespace NAP.SLI.Results.Tests.Controllers
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetResultLeagueByDate(IMediator mediator, GetLeaguesRequest request, IEnumerable<LeagueModel> sendResult)
+        public async Task TestMethod_GetResultLeagueByDate(IMediator mediator, QueryLeaguesRequest request, IEnumerable<LeagueModel> sendResult)
         {
             // Arrange
             var controller = new ResultController(mediator);
             mediator.Send(request).Returns(sendResult);
 
             // Act
-            var result = await controller.GetLeagues(request);
+            var result = await controller.QueryLeagues(request);
 
             // Assert
             await mediator.Received().Send(request);
@@ -51,14 +51,14 @@ namespace NAP.SLI.Results.Tests.Controllers
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetResult(IMediator mediator, GetResultsByDateRequest request, object sendResult)
+        public async Task TestMethod_GetResult(IMediator mediator, QueryResultsByDateRequest request, object sendResult)
         {
             // Arrange
             var controller = new ResultController(mediator);
             mediator.Send(request).Returns(sendResult);
 
             // Act
-            var result = await controller.GetResultsByDate(request);
+            var result = await controller.QueryResultsByDate(request);
 
             // Assert
             await mediator.Received().Send(request);

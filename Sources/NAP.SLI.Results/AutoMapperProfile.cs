@@ -7,7 +7,7 @@ namespace NAP.SLI.Results
     {
         public AutoMapperProfile()
         {
-            CreateMap<ExcelRequest, GetResultsByDateRequest>();
+            CreateMap<ExcelRequest, QueryResultsByDateRequest>();
         }
     }
 }

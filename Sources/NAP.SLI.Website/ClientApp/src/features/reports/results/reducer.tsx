@@ -1,76 +1,157 @@
 import { createAsyncThunk, createSlice, unwrapResult } from '@reduxjs/toolkit';
 import { download, post } from 'services/http';
 import { SHOW_ALL_LEAGUES } from 'utils/ConstantUtils';
-import {
-  ExcelArg,
-  League,
-  LeagueArg,
-  QueryLeaguesAndResultsArg,
-  QueryLeaguesAndResultsResponse,
-  QuerySubmitArg,
-  QuerySubmitResponse,
-  ResultArg,
-  Record,
-  Soccer5Arg,
-  Sport,
-  SportArg,
-  State,
-} from './types';
+
+export type Match = {
+  matchId: number;
+  noMatch: string;
+  leagueId: number;
+  kickOffTime: string;
+  eventStatus: string;
+};
+
+export type NumberGameMatch = Match & {
+  firstBall: Ball;
+  secondBall: Ball;
+  thirdBall: Ball;
+  oeft: string;
+};
+
+export type Happy5Match = Match & {
+  firstBall: Ball;
+  secondBall: Ball;
+  thirdBall: Ball;
+  fourthBall: Ball;
+  fifthBall: Ball;
+  totalBall: string;
+  bigSmall: string;
+  oddEven: string;
+  fourSeason: string;
+  moreOddMoreEven: string;
+  soccer5: string;
+  soccer5Class: string;
+  combo: string;
+  balls: string;
+  eventStatusIsRefund: boolean;
+};
+
+export type Result = {
+  leagueName: string;
+  matches: Array<NumberGameMatch | Happy5Match>;
+};
+
+export type Ball = {
+  number: string;
+  color: string;
+};
+
+export type Sport = {
+  sportType: number;
+  sportName: string;
+};
+
+export type League = {
+  leagueId: number;
+  leagueName: string;
+};
+
+export type State = {
+  sports: Sport[];
+  leagues: League[];
+  results: Result[];
+  sportType: number;
+  isSportLoading: boolean;
+  isLeagueLoading: boolean;
+  isResultLoading: boolean;
+  isSoccer5Loading: boolean;
+  isExcelLoading: boolean;
+  isShowLeagueName: boolean;
+};
 
 const actionName = 'result';
 
 const initialState: State = {
   sports: [],
   leagues: [],
-  records: [],
-  selectedSportType: 0,
+  results: [],
+  sportType: 0,
   isSportLoading: false,
   isLeagueLoading: false,
   isResultLoading: false,
   isSoccer5Loading: false,
   isExcelLoading: false,
+  isShowLeagueName: false,
 };
 
-const querySports = createAsyncThunk<Sport[], SportArg>(
-  `${actionName}/getSports`,
-  async (values) => {
-    const { data } = await post<Sport[]>(
-      `/api/${actionName}/getSports`,
-      values,
-    );
-    return data;
-  },
-);
+const querySports = createAsyncThunk<
+  Sport[],
+  {
+    eventDate: string;
+  }
+>(`${actionName}/querySports`, async (values) => {
+  const { data } = await post<Sport[]>(
+    `/api/${actionName}/querySports`,
+    values,
+  );
+  return data;
+});
 
-const queryLeagues = createAsyncThunk<League[], LeagueArg>(
-  `${actionName}/getLeagues`,
-  async (values) => {
-    const { data } = await post<League[]>(
-      `/api/${actionName}/getLeagues`,
-      values,
-    );
-    const allItem: League = {
-      leagueId: 0,
-      leagueName: SHOW_ALL_LEAGUES,
-    };
-    return [allItem].concat(data);
-  },
-);
+const queryLeagues = createAsyncThunk<
+  League[],
+  {
+    eventDate: string;
+    sportType: number;
+  }
+>(`${actionName}/queryLeagues`, async (values) => {
+  const { data } = await post<League[]>(
+    `/api/${actionName}/queryLeagues`,
+    values,
+  );
+  const allItem: League = {
+    leagueId: 0,
+    leagueName: SHOW_ALL_LEAGUES,
+  };
+  return [allItem].concat(data);
+});
 
-export const queryResultsByDate = createAsyncThunk<Record[], ResultArg>(
-  `${actionName}/queryResultsByDate`,
-  async (values) => {
-    const { data } = await post<Record[]>(
-      `/api/${actionName}/getResultsByDate`,
-      values,
-    );
-    return data;
-  },
-);
+export const queryResultsByDate = createAsyncThunk<
+  Result[],
+  {
+    eventDate: string;
+    leagueId: number;
+    sportType: number;
+  }
+>(`${actionName}/queryResultsByDate`, async (values) => {
+  const { data } = await post<Result[]>(
+    `/api/${actionName}/queryResultsByDate`,
+    values,
+  );
+  return data;
+});
+
+export const queryResultsByMatch = createAsyncThunk<
+  Result[],
+  {
+    matchId: number;
+    sportType: number;
+  }
+>(`${actionName}/queryResultsByMatch`, async (values) => {
+  const { data } = await post<Result[]>(
+    `/api/${actionName}/queryResultsByMatch`,
+    values,
+  );
+  return data;
+});
 
 export const queryResults = createAsyncThunk<
-  QuerySubmitResponse,
-  QuerySubmitArg
+  {
+    sports: Sport[];
+    leagues: League[];
+    results: Result[];
+  },
+  {
+    eventDate: string;
+  }
 >(`${actionName}/queryResults`, async ({ eventDate }, { dispatch }) => {
   const sports = await dispatch(querySports({ eventDate })).then(unwrapResult);
   if (sports.length === 0) return { sports: [], leagues: [], results: [] };
@@ -98,10 +179,16 @@ export const queryResults = createAsyncThunk<
 });
 
 export const queryLeaguesAndResults = createAsyncThunk<
-  QueryLeaguesAndResultsResponse,
-  QueryLeaguesAndResultsArg
+  {
+    leagues: League[];
+    results: Result[];
+  },
+  {
+    eventDate: string;
+    sportType: number;
+  }
 >(
-  `${actionName}/getLeaguesAndResults`,
+  `${actionName}/queryLeaguesAndResults`,
   async ({ eventDate, sportType }, { dispatch }) => {
     const leagues = await dispatch(queryLeagues({ eventDate, sportType })).then(
       unwrapResult,
@@ -122,31 +209,45 @@ export const queryLeaguesAndResults = createAsyncThunk<
   },
 );
 
-export const queryExcel = createAsyncThunk<void, ExcelArg>(
-  `${actionName}/getExcel`,
-  async (values) => {
-    await download(`/api/${actionName}/excel`, values);
-  },
-);
+export const queryExcel = createAsyncThunk<
+  void,
+  {
+    eventDate: string;
+    leagueId: number;
+    sportType: number;
+    leagueName: string;
+    sportName: string;
+  }
+>(`${actionName}/getExcel`, async (values) => {
+  await download(`/api/${actionName}/excel`, values);
+});
 
-export const querySoccer5 = createAsyncThunk<string, Soccer5Arg>(
-  'third-party-result/getSoccer5Result',
-  async (values) => {
-    const { data } = await post<string>(
-      'api/third-party-result/getSoccer5Result',
-      values,
-    );
-    return data;
-  },
-);
+export const querySoccer5 = createAsyncThunk<
+  string,
+  {
+    matchId: number;
+    balls: string;
+    isDesktop: boolean;
+  }
+>('third-party-result/getSoccer5Result', async (values) => {
+  const { data } = await post<string>(
+    'api/third-party-result/getSoccer5Result',
+    values,
+  );
+  return data;
+});
 
-export const queryNumberGame = createAsyncThunk<string, Soccer5Arg>(
-  'third-party-result/getSoccer5Result',
-  async (values) => {
-    const { data } = await post<string>('api/result/getResultByMatch', values);
-    return data;
-  },
-);
+export const queryNumberGame = createAsyncThunk<
+  string,
+  {
+    matchId: number;
+    balls: string;
+    isDesktop: boolean;
+  }
+>('third-party-result/getSoccer5Result', async (values) => {
+  const { data } = await post<string>('api/result/getResultByMatch', values);
+  return data;
+});
 
 const slice = createSlice({
   name: actionName,
@@ -159,18 +260,18 @@ const slice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(querySports.pending, (state) => {
       state.isSportLoading = true;
-      state.records = [];
+      state.results = [];
     });
     builder.addCase(querySports.fulfilled, (state, { payload }) => {
       state.isSportLoading = false;
       state.sports = payload;
-      state.selectedSportType = payload[0]?.sportType ?? 0;
+      state.sportType = payload[0]?.sportType ?? 0;
     });
 
     builder.addCase(queryLeagues.pending, (state, { meta }) => {
       state.isLeagueLoading = true;
-      state.selectedSportType = meta.arg.sportType;
-      state.records = [];
+      state.sportType = meta.arg.sportType;
+      state.results = [];
     });
     builder.addCase(queryLeagues.fulfilled, (state, { payload }) => {
       state.isLeagueLoading = false;
@@ -179,21 +280,33 @@ const slice = createSlice({
 
     builder.addCase(queryResultsByDate.pending, (state) => {
       state.isResultLoading = true;
-      state.records = [];
+      state.isShowLeagueName = true;
+      state.results = [];
     });
     builder.addCase(queryResultsByDate.fulfilled, (state, { payload }) => {
       state.isResultLoading = false;
-      state.records = payload;
+      state.results = payload;
+    });
+
+    builder.addCase(queryResultsByMatch.pending, (state, { meta }) => {
+      state.isResultLoading = true;
+      state.isShowLeagueName = false;
+      state.sportType = meta.arg.sportType;
+      state.results = [];
+    });
+    builder.addCase(queryResultsByMatch.fulfilled, (state, { payload }) => {
+      state.isResultLoading = false;
+      state.results = payload;
     });
 
     builder.addCase(queryLeaguesAndResults.fulfilled, (state, { payload }) => {
       state.leagues = payload.leagues;
-      state.records = payload.results;
+      state.results = payload.results;
     });
     builder.addCase(queryResults.fulfilled, (state, { payload }) => {
       state.sports = payload.sports;
       state.leagues = payload.leagues;
-      state.records = payload.results;
+      state.results = payload.results;
     });
 
     builder.addCase(queryExcel.pending, (state) => {

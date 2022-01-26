@@ -27,5 +27,6 @@
     <Setting Key="U3_Result_SportSelByDate" SpName="U3_Result_SportSelByDate" DbName="DBAGE.bodb02.bodbDownlineNetView"/>
     <Setting Key="U3_Age_Result_LeagueSelByDate" SpName="U3_Age_Result_LeagueSelByDate" DbName="DBAGE.bodb02.bodbDownlineNetView"/>
     <Setting Key="U3_Result_MatchSelNumberGameByLeague" SpName="U3_Result_MatchSelNumberGameByLeague" DbName="DBAGE.bodb02.bodbDownlineNetView"/>
+    <Setting Key="U3_BetList_SelMatchResultNumberGame" SpName="U3_BetList_SelMatchResultNumberGame" DbName="DBAGE.bodb02.bodbDownlineNetView"/>
   </Funtion>
 </Functions>

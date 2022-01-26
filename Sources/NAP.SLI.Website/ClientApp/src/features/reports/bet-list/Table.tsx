@@ -165,7 +165,7 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
         toggle={handleToggle}
         fade={false}
       >
-        <ModalHeader toggle={handleToggle}>Results </ModalHeader>
+        <ModalHeader toggle={handleToggle}>RESULTS</ModalHeader>
         <ModalBody>
           <ResultsModal sportType={sportType} matchId={matchId} />
         </ModalBody>

@@ -21,7 +21,7 @@ const getTableBySportType = (sportType: number) => {
 };
 
 const Page = () => {
-  const { isSportLoading, isLeagueLoading, selectedSportType } = useSelector(
+  const { isSportLoading, isLeagueLoading, sportType } = useSelector(
     (state: AppState) => state.results,
   );
   const dispatch = useAppDispatch();
@@ -38,7 +38,7 @@ const Page = () => {
     <div className="result-page">
       <div className="page-title">Results</div>
       <Filter />
-      {!isLoading && getTableBySportType(selectedSportType)}
+      {!isLoading && getTableBySportType(sportType)}
     </div>
   );
 };

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { SportTypes } from '../../../utils/ConstantUtils';
 import Happy5Table from './happy5/Table';
 import NumberGameTable from './number-game/Table';
 import EmptyTable from './components/EmptyTable';
 import './Page.scss';
+import { useAppDispatch } from 'app/store';
+import { queryResultsByMatch, reset } from './reducer';
+import GlobalSpinner from 'components/spinner/GlobalSpinner';
 
 const getTableBySportType = (sportType: number) => {
   switch (sportType) {
@@ -17,21 +20,38 @@ const getTableBySportType = (sportType: number) => {
   }
 };
 
-type Props = {
+const Modal = ({
+  sportType,
+  matchId,
+}: {
   sportType: number;
   matchId: number;
-};
-
-const Modal = ({ sportType, matchId }: Props) => {
-  const { isSportLoading, isLeagueLoading, selectedSportType } = useSelector(
+}) => {
+  const { isResultLoading, sportType: selectedSportType } = useSelector(
     (state: AppState) => state.results,
   );
+  const dispatch = useAppDispatch();
 
-  const isLoading = isSportLoading || isLeagueLoading;
+  useEffect(() => {
+    dispatch(
+      queryResultsByMatch({
+        sportType,
+        matchId,
+      }),
+    );
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, matchId, sportType]);
 
   return (
     <div className="result-page">
-      {!isLoading && getTableBySportType(selectedSportType || sportType)}
+      {isResultLoading ? (
+        <GlobalSpinner />
+      ) : (
+        getTableBySportType(selectedSportType)
+      )}
     </div>
   );
 };
