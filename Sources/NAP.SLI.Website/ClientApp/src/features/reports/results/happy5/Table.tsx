@@ -15,7 +15,7 @@ const Happy5Table = () => {
     isLeagueLoading,
     isSportLoading,
     isSoccer5Loading,
-    isShowLeagueName,
+    isFromBetList,
   } = useSelector((state: AppState) => state.results);
   const [modal, setModal] = useState(false);
   const [url, setUrl] = useState('');
@@ -27,7 +27,6 @@ const Happy5Table = () => {
       querySoccer5({
         matchId,
         balls,
-        isDesktop: true,
       }),
     );
     const urlRes = unwrapResult(result);
@@ -52,21 +51,21 @@ const Happy5Table = () => {
             <th className="col-4s">4S</th>
             <th className="col-mome">MO/ME</th>
             <th className="col-cb">CB</th>
-            <th className="col-soccer5">Soccer 5</th>
+            {!isFromBetList && <th className="col-soccer5">Soccer 5</th>}
             <th className="col-status">Status</th>
           </tr>
         </thead>
         <tbody>
           {results.length === 0 ? (
             <tr>
-              <td className="text-center" colSpan={11}>
+              <td className="text-center" colSpan={!isFromBetList ? 11 : 10}>
                 There is no information
               </td>
             </tr>
           ) : (
             results.map((league, index) => (
               <Fragment key={`${index}_${league.leagueName}`}>
-                {isShowLeagueName && (
+                {!isFromBetList && (
                   <tr>
                     <td className="col-league" colSpan={11}>
                       {league.leagueName}

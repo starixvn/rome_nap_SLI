@@ -10,7 +10,7 @@ const NumberGameTable = () => {
     isResultLoading,
     isLeagueLoading,
     isSportLoading,
-    isShowLeagueName,
+    isFromBetList,
   } = useSelector((state: AppState) => state.results);
 
   return isResultLoading || isLeagueLoading || isSportLoading ? (
@@ -38,7 +38,7 @@ const NumberGameTable = () => {
         ) : (
           results.map((league, index) => (
             <Fragment key={`${index}_${league.leagueName}`}>
-              {isShowLeagueName && (
+              {!isFromBetList && (
                 <tr>
                   <td className="col-league" colSpan={8}>
                     {league.leagueName}

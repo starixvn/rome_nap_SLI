@@ -11,11 +11,12 @@ namespace NAP.SLI.Results.Services
 
     public interface IResultService
     {
-        Task<IEnumerable<SportModel>> GetSports(QuerySportsRequest request);
-        Task<IEnumerable<LeagueModel>> GetLeagues(QueryLeaguesRequest request);
-        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(QueryResultsByDateRequest request);
-        Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(QueryResultsByDateRequest request);
-        Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByMatch(QueryResultsByMatchRequest request);
+        Task<IEnumerable<SportModel>> QuerySports(QuerySportsRequest request);
+        Task<IEnumerable<LeagueModel>> QueryLeagues(QueryLeaguesRequest request);
+        Task<IEnumerable<ResultMatch<NumberGameMatch>>> QueryNumberGameResultsByDate(QueryResultsByDateRequest request);
+        Task<IEnumerable<ResultMatch<Happy5Match>>> QueryHappy5ResultsByDate(QueryResultsByDateRequest request);
+        Task<IEnumerable<ResultMatch<NumberGameMatch>>> QueryNumberGameResultsByMatch(QueryResultsByMatchRequest request);
+        Task<IEnumerable<ResultMatch<Happy5Match>>> QueryHappy5ResultsByMatch(QueryResultsByMatchRequest request);
     }
 
     public class ResultService : IResultService
@@ -29,7 +30,7 @@ namespace NAP.SLI.Results.Services
             this.reportService = reportService;
         }
 
-        public async Task<IEnumerable<SportModel>> GetSports(QuerySportsRequest request)
+        public async Task<IEnumerable<SportModel>> QuerySports(QuerySportsRequest request)
         {
             var criteria = new QuerySportsCriteria
             {
@@ -38,7 +39,7 @@ namespace NAP.SLI.Results.Services
             return await dynamicRepositoryEx.FetchAsync<SportModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<LeagueModel>> GetLeagues(QueryLeaguesRequest request)
+        public async Task<IEnumerable<LeagueModel>> QueryLeagues(QueryLeaguesRequest request)
         {
             var criteria = new QueryLeaguesCriteria
             {
@@ -48,26 +49,28 @@ namespace NAP.SLI.Results.Services
             return await dynamicRepositoryEx.FetchAsync<LeagueModel>(criteria).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByDate(QueryResultsByDateRequest request)
+        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> QueryNumberGameResultsByDate(QueryResultsByDateRequest request)
         {
             var results = await GetResultsByDate(request).ConfigureAwait(false);
             return MappingResult<NumberGameMatch>(results);
         }
 
-        public async Task<IEnumerable<ResultMatch<Happy5Match>>> GetHappy5ResultsByDate(QueryResultsByDateRequest request)
+        public async Task<IEnumerable<ResultMatch<Happy5Match>>> QueryHappy5ResultsByDate(QueryResultsByDateRequest request)
         {
             var results = await GetResultsByDate(request).ConfigureAwait(false);
             return MappingResult<Happy5Match>(results);
         }
 
-        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> GetNumberGameResultsByMatch(QueryResultsByMatchRequest request)
+        public async Task<IEnumerable<ResultMatch<NumberGameMatch>>> QueryNumberGameResultsByMatch(QueryResultsByMatchRequest request)
         {
-            var criteria = new QueryResultsByMatchCriteria
-            {
-                MatchId = request.MatchId
-            };
-            var results = await dynamicRepositoryEx.FetchAsync<ResultModel>(criteria).ConfigureAwait(false);
+            var results = await GetResultsByMatch(request).ConfigureAwait(false);
             return MappingResult<NumberGameMatch>(results);
+        }
+
+        public async Task<IEnumerable<ResultMatch<Happy5Match>>> QueryHappy5ResultsByMatch(QueryResultsByMatchRequest request)
+        {
+            var results = await GetResultsByMatch(request).ConfigureAwait(false);
+            return MappingResult<Happy5Match>(results);
         }
 
         private async Task<IEnumerable<ResultModel>> GetResultsByDate(QueryResultsByDateRequest request)
@@ -77,6 +80,15 @@ namespace NAP.SLI.Results.Services
                 EventDate = request.EventDate,
                 SportType = request.SportType,
                 LeagueId = request.LeagueId
+            };
+            return await dynamicRepositoryEx.FetchAsync<ResultModel>(criteria).ConfigureAwait(false);
+        }
+
+        private async Task<IEnumerable<ResultModel>> GetResultsByMatch(QueryResultsByMatchRequest request)
+        {
+            var criteria = new QueryResultsByMatchCriteria
+            {
+                MatchId = request.MatchId
             };
             return await dynamicRepositoryEx.FetchAsync<ResultModel>(criteria).ConfigureAwait(false);
         }

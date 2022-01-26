@@ -10,7 +10,7 @@ const Match = ({ match }: Props) => {
   return (
     <tr>
       <td className="text-center new-line">{match.kickOffTime}</td>
-      <td className="align-middle pl-3">{match.noMatch}</td>
+      <td className="align-middle pl-3">{match.matchNo}</td>
       <td className="text-center align-middle">{match.oeft}</td>
       <td className="text-center align-middle">
         <BallNumber ball={match.firstBall} />

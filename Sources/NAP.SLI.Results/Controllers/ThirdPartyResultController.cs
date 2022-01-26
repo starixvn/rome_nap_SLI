@@ -23,7 +23,7 @@ namespace NAP.SLI.Results.Controllers
         /// <summary>Get Happy5 Linked Game</summary>
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetHappy5LinkedGameResult([FromBody] Happy5LinkedGameResultRequest request)
+        public async Task<IActionResult> QueryHappy5LinkedGameResult([FromBody] QueryHappy5LinkedGameResultRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);
@@ -32,7 +32,7 @@ namespace NAP.SLI.Results.Controllers
         /// <summary>Get Soccer 5</summary>
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetSoccer5Result([FromBody] Soccer5ResultRequest request)
+        public async Task<IActionResult> QuerySoccer5Result([FromBody] QuerySoccer5ResultRequest request)
         {
             var result = await mediator.Send(request).ConfigureAwait(false);
             return Ok(result);

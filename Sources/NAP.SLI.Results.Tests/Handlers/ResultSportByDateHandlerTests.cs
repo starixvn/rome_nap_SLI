@@ -18,13 +18,13 @@ namespace NAP.SLI.Results.Tests.Handlers
         {
             // Arrange
             var handler = new QuerySportsHandler(service);
-            service.GetSports(request).Returns(serviceResult);
+            service.QuerySports(request).Returns(serviceResult);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().GetSports(request);
+            await service.Received().QuerySports(request);
             Assert.Equal(serviceResult, result);
         }
     }

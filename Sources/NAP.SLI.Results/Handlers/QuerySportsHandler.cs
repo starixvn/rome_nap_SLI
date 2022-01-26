@@ -19,7 +19,7 @@ namespace NAP.SLI.Results.Handlers
 
         public async Task<IEnumerable<SportModel>> Handle(QuerySportsRequest request, CancellationToken cancellationToken)
         {
-            return await service.GetSports(request).ConfigureAwait(false);
+            return await service.QuerySports(request).ConfigureAwait(false);
         }
     }
 

@@ -2,7 +2,7 @@ namespace NAP.SLI.Results.Requests
 {
     using MediatR;
 
-    public class Soccer5ResultRequest : IRequest<string>
+    public class QuerySoccer5ResultRequest : IRequest<string>
     {
         public int MatchId { get; set; }
 
@@ -14,6 +14,6 @@ namespace NAP.SLI.Results.Requests
 
         public string Language { get; set; } = "en-US";
 
-        public int BettypeId { get; set; } = 3604;
+        public int BetTypeId { get; set; } = 3604;
     }
 }

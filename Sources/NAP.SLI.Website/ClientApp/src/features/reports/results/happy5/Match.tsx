@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import BallNumber from '../components/BallNumber';
 import { Happy5Match } from '../reducer';
 
@@ -8,10 +9,12 @@ type Props = {
 };
 
 const Match = ({ match, onSoccer5Click }: Props) => {
+  const { isFromBetList } = useSelector((state: AppState) => state.results);
+
   return (
     <tr>
       <td className="text-center new-line">{match.kickOffTime}</td>
-      <td className="align-middle pl-3">{match.noMatch}</td>
+      <td className="align-middle pl-3">{match.matchNo}</td>
       <td className="text-center align-middle">
         {match.eventStatusIsRefund ? (
           'N/A'
@@ -31,14 +34,16 @@ const Match = ({ match, onSoccer5Click }: Props) => {
       <td className="text-center align-middle">{match.fourSeason}</td>
       <td className="text-center align-middle">{match.moreOddMoreEven}</td>
       <td className="text-center align-middle">{match.combo}</td>
-      <td className="text-center align-middle">
-        <div
-          className={match.soccer5Class}
-          onClick={() => onSoccer5Click(match.matchId, match.balls)}
-        >
-          {match.soccer5}
-        </div>
-      </td>
+      {!isFromBetList && (
+        <td className="text-center align-middle">
+          <div
+            className={match.soccer5Class}
+            onClick={() => onSoccer5Click(match.matchId, match.balls)}
+          >
+            {match.soccer5}
+          </div>
+        </td>
+      )}
       <td className="text-center align-middle font-weight-bold text-capitalize">
         {match.eventStatus}
       </td>

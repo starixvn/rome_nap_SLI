@@ -21,7 +21,8 @@ namespace NAP.SLI.Results.Handlers
         {
             return request.SportType switch
             {
-                (int)SportTypes.NumberGame => await service.GetNumberGameResultsByMatch(request).ConfigureAwait(false),
+                (int)SportTypes.NumberGame => await service.QueryNumberGameResultsByMatch(request).ConfigureAwait(false),
+                (int)SportTypes.Happy5 => await service.QueryHappy5ResultsByMatch(request).ConfigureAwait(false),
                 _ => throw new NotImplementedException()
             };
         }

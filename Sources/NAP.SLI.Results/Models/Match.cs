@@ -26,9 +26,8 @@ namespace NAP.SLI.Results.Models
 
     public class Match : IMatch
     {
-        protected readonly ResultModel result;
-
         private const string DateTimeFormat = "{0:MM/dd/yyyy \\\n hh:mm:ss tt}";
+        protected readonly ResultModel result;
 
         public Match(ResultModel result)
         {

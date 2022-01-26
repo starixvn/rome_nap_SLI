@@ -25,13 +25,13 @@ namespace NAP.SLI.Results.Tests.Handlers
             var request = fixture.Build<QueryResultsByDateRequest>()
                 .With(c => c.SportType, (int)SportTypes.NumberGame)
                 .Create();
-            service.GetNumberGameResultsByDate(request).Returns(resultRecords);
+            service.QueryNumberGameResultsByDate(request).Returns(resultRecords);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().GetNumberGameResultsByDate(request);
+            await service.Received().QueryNumberGameResultsByDate(request);
             Assert.Equal(resultRecords, result);
         }
 
@@ -45,13 +45,13 @@ namespace NAP.SLI.Results.Tests.Handlers
             var request = fixture.Build<QueryResultsByDateRequest>()
                 .With(c => c.SportType, (int)SportTypes.Happy5)
                 .Create();
-            service.GetHappy5ResultsByDate(request).Returns(resultRecords);
+            service.QueryHappy5ResultsByDate(request).Returns(resultRecords);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().GetHappy5ResultsByDate(request);
+            await service.Received().QueryHappy5ResultsByDate(request);
             Assert.Equal(resultRecords, result);
         }
     }

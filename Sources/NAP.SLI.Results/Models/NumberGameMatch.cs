@@ -14,9 +14,10 @@ namespace NAP.SLI.Results.Models
 
         public NumberGameMatch(ResultModel result) : base(result)
         {
+            MatchNo = $"Number Game No {MatchCode}";
         }
 
-        public string NoMatch => $"Number Game No {result.MatchCode}";
+        public string MatchNo { get; }
 
         public Ball FirstBall
         {

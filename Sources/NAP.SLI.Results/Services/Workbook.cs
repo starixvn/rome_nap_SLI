@@ -126,7 +126,7 @@ namespace NAP.SLI.Results.Services
         {
             return new Mapper<NumberGameMatch>()
                             .Map(Column.A, x => x.KickOffTime)
-                            .Map(Column.B, x => x.NoMatch)
+                            .Map(Column.B, x => x.MatchNo)
                             .Map(Column.C, x => x.OEFT)
                             .Map(Column.D, x => x.FirstBall.Number)
                             .Map(Column.E, x => x.SecondBall.Number)
@@ -168,7 +168,7 @@ namespace NAP.SLI.Results.Services
         {
             return new Mapper<Happy5Match>()
                              .Map(Column.A, x => x.KickOffTime)
-                             .Map(Column.B, x => x.NoMatch)
+                             .Map(Column.B, x => x.MatchNo)
                              .Map(Column.C, x => GetBalls(x))
                              .Map(Column.D, x => x.TotalBall)
                              .Map(Column.E, x => x.BigSmall)

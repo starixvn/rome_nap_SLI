@@ -12,17 +12,17 @@ namespace NAP.SLI.Results.Tests.Handlers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle(IThirdPartyResultService service, Happy5LinkedGameResultRequest request, string serviceResult)
+        public async Task TestMethod_Handle(IThirdPartyResultService service, QueryHappy5LinkedGameResultRequest request, string serviceResult)
         {
             // Arrange
-            var handler = new Happy5LinkedGameResultHandler(service);
-            service.GetHappy5LinkedGameResult(request).Returns(serviceResult);
+            var handler = new QueryHappy5LinkedGameResultHandler(service);
+            service.QueryHappy5LinkedGameResult(request).Returns(serviceResult);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            await service.Received().GetHappy5LinkedGameResult(request);
+            await service.Received().QueryHappy5LinkedGameResult(request);
             Assert.Equal(serviceResult, result);
         }
     }

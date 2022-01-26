@@ -13,14 +13,14 @@ namespace NAP.SLI.Results.Tests.Controllers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetHappy5LinkedGameResult(IMediator mediator, Happy5LinkedGameResultRequest request, string sendResult)
+        public async Task TestMethod_GetHappy5LinkedGameResult(IMediator mediator, QueryHappy5LinkedGameResultRequest request, string sendResult)
         {
             // Arrange
             var controller = new ThirdPartyResultController(mediator);
             mediator.Send(request).Returns(sendResult);
 
             // Act
-            var result = await controller.GetHappy5LinkedGameResult(request);
+            var result = await controller.QueryHappy5LinkedGameResult(request);
 
             // Assert
             await mediator.Received().Send(request);
@@ -30,14 +30,14 @@ namespace NAP.SLI.Results.Tests.Controllers
 
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_GetSoccer5Result(IMediator mediator, Soccer5ResultRequest request, string sendResult)
+        public async Task TestMethod_GetSoccer5Result(IMediator mediator, QuerySoccer5ResultRequest request, string sendResult)
         {
             // Arrange
             var controller = new ThirdPartyResultController(mediator);
             mediator.Send(request).Returns(sendResult);
 
             // Act
-            var result = await controller.GetSoccer5Result(request);
+            var result = await controller.QuerySoccer5Result(request);
 
             // Assert
             await mediator.Received().Send(request);

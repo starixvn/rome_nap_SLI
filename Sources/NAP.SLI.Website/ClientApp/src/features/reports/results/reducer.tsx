@@ -4,7 +4,7 @@ import { SHOW_ALL_LEAGUES } from 'utils/ConstantUtils';
 
 export type Match = {
   matchId: number;
-  noMatch: string;
+  matchNo: string;
   leagueId: number;
   kickOffTime: string;
   eventStatus: string;
@@ -65,7 +65,7 @@ export type State = {
   isResultLoading: boolean;
   isSoccer5Loading: boolean;
   isExcelLoading: boolean;
-  isShowLeagueName: boolean;
+  isFromBetList: boolean;
 };
 
 const actionName = 'result';
@@ -80,7 +80,7 @@ const initialState: State = {
   isResultLoading: false,
   isSoccer5Loading: false,
   isExcelLoading: false,
-  isShowLeagueName: false,
+  isFromBetList: false,
 };
 
 const querySports = createAsyncThunk<
@@ -227,25 +227,12 @@ export const querySoccer5 = createAsyncThunk<
   {
     matchId: number;
     balls: string;
-    isDesktop: boolean;
   }
->('third-party-result/getSoccer5Result', async (values) => {
+>('third-party-result/querySoccer5Result', async (values) => {
   const { data } = await post<string>(
-    'api/third-party-result/getSoccer5Result',
+    'api/third-party-result/querySoccer5Result',
     values,
   );
-  return data;
-});
-
-export const queryNumberGame = createAsyncThunk<
-  string,
-  {
-    matchId: number;
-    balls: string;
-    isDesktop: boolean;
-  }
->('third-party-result/getSoccer5Result', async (values) => {
-  const { data } = await post<string>('api/result/getResultByMatch', values);
   return data;
 });
 
@@ -280,7 +267,7 @@ const slice = createSlice({
 
     builder.addCase(queryResultsByDate.pending, (state) => {
       state.isResultLoading = true;
-      state.isShowLeagueName = true;
+      state.isFromBetList = false;
       state.results = [];
     });
     builder.addCase(queryResultsByDate.fulfilled, (state, { payload }) => {
@@ -290,7 +277,7 @@ const slice = createSlice({
 
     builder.addCase(queryResultsByMatch.pending, (state, { meta }) => {
       state.isResultLoading = true;
-      state.isShowLeagueName = false;
+      state.isFromBetList = true;
       state.sportType = meta.arg.sportType;
       state.results = [];
     });

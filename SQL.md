@@ -1,3 +1,9 @@
+// General
+select top 100 c.custid, c.username from dbo.bettrans14 as b with (nolock)
+inner join dbo.match14 as m with (nolock) on b.matchid=m.matchid
+inner join dbo.Customer as c with (nolock) on b.custid=c.custid
+where m.sporttype=164
+
 // Win Loss Detail
 declare @FDate DATETIME ='2021-10-01 00:00:00'
 declare @TDate datetime ='2022-01-19 00:00:00'

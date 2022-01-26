@@ -13,17 +13,17 @@ namespace NAP.SLI.Results.Tests.Handlers
     {
         [Theory]
         [AutoDomainData]
-        public async Task TestMethod_Handle(IThirdPartyResultService service, Soccer5ResultRequest request, string serviceResult)
+        public async Task TestMethod_Handle(IThirdPartyResultService service, QuerySoccer5ResultRequest request, string serviceResult)
         {
             // Arrange
-            var handler = new Soccer5ResultHandler(service);
-            service.GetSoccer5Result(request).Returns(serviceResult);
+            var handler = new QuerySoccer5ResultHandler(service);
+            service.QuerySoccer5Result(request).Returns(serviceResult);
 
             // Act
             var result = await handler.Handle(request, default);
 
             // Assert
-            service.Received().GetSoccer5Result(request);
+            service.Received().QuerySoccer5Result(request);
             Assert.Equal(serviceResult, result);
         }
     }

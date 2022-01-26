@@ -42,7 +42,7 @@ namespace NAP.SLI.Results.Services
         public async Task<byte[]> ExcelNumberGameResult(ExcelRequest excelRequest)
         {
             var request = mapper.Map<QueryResultsByDateRequest>(excelRequest);
-            var resultRecords = await resultService.GetNumberGameResultsByDate(request).ConfigureAwait(false);
+            var resultRecords = await resultService.QueryNumberGameResultsByDate(request).ConfigureAwait(false);
             var workbookInfo = CreateWorkbookInfo("NumberGame.xls", excelRequest.GetTitle());
             var workbook = new NumberGameWorkbook(workbookInfo, resultRecords);
             return workbook.ExportToBytes();
@@ -51,7 +51,7 @@ namespace NAP.SLI.Results.Services
         public async Task<byte[]> ExcelHappy5Result(ExcelRequest excelRequest)
         {
             var request = mapper.Map<QueryResultsByDateRequest>(excelRequest);
-            var resultRecords = await resultService.GetHappy5ResultsByDate(request).ConfigureAwait(false);
+            var resultRecords = await resultService.QueryHappy5ResultsByDate(request).ConfigureAwait(false);
             var workbookInfo = CreateWorkbookInfo("Happy5.xls", excelRequest.GetTitle());
             var workbook = new Happy5Workbook(workbookInfo, resultRecords);
             return workbook.ExportToBytes();

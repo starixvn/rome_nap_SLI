@@ -31,7 +31,7 @@ namespace NAP.SLI.Results.Tests.Services
                             .Returns(Task.FromResult(fetchData));
 
             // Act
-            var result = await service.GetSports(request);
+            var result = await service.QuerySports(request);
 
             // Assert
             await dynamicRepositoryEx.Received()
@@ -55,7 +55,7 @@ namespace NAP.SLI.Results.Tests.Services
                             .Returns(Task.FromResult(fetchData));
 
             // Act
-            var result = await service.GetLeagues(request);
+            var result = await service.QueryLeagues(request);
 
             // Assert
             await dynamicRepositoryEx.Received()
@@ -89,7 +89,7 @@ namespace NAP.SLI.Results.Tests.Services
                                 .Returns(Task.FromResult(fetchData));
 
             // Act
-            var results = await service.GetNumberGameResultsByDate(request);
+            var results = await service.QueryNumberGameResultsByDate(request);
 
             // Assert
             await dynamicRepositoryEx.Received()
@@ -136,7 +136,7 @@ namespace NAP.SLI.Results.Tests.Services
                                 .Returns(Task.FromResult(fetchData));
 
             // Act
-            var results = await service.GetHappy5ResultsByDate(request);
+            var results = await service.QueryHappy5ResultsByDate(request);
 
             // Assert
             await dynamicRepositoryEx.Received()

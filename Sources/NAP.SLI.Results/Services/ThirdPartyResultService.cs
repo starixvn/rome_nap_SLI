@@ -10,8 +10,8 @@ namespace NAP.SLI.Results.Services
 
     public interface IThirdPartyResultService
     {
-        Task<string> GetHappy5LinkedGameResult(Happy5LinkedGameResultRequest request);
-        string GetSoccer5Result(Soccer5ResultRequest request);
+        Task<string> QueryHappy5LinkedGameResult(QueryHappy5LinkedGameResultRequest request);
+        string QuerySoccer5Result(QuerySoccer5ResultRequest request);
     }
 
     public class ThirdPartyResultService : IThirdPartyResultService
@@ -27,11 +27,8 @@ namespace NAP.SLI.Results.Services
             this.client = client ?? new JsonWebClient(this.serializer);
         }
 
-        public async Task<string> GetHappy5LinkedGameResult(Happy5LinkedGameResultRequest request)
+        public async Task<string> QueryHappy5LinkedGameResult(QueryHappy5LinkedGameResultRequest request)
         {
-            Helper.CheckArgument(request.ObCustId, "ObCustId");
-            Helper.CheckArgument(request.TranId3rd, "TranId3rd");
-
             var requestData = GenerateRequestData();
             if ((DebugMode)appSettings.ResultsConfigs.DebugMode == DebugMode.DontSendRequest)
             {
@@ -56,13 +53,12 @@ namespace NAP.SLI.Results.Services
 
             Dictionary<string, string> GenerateRequestData()
             {
-                var languageCode = Language.GetLanguageCode(request.Language);
                 return new Dictionary<string, string>
                 {
                     { "SiteId", appSettings.ResultsConfigs.SiteId },
                     { "ObCustID", request.ObCustId },
                     { "TranId3rd", request.TranId3rd},
-                    { "Language", languageCode },
+                    { "Language", request.Language },
                     { "Platform", request.IsDesktop ? "D" : "M" },
                     { "DarkMode", request.IsDarkMode ? "1" : "0" },
                 };
@@ -87,7 +83,7 @@ namespace NAP.SLI.Results.Services
             }
         }
 
-        public string GetSoccer5Result(Soccer5ResultRequest request)
+        public string QuerySoccer5Result(QuerySoccer5ResultRequest request)
         {
             Helper.CheckArgument(request.MatchId.ToString(), "MatchId");
             Helper.CheckArgument(request.Balls, "Balls");
@@ -104,14 +100,13 @@ namespace NAP.SLI.Results.Services
 
             Dictionary<string, string> GenerateRequestData()
             {
-                var languageCode = Language.GetLanguageCode(request.Language);
                 return new Dictionary<string, string>
                 {
                     { "MatchId", request.MatchId.ToString()},
                     { "SiteId", appSettings.ResultsConfigs.SiteId },
-                    { "LangCode" , languageCode },
+                    { "LangCode" , request.Language },
                     { "Balllist" , request.Balls },
-                    { "BettypeId" , request.BettypeId.ToString() },
+                    { "BettypeId" , request.BetTypeId.ToString() },
                     { "Platform" , request.IsDesktop ? "D" : "M" },
                     { "DarkMode" , request.IsDarkMode ? "1" : "0"},
                 };

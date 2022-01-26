@@ -23,9 +23,10 @@ namespace NAP.SLI.Results.Models
 
         public Happy5Match(ResultModel result) : base(result)
         {
+            MatchNo = $"No. {MatchCode}";
         }
 
-        public string NoMatch => $"No. {result.MatchCode}";
+        public string MatchNo { get; }
 
         public Ball FirstBall
         {
