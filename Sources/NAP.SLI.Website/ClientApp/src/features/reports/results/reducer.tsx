@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, unwrapResult } from '@reduxjs/toolkit';
 import { download, post } from 'services/http';
-import { SHOW_ALL_LEAGUES } from 'utils/ConstantUtils';
+import { SHOW_ALL_LEAGUES, SportTypes } from 'utils/ConstantUtils';
 
 export type Match = {
   matchId: number;
@@ -63,9 +63,9 @@ export type State = {
   isSportLoading: boolean;
   isLeagueLoading: boolean;
   isResultLoading: boolean;
-  isSoccer5Loading: boolean;
   isExcelLoading: boolean;
   isFromBetList: boolean;
+  happy5LinkedGameResultUrl: string;
 };
 
 const actionName = 'result';
@@ -78,9 +78,9 @@ const initialState: State = {
   isSportLoading: false,
   isLeagueLoading: false,
   isResultLoading: false,
-  isSoccer5Loading: false,
   isExcelLoading: false,
   isFromBetList: false,
+  happy5LinkedGameResultUrl: '',
 };
 
 const querySports = createAsyncThunk<
@@ -222,15 +222,26 @@ export const queryExcel = createAsyncThunk<
   await download(`/api/${actionName}/excel`, values);
 });
 
-export const querySoccer5 = createAsyncThunk<
-  string,
-  {
-    matchId: number;
-    balls: string;
-  }
->('third-party-result/querySoccer5Result', async (values) => {
+export const querySoccer5 = async (values: {
+  matchId: number;
+  balls: string;
+}) => {
   const { data } = await post<string>(
     'api/third-party-result/querySoccer5Result',
+    values,
+  );
+  return data;
+};
+
+export const queryHappy5LinkedGameResult = createAsyncThunk<
+  string,
+  {
+    custId: number;
+    transId: number;
+  }
+>('third-party-result/queryHappy5LinkedGameResult', async (values) => {
+  const { data } = await post<string>(
+    'api/third-party-result/queryHappy5LinkedGameResult',
     values,
   );
   return data;
@@ -303,12 +314,17 @@ const slice = createSlice({
       state.isExcelLoading = false;
     });
 
-    builder.addCase(querySoccer5.pending, (state) => {
-      state.isSoccer5Loading = true;
+    builder.addCase(queryHappy5LinkedGameResult.pending, (state) => {
+      state.isResultLoading = true;
+      state.sportType = SportTypes.Happy5_Linked_Game;
     });
-    builder.addCase(querySoccer5.fulfilled, (state) => {
-      state.isSoccer5Loading = false;
-    });
+    builder.addCase(
+      queryHappy5LinkedGameResult.fulfilled,
+      (state, { payload }) => {
+        state.isResultLoading = false;
+        state.happy5LinkedGameResultUrl = payload;
+      },
+    );
   },
 });
 

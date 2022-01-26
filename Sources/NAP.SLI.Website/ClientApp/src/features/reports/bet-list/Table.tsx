@@ -14,6 +14,7 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
   const [modal, setModal] = useState(false);
   const [sportType, setSportType] = useState(0);
   const [matchId, setMatchId] = useState(0);
+  const [transId, setTransId] = useState(0);
 
   const handleToggle = () => setModal(!modal);
 
@@ -32,6 +33,7 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
   ) => {
     setSportType(sportType);
     setMatchId(matchId);
+    setTransId(refNo);
     handleToggle();
   };
 
@@ -167,7 +169,11 @@ const TableComponent = ({ data, isHappy5LinkedGame }: Props) => {
       >
         <ModalHeader toggle={handleToggle}>RESULTS</ModalHeader>
         <ModalBody>
-          <ResultsModal sportType={sportType} matchId={matchId} />
+          <ResultsModal
+            sportType={sportType}
+            matchId={matchId}
+            transId={transId}
+          />
         </ModalBody>
       </Modal>
     </>

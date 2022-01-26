@@ -4,21 +4,20 @@ namespace NAP.SLI.Results.Utilities
     using System.Collections.Generic;
     using System.Net;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
 
-    public interface IWebClient
+    public interface IJsonWebClient
     {
         Task<TOut> QueryString<TOut>(string address, Dictionary<string, string> requestData, string proxyServer = "", int port = 0);
     }
 
-    public class JsonWebClient : IWebClient, IDisposable
+    public class JsonWebClient : IJsonWebClient, IDisposable
     {
-        private readonly WebClient client;
-        private readonly ISerializer serializer;
+        private readonly WebClient webClient;
 
-        public JsonWebClient(ISerializer serializer)
+        public JsonWebClient(WebClient webClient = null)
         {
-            client = new WebClient();
-            this.serializer = serializer ?? new JsonSerializer();
+            this.webClient = webClient ?? new WebClient();
         }
 
         public async Task<TOut> QueryString<TOut>(string address, Dictionary<string, string> requestData, string proxyServer = "", int port = 0)
@@ -26,17 +25,16 @@ namespace NAP.SLI.Results.Utilities
             if (!string.IsNullOrEmpty(proxyServer) && port != 0)
             {
                 var proxy = new WebProxy(proxyServer, port);
-                client.Proxy = proxy;
+                webClient.Proxy = proxy;
             }
 
             foreach (var item in requestData)
             {
-                client.QueryString.Add(item.Key, item.Value);
+                webClient.QueryString.Add(item.Key, item.Value);
             }
 
-            var response = await client.DownloadStringTaskAsync(address);
-
-            return serializer.Deserialize<TOut>(response);
+            var response = await webClient.DownloadStringTaskAsync(address);
+            return JsonConvert.DeserializeObject<TOut>(response);
         }
 
         public void Dispose()
@@ -47,9 +45,9 @@ namespace NAP.SLI.Results.Utilities
 
         protected virtual void Dispose(bool disposing)
         {
-            if (client != null)
+            if (webClient != null)
             {
-                client.Dispose();
+                webClient.Dispose();
             }
         }
     }

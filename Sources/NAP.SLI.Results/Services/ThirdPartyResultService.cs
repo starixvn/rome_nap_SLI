@@ -7,6 +7,7 @@ namespace NAP.SLI.Results.Services
     using NAP.SLI.Results.Models;
     using NAP.SLI.Results.Requests;
     using NAP.SLI.Results.Utilities;
+    using Newtonsoft.Json;
 
     public interface IThirdPartyResultService
     {
@@ -17,22 +18,28 @@ namespace NAP.SLI.Results.Services
     public class ThirdPartyResultService : IThirdPartyResultService
     {
         private readonly IAppSettings appSettings;
-        private readonly IWebClient client;
-        private readonly ISerializer serializer;
+        private readonly IJsonWebClient client;
 
-        public ThirdPartyResultService(IAppSettings appSettings, IWebClient client = null, ISerializer serializer = null)
+        public ThirdPartyResultService(IAppSettings appSettings, IJsonWebClient client = null)
         {
             this.appSettings = appSettings;
-            this.serializer = serializer ?? new JsonSerializer();
-            this.client = client ?? new JsonWebClient(this.serializer);
+            this.client = client ?? new JsonWebClient();
         }
 
         public async Task<string> QueryHappy5LinkedGameResult(QueryHappy5LinkedGameResultRequest request)
         {
-            var requestData = GenerateRequestData();
+            var requestData = new Dictionary<string, string>
+            {
+                { "SiteId", appSettings.ResultsConfigs.SiteId },
+                { "ObCustID", request.CustId },
+                { "TranId3rd", request.TranId3rd},
+                { "Language", request.Language },
+                { "Platform", request.IsDesktop ? "D" : "M" },
+                { "DarkMode", request.IsDarkMode ? "1" : "0" },
+            };
             if ((DebugMode)appSettings.ResultsConfigs.DebugMode == DebugMode.DontSendRequest)
             {
-                throw new Exception("Request data:" + serializer.Serialize(requestData));
+                throw new Exception("Request data:" + JsonConvert.SerializeObject(requestData));
             }
             else
             {
@@ -43,44 +50,31 @@ namespace NAP.SLI.Results.Services
                     appSettings.ResultsConfigs.ProxyPortServer
                     );
 
-                if (ValidateResponse(responseData))
+                if (ValidateResponse(requestData, responseData))
                 {
                     return RemoveWebProtocol(responseData.Url);
                 }
             }
 
             return await Task.FromResult(string.Empty);
+        }
 
-            Dictionary<string, string> GenerateRequestData()
+        private bool ValidateResponse(Dictionary<string, string> requestData, Happy5LinkedGameResultModel responseData)
+        {
+            if (!responseData.IsSuccess)
             {
-                return new Dictionary<string, string>
+                if ((DebugMode)appSettings.ResultsConfigs.DebugMode == DebugMode.None)
                 {
-                    { "SiteId", appSettings.ResultsConfigs.SiteId },
-                    { "ObCustID", request.ObCustId },
-                    { "TranId3rd", request.TranId3rd},
-                    { "Language", request.Language },
-                    { "Platform", request.IsDesktop ? "D" : "M" },
-                    { "DarkMode", request.IsDarkMode ? "1" : "0" },
-                };
-            }
-
-            bool ValidateResponse(Happy5LinkedGameResultModel responseData)
-            {
-                if (!responseData.IsSuccess)
-                {
-                    if ((DebugMode)appSettings.ResultsConfigs.DebugMode == DebugMode.None)
-                    {
-                        throw new Exception(responseData.ErrMsg);
-                    }
-                    else
-                    {
-                        throw new Exception($"Url of LinkedGames send request incorrectly! Detail request:" +
-                            $" {Helper.ConvertToQueryString(requestData)}; \n Detail response: {serializer.Serialize(responseData)}");
-                    }
+                    throw new Exception(responseData.ErrMsg);
                 }
-
-                return true;
+                else
+                {
+                    throw new Exception($"Url of LinkedGames send request incorrectly! Detail request:" +
+                        $" {Helper.ConvertToQueryString(requestData)}; \n Detail response: {JsonConvert.SerializeObject(responseData)}");
+                }
             }
+
+            return true;
         }
 
         public string QuerySoccer5Result(QuerySoccer5ResultRequest request)
@@ -88,28 +82,23 @@ namespace NAP.SLI.Results.Services
             Helper.CheckArgument(request.MatchId.ToString(), "MatchId");
             Helper.CheckArgument(request.Balls, "Balls");
 
-            var requestData = GenerateRequestData();
+            var requestData = new Dictionary<string, string>
+            {
+                { "MatchId", request.MatchId.ToString()},
+                { "SiteId", appSettings.ResultsConfigs.SiteId },
+                { "LangCode" , request.Language },
+                { "Balllist" , request.Balls },
+                { "BettypeId" , request.BetTypeId.ToString() },
+                { "Platform" , request.IsDesktop ? "D" : "M" },
+                { "DarkMode" , request.IsDarkMode ? "1" : "0"},
+            };
             if ((DebugMode)appSettings.ResultsConfigs.DebugMode == DebugMode.DontSendRequest)
             {
-                throw new Exception("Request data:" + serializer.Serialize(requestData));
+                throw new Exception("Request data:" + JsonConvert.SerializeObject(requestData));
             }
             else
             {
                 return $"{appSettings.ResultsConfigs.UrlSoccer5}?{Helper.ConvertToQueryString(requestData)}";
-            }
-
-            Dictionary<string, string> GenerateRequestData()
-            {
-                return new Dictionary<string, string>
-                {
-                    { "MatchId", request.MatchId.ToString()},
-                    { "SiteId", appSettings.ResultsConfigs.SiteId },
-                    { "LangCode" , request.Language },
-                    { "Balllist" , request.Balls },
-                    { "BettypeId" , request.BetTypeId.ToString() },
-                    { "Platform" , request.IsDesktop ? "D" : "M" },
-                    { "DarkMode" , request.IsDarkMode ? "1" : "0"},
-                };
             }
         }
 

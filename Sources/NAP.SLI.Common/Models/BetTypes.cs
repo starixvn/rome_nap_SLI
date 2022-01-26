@@ -5,5 +5,6 @@ namespace NAP.SLI.Common.Models
         OverUnder = 85,
         OddEven = 86,
         NumberWheel = 90,
+        Soccer5 = 3604
     }
 }

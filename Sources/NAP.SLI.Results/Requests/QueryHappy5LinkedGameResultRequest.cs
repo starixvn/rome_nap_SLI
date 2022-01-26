@@ -1,17 +1,22 @@
 namespace NAP.SLI.Results.Requests
 {
     using MediatR;
+    using NAP.SLI.Common.Models;
 
     public class QueryHappy5LinkedGameResultRequest : IRequest<string>
     {
         public string TranId3rd { get; set; }
 
-        public string ObCustId { get; set; }
+        public string CustId { get; set; }
 
-        public bool IsDesktop { get; set; } = true;
+        public int BetType { get; } = (int)BetTypes.Soccer5;
 
-        public bool IsDarkMode { get; set; } = false;
+        public int SportType { get; } = (int)SportTypes.Happy5_Linked_Game;
 
-        public string Language { get; set; } = "en-US";
+        public bool IsDesktop { get; } = true;
+
+        public bool IsDarkMode { get; } = false;
+
+        public string Language { get; } = "en-US";
     }
 }

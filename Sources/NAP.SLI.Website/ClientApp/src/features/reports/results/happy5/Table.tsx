@@ -1,5 +1,3 @@
-import { unwrapResult } from '@reduxjs/toolkit';
-import { useAppDispatch } from 'app/store';
 import GlobalSpinner from 'components/spinner/GlobalSpinner';
 import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -8,37 +6,34 @@ import Match from './Match';
 import { querySoccer5, Happy5Match } from '../reducer';
 
 const Happy5Table = () => {
-  const dispatch = useAppDispatch();
   const {
     results,
     isResultLoading,
     isLeagueLoading,
     isSportLoading,
-    isSoccer5Loading,
     isFromBetList,
   } = useSelector((state: AppState) => state.results);
-  const [modal, setModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
 
-  const handleToggle = () => setModal((prevModal) => !prevModal);
+  const handleToggle = () => {
+    setUrl('');
+  };
 
   const handleSoccer5Click = async (matchId: number, balls: string) => {
-    const result = await dispatch(
-      querySoccer5({
-        matchId,
-        balls,
-      }),
-    );
-    const urlRes = unwrapResult(result);
-    setUrl(urlRes);
-    handleToggle();
+    setLoading(true);
+    const url = await querySoccer5({
+      matchId,
+      balls,
+    });
+    setUrl(url);
+    setLoading(false);
   };
 
   return isResultLoading || isLeagueLoading || isSportLoading ? (
     <></>
   ) : (
     <>
-      {isSoccer5Loading && <GlobalSpinner />}
       <Table bordered striped hover>
         <thead>
           <tr className="text-center">
@@ -84,24 +79,21 @@ const Happy5Table = () => {
           )}
         </tbody>
       </Table>
-      <Modal
-        centered
-        isOpen={modal}
-        size="xl"
-        toggle={handleToggle}
-        fade={false}
-      >
-        <ModalHeader toggle={handleToggle}>Happy 5</ModalHeader>
-        <ModalBody>
-          <iframe
-            src={url}
-            height="400px"
-            width="100%"
-            title="happy 5"
-            style={{ border: 'none' }}
-          ></iframe>
-        </ModalBody>
-      </Modal>
+      {loading && <GlobalSpinner />}
+      {url && (
+        <Modal centered isOpen size="xl" toggle={handleToggle} fade={false}>
+          <ModalHeader toggle={handleToggle}>Happy 5</ModalHeader>
+          <ModalBody>
+            <iframe
+              src={url}
+              height="400px"
+              width="100%"
+              title="happy 5"
+              style={{ border: 'none' }}
+            ></iframe>
+          </ModalBody>
+        </Modal>
+      )}
     </>
   );
 };

@@ -1,6 +1,7 @@
 namespace NAP.SLI.Results.Requests
 {
     using MediatR;
+    using NAP.SLI.Common.Models;
 
     public class QuerySoccer5ResultRequest : IRequest<string>
     {
@@ -8,12 +9,12 @@ namespace NAP.SLI.Results.Requests
 
         public string Balls { get; set; }
 
-        public bool IsDesktop { get; set; }
+        public bool IsDesktop { get; } = true;
 
-        public bool IsDarkMode { get; set; } = false;
+        public bool IsDarkMode { get; } = false;
 
-        public string Language { get; set; } = "en-US";
+        public string Language { get; } = "en-US";
 
-        public int BetTypeId { get; set; } = 3604;
+        public int BetTypeId { get; } = (int)BetTypes.Soccer5;
     }
 }

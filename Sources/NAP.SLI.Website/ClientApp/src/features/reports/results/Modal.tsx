@@ -6,8 +6,13 @@ import NumberGameTable from './number-game/Table';
 import EmptyTable from './components/EmptyTable';
 import './Page.scss';
 import { useAppDispatch } from 'app/store';
-import { queryResultsByMatch, reset } from './reducer';
+import {
+  queryResultsByMatch,
+  reset,
+  queryHappy5LinkedGameResult,
+} from './reducer';
 import GlobalSpinner from 'components/spinner/GlobalSpinner';
+import { useCustomerParams } from '..';
 
 const getTableBySportType = (sportType: number) => {
   switch (sportType) {
@@ -23,37 +28,53 @@ const getTableBySportType = (sportType: number) => {
 const Modal = ({
   sportType,
   matchId,
+  transId,
 }: {
   sportType: number;
   matchId: number;
+  transId: number;
 }) => {
   const { isResultLoading, sportType: selectedSportType } = useSelector(
     (state: AppState) => state.results,
   );
+  const { custId } = useCustomerParams();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(
-      queryResultsByMatch({
-        sportType,
-        matchId,
-      }),
-    );
+    if (sportType === SportTypes.Happy5_Linked_Game) {
+      dispatch(
+        queryHappy5LinkedGameResult({
+          transId,
+          custId,
+        }),
+      );
+    } else {
+      dispatch(
+        queryResultsByMatch({
+          sportType,
+          matchId,
+        }),
+      );
+    }
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, matchId, sportType]);
+  }, [dispatch, matchId, sportType, transId, custId]);
 
-  return (
-    <div className="result-page">
-      {isResultLoading ? (
-        <GlobalSpinner />
-      ) : (
-        getTableBySportType(selectedSportType)
-      )}
-    </div>
-  );
+  const renderContent = () => {
+    if (isResultLoading) {
+      return <GlobalSpinner />;
+    }
+
+    if (selectedSportType === SportTypes.Happy5_Linked_Game) {
+      return <iframe></iframe>;
+    } else {
+      return getTableBySportType(selectedSportType);
+    }
+  };
+
+  return <div className="result-page">{renderContent()}</div>;
 };
 
 export default Modal;
