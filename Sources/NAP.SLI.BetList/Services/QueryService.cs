@@ -1,5 +1,6 @@
 namespace NAP.SLI.BetList.Services
 {
+    using System;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
@@ -19,7 +20,16 @@ namespace NAP.SLI.BetList.Services
 
     public class QueryService : IQueryService
     {
+        private static readonly HttpClient httpClient = CreateHttpClient();
         private readonly IAppSettings appSettings;
+
+        private static HttpClient CreateHttpClient()
+        {
+            return new HttpClient
+            {
+                Timeout = TimeSpan.FromMinutes(5)
+            };
+        }
 
         public QueryService(IAppSettings appSettings)
         {
@@ -28,20 +38,17 @@ namespace NAP.SLI.BetList.Services
 
         public async Task<object> QueryByDate(QueryByDateRequest request)
         {
-            var response = await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByDate").ConfigureAwait(false);
-            return response;
+            return await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByDate").ConfigureAwait(false);
         }
 
         public async Task<object> QueryByMatch(QueryByMatchRequest request)
         {
-            var response = await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByMatch").ConfigureAwait(false);
-            return response;
+            return await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByMatch").ConfigureAwait(false);
         }
 
         public async Task<object> QueryByBetType(QueryByBetTypeRequest request)
         {
-            var response = await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByBetType").ConfigureAwait(false);
-            return response;
+            return await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByBetType").ConfigureAwait(false);
         }
 
         private static async Task<object> Query(object request, string url)
@@ -49,14 +56,11 @@ namespace NAP.SLI.BetList.Services
             var serializeRequest = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(serializeRequest, Encoding.UTF8, "application/json");
 
-            using var httpClient = new HttpClient();
             using var response = await httpClient.PostAsync(url, requestContent).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var records = JObject.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
-
-            return records;
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return JObject.Parse(responseContent);
         }
     }
-
 }
