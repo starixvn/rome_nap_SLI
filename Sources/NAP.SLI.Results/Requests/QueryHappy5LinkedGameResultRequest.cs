@@ -17,6 +17,6 @@ namespace NAP.SLI.Results.Requests
 
         public bool IsDarkMode { get; } = false;
 
-        public string Language { get; } = "en-US";
+        public string Language { get; } = "en";
     }
 }
