@@ -88,7 +88,7 @@ const Happy5Table = () => {
               src={url}
               height="400px"
               width="100%"
-              title="happy 5"
+              title="Happy 5"
               style={{ border: 'none' }}
             ></iframe>
           </ModalBody>

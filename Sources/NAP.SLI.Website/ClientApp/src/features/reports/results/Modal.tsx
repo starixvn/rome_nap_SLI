@@ -34,9 +34,11 @@ const Modal = ({
   matchId: number;
   transId: number;
 }) => {
-  const { isResultLoading, sportType: selectedSportType } = useSelector(
-    (state: AppState) => state.results,
-  );
+  const {
+    isResultLoading,
+    sportType: selectedSportType,
+    happy5LinkedGameResultUrl,
+  } = useSelector((state: AppState) => state.results);
   const { custId } = useCustomerParams();
   const dispatch = useAppDispatch();
 
@@ -68,7 +70,15 @@ const Modal = ({
     }
 
     if (selectedSportType === SportTypes.Happy5_Linked_Game) {
-      return <iframe></iframe>;
+      return (
+        <iframe
+          src={happy5LinkedGameResultUrl}
+          height="400px"
+          width="100%"
+          title="Happy 5 Linked Game"
+          style={{ border: 'none' }}
+        ></iframe>
+      );
     } else {
       return getTableBySportType(selectedSportType);
     }
