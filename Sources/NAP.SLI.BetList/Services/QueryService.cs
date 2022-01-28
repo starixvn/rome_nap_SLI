@@ -1,6 +1,7 @@
 namespace NAP.SLI.BetList.Services
 {
     using System;
+    using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
@@ -25,7 +26,11 @@ namespace NAP.SLI.BetList.Services
 
         private static HttpClient CreateHttpClient()
         {
-            return new HttpClient
+            var clientHandler = new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            return new HttpClient(clientHandler)
             {
                 Timeout = TimeSpan.FromMinutes(5)
             };
