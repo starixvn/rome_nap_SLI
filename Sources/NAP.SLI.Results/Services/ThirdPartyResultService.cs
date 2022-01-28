@@ -41,26 +41,14 @@ namespace NAP.SLI.Results.Services
             {
                 throw new Exception("Request data:" + JsonConvert.SerializeObject(requestData));
             }
-            else
-            {
-                var responseData = await client.QueryString<Happy5LinkedGameResultModel>(
-                    appSettings.ResultsConfigs.Url,
-                    requestData,
-                    appSettings.ResultsConfigs.ProxyIPServer,
-                    appSettings.ResultsConfigs.ProxyPortServer
-                    );
 
-                if (ValidateResponse(requestData, responseData))
-                {
-                    return RemoveWebProtocol(responseData.Url);
-                }
-            }
+            var responseData = await client.QueryString<Happy5LinkedGameResultModel>(
+                appSettings.ResultsConfigs.Url,
+                requestData,
+                appSettings.ResultsConfigs.ProxyIPServer,
+                appSettings.ResultsConfigs.ProxyPortServer
+                );
 
-            return await Task.FromResult(string.Empty);
-        }
-
-        private bool ValidateResponse(Dictionary<string, string> requestData, Happy5LinkedGameResultModel responseData)
-        {
             if (!responseData.IsSuccess)
             {
                 if ((DebugMode)appSettings.ResultsConfigs.DebugMode == DebugMode.None)
@@ -74,7 +62,7 @@ namespace NAP.SLI.Results.Services
                 }
             }
 
-            return true;
+            return RemoveWebProtocol(responseData.Url);
         }
 
         public string QuerySoccer5Result(QuerySoccer5ResultRequest request)
