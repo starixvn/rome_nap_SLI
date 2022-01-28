@@ -11,7 +11,9 @@ const Page = () => {
 
   return (
     <div className="bet-list-page">
-      <Title content={`MEMBER BET LIST${username ?? ' (' + username + ')'}`} />
+      <Title
+        content={`MEMBER BET LIST - ${username ?? ' (' + username + ')'}`}
+      />
       <Filter setData={setData} />
       {data !== undefined && <Table data={data} isHappy5LinkedGame={false} />}
     </div>
