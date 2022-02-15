@@ -17,9 +17,11 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Extensions
             services.AddWinLossAnalysisModule();
 
             // Assert
-            Assert.Single(services);
+            Assert.Equal(2, services.Count);
             Assert.Equal(typeof(IQueryService), services[0].ServiceType);
             Assert.Equal(typeof(QueryService), services[0].ImplementationType);
+            Assert.Equal(typeof(IExcelService), services[1].ServiceType);
+            Assert.Equal(typeof(ExcelService), services[1].ImplementationType);
         }
     }
 }

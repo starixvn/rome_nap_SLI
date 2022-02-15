@@ -7,6 +7,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Controller
     using NAP.SLI.Common.Models;
     using NAP.SLI.Tests;
     using NAP.SLI.WinLossAnalysis.Controllers;
+    using NAP.SLI.WinLossAnalysis.Extensions;
     using NAP.SLI.WinLossAnalysis.Requests;
     using NSubstitute;
     using Xunit;
@@ -45,7 +46,7 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Controller
             var fileContentResult = Assert.IsType<FileContentResult>(result);
             Assert.Equal(sendResult, fileContentResult.FileContents);
             Assert.Equal(ContentTypes.Excel, fileContentResult.ContentType);
-            var expectedFileDownloadName = $"{string.Join("-", "Win Loss Analysis", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls";
+            var expectedFileDownloadName = $"{string.Join("-", $"{request.GetReportName()} Win Loss Analysis", request.Username, request.FromDate.ToDateString(), request.ToDate.ToDateString())}.xls";
             Assert.Equal(expectedFileDownloadName, fileContentResult.FileDownloadName);
         }
     }

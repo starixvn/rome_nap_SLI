@@ -37,6 +37,11 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             (IEnumerable<SuperRecord>, IEnumerable<SuperRecord>) fetchData)
         {
             // Arrange
+            var mockResult = new SuperData
+            {
+                Records = mapper.Map<IEnumerable<SuperRecord>, IEnumerable<SuperRecordEx>>(fetchData.Item1),
+                Total = mapper.Map<SuperRecord, SuperRecordEx>(fetchData.Item2.First())
+            };
             var queryService = new QueryService(reportService, dynamicRepositoryEx, mapper);
             var request = CreateQueryRequestByRole(CustomerLevels.Super);
             reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
@@ -47,8 +52,8 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
 
             // Assert
             await dynamicRepositoryEx.Received().FetchMultipleAsync<SuperRecord, SuperRecord>(Arg.Is<QueryCriteria>(criteria => IsMatch(criteria, balanceUpDayModel, request))).ConfigureAwait(false);
-            Assert.Equal(fetchData.Item1, result.Records);
-            Assert.Equal(fetchData.Item2.First(), result.Total);
+            Assert.Equal(mockResult.Records, result.Records);
+            Assert.Equal(mockResult.Total, result.Total);
         }
 
         [Theory]
@@ -61,6 +66,11 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             (IEnumerable<MasterRecord>, IEnumerable<MasterRecord>) fetchData)
         {
             // Arrange
+            var mockResult = new MasterData
+            {
+                Records = mapper.Map<IEnumerable<MasterRecord>, IEnumerable<MasterRecordEx>>(fetchData.Item1),
+                Total = mapper.Map<MasterRecord, MasterRecordEx>(fetchData.Item2.First())
+            };
             var queryService = new QueryService(reportService, dynamicRepositoryEx, mapper);
             var request = CreateQueryRequestByRole(CustomerLevels.Master);
             reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
@@ -71,8 +81,8 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
 
             // Assert
             await dynamicRepositoryEx.Received().FetchMultipleAsync<MasterRecord, MasterRecord>(Arg.Is<QueryCriteria>(criteria => IsMatch(criteria, balanceUpDayModel, request)));
-            Assert.Equal(fetchData.Item1, result.Records);
-            Assert.Equal(fetchData.Item2.First(), result.Total);
+            Assert.Equal(mockResult.Records, result.Records);
+            Assert.Equal(mockResult.Total, result.Total);
         }
 
 
@@ -86,6 +96,11 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
             (IEnumerable<AgentRecord>, IEnumerable<AgentRecord>) fetchData)
         {
             // Arrange
+            var mockResult = new AgentData
+            {
+                Records = mapper.Map<IEnumerable<AgentRecord>, IEnumerable<AgentRecordEx>>(fetchData.Item1),
+                Total = mapper.Map<AgentRecord, AgentRecordEx>(fetchData.Item2.First())
+            };
             var queryService = new QueryService(reportService, dynamicRepositoryEx, mapper);
             var request = CreateQueryRequestByRole(CustomerLevels.Agent);
             reportService.GetBalanceUpDay().Returns(balanceUpDayModel);
@@ -96,8 +111,8 @@ namespace NAP.SLI.WinLossAnalysis.Tests.Services
 
             // Assert
             await dynamicRepositoryEx.Received().FetchMultipleAsync<AgentRecord, AgentRecord>(Arg.Is<QueryCriteria>(criteria => IsMatch(criteria, balanceUpDayModel, request)));
-            Assert.Equal(fetchData.Item1, result.Records);
-            Assert.Equal(fetchData.Item2.First(), result.Total);
+            Assert.Equal(mockResult.Records, result.Records);
+            Assert.Equal(mockResult.Total, result.Total);
         }
 
         private static bool IsMatch(QueryCriteria criteria, BalanceUpDayModel balanceUpDayModel, QueryRequest request)

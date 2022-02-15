@@ -23,10 +23,6 @@ namespace NAP.SLI.Customer.Tests.Services
         {
             //Arrange
             var service = new CustomerService(dynamicRepositoryEx);
-            var fixture = new Fixture();
-            var request = fixture.Build<GetInformationCriteria>()
-                .With(c => c.IsSuccess, true)
-                .Create();
 
             dynamicRepositoryEx
                 .FetchMultipleAsync<GeneralInformationModel, HeadlineModel>(Arg.Is<GetInformationCriteria>(x => x.Username == username))
@@ -39,8 +35,6 @@ namespace NAP.SLI.Customer.Tests.Services
             await dynamicRepositoryEx.Received().FetchMultipleAsync<GeneralInformationModel, HeadlineModel>(Arg.Is<GetInformationCriteria>(criteria => criteria.Username == username));
             Assert.Equal(fetchData.Item1.First(), result.GeneralInformation);
             Assert.Equal(fetchData.Item2.First(), result.Headline);
-            Assert.Equal(request.ErrCode, result.ErrCode);
-            Assert.Equal(request.ErrMsg, result.ErrMsg);
         }
     }
 }
