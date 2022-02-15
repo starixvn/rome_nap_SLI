@@ -41,7 +41,7 @@
             return Ok(result);
         }
 
-        /// <summary>Checkin</summary>
+        /// <summary>CheckIn</summary>
         [HttpPost("[action]")]
         [ProducesResponseType(typeof(ResultModel), StatusCodes.Status200OK)]
         public async Task<IActionResult> CheckIn([FromBody] CheckInRequest request)
