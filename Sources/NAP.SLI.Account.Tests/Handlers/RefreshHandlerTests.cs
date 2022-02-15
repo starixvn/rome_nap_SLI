@@ -6,6 +6,7 @@ using NAP.SLI.Account.Services;
 using NAP.SLI.Common.Models;
 using NAP.SLI.Common.Services;
 using NAP.SLI.Tests;
+using Newtonsoft.Json;
 using NSubstitute;
 using Xunit;
 
@@ -33,7 +34,7 @@ namespace NAP.SLI.Account.Tests.Handlers
                 UserId = currentUserService.UserId,
                 IsAdmin = currentUserService.IsAdmin
             };
-            Assert.Equal(expectedResult, result);
+            Assert.Equal(JsonConvert.SerializeObject(expectedResult), JsonConvert.SerializeObject(result));
         }
     }
 }
