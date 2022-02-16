@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Localization;
-using NAP.SLI.Common.Extensions;
 using NAP.SLI.Common.Services;
 using NAP.SLI.Localization.Services;
 using NAP.SLI.Tests;
