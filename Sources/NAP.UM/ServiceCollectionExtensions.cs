@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using NAP.UM.Models;
 using NAP.UM.Services;
@@ -10,6 +11,10 @@ namespace NAP.UM
         {
             services.AddSingleton(umConfig);
             services.AddSingleton<IMaintenanceService, MaintenanceService>();
+            services.AddHttpClient<MaintenanceService>(httpClient =>
+            {
+                httpClient.Timeout = TimeSpan.FromSeconds(5);
+            });
             return services;
         }
     }

@@ -24,11 +24,13 @@ namespace NAP.UM.Services
         private const string CacheKey = "NAP.UM.Services.MaintenanceService";
         private readonly UMConfig umConfig;
         private readonly ICacheService cacheService;
+        private readonly HttpClient httpClient;
 
-        public MaintenanceService(UMConfig umConfig, MemoryCacheOptions cacheOptions)
+        public MaintenanceService(UMConfig umConfig, MemoryCacheOptions cacheOptions, HttpClient httpClient)
         {
             this.umConfig = umConfig;
             cacheService = new CacheService(new MemoryCache(cacheOptions));
+            this.httpClient = httpClient;
         }
 
         public bool IsEnabled => umConfig.Enabled;
@@ -73,17 +75,13 @@ namespace NAP.UM.Services
         {
             try
             {
-                using var client = new HttpClient
-                {
-                    Timeout = TimeSpan.FromSeconds(5)
-                };
                 var request = new HttpRequestMessage
                 {
                     RequestUri = new Uri($"{umConfig.ServiceUri}{endPoint}"),
                     Method = httpMethod
                 };
                 request.AddHMAC(umConfig.SecretKey);
-                var response = await client.SendAsync(request).ConfigureAwait(false);
+                var response = await httpClient.SendAsync(request).ConfigureAwait(false);
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadFromJsonAsync<T>().ConfigureAwait(false);
             }

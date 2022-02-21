@@ -1,7 +1,5 @@
 namespace NAP.SLI.BetList.Services
 {
-    using System;
-    using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
@@ -21,24 +19,13 @@ namespace NAP.SLI.BetList.Services
 
     public class QueryService : IQueryService
     {
-        private static readonly HttpClient httpClient = CreateHttpClient();
         private readonly IAppSettings appSettings;
+        private readonly HttpClient httpClient;
 
-        private static HttpClient CreateHttpClient()
-        {
-            var clientHandler = new HttpClientHandler()
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-            };
-            return new HttpClient(clientHandler)
-            {
-                Timeout = TimeSpan.FromMinutes(5)
-            };
-        }
-
-        public QueryService(IAppSettings appSettings)
+        public QueryService(IAppSettings appSettings, HttpClient httpClient)
         {
             this.appSettings = appSettings;
+            this.httpClient = httpClient;
         }
 
         public async Task<object> QueryByDate(QueryByDateRequest request)
@@ -56,7 +43,7 @@ namespace NAP.SLI.BetList.Services
             return await Query(request, appSettings.BetListApiUrl + "/BetListSLIApi/GetByBetType").ConfigureAwait(false);
         }
 
-        private static async Task<object> Query(object request, string url)
+        private async Task<object> Query(object request, string url)
         {
             var serializeRequest = JsonConvert.SerializeObject(request);
             var requestContent = new StringContent(serializeRequest, Encoding.UTF8, "application/json");
