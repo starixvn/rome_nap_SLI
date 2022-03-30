@@ -11,7 +11,7 @@ namespace NAP.UM
         {
             services.AddSingleton(umConfig);
             services.AddSingleton<IMaintenanceService, MaintenanceService>();
-            services.AddHttpClient<MaintenanceService>(httpClient =>
+            services.AddHttpClient<IMaintenanceService, MaintenanceService>(httpClient =>
             {
                 httpClient.Timeout = TimeSpan.FromSeconds(5);
             });

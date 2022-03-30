@@ -11,7 +11,7 @@ namespace NAP.SLI.BetList.Extensions
         public static IServiceCollection AddBetListModule(this IServiceCollection services)
         {
             services.AddScoped<IQueryService, QueryService>();
-            services.AddHttpClient<QueryService>(httpClient =>
+            services.AddHttpClient<IQueryService, QueryService>(httpClient =>
             {
                 httpClient.Timeout = TimeSpan.FromMinutes(5);
             }).ConfigurePrimaryHttpMessageHandler(httpClient =>
